@@ -3,7 +3,7 @@
 // app/api/auth/callback/route.ts
 
 import { NextResponse, type NextRequest } from 'next/server';
-import { cookies } from 'next/headers';
+//import { cookies } from 'next/headers';
 
 const { COGNITO_DOMAIN, COGNITO_APP_CLIENT_ID, COGNITO_APP_CLIENT_SECRET } = process.env;
 

@@ -1,4 +1,4 @@
-//'use client';
+'use client';
 // app/api/auth/signout/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';

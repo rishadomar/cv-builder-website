@@ -25,11 +25,21 @@ export default function Home() {
                         <li className='mb-2'>
                             Get started by signing up using an email address or via Google{' '}
                             <a
-                                href='https://app.cvbuilder.co.za'
-                                target='_blank'
+                                href='/authentication/'
+                                target='_self'
                                 className='flex items-center gap-2 underline underline-offset-4'
                             >
                                 Signup
+                            </a>
+                        </li>
+                        <li className='mb-2'>
+                            Already registered? Then
+                            <a
+                                href='/login/'
+                                target='_blank'
+                                className='flex items-center gap-2 underline underline-offset-4'
+                            >
+                                Login
                             </a>
                         </li>
                         <li>Fill in the easy to answer questionnaire. No large text required - just the facts</li>
