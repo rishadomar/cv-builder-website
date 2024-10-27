@@ -1,6 +1,6 @@
 'use client';
 
-import { complete } from '@/api/openai/openaiApi';
+import { complete } from '@/lib/api/openai/openaiApi';
 import { useState } from 'react';
 
 const TestingPage: React.FC = () => {

@@ -1,13 +1,16 @@
 'use client';
 
 import React from 'react';
-import { validateGoogleLogin } from '@/api/auth/authApi';
+import { validateGoogleLogin } from '@/lib/api/auth/authApi';
 import { setCookie } from '@/lib/cookies';
+import { useRouter } from 'next/navigation';
+
 
 export default function GoogleLoginSuccessPage() {
-    const [loading, setLoading] = React.useState<boolean>(true);
+    const [loading] = React.useState<boolean>(true);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const hasFetchedData = React.useRef(false);
+    const router = useRouter();
 
     React.useEffect(() => {
         if (hasFetchedData.current) {
@@ -36,6 +39,7 @@ export default function GoogleLoginSuccessPage() {
                 setCookie('Email', response.email);
 
                 console.log('Response:', response);
+                router.push('/authentication');
             } catch (error) {
                 if (error instanceof Error) {
                     setErrorMessage(error.message);
