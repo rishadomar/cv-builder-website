@@ -24,3 +24,30 @@ To learn more about Next.js, take a look at the following resources:
 
 
 
+### Screens
+
+Home screen (server) /nothing
+   - [Register]
+   - [Sign in]
+
+Register /register
+    - f-email
+    - [Continue with email]
+    -------------------------------
+    Or register using Google
+    - [via google]
+    - [Login instead]
+
+if f-email already known goto /sign-in
+if not known:
+    - f-password
+    - f-confirm-password
+    [Register]
+
+Sign in /sign-in?email=
+    - f-email
+    - f-password
+    OR
+    [via Google]
+
+Logged in /start

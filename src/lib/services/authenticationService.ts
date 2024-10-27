@@ -46,6 +46,37 @@ export const loadOnRefresh = () => {
     };
 };
 
+export const googleLogin = (code: string) => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setLoading(true));
+        try {
+            const response = await authApi.validateGoogleLogin(code);
+            setCookie('AccessToken', response.access_token);
+            setCookie('IdToken', response.id_token);
+            setCookie('RefreshToken', response.refresh_token);
+            setCookie('Sub', response.sub);
+            setCookie('Email', response.email);
+
+            console.log('Response:', response);
+            dispatch(
+                setAuthenticationDetails({
+                    idToken: response.id_token,
+                    accessToken: response.access_token,
+                    refreshToken: response.refresh_token,
+                    sub: response.sub,
+                    email: response.email
+                })
+            );
+            await readRecord(response.sub)(dispatch);
+        } catch (error) {
+            console.error('Google login error:', error);
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+};
+
 export const login = (email: string, password: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setLoading(true));

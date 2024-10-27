@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import StoreProvider from '@/lib/store/StoreProvider';
 import './globals.css';
+import CookieLoader from '@/components/CookieLoader';
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
@@ -27,7 +28,10 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <StoreProvider>{children}</StoreProvider>
+                <StoreProvider>
+                    <CookieLoader />
+                    {children}
+                </StoreProvider>
             </body>
         </html>
     );

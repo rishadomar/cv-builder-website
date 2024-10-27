@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { validateGoogleLogin } from '@/lib/api/auth/authApi';
-import { setCookie } from '@/lib/cookies';
+import * as services from '@/lib/services';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/lib/store/hooks';
 
 
 export default function GoogleLoginSuccessPage() {
     const [loading] = React.useState<boolean>(true);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const hasFetchedData = React.useRef(false);
+    const dispatch = useAppDispatch();
     const router = useRouter();
 
     React.useEffect(() => {
@@ -31,15 +32,17 @@ export default function GoogleLoginSuccessPage() {
                     throw new Error('No code found in URL parameters');
                 }
 
-                const response = await validateGoogleLogin(code);
-                setCookie('AccessToken', response.access_token);
-                setCookie('IdToken', response.id_token);
-                setCookie('RefreshToken', response.refresh_token);
-                setCookie('Sub', response.sub);
-                setCookie('Email', response.email);
+                const response = await dispatch(services.googleLogin(code));
+
+                // const response = await validateGoogleLogin(code);
+                // setCookie('AccessToken', response.access_token);
+                // setCookie('IdToken', response.id_token);
+                // setCookie('RefreshToken', response.refresh_token);
+                // setCookie('Sub', response.sub);
+                // setCookie('Email', response.email);
 
                 console.log('Response:', response);
-                router.push('/authentication');
+                router.push('/builder');
             } catch (error) {
                 if (error instanceof Error) {
                     setErrorMessage(error.message);
@@ -53,6 +56,7 @@ export default function GoogleLoginSuccessPage() {
 
         fetchData();
     }, []); // Empty dependency array ensures this runs only once
+
     return (
         <div className='min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
             {loading && <p>Loading...</p>}
