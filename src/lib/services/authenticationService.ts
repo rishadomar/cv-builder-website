@@ -77,24 +77,39 @@ export const googleLogin = (code: string) => {
     };
 };
 
+export const registerNewUser = (email: string, password: string) => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setLoading(true));
+        try {
+            await authApi.registerNewUser(email, password);
+            await login(email, password)(dispatch);
+        } catch (error) {
+            console.error('Register new user error:', error);
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
 export const login = (email: string, password: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setLoading(true));
         try {
             const response = await authApi.login(email, password);
-            console.log('Sign in', response.data);
-            setCookie('AccessToken', response.data.AccessToken);
-            setCookie('IdToken', response.data.IdToken);
-            setCookie('RefreshToken', response.data.RefreshToken);
-            setCookie('Sub', response.data.Sub);
+            console.log('Sign in', response);
+            setCookie('AccessToken', response.AccessToken);
+            setCookie('IdToken', response.IdToken);
+            setCookie('RefreshToken', response.RefreshToken);
+            setCookie('Sub', response.Sub);
             setCookie('Email', email);
 
             dispatch(
                 setAuthenticationDetails({
-                    idToken: response.data.IdToken,
-                    accessToken: response.data.AccessToken,
-                    refreshToken: response.data.RefreshToken,
-                    sub: response.data.Sub,
+                    idToken: response.IdToken,
+                    accessToken: response.AccessToken,
+                    refreshToken: response.RefreshToken,
+                    sub: response.Sub,
                     email: email
                 })
             );

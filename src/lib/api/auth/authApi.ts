@@ -33,10 +33,13 @@ export async function validateGoogleLogin(code: string): Promise<GoogleLoginResp
 export async function login(email: string, password: string): Promise<any> {
     try {
         // Make the GET request using Axios
-        return await axiosInstance.post('/login', {
+        const response = await axiosInstance.post('/login', {
             email,
             password
         });
+        console.log(response.data);
+        return response.data;
+
     } catch (error: unknown) {
         // Handle any errors
         throw (error as Error).cause;
