@@ -33,14 +33,6 @@ export default function GoogleLoginSuccessPage() {
                 }
 
                 const response = await dispatch(services.googleLogin(code));
-
-                // const response = await validateGoogleLogin(code);
-                // setCookie('AccessToken', response.access_token);
-                // setCookie('IdToken', response.id_token);
-                // setCookie('RefreshToken', response.refresh_token);
-                // setCookie('Sub', response.sub);
-                // setCookie('Email', response.email);
-
                 console.log('Response:', response);
                 router.push('/builder');
             } catch (error) {
