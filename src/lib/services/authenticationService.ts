@@ -36,7 +36,7 @@ export const loadOnRefresh = () => {
             }
             dispatch(setAuthenticationDetails({ idToken, accessToken, refreshToken, sub, email }));
 
-            await readRecord(sub)(dispatch);
+            await readRecord(sub, email)(dispatch);
         } catch (error) {
             console.error('Load on refresh error:', error);
             throw error;
@@ -67,7 +67,7 @@ export const googleLogin = (code: string) => {
                     email: response.email
                 })
             );
-            await readRecord(response.sub)(dispatch);
+            await readRecord(response.sub, response.email)(dispatch);
         } catch (error) {
             console.error('Google login error:', error);
             throw error;
@@ -114,7 +114,7 @@ export const login = (email: string, password: string) => {
                 })
             );
 
-            await readRecord(response.Sub)(dispatch);
+            await readRecord(response.Sub, email)(dispatch);
         } catch (error) {
             console.error('Login error:', error);
             throw error;

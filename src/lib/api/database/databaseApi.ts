@@ -7,8 +7,8 @@ export async function createRecord(details: CvData) {
     return response.data;
 }
 
-export async function readRecord(sub: string) {
-    const response = await axiosInstance.get(`/readRecord?sub=${sub}`);
+export async function readRecord(sub: string, email: string) {
+    const response = await axiosInstance.get(`/readRecord?sub=${sub}&email=${email}`);
     console.log(response.data);
     return response.data;
 }

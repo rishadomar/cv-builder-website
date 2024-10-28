@@ -6,11 +6,11 @@ import { setFieldValues, setWorkExperiences } from '@/lib/store/fieldValues/fiel
 import { FieldValuesState, PaymentDetails, WorkExperienceEntry } from '@/lib/type';
 import { addAxiosError } from '@/lib/store/alert/alertSlice';
 
-export const readRecord = (sub: string) => {
+export const readRecord = (sub: string, email: string) => {
     return async (dispatch: Dispatch) => {
         dispatch(setLoading(true));
         try {
-            const response = await api.readRecord(sub);
+            const response = await api.readRecord(sub, email);
             const mappedArray = Object.entries(response.details).map(([field, value]) => {
                 if (field === 'payment') {
                     const dateValue = new Date((value as PaymentDetails).date);
