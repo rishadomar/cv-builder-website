@@ -114,7 +114,7 @@ export const login = (email: string, password: string) => {
                 })
             );
 
-            await readRecord(response.data.Sub)(dispatch);
+            await readRecord(response.Sub)(dispatch);
         } catch (error) {
             console.error('Login error:', error);
             throw error;
