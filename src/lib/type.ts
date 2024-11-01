@@ -70,7 +70,8 @@ export type FieldValuesState = {
 
 export interface FieldValue {
     field: keyof FieldValuesState;
-    value: unknown;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any;
 }
 
 export interface PayloadActionAddItemToList {
@@ -102,4 +103,21 @@ export type CvData = {
 export type SignupDetails = {
     sub: string;
     email: string;
+};
+
+// Define a type for key-value pairs
+export interface KeyValuePair {
+    key: string;
+    value: unknown;
+}
+
+// Define a type for an array of key-value pairs
+export type KeyValuePairArray = KeyValuePair[];
+
+export type Error = {
+    response: {
+        data: {
+            error: string;
+        };
+    };
 };

@@ -1,9 +1,10 @@
+import { Error } from '@/lib/type';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 type AddAxiosErrorPayload = {
     title: string;
-    error: any;
+    error: Error;
 };
 
 // Define a type for the slice state

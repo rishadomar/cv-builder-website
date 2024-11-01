@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/api/axios/axiosInstance';
-import { CvData, WorkExperienceEntry } from '../../type';
+import { CvData, KeyValuePairArray, WorkExperienceEntry } from '@/lib/type';
 
 export async function createRecord(details: CvData) {
     const response = await axiosInstance.post('/createRecord', details);
@@ -36,7 +36,7 @@ export async function deleteWorkExperienceEntry(sub: string, workExperienceEntry
     return response.data;
 }
 
-export async function save(sub: string, data: any) {
+export async function save(sub: string, data: KeyValuePairArray) {
     const response = await axiosInstance.post('/saveData', { sub, data });
     console.log(response.data);
     return response.data;
