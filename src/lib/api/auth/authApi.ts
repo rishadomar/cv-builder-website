@@ -17,7 +17,8 @@ export async function validateGoogleLogin(code: string): Promise<GoogleLoginResp
         // Make the GET request using Axios
         console.log('ENV VAR API_GATEWAY', process.env.NEXT_PUBLIC_API_GATEWAY_URL);
         const response = await axios.post(process.env.NEXT_PUBLIC_API_GATEWAY_URL + '/validateGoogleLogin', {
-            code
+            code,
+            callbackURL: `${window.location.origin}/google-login-success`
         });
         console.log(response.data);
         // Return the response data
@@ -29,8 +30,15 @@ export async function validateGoogleLogin(code: string): Promise<GoogleLoginResp
     }
 }
 
+export type LoginResponse = {
+    AccessToken: string;
+    IdToken: string;
+    RefreshToken: string;
+    Sub: string;
+};
+
 // Define the service function to fetch data from a given URL
-export async function login(email: string, password: string): Promise<any> {
+export async function login(email: string, password: string): Promise<LoginResponse> {
     try {
         // Make the GET request using Axios
         const response = await axiosInstance.post('/login', {
@@ -39,14 +47,18 @@ export async function login(email: string, password: string): Promise<any> {
         });
         console.log(response.data);
         return response.data;
-
     } catch (error: unknown) {
         // Handle any errors
         throw (error as Error).cause;
     }
 }
 
-export async function registerNewUser(email: string, password: string): Promise<any> {
+export type RegisterNewUserResponse = {
+    sub: string;
+    email: string;
+};
+
+export async function registerNewUser(email: string, password: string): Promise<RegisterNewUserResponse> {
     try {
         // Make the GET request using Axios
         const response = await axiosInstance.post('/registerNewUser', {
@@ -62,7 +74,11 @@ export async function registerNewUser(email: string, password: string): Promise<
     }
 }
 
-export async function logout(accessToken: string): Promise<any> {
+type LogoutResponse = {
+    message: string;
+};
+
+export async function logout(accessToken: string): Promise<LogoutResponse> {
     try {
         // Make the GET request using Axios
         return await axiosInstance.post('/logout', { accessToken });

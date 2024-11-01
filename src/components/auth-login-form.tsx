@@ -17,12 +17,8 @@ export function UserAuthLoginForm({ className, ...props }: UserAuthLoginFormProp
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
-    const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+    const [, setErrorMessage] = React.useState<string | null>(null);
     const router = useRouter();
-
-    console.log(
-        `UserAuthLogin Form Email: ${email} Password: ${password} Error: ${errorMessage}`
-    );
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();

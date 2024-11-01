@@ -18,12 +18,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+    const [, setErrorMessage] = React.useState<string | null>(null);
     const router = useRouter();
-
-    console.log(
-        `UserAuthForm Email: ${email} Password: ${password} ShowPassword: ${showPassword} Error: ${errorMessage}`
-    );
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
