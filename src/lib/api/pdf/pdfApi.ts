@@ -1,13 +1,11 @@
-import axios from 'axios';
 import axiosInstance from '../axios/axiosInstance';
 
 // Define the service function to fetch data from a given URL
-export async function complete(prompt: string): Promise<string> {
+export async function generatePDF(sub: string): Promise<string> {
     try {
         // Make the GET request using Axios
-        console.log('ENV VAR API_GATEWAY', process.env.NEXT_PUBLIC_API_GATEWAY_URL);
-        const response = await axios.post(process.env.NEXT_PUBLIC_API_GATEWAY_URL + '/aiTextCompletion', {
-            text: prompt
+        const response = await axiosInstance.post('/generatePDF', {
+            sub
         });
         console.log(response.data);
         // Return the response data
@@ -19,16 +17,15 @@ export async function complete(prompt: string): Promise<string> {
     }
 }
 
-export async function generatePersonalityText(sub: string, traits: Array<string>): Promise<string> {
+export async function downloadPDF(sub: string): Promise<string> {
     try {
         // Make the GET request using Axios
-        const response = await axiosInstance.post('/personalityText', {
-            sub: sub,
-            traits: traits
+        const response = await axiosInstance.post('/downloadPDF', {
+            sub
         });
         console.log(response.data);
         // Return the response data
-        return response.data;
+        return response.data.url;
     } catch (error) {
         // Handle any errors
         console.error('Error fetching data:', error);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import axiosInstance from '@/lib/api/axios/axiosInstance';
 import { jwtDecode } from 'jwt-decode';
-import { getCookie, setCookie } from '@/lib/cookies';
+import { getCookie, setCookie } from '@/lib/utils/cookies';
 
 export type GoogleLoginResponse = {
     access_token: string;

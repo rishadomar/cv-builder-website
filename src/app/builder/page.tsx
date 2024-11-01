@@ -5,14 +5,14 @@ import { ContactDetailsForm } from '@/app/builder/ContactDetailsForm';
 import { PersonalDetailsForm } from './PersonalDetailsForm';
 import { LocationDetailsForm } from './LocationDetailsForm';
 import { RemoteWorkDetailsForm } from './RemoteWorkDetailsForm';
-// import { HobbyDetailsForm } from './HobbiesDetailsForm';
-// import WorkExperienceList from './workExperience/WorkExperienceList';
-// import { MilestoneCaptureData } from './MilestoneCaptureData';
-// import { ReviewPersonalityDetailsForm } from './ReviewPersonalityDetailsForm';
-// import { GeneratePDF } from './GeneratePDF';
-import { useAppSelector } from '@/lib/store/hooks';
-import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
+import { HobbyDetailsForm } from './HobbiesDetailsForm';
+import WorkExperienceList from './workExperience/WorkExperienceList';
+// import { useAppSelector } from '@/lib/store/hooks';
+// import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
 import { PersonalityDetailsForm } from './PersonalityDetailsForm';
+import { MilestoneCaptureData } from './MilestoneCaptureData';
+import { ReviewPersonalityDetailsForm } from './ReviewPersonalityDetailsForm';
+import { GeneratePDF } from './GeneratePDF';
 
 const NumberOfPages = 10;
 
@@ -49,13 +49,13 @@ export default function BuilderPage() {
                     {currentPageNumber === 3 && <LocationDetailsForm onNext={nextPage} onPrevious={previousPage} />}
                     {currentPageNumber === 4 && <RemoteWorkDetailsForm onNext={nextPage} onPrevious={previousPage} />}
                     {currentPageNumber === 5 && <PersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />}
-                    {/* {currentPageNumber === 6 && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
+                    {currentPageNumber === 6 && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
                     {currentPageNumber === 7 && <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />}
                     {currentPageNumber === 8 && <MilestoneCaptureData onNext={nextPage} onPrevious={previousPage} />}
                     {currentPageNumber === 9 && (
                         <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                     )}
-                    {currentPageNumber === 10 && <GeneratePDF onNext={nextPage} onPrevious={previousPage} />} */}
+                    {currentPageNumber === 10 && <GeneratePDF onNext={nextPage} onPrevious={previousPage} />}
                     {(currentPageNumber < 0 || currentPageNumber > NumberOfPages) && <div>Unknown page</div>}
                 </div>
             </div>

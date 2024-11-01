@@ -5,7 +5,7 @@ import * as authApi from '@/lib/api';
 import { resetAuthenticationDetails, setAuthenticationDetails } from '@/lib/store/authentication/authenticationSlice';
 import { resetFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { RootState } from '@/lib/store/store';
-import { deleteCookie, getCookie, setCookie } from '@/lib/cookies';
+import { deleteCookie, getCookie, setCookie } from '@/lib/utils/cookies';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
 import { readRecord } from './databaseService';
 

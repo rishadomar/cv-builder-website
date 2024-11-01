@@ -1,0 +1,70 @@
+import * as React from 'react';
+import { FormDescription, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue
+} from '@/components/ui/select';
+import { FieldError } from 'react-hook-form';
+
+interface MonthFormFieldProps {
+    form: any;
+    label: string;
+    fieldName: string;
+    description?: string;
+    error?: FieldError;
+}
+
+const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+];
+
+export default function MonthFormField({ form, label, fieldName, description, error }: MonthFormFieldProps) {
+    return (
+        <FormField
+            control={form.control}
+            name={fieldName}
+            render={() => (
+                <FormItem>
+                    <FormLabel>{label}</FormLabel>
+                    <FormControl>
+                        <Select>
+                            <SelectTrigger className='w-[180px]'>
+                                <SelectValue placeholder={label} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Month</SelectLabel>
+                                    {months.map((month) => (
+                                        <SelectItem key={month} value={month}>
+                                            {month}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </FormControl>
+                    {description && <FormDescription>{description}</FormDescription>}
+                    {error && (
+                        <FormMessage className='text-xs text-red-500'>{error.message as React.ReactNode}</FormMessage>
+                    )}
+                </FormItem>
+            )}
+        />
+    );
+}
