@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { WorkExperienceEntry } from '@/lib/type';
 import { useAppDispatch } from '@/lib/store/hooks';
-import { useToast } from '@/lib/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { deleteWorkExperience } from '@/lib/services';
 import { Icons } from '@/components/icons';
 

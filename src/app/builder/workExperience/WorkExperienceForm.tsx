@@ -9,7 +9,7 @@ import { WorkExperienceEntry } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
-import { useToast } from '@/lib/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z

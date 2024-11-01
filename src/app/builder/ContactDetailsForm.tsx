@@ -7,6 +7,7 @@ import TextFormField from '@/app/builder/TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { useEffect } from 'react';
+import { KeyValuePairArray } from '@/lib/type';
 
 const PhoneNumberRegex = /^(\+?\d{1,3})?[\s-]?(\(?\d{1,4}\)?)?[\s-]?\d{1,4}[\s-]?\d{1,4}[\s-]?\d{1,9}$/;
 
@@ -55,10 +56,14 @@ export function ContactDetailsForm({ onNext, onPrevious }: ContactDetailsFormPro
     }, [allFieldValues, formHook]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
-        const submitterName = (event?.nativeEvent as any).submitter?.name;
+        const submitter = (event?.nativeEvent as SubmitEvent).submitter;
+        const submitterName =
+            submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement
+                ? submitter.name
+                : undefined;
 
-        const saveValues = (data: ContactDetailsFormValues) => {
-            dispatch(save(data as any));
+        const saveValues = (data: unknown) => {
+            dispatch(save(data as KeyValuePairArray));
         };
 
         if (onNext && submitterName === 'next') {
