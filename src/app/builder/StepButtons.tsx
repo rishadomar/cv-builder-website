@@ -24,13 +24,13 @@ export function StepButtons({ onPrevious, onNext, asSubmit = true, ...rest }: St
 
             <Button
                 disabled={!onNext}
-                variant={onNext ? 'default' : 'secondary'}
+                variant={onNext ? 'default' : 'outline'}
                 name='next'
                 type={asSubmit ? 'submit' : 'button'}
                 onClick={asSubmit || !onNext ? undefined : () => onNext()}
             >
                 Next
-                <Icons.chevronRight className='ml-2' />
+                <Icons.chevronRight className={`ml-2 h-4 w-4 ${onNext ? 'text-white' : 'text-black'}`} />
             </Button>
         </div>
     );

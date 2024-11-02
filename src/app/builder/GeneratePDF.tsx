@@ -45,22 +45,24 @@ export function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
 
     return (
         <>
-            <div>PDF will now be generated</div>
-            <div>You can review the PDF and make any changes</div>
-            <div className='flex flex-col space-y-2'>
-                <Button variant='outline' disabled={isLoading} onClick={() => callGeneratePDF()}>
-                    <Icons.document className='mr-2' />
-                    Generate PDF
-                </Button>
-                <div className='text-xs text-gray-500'>
-                    Note: This will overwrite the previous PDF that was generated on: ...
+            <div className='mb-4'>
+                <div>PDF will now be generated</div>
+                <div>You can review the PDF and return here to make any changes</div>
+                <div className='flex flex-col space-y-2'>
+                    <Button variant='outline' disabled={isLoading} onClick={() => callGeneratePDF()}>
+                        <Icons.document className='mr-2' />
+                        Generate PDF
+                    </Button>
+                    <div className='text-xs text-gray-500'>
+                        Note: This will overwrite the previous PDF that was generated on: ...
+                    </div>
                 </div>
-            </div>
-            <div className='flex flex-col space-y-2 mt-4'>
-                <Button variant='outline' disabled={isLoading} onClick={() => callDownloadPDF()}>
-                    <Icons.arrow_down_on_square className='mr-2' />
-                    Download PDF
-                </Button>
+                <div className='flex flex-col space-y-2 mt-4'>
+                    <Button variant='outline' disabled={isLoading} onClick={() => callDownloadPDF()}>
+                        <Icons.arrow_down_on_square className='mr-2' />
+                        Download PDF
+                    </Button>
+                </div>
             </div>
             <StepButtons asSubmit={false} onNext={onNext} onPrevious={onPrevious} />
         </>
