@@ -13,12 +13,12 @@ export function StepButtons({ onPrevious, onNext, asSubmit = true, ...rest }: St
         <div className={`flex flex-row justify-between ${rest.className}`}>
             <Button
                 disabled={!onPrevious}
-                variant='secondary'
+                variant='outline'
                 name='previous'
                 type={asSubmit ? 'submit' : 'button'}
                 onClick={asSubmit || !onPrevious ? undefined : () => onPrevious()}
             >
-                <Icons.chevronLeft className='mr-2' />
+                <Icons.chevronLeft className='mr-2 h-4 w-4' />
                 Previous
             </Button>
 

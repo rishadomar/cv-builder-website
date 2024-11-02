@@ -47,15 +47,22 @@ export function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
         <>
             <div>PDF will now be generated</div>
             <div>You can review the PDF and make any changes</div>
-            <Button variant='outline' disabled={isLoading} onClick={() => callGeneratePDF()}>
-                <Icons.document className='mr-2' />
-                Generate PDF
-            </Button>
-            <Button variant='outline' disabled={isLoading} onClick={() => callDownloadPDF()}>
-                <Icons.arrow_down_on_square className='mr-2' />
-                Download PDF
-            </Button>
-            <StepButtons onNext={onNext} onPrevious={onPrevious} />
+            <div className='flex flex-col space-y-2'>
+                <Button variant='outline' disabled={isLoading} onClick={() => callGeneratePDF()}>
+                    <Icons.document className='mr-2' />
+                    Generate PDF
+                </Button>
+                <div className='text-xs text-gray-500'>
+                    Note: This will overwrite the previous PDF that was generated on: ...
+                </div>
+            </div>
+            <div className='flex flex-col space-y-2 mt-4'>
+                <Button variant='outline' disabled={isLoading} onClick={() => callDownloadPDF()}>
+                    <Icons.arrow_down_on_square className='mr-2' />
+                    Download PDF
+                </Button>
+            </div>
+            <StepButtons asSubmit={false} onNext={onNext} onPrevious={onPrevious} />
         </>
     );
 }

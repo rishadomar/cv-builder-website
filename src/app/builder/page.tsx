@@ -55,7 +55,7 @@ export default function BuilderPage() {
                     {currentPageNumber === 9 && (
                         <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                     )}
-                    {currentPageNumber === 10 && <GeneratePDF onNext={nextPage} onPrevious={previousPage} />}
+                    {currentPageNumber === 10 && <GeneratePDF onPrevious={previousPage} />}
                     {(currentPageNumber < 0 || currentPageNumber > NumberOfPages) && <div>Unknown page</div>}
                 </div>
             </div>
