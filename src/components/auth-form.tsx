@@ -57,18 +57,28 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                                 </Label>
                                 <Input id='email' type='email' readOnly value={email} />
                             </div>
-                            <div className='grid gap-1'>
+                            <div className='grid gap-1 mb-4'>
                                 <Label className='sr-only' htmlFor='email'>
                                     Password
                                 </Label>
                                 <Input
                                     id='password'
                                     type='password'
+                                    placeholder='Password'
                                     autoCapitalize='none'
                                     disabled={isLoading}
                                     value={password}
                                     onChange={(event) => setPassword(event.target.value)}
                                 />
+                                <div className='flex flex-col'>
+                                    <span className='text-xs text-muted-foreground'>
+                                        The password must be atleast 8 characters long.
+                                    </span>
+                                    <span className='text-xs text-muted-foreground'>
+                                        {' '}
+                                        Contain 1 number and 1 lowercase letter.
+                                    </span>
+                                </div>
                             </div>
                             <Button disabled={isLoading} name='sign-in'>
                                 {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
