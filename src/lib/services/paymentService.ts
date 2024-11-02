@@ -14,7 +14,7 @@ export const paymentComplete = (amount: number, reference: string) => {
         dispatch(setLoading(true));
         try {
             const response = await api.paymentComplete(getState().authentication.sub!, amount, reference);
-            dispatch(setFieldValues([{ field: 'payment', value: response.payment }]));
+            dispatch(setFieldValues([{ field: 'payment', value: response }]));
         } catch (error) {
             console.error('Payment error:', error);
             dispatch(addAxiosError({ title: 'Payment ', error: error as Error }));

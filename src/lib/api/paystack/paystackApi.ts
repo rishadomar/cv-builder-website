@@ -9,9 +9,12 @@ export async function paymentComplete(sub: string, amount: number, reference: st
             amount,
             reference
         });
-        console.log(response.data);
+        console.log('Payment complete: response.data = ', response.data);
         // Return the response data
-        return response.data;
+        return {
+            amount: response.data.payment.amount,
+            date: new Date(response.data.payment.date)
+        };
     } catch (error) {
         // Handle any errors
         console.error('Error fetching data:', error);
