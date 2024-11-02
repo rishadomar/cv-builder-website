@@ -36,7 +36,11 @@ export default function YesNoFormField({ formHook, label, fieldName }: YesNoForm
                             {options.map((option) => (
                                 <FormItem key={option.value} className='flex items-center space-x-3 space-y-0'>
                                     <FormControl>
-                                        <RadioGroupItem id={`${fieldName}-${option.value}`} value={option.value} />
+                                        <RadioGroupItem
+                                            id={`${fieldName}-${option.value}`}
+                                            value={option.value}
+                                            checked={option.value === field.value}
+                                        />
                                     </FormControl>
                                     <FormLabel
                                         htmlFor={`${fieldName}-${option.value}`}

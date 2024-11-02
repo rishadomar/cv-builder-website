@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 export default function Welcome() {
     return (
@@ -26,8 +26,8 @@ export default function Welcome() {
                     <li className='mb-2'>
                         Already registered? Then
                         <a
-                            href='/login/'
-                            target='_blank'
+                            href='/authentication/signin'
+                            target='_self'
                             className='flex items-center gap-2 underline underline-offset-4'
                         >
                             Login
