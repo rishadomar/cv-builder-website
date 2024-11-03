@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
+import PasswordField from '@/app/builder/PasswordField';
 
 interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function UserAuthLoginForm({ className, ...props }: UserAuthLoginFormProps) {
@@ -59,20 +60,7 @@ export function UserAuthLoginForm({ className, ...props }: UserAuthLoginFormProp
                                 onChange={(event) => setEmail(event.target.value)}
                             />
                         </div>
-                        <div className='grid gap-1'>
-                            <Label className='sr-only' htmlFor='email'>
-                                Password
-                            </Label>
-                            <Input
-                                id='password'
-                                placeholder='Password'
-                                type='password'
-                                autoCapitalize='none'
-                                disabled={isLoading}
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                            />
-                        </div>
+                        <PasswordField onChange={setPassword} value={password} withHelp={false} isLoading={false} />
                         <Button disabled={isLoading} name='sign-in'>
                             {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
                             Login
