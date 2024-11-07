@@ -16,13 +16,16 @@ export default function LoginLogout() {
 
     if (isLoggedIn) {
         return (
-            <Button name='sign-out' className={cn(buttonVariants({ variant: 'default' }), 'absolute right-4 top-4 md:right-8 md:top-8')} 
-                onClick={async ()=>{
-                // This is a placeholder for the actual logout logic
-                console.log('Logging out');
-                await dispatch(services.logout());
-                router.push('/authentication');
-            }}>
+            <Button
+                name='sign-out'
+                className={cn(buttonVariants({ variant: 'default' }), 'absolute right-4 top-4 md:right-8 md:top-8')}
+                onClick={async () => {
+                    // This is a placeholder for the actual logout logic
+                    console.log('Logging out');
+                    await dispatch(services.logout());
+                    router.push('/authentication');
+                }}
+            >
                 Logout
             </Button>
         );

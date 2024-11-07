@@ -28,12 +28,12 @@ export default function PasswordField({ value, onChange, isLoading, withHelp }: 
                     onChange={(event) => onChange(event.target.value)}
                 />
                 {showPassword ? (
-                    <Icons.eye
+                    <Icons.eyeSlash
                         className='absolute right-2 top-2 h-4 w-4 text-muted-foreground'
                         onClick={() => setShowPassword(!showPassword)}
                     />
                 ) : (
-                    <Icons.eyeSlash
+                    <Icons.eye
                         className='absolute right-2 top-2 h-4 w-4 text-muted-foreground'
                         onClick={() => setShowPassword(!showPassword)}
                     />

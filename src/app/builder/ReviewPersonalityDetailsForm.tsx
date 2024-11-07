@@ -112,7 +112,7 @@ export function ReviewPersonalityDetailsForm({ onNext, onPrevious }: ReviewPerso
                     </div>
                     <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
                     <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
-                        <Icons.sparkles className='mr-2' />
+                        <Icons.sparkles className='mr-2 h-5 w-5' />
                         Generate
                     </Button>
                     <TextareaFormField

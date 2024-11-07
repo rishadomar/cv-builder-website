@@ -50,7 +50,7 @@ export function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
                 <div>You can review the PDF and return here to make any changes</div>
                 <div className='flex flex-col space-y-2'>
                     <Button variant='outline' disabled={isLoading} onClick={() => callGeneratePDF()}>
-                        <Icons.document className='mr-2' />
+                        <Icons.document className='mr-2 h-5 w-5' />
                         Generate PDF
                     </Button>
                     <div className='text-xs text-gray-500'>
@@ -59,7 +59,7 @@ export function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
                 </div>
                 <div className='flex flex-col space-y-2 mt-4'>
                     <Button variant='outline' disabled={isLoading} onClick={() => callDownloadPDF()}>
-                        <Icons.arrow_down_on_square className='mr-2' />
+                        <Icons.arrow_down_on_square className='mr-2 h-5 w-5' />
                         Download PDF
                     </Button>
                 </div>

@@ -6,13 +6,13 @@ export default function Welcome() {
             <main className='flex flex-col gap-8 row-start-2 items-center sm:items-start'>
                 <Image
                     //className='dark:invert'
-                    src='https://app.cvbuilder.co.za/logo-pencil.jpeg'
+                    src='https://cvbuilder.co.za/images/logo-pencil.jpeg'
                     alt='CV Builder logo'
                     width={180}
                     height={38}
                     priority
                 />
-                <div>Version 1.0.0</div>
+                <div>Version 1.0.1 - logout fix</div>
                 <ol className='list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]'>
                     <li className='mb-2'>
                         Get started by signing up using an email address or via Google{' '}
