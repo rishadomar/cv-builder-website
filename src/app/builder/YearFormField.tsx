@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { FieldError } from 'react-hook-form';
 interface YearFormFieldProps {
-    form: any;
+    formHook: any;
     label: string;
     fieldName: string;
     description?: string;
@@ -20,16 +20,16 @@ interface YearFormFieldProps {
 
 const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
 
-export default function YearFormField({ form, label, fieldName, description, error }: YearFormFieldProps) {
+export default function YearFormField({ formHook, label, fieldName, description, error }: YearFormFieldProps) {
     return (
         <FormField
-            control={form.control}
+            control={formHook.control}
             name={fieldName}
-            render={() => (
+            render={({ field }) => (
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <Select>
+                        <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
                             <SelectTrigger className='w-[180px]'>
                                 <SelectValue placeholder={label} />
                             </SelectTrigger>

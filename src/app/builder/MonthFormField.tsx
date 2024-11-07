@@ -12,7 +12,7 @@ import {
 import { FieldError } from 'react-hook-form';
 
 interface MonthFormFieldProps {
-    form: any;
+    formHook: any;
     label: string;
     fieldName: string;
     description?: string;
@@ -34,16 +34,16 @@ const months = [
     'December'
 ];
 
-export default function MonthFormField({ form, label, fieldName, description, error }: MonthFormFieldProps) {
+export default function MonthFormField({ formHook, label, fieldName, description, error }: MonthFormFieldProps) {
     return (
         <FormField
-            control={form.control}
+            control={formHook.control}
             name={fieldName}
-            render={() => (
+            render={({ field }) => (
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <Select>
+                        <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
                             <SelectTrigger className='w-[180px]'>
                                 <SelectValue placeholder={label} />
                             </SelectTrigger>

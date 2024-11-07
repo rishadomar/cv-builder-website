@@ -77,7 +77,7 @@ export default function WorkExperienceForm({
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: WorkExperienceDetailsFormValues) => {
             try {
-                console.log('Set busy adding to true');
+                console.log('Set busy adding to true', data);
                 setBusyUpdating(true);
                 if (workExperienceEntryToEdit) {
                     await dispatch(
@@ -118,9 +118,7 @@ export default function WorkExperienceForm({
             <form onSubmit={onSubmit} className='flex flex-col bg-white'>
                 <div className='h-[500px] overflow-auto space-y-4 px-2'>
                     <TextFormField formHook={formHook} label='Company' fieldName='company' placeholder='Company name' />
-                    <YearMonthFormField form={formHook} label='Start date' fieldName='startDate' />
-                    {/* <YearFormField form={formHook} label='Start year' fieldName='startYear' /> */}
-                    {/* <MonthFormField form={formHook} label='Start month' fieldName='startMonth' /> */}
+                    <YearMonthFormField formHook={formHook} label='Start date' fieldName='startDate' />
                     <TextFormField
                         formHook={formHook}
                         label='Role'
