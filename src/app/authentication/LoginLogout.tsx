@@ -8,9 +8,11 @@ import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import * as services from '@/lib/services';
+import { Icons } from '@/components/icons';
 
 export default function LoginLogout() {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
+    const isLoading = useAppSelector((state) => state.loading.isLoading);
     const dispatch = useAppDispatch();
     const router = useRouter();
 
@@ -19,6 +21,7 @@ export default function LoginLogout() {
             <Button
                 name='sign-out'
                 className={cn(buttonVariants({ variant: 'default' }), 'absolute right-4 top-4 md:right-8 md:top-8')}
+                disabled={isLoading}
                 onClick={async () => {
                     // This is a placeholder for the actual logout logic
                     console.log('Logging out');
@@ -26,7 +29,7 @@ export default function LoginLogout() {
                     router.push('/authentication');
                 }}
             >
-                Logout
+                {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}Logout
             </Button>
         );
     }
