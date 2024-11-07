@@ -1,6 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: false // Add this line to disable React Strict Mode
+    reactStrictMode: false,
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'cvbuilder.co.za',
+                pathname: '/**'
+            }
+        ]
+    }
 };
 
 export default nextConfig;
