@@ -78,10 +78,10 @@ type LogoutResponse = {
     message: string;
 };
 
-export async function logout(accessToken: string): Promise<LogoutResponse> {
+export async function logout(email: string, accessToken: string): Promise<LogoutResponse> {
     try {
         // Make the GET request using Axios
-        return await axiosInstance.post('/logout', { accessToken });
+        return await axiosInstance.post('/logout', { email, accessToken });
     } catch (error: unknown) {
         // Handle any errors
         throw (error as Error).cause;
