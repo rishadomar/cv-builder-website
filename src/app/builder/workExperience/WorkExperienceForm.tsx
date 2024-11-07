@@ -24,7 +24,12 @@ const workExperienceDetailsFormSchema = z.object({
             month: z.string()
         })
         .default({ year: '2000', month: 'January' }),
-    endDate: z.date().optional(),
+    endDate: z
+        .object({
+            year: z.string(),
+            month: z.string()
+        })
+        .optional(),
     location: z
         .string()
         .min(2, {
@@ -119,6 +124,7 @@ export default function WorkExperienceForm({
                 <div className='h-[500px] overflow-auto space-y-4 px-2'>
                     <TextFormField formHook={formHook} label='Company' fieldName='company' placeholder='Company name' />
                     <YearMonthFormField formHook={formHook} label='Start date' fieldName='startDate' />
+                    <YearMonthFormField formHook={formHook} label='End date' fieldName='endDate' />
                     <TextFormField
                         formHook={formHook}
                         label='Role'

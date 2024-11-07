@@ -63,12 +63,18 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                             <TableRow key={`${workExperienceEntry.company}-${index}`}>
                                 <TableCell>{workExperienceEntry.company}</TableCell>
                                 <TableCell>
-                                    <span>test</span>
-                                    {/* <span>{workExperienceEntry.startDate}</span>
-                                    <span> {workExperienceEntry.startDate}</span> */}
+                                    <span>{workExperienceEntry.startDate?.year}</span>
+                                    <span> {workExperienceEntry.startDate?.month}</span>
                                 </TableCell>
                                 <TableCell>
-                                    {workExperienceEntry.endDate?.toISOString().slice(0, 10) || 'Present'}
+                                    {workExperienceEntry.endDate ? (
+                                        <>
+                                            <span>{workExperienceEntry.endDate.year}</span>
+                                            <span> {workExperienceEntry.endDate.month}</span>
+                                        </>
+                                    ) : (
+                                        'Present'
+                                    )}
                                 </TableCell>
                                 <TableCell>
                                     <EditWorkExperienceDialog

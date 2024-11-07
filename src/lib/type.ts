@@ -88,7 +88,7 @@ export interface WorkExperienceEntry {
     id: number;
     company: string;
     startDate?: YearMonth;
-    endDate?: Date;
+    endDate?: YearMonth;
     location: string;
     role: string;
     description: string;
