@@ -21,6 +21,7 @@ export default function EditWorkExperienceDialog({
             <DialogTrigger asChild>
                 <div className='flex justify-center items-center'>
                     <Icons.pen
+                        className='w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer'
                         onClick={() => {
                             setDialogIsOpen(true);
                         }}

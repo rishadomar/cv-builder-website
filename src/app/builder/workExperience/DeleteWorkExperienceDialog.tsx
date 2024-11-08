@@ -30,7 +30,7 @@ export default function DeleteWorkExperienceDialog({
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Icons.trash />
+                <Icons.trash className='w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer' />
             </AlertDialogTrigger>
             <AlertDialogContent className='bg-white opacity-100'>
                 <AlertDialogHeader>
