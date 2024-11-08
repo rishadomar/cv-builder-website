@@ -20,7 +20,7 @@ export function PaymentComplete({ paymentDetails, onNext, onPrevious }: PaymentC
             <CardContent>
                 <small>Thanks for your payment on: </small>
                 <div>
-                    <small>{formatDate(paymentDetails.date)}</small>
+                    <small>{paymentDetails.date ? formatDate(new Date(paymentDetails.date)) : 'unknown'}</small>
                 </div>
                 <div>
                     <small>Amount: {formatAmount(paymentDetails.amount)}</small>

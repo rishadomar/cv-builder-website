@@ -13,17 +13,15 @@ export const readRecord = (sub: string, email: string) => {
             const response = await api.readRecord(sub, email);
             const mappedArray = Object.entries(response.details).map(([field, value]) => {
                 if (field === 'payment') {
-                    const dateValue = new Date((value as PaymentDetails).date);
+                    let dateValue: Date | undefined = new Date((value as PaymentDetails).date);
                     if (isNaN(dateValue.getTime())) {
-                        console.error('Invalid date:', value);
-                    } else {
-                        console.log('Parsed date:', dateValue);
+                        dateValue = undefined;
                     }
                     return {
                         field: field as keyof FieldValuesState,
                         value: {
                             amount: (value as PaymentDetails).amount,
-                            date: dateValue
+                            date: dateValue ? dateValue.toISOString() : undefined
                         }
                     };
                 } else {

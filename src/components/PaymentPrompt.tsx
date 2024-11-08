@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import PaystackButton from '@/components/PaystackButton';
 import { paymentComplete } from '@/lib/services/paymentService';
 
+const Currency = 'ZAR';
 const Amount = 5900;
 
 type PaymentPromptProps = {
@@ -16,7 +17,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     const authentication = useAppSelector((state) => state.authentication);
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
-        await dispatch(paymentComplete(Amount, response.reference));
+        await dispatch(paymentComplete(Currency, Amount, response.reference));
     };
 
     return (
@@ -38,6 +39,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                         label='Pay now'
                         options={{
                             email: authentication.email!,
+                            currency: 'ZAR',
                             amount: Amount,
                             reference: `payment_${new Date().getTime().toString()}`
                         }}

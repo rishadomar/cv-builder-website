@@ -5,15 +5,16 @@ import * as api from '@/lib/api';
 import { addAxiosError } from '@/lib/store/alert/alertSlice';
 import { setFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
 import type { Error } from '@/lib/type';
+import { Currency } from 'react-paystack/dist/types';
 
-export const paymentComplete = (amount: number, reference: string) => {
+export const paymentComplete = (currency: Currency, amount: number, reference: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
         if (!getState().authentication.sub) {
             throw new Error('No sub found');
         }
         dispatch(setLoading(true));
         try {
-            const response = await api.paymentComplete(getState().authentication.sub!, amount, reference);
+            const response = await api.paymentComplete(getState().authentication.sub!, currency, amount, reference);
             dispatch(setFieldValues([{ field: 'payment', value: response }]));
         } catch (error) {
             console.error('Payment error:', error);

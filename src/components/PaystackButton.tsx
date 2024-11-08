@@ -1,5 +1,5 @@
 import { usePaystackPayment } from 'react-paystack';
-import { PaystackProps } from 'react-paystack/dist/types';
+import { Currency, PaystackProps } from 'react-paystack/dist/types';
 import { Button } from '@/components/ui/button';
 
 export const PaystackConfig = {
@@ -12,6 +12,7 @@ interface PaystackButtonProps {
     cancelLabel?: string;
     options: {
         email: string;
+        currency: Currency;
         amount: number;
         reference: string;
         channels?: string[];
