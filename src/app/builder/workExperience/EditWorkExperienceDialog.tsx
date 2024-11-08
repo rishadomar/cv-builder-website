@@ -28,7 +28,7 @@ export default function EditWorkExperienceDialog({
                     />
                 </div>
             </DialogTrigger>
-            <DialogContent className='sm:max-w-[425px] bg-white'>
+            <DialogContent aria-describedby='Capture job specification' className='sm:max-w-[425px] bg-white'>
                 <DialogHeader>
                     <DialogTitle>Job specification</DialogTitle>
                 </DialogHeader>
