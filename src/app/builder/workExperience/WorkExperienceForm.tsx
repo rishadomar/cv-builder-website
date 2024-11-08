@@ -121,7 +121,7 @@ export default function WorkExperienceForm({
             {/* {busySaving && <OverlaySpinner />} */}
             {/* <h2>Location details</h2> */}
             <form onSubmit={onSubmit} className='flex flex-col bg-white'>
-                <div className='h-[500px] overflow-auto space-y-4 px-2'>
+                <div className='sm:max-w-[400px] overflow-auto space-y-4 px-2'>
                     <TextFormField formHook={formHook} label='Company' fieldName='company' placeholder='Company name' />
                     <YearMonthFormField formHook={formHook} label='Start date' fieldName='startDate' />
                     <YearMonthFormField formHook={formHook} label='End date' fieldName='endDate' />

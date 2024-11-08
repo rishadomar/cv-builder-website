@@ -41,24 +41,26 @@ export default function MonthFormField({ formHook, label, fieldName, description
             name={fieldName}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel>{label}</FormLabel>
-                    <FormControl>
-                        <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
-                            <SelectTrigger className='w-[180px]'>
-                                <SelectValue placeholder={label} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Month</SelectLabel>
-                                    {months.map((month) => (
-                                        <SelectItem key={month} value={month}>
-                                            {month}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </FormControl>
+                    <div className='flex items-center space-x-4'>
+                        <FormLabel>{label}</FormLabel>
+                        <FormControl>
+                            <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                                <SelectTrigger className='w-[180px]'>
+                                    <SelectValue placeholder={label} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Month</SelectLabel>
+                                        {months.map((month) => (
+                                            <SelectItem key={month} value={month}>
+                                                {month}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </FormControl>
+                    </div>
                     {description && <FormDescription>{description}</FormDescription>}
                     {error && (
                         <FormMessage className='text-xs text-red-500'>{error.message as React.ReactNode}</FormMessage>
