@@ -6,7 +6,44 @@ import DeleteWorkExperienceDialog from './DeleteWorkExperienceDialog';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import OverlaySpinner from '@/components/core/OverlaySpinner';
-import { Column } from '@/lib/type';
+import { Column, WorkExperienceEntry } from '@/lib/type';
+import Timeline from '@/components/Timeline';
+
+const workExperienceEntriesToTimelineEntries = (workExperienceEntries: WorkExperienceEntry[]) => {
+    return workExperienceEntries.map((workExperienceEntry) => ({
+        title: workExperienceEntry.company,
+        startYear: workExperienceEntry.startDate?.year ?? '',
+        startMonth: workExperienceEntry.startDate?.month ?? '',
+        endYear: workExperienceEntry.endDate?.year,
+        endMonth: workExperienceEntry.endDate?.month,
+        description: workExperienceEntry.description
+    }));
+};
+
+function WorkExperienceListEntry({
+    id,
+    company,
+    startDate,
+    endDate,
+    location,
+    role,
+    description
+}: WorkExperienceEntry) {
+    return (
+        <div className='grid gap-1 text-sm relative'>
+            <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50' />
+            <div className='text-lg font-bold'>{company}</div>
+            <div className='text-gray-500 dark:text-gray-400'>{location}</div>
+            {startDate && (
+                <div className='text-gray-500 dark:text-gray-400'>
+                    {startDate.month} {startDate.year} - {endDate ? `${endDate.month} ${endDate.year}` : 'Present'}
+                </div>
+            )}
+            <div className='text-gray-500 dark:text-gray-400'>{role}</div>
+            <div className='text-gray-500 dark:text-gray-400'>{description}</div>
+        </div>
+    );
+}
 
 type WorkExperienceListProps = {
     onNext: () => void;
@@ -39,6 +76,28 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
         event?.preventDefault();
     }
 
+    return (
+        <>
+            <div className='p-6 sm:p-10'>
+                <div className='after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 relative pl-6 after:left-0 grid gap-10 dark:after:bg-gray-400/20'>
+                    {busyUpdatingList && <OverlaySpinner />}
+                    {workExperienceEntries &&
+                        workExperienceEntries.map((workExperienceEntry, index) => (
+                            <WorkExperienceListEntry key={index} {...workExperienceEntry} />
+                        ))}
+                </div>
+            </div>
+
+            <div className='mt-4'>
+                <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
+                <form onSubmit={onSubmit} className='flex flex-col'>
+                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                </form>
+            </div>
+        </>
+    );
+
+    /*
     return (
         <div className='relative'>
             {busyUpdatingList && <OverlaySpinner />}
@@ -101,4 +160,5 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
             </div>
         </div>
     );
+    */
 }
