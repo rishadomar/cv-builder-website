@@ -13,11 +13,12 @@ import { PersonalityDetailsForm } from './PersonalityDetailsForm';
 import { MilestoneCaptureData } from './MilestoneCaptureData';
 import { ReviewPersonalityDetailsForm } from './ReviewPersonalityDetailsForm';
 import { GeneratePDF } from './GeneratePDF';
+import { ProgressBar } from '@/components/ProgressBar';
 
 const NumberOfPages = 10;
 
 export default function BuilderPage() {
-    const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
+    const [currentPageNumber, setCurrentPageNumber] = useState<number>(7);
 
     const nextPage = () => {
         setCurrentPageNumber((pageNumber) => {
@@ -41,9 +42,10 @@ export default function BuilderPage() {
 
     return (
         <div className='flex flex-col space-y-4 mt-4'>
-            {/* <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} /> */}
             <div className='flex items-center justify-center min-h-[calc(80vh-20rem)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
                 <div className='w-full max-w-md'>
+                    <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
+
                     {currentPageNumber === 1 && <ContactDetailsForm onNext={nextPage} />}
                     {currentPageNumber === 2 && <PersonalDetailsForm onNext={nextPage} onPrevious={previousPage} />}
                     {currentPageNumber === 3 && <LocationDetailsForm onNext={nextPage} onPrevious={previousPage} />}
