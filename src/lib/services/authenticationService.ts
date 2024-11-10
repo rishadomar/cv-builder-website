@@ -56,6 +56,7 @@ export const googleLogin = (code: string) => {
             setCookie('RefreshToken', response.refresh_token);
             setCookie('Sub', response.sub);
             setCookie('Email', response.email);
+            setCookie('Google', 'true');
 
             console.log('Response:', response);
             dispatch(
@@ -103,6 +104,7 @@ export const login = (email: string, password: string) => {
             setCookie('RefreshToken', response.RefreshToken);
             setCookie('Sub', response.Sub);
             setCookie('Email', email);
+            setCookie('Google', 'false');
 
             dispatch(
                 setAuthenticationDetails({
@@ -143,6 +145,7 @@ export const logout = () => {
             deleteCookie('RefreshToken');
             deleteCookie('Sub');
             deleteCookie('Email');
+            deleteCookie('Google');
 
             dispatch(resetFieldValues());
             dispatch(setLoading(false));

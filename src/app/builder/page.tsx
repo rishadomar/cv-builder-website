@@ -18,7 +18,7 @@ import { ProgressBar } from '@/components/ProgressBar';
 const NumberOfPages = 10;
 
 export default function BuilderPage() {
-    const [currentPageNumber, setCurrentPageNumber] = useState<number>(7);
+    const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
 
     const nextPage = () => {
         setCurrentPageNumber((pageNumber) => {
