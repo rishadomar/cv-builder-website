@@ -11,26 +11,34 @@ import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import PasswordField from '@/app/builder/PasswordField';
+import { CustomError } from '@/lib/utils/customError';
 
 interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function UserAuthLoginForm({ className, ...props }: UserAuthLoginFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const emailRef = React.useRef<HTMLInputElement>(null);
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
-    const [, setErrorMessage] = React.useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const router = useRouter();
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
+        setErrorMessage(null);
         setIsLoading(true);
         if (email && password) {
             try {
                 await dispatch(services.login(email, password));
                 router.push('/builder');
-            } catch (error) {
-                console.error('Login error:', error);
-                setErrorMessage('An error occurred. Please try again.');
+            } catch (error: unknown) {
+                if (error instanceof CustomError) {
+                    console.error('Custom error in login-logout-form:', error.message);
+                    setErrorMessage(error.message);
+                } else {
+                    console.error('Login error:', error);
+                    setErrorMessage('An unknown error occurred. Please try again.');
+                }
             } finally {
                 setIsLoading(false);
             }
@@ -58,9 +66,11 @@ export function UserAuthLoginForm({ className, ...props }: UserAuthLoginFormProp
                                 type='email'
                                 value={email}
                                 onChange={(event) => setEmail(event.target.value)}
+                                ref={emailRef}
                             />
                         </div>
                         <PasswordField onChange={setPassword} value={password} withHelp={false} isLoading={false} />
+                        {errorMessage && <p className='text-red-500 text-sm'>{errorMessage}</p>}
                         <Button disabled={isLoading} name='sign-in'>
                             {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
                             Login

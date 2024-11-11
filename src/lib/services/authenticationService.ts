@@ -8,6 +8,7 @@ import { RootState } from '@/lib/store/store';
 import { deleteCookie, getCookie, setCookie } from '@/lib/utils/cookies';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
 import { readRecord } from './databaseService';
+import { CustomError } from '../utils/customError';
 
 export const loadOnRefresh = () => {
     return async (dispatch: Dispatch) => {
@@ -118,7 +119,11 @@ export const login = (email: string, password: string) => {
 
             await readRecord(response.Sub, email)(dispatch);
         } catch (error) {
-            console.error('Login error:', error);
+            if (error instanceof CustomError) {
+                console.error('Custom error in service:', error.message);
+            } else {
+                console.error('Login error in service:', error);
+            }
             throw error;
         } finally {
             dispatch(setLoading(false));

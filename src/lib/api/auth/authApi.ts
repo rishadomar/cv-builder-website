@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import axiosInstance from '@/lib/api/axios/axiosInstance';
 import { jwtDecode } from 'jwt-decode';
 import { getCookie, setCookie } from '@/lib/utils/cookies';
+import { CustomError } from '@/lib/utils/customError';
 
 export type GoogleLoginResponse = {
     access_token: string;
@@ -48,8 +49,17 @@ export async function login(email: string, password: string): Promise<LoginRespo
         console.log(response.data);
         return response.data;
     } catch (error: unknown) {
-        // Handle any errors
-        throw (error as Error).cause;
+        if (error instanceof AxiosError) {
+            console.log('Error fetching data:', error.response?.data);
+            throw new CustomError(
+                error.response?.data?.error || 'An error occurred while logging in',
+                error.response?.status || 500,
+                error.response?.data
+            );
+        } else {
+            console.log('Error fetching data:', error);
+            throw new CustomError('An unknown error occurred', 500, error);
+        }
     }
 }
 
