@@ -2,7 +2,7 @@ import { UserAuthForm } from '@/components/auth-form';
 import LoginLogout from './LoginLogout';
 import { GoogleLoginForm } from '@/components/GoogleLoginForm';
 import PrivacyLinks from './PrivacyLinks';
-import AuthImage from './AuthImage';
+import AuthImage from '@/components/AuthImage';
 
 export default function AuthenticationPage() {
     return (

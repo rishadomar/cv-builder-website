@@ -10,20 +10,15 @@ import { Label } from '@/components/ui/label';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
-import PasswordField from '@/app/builder/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
-import LinkButton from './core/LinkButton';
 
-interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
-    onForgotPassword: () => void;
-}
+interface ForgotPaaswordFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function UserAuthLoginForm({ onForgotPassword, className, ...props }: UserAuthLoginFormProps) {
+export function ForgotPasswordForm({ className, ...props }: ForgotPaaswordFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<HTMLInputElement>(null);
     const [email, setEmail] = React.useState<string>('');
-    const [password, setPassword] = React.useState<string>('');
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const router = useRouter();
 
@@ -31,10 +26,10 @@ export function UserAuthLoginForm({ onForgotPassword, className, ...props }: Use
         event.preventDefault();
         setErrorMessage(null);
         setIsLoading(true);
-        if (email && password) {
+        if (email) {
             try {
-                await dispatch(services.login(email, password));
-                router.push('/builder');
+                await dispatch(services.forgotPassword(email));
+                router.push('/authentication/signin');
             } catch (error: unknown) {
                 if (error instanceof CustomError) {
                     setErrorMessage(error.message);
@@ -50,8 +45,8 @@ export function UserAuthLoginForm({ onForgotPassword, className, ...props }: Use
     return (
         <>
             <div className='flex flex-col space-y-2 text-center'>
-                <h1 className='text-2xl font-semibold tracking-tight'>Sign In</h1>
-                <p className='text-sm text-muted-foreground'>Enter your email & password below to sign in</p>
+                <h1 className='text-2xl font-semibold tracking-tight'>Forgot password</h1>
+                <p className='text-sm text-muted-foreground'>Enter your email to reset your password</p>
             </div>
 
             <div className={cn('grid gap-6', className)} {...props}>
@@ -71,16 +66,11 @@ export function UserAuthLoginForm({ onForgotPassword, className, ...props }: Use
                                 ref={emailRef}
                             />
                         </div>
-                        <PasswordField onChange={setPassword} value={password} withHelp={false} isLoading={false} />
-                        {errorMessage && <p className='text-red-500 text-sm'>{errorMessage}</p>}
-                        <Button
-                            disabled={isLoading || email.trim().length === 0 || password.trim().length === 0}
-                            name='sign-in'
-                        >
+                        {errorMessage && <p className='text-green-500 text-sm'>{errorMessage}</p>}
+                        <Button disabled={isLoading || email.trim().length === 0} name='sign-in'>
                             {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
-                            Login
+                            Send Reset Link
                         </Button>
-                        <LinkButton onClick={onForgotPassword} label='Forgot Password?' />
                     </div>
                 </form>
             </div>

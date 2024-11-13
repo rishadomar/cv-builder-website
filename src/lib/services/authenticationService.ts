@@ -150,3 +150,17 @@ export const logout = () => {
         }
     };
 };
+
+export const forgotPassword = (email: string) => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setLoading(true));
+        try {
+            await authApi.forgotPassword(email);
+        } catch (error) {
+            console.error('Forgot password error:', error);
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+};
