@@ -3,7 +3,7 @@ import React from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
 import Image from 'next/image';
-import LoginLogout from '@/app/authentication/LoginLogout';
+import LogoutButton from './LogoutButton';
 
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
                     />
                     <span className='text-white ml-2'>CV Builder</span>
                 </div>
-                <LoginLogout />
+                <LogoutButton />
             </div>
         </nav>
     );
