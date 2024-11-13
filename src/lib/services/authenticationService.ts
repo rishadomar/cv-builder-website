@@ -38,7 +38,6 @@ export const loadOnRefresh = () => {
 
             await readRecord(sub, email)(dispatch);
         } catch (error) {
-            console.error('Load on refresh error:', error);
             throw error;
         } finally {
             dispatch(setLoading(false));
