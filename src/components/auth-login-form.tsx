@@ -32,13 +32,7 @@ export function UserAuthLoginForm({ className, ...props }: UserAuthLoginFormProp
                 await dispatch(services.login(email, password));
                 router.push('/builder');
             } catch (error: unknown) {
-                if (error instanceof CustomError) {
-                    console.error('Custom error in login-logout-form:', error.message);
-                    setErrorMessage(error.message);
-                } else {
-                    console.error('Login error:', error);
-                    setErrorMessage('An unknown error occurred. Please try again.');
-                }
+                setErrorMessage((error as CustomError).message);
             } finally {
                 setIsLoading(false);
             }
