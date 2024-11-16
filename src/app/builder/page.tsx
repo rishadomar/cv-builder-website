@@ -13,11 +13,10 @@ import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-detai
 import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Steps } from '@/components/ProgressSteps';
-import withAuth from '@/components/withAuth';
 
 const NumberOfPages = Steps.length;
 
-function BuilderPage() {
+export default function BuilderPage() {
     const searchParams = useSearchParams();
     const [currentPage, setCurrentPage] = useState<string>('contact-details');
     const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
@@ -100,5 +99,3 @@ function BuilderPage() {
         </div>
     );
 }
-
-export default withAuth(BuilderPage);

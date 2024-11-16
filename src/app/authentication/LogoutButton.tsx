@@ -1,12 +1,9 @@
 'use client';
-import { useAppSelector } from '@/lib/store/hooks';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/lib/utils';
-import { Icons } from '@/components/icons';
 
 export default function LogoutButton() {
-    const isLoading = useAppSelector((state) => state.loading.isLoading);
     const router = useRouter();
 
     return (
@@ -26,7 +23,7 @@ export default function LogoutButton() {
                 }
             }}
         >
-            {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}Logout
+            Logout
         </Button>
     );
 }
