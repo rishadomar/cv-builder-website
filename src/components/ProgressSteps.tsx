@@ -96,10 +96,10 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onClose }: ProgressStepsP
     const router = useRouter();
     return (
         <Card className='w-full max-w-md'>
-            {/* <CardHeader>
+            <CardHeader className='hidden sm:block'>
                 <CardTitle>Build your CV</CardTitle>
                 <CardDescription>Complete these steps to complete your CV</CardDescription>
-            </CardHeader> */}
+            </CardHeader>
             <CardContent className='mt-3'>
                 <ol className='space-y-4'>
                     {Steps.map((step, index) => (
