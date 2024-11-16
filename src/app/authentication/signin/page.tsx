@@ -2,7 +2,6 @@
 
 import { GoogleLoginForm } from '@/components/GoogleLoginForm';
 import { UserAuthLoginForm } from '@/components/auth-login-form';
-import AuthImage from '../../../components/AuthImage';
 import { useState } from 'react';
 import { ForgotPasswordForm } from '@/components/ForgotPasswordForm';
 import { useAppSelector } from '@/lib/store/hooks';
@@ -14,8 +13,7 @@ export default function SigninPage() {
 
     if (isLoggedIn) {
         return (
-            <div className='container relative h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
-                <AuthImage />
+            <div className='container relative h-full flex-col items-center justify-center'>
                 <div className='lg:p-8'>
                     <div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]'>
                         <p>You are already logged in</p>
@@ -26,8 +24,7 @@ export default function SigninPage() {
     }
 
     return (
-        <div className='container relative h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
-            <AuthImage />
+        <div className='container relative h-full flex-col items-center justify-center'>
             <div className='lg:p-8'>
                 <div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]'>
                     {showForgotPassword ? (
