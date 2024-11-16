@@ -3,17 +3,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 
+export type StepPath =
+    | 'contact-details'
+    | 'personal-details'
+    | 'location-details'
+    | 'remote-work-details'
+    | 'personality-details'
+    | 'hobbies'
+    | 'work-experience'
+    | 'milestone-capture-data'
+    | 'review-personality-details'
+    | 'generate-pdf';
+
 export const Steps = [
     {
         id: 1,
-        title: 'Contact details',
+        title: 'Contact',
         description: 'Provide contact details',
         completed: true,
         path: 'contact-details'
     },
     {
         id: 2,
-        title: 'Personal details',
+        title: 'Personal',
         description: 'Enter details about yourself',
         completed: true,
         path: 'personal-details'
@@ -34,7 +46,7 @@ export const Steps = [
     },
     {
         id: 5,
-        title: 'Personality details',
+        title: 'Personality',
         description: 'Dive deeper into your personality',
         completed: false,
         path: 'personality-details'
@@ -58,18 +70,18 @@ export const Steps = [
         title: 'Milestone capture',
         description: 'Pay please to continue',
         completed: false,
-        path: 'milestone-capture'
+        path: 'milestone-capture-data'
     },
     {
         id: 9,
-        title: 'Review personality details',
+        title: 'Review personality',
         description: 'Let AI guide you to describe your personality',
         completed: false,
         path: 'review-personality-details'
     },
     {
         id: 10,
-        title: 'Generate & download your CV',
+        title: 'Generate & download CV',
         description: 'A PDF will be generated which you can download for keeps',
         completed: false,
         path: 'generate-pdf'
@@ -84,11 +96,11 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onClose }: ProgressStepsP
     const router = useRouter();
     return (
         <Card className='w-full max-w-md'>
-            <CardHeader>
+            {/* <CardHeader>
                 <CardTitle>Build your CV</CardTitle>
                 <CardDescription>Complete these steps to complete your CV</CardDescription>
-            </CardHeader>
-            <CardContent>
+            </CardHeader> */}
+            <CardContent className='mt-3'>
                 <ol className='space-y-4'>
                     {Steps.map((step, index) => (
                         <li
@@ -112,8 +124,8 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onClose }: ProgressStepsP
                                 )}
                             </div>
                             <div className='flex-1'>
-                                <h3 className='text-lg font-semibold'>{step.title}</h3>
-                                <p className='text-sm text-gray-500'>{step.description}</p>
+                                <h3 className='text-sm font-semibold'>{step.title}</h3>
+                                {/* <p className='text-sm text-gray-500'>{step.description}</p> */}
                             </div>
                             {index < Steps.length - 1 && (
                                 <Icons.chevronRight className='h-5 w-5 text-gray-400' aria-hidden='true' />
