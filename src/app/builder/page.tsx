@@ -1,71 +1,101 @@
 'use client';
-import { useState } from 'react';
-// import { ProgressBar } from './ProgressBar';
-import { ContactDetailsForm } from '@/app/builder/ContactDetailsForm';
-import { PersonalDetailsForm } from './PersonalDetailsForm';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import ContactDetailsForm from '@/app/builder/contact-details/page';
+import PersonalDetailsForm from './personal-details/page';
 import { LocationDetailsForm } from './LocationDetailsForm';
-import { RemoteWorkDetailsForm } from './RemoteWorkDetailsForm';
-import { HobbyDetailsForm } from './HobbiesDetailsForm';
-import WorkExperienceList from './workExperience/WorkExperienceList';
-// import { useAppSelector } from '@/lib/store/hooks';
-// import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
-import { PersonalityDetailsForm } from './PersonalityDetailsForm';
-import { MilestoneCaptureData } from './MilestoneCaptureData';
-import { ReviewPersonalityDetailsForm } from './ReviewPersonalityDetailsForm';
-import { GeneratePDF } from './GeneratePDF';
+import RemoteWorkDetailsForm from '@/app/builder/remote-work-details/page';
+import HobbyDetailsForm from '@/app/builder/hobbies/page';
+import WorkExperienceList from '@/app/builder/work-experience/page';
+import PersonalityDetailsForm from '@/app/builder/personality-details/page';
+import MilestoneCaptureData from '@/app/builder/milestone-capture-data/page';
+import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-details/page';
+import GeneratePDF from '@/app/builder/generate-pdf/page';
 import { ProgressBar } from '@/components/ProgressBar';
+import { Steps } from '@/components/ProgressSteps';
 
-const NumberOfPages = 10;
+const NumberOfPages = Steps.length;
 
 export default function BuilderPage() {
+    const searchParams = useSearchParams();
+    const [currentPage, setCurrentPage] = useState<string>('contact-details');
     const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
 
+    useEffect(() => {
+        const page = searchParams.get('page');
+        if (page) {
+            setCurrentPage(page);
+        } else {
+            setCurrentPage('contact-details');
+        }
+    }, [searchParams]);
+
+    useEffect(() => {
+        const p = Steps.find((step) => step.path === currentPage);
+        if (!p) {
+            setCurrentPageNumber(1);
+        } else {
+            setCurrentPageNumber(Steps.indexOf(p) + 1);
+        }
+    }, [currentPage]);
+
     const nextPage = () => {
-        setCurrentPageNumber((pageNumber) => {
-            const newPageNumber = pageNumber + 1;
-            if (newPageNumber > NumberOfPages) {
-                return NumberOfPages;
+        setCurrentPage((currentPage) => {
+            const p = Steps.find((step) => step.path === currentPage);
+            if (!p) {
+                return 'contact-details';
             }
-            return newPageNumber;
+            const index = Steps.indexOf(p);
+            if (index + 1 >= Steps.length) {
+                return 'contact-details';
+            }
+            return Steps[index + 1].path;
         });
     };
 
     const previousPage = () => {
-        setCurrentPageNumber((pageNumber) => {
-            const newPageNumber = pageNumber - 1;
-            if (newPageNumber < 1) {
-                return 1;
+        setCurrentPage((currentPage) => {
+            const p = Steps.find((step) => step.path === currentPage);
+            if (!p) {
+                return 'contact-details';
             }
-            return newPageNumber;
+            const index = Steps.indexOf(p);
+            if (index - 1 < 0) {
+                return 'contact-details';
+            }
+            return Steps[index - 1].path;
         });
     };
 
     return (
-        <div className='flex flex-col space-y-4 mt-4'>
-            <div className='flex items-center justify-center min-h-[calc(80vh-20rem)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
-                <div className='w-full max-w-md'>
-                    <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
-
-                    {currentPageNumber === 1 && <ContactDetailsForm onNext={nextPage} />}
-                    {currentPageNumber === 2 && <PersonalDetailsForm onNext={nextPage} onPrevious={previousPage} />}
-                    {currentPageNumber === 3 && <LocationDetailsForm onNext={nextPage} onPrevious={previousPage} />}
-                    {currentPageNumber === 4 && <RemoteWorkDetailsForm onNext={nextPage} onPrevious={previousPage} />}
-                    {currentPageNumber === 5 && <PersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />}
-                    {currentPageNumber === 6 && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
-                    {currentPageNumber === 7 && <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />}
-                    {currentPageNumber === 8 && <MilestoneCaptureData onNext={nextPage} onPrevious={previousPage} />}
-                    {currentPageNumber === 9 && (
-                        <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
-                    )}
-                    {currentPageNumber === 10 && <GeneratePDF onPrevious={previousPage} />}
-                    {(currentPageNumber < 0 || currentPageNumber > NumberOfPages) && <div>Unknown page</div>}
-                </div>
+        <div className='h-full w-full max-w-md'>
+            <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
+            <div className='bg-gray-50 py-6 sm:px-6 lg:px-8'>
+                {currentPage === 'contact-details' && <ContactDetailsForm onNext={nextPage} />}
+                {currentPage === 'personal-details' && (
+                    <PersonalDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                )}
+                {currentPage === 'location-details' && (
+                    <LocationDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                )}
+                {currentPage === 'remote-work-details' && (
+                    <RemoteWorkDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                )}
+                {currentPage === 'personality-details' && (
+                    <PersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                )}
+                {currentPage === 'hobbies' && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
+                {currentPage === 'work-experience' && (
+                    <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />
+                )}
+                {currentPage === 'milestone-capture-data' && (
+                    <MilestoneCaptureData onNext={nextPage} onPrevious={previousPage} />
+                )}
+                {currentPage === 'review-personality-details' && (
+                    <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                )}
+                {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
             </div>
         </div>
     );
 }
-
-// export default function Builder() {
-//     const isLoggedIn = useAppSelector(selectIsLoggedIn);
-//     return <>{isLoggedIn ? <div>Logged in</div> : <div>Not logged in</div>}</>;
-// }

@@ -12,7 +12,7 @@ type MilestoneCaptureDataProps = {
     onPrevious: () => void;
 };
 
-export function MilestoneCaptureData({ onNext, onPrevious }: MilestoneCaptureDataProps) {
+export default function MilestoneCaptureData({ onNext, onPrevious }: MilestoneCaptureDataProps) {
     const fieldValues = useAppSelector((state) => state.fieldValues);
 
     if (fieldValues.payment) {

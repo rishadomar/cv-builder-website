@@ -1,3 +1,5 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
@@ -39,7 +41,7 @@ type ContactDetailsFormProps = {
     onPrevious?: () => void;
 };
 
-export function ContactDetailsForm({ onNext, onPrevious }: ContactDetailsFormProps) {
+export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<ContactDetailsFormValues>({
@@ -82,9 +84,9 @@ export function ContactDetailsForm({ onNext, onPrevious }: ContactDetailsFormPro
 
     return (
         <Form {...formHook}>
-            <h2>Contact details</h2>
-            <form onSubmit={onSubmit} className='flex flex-col space-y-4'>
-                <div className='h-[500px] overflow-auto  space-y-4 px-2'>
+            <h1 className='m-3'>Contact details</h1>
+            <form onSubmit={onSubmit} className='flex flex-col'>
+                <div className='flex-grow overflow-auto space-y-4 px-3'>
                     <TextFormField
                         formHook={formHook}
                         label='Name'
@@ -100,7 +102,9 @@ export function ContactDetailsForm({ onNext, onPrevious }: ContactDetailsFormPro
                         placeholder='Your contact number'
                     />
                 </div>
-                <StepButtons onNext={onNext} />
+                <div className='my-4'>
+                    <StepButtons onNext={onNext} />
+                </div>
             </form>
         </Form>
     );

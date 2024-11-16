@@ -1,4 +1,4 @@
-import { StepButtons } from './StepButtons';
+import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ type GeneratePDFProps = {
     onPrevious: () => void;
 };
 
-export function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
+export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
     const dispatch = useAppDispatch();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const allFieldValues = useAppSelector((state) => state.fieldValues);

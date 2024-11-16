@@ -3,16 +3,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { StepButtons } from './StepButtons';
-import TextFormField from './TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
-import PillSelectFormField from './PillSelectFormField';
-import TextareaFormField from './TextareaFormField';
 import { Button } from '@/components/ui/button';
 import { generatePersonalityText } from '@/lib/services/aiService';
 import { Icons } from '@/components/icons';
 import { KeyValuePairArray } from '@/lib/type';
+import TextareaFormField from '../TextareaFormField';
+import { StepButtons } from '../StepButtons';
+import TextFormField from '../TextFormField';
+import PillSelectFormField from '../PillSelectFormField';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     descriptionOfSelf: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -45,7 +45,7 @@ const Traits = [
     'Independent'
 ];
 
-export function ReviewPersonalityDetailsForm({ onNext, onPrevious }: ReviewPersonalityDetailsFormProps) {
+export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: ReviewPersonalityDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<ReviewPersonalityDetailsFormValues>({

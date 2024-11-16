@@ -22,7 +22,7 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                     <Icons.x className='h-6 w-6 cursor-pointer' onClick={onClose} />
                 </div>
                 <div className='p-4'>
-                    <ProgressSteps />
+                    <ProgressSteps onClose={() => onClose()} />
                 </div>
             </div>
         </>

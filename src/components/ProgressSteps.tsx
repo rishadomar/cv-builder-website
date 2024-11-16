@@ -1,92 +1,86 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ContactDetailsForm } from '@/app/builder/ContactDetailsForm';
-import { PersonalDetailsForm } from '@/app/builder/PersonalDetailsForm';
-import { LocationDetailsForm } from '@/app/builder/LocationDetailsForm';
-import { RemoteWorkDetailsForm } from '@/app/builder/RemoteWorkDetailsForm';
-import { HobbyDetailsForm } from '@/app/builder/HobbiesDetailsForm';
-import WorkExperienceList from '@/app/builder/workExperience/WorkExperienceList';
-import { PersonalityDetailsForm } from '@/app/builder/PersonalityDetailsForm';
-import { MilestoneCaptureData } from '@/app/builder/MilestoneCaptureData';
-import { ReviewPersonalityDetailsForm } from '@/app/builder/ReviewPersonalityDetailsForm';
-import { GeneratePDF } from '@/app/builder/GeneratePDF';
 import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 
-const steps = [
+export const Steps = [
     {
         id: 1,
         title: 'Contact details',
         description: 'Provide contact details',
         completed: true,
-        component: ContactDetailsForm
+        path: 'contact-details'
     },
     {
         id: 2,
         title: 'Personal details',
         description: 'Enter details about yourself',
         completed: true,
-        component: PersonalDetailsForm
+        path: 'personal-details'
     },
     {
         id: 3,
         title: 'Your location',
         description: 'Provide your current location',
         completed: false,
-        component: LocationDetailsForm
+        path: 'location-details'
     },
     {
         id: 4,
         title: 'Remote work preferences',
         description: 'Select remote work preferences',
         completed: false,
-        component: RemoteWorkDetailsForm
+        path: 'remote-work-details'
     },
     {
         id: 5,
         title: 'Personality details',
         description: 'Dive deeper into your personality',
         completed: false,
-        component: PersonalityDetailsForm
+        path: 'personality-details'
     },
     {
         id: 6,
         title: 'Hobbies',
         description: 'What do you enjoy doing to accomplish a life/work balance',
         completed: false,
-        component: HobbyDetailsForm
+        path: 'hobbies'
     },
     {
         id: 7,
         title: 'Work experience',
         description: 'Professional experience',
         completed: false,
-        component: WorkExperienceList
+        path: 'work-experience'
     },
     {
         id: 8,
         title: 'Milestone capture',
         description: 'Pay please to continue',
         completed: false,
-        component: MilestoneCaptureData
+        path: 'milestone-capture'
     },
     {
         id: 9,
         title: 'Review personality details',
         description: 'Let AI guide you to describe your personality',
         completed: false,
-        component: ReviewPersonalityDetailsForm
+        path: 'review-personality-details'
     },
     {
         id: 10,
         title: 'Generate & download your CV',
         description: 'A PDF will be generated which you can download for keeps',
         completed: false,
-        component: GeneratePDF
+        path: 'generate-pdf'
     }
 ];
 
-const ProgressSteps: React.FC = () => {
+type ProgressStepsProps = {
+    onClose: () => void;
+};
+
+const ProgressSteps: React.FC<ProgressStepsProps> = ({ onClose }: ProgressStepsProps) => {
     const router = useRouter();
     return (
         <Card className='w-full max-w-md'>
@@ -96,12 +90,13 @@ const ProgressSteps: React.FC = () => {
             </CardHeader>
             <CardContent>
                 <ol className='space-y-4'>
-                    {steps.map((step, index) => (
+                    {Steps.map((step, index) => (
                         <li
                             key={step.id}
                             className='flex items-center space-x-4'
                             onClick={() => {
-                                router.push('/builder');
+                                onClose();
+                                router.replace(`/builder?page=${step.path}`);
                             }}
                         >
                             <div
@@ -120,7 +115,7 @@ const ProgressSteps: React.FC = () => {
                                 <h3 className='text-lg font-semibold'>{step.title}</h3>
                                 <p className='text-sm text-gray-500'>{step.description}</p>
                             </div>
-                            {index < steps.length - 1 && (
+                            {index < Steps.length - 1 && (
                                 <Icons.chevronRight className='h-5 w-5 text-gray-400' aria-hidden='true' />
                             )}
                         </li>

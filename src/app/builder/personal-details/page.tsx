@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { StepButtons } from './StepButtons';
-import TextFormField from './TextFormField';
+import { StepButtons } from '../StepButtons';
+import TextFormField from '../TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import YesNoFormField from '@/app/builder/YesNoFormField';
@@ -29,7 +29,7 @@ type PersonalDetailsFormProps = {
     onPrevious: () => void;
 };
 
-export function PersonalDetailsForm({ onNext, onPrevious }: PersonalDetailsFormProps) {
+export default function PersonalDetailsForm({ onNext, onPrevious }: PersonalDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<PersonalDetailsFormValues>({
@@ -73,9 +73,9 @@ export function PersonalDetailsForm({ onNext, onPrevious }: PersonalDetailsFormP
     return (
         <>
             <Form {...formHook}>
-                <h2>Personal details</h2>
-                <form onSubmit={onSubmit} className='flex flex-col space-y-4'>
-                    <div className='h-[500px] overflow-auto space-y-4 px-2'>
+                <h1 className='m-3'>Personal details</h1>
+                <form onSubmit={onSubmit} className='flex flex-col h-full'>
+                    <div className='flex-grow overflow-auto space-y-4 px-3'>
                         <TextFormField
                             formHook={formHook}
                             label='Preferred pronoun'
@@ -89,7 +89,9 @@ export function PersonalDetailsForm({ onNext, onPrevious }: PersonalDetailsFormP
                             fieldName='excludeGender'
                         />
                     </div>
-                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                    <div className='my-4'>
+                        <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                    </div>
                 </form>
             </Form>
         </>

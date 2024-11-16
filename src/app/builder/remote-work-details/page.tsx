@@ -2,12 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { StepButtons } from './StepButtons';
+import { StepButtons } from '@/app/builder/StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
-import YesNoFormField from './YesNoFormField';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
+import YesNoFormField from '../YesNoFormField';
 
 const remoteworkDetailsFormSchema = z.object({
     remoteWork: z.enum(['yes', 'no'], {
@@ -28,7 +28,7 @@ type RemoteWorkDetailsFormProps = {
     onPrevious: () => void;
 };
 
-export function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWorkDetailsFormProps) {
+export default function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWorkDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<RemoteWorkDetailsFormValues>({
