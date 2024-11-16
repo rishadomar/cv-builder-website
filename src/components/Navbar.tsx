@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
 import Image from 'next/image';
-import LogoutButton from './LogoutButton';
+import LogoutButton from '../app/authentication/LogoutButton';
 import { Icons } from './icons';
 import Drawer from './Drawer';
 

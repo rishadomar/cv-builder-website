@@ -12,8 +12,8 @@ import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import PasswordField from '@/app/builder/PasswordField';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>('');

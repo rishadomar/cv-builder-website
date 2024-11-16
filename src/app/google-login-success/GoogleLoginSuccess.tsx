@@ -33,7 +33,7 @@ export default function GoogleLoginSuccess() {
 
                 const response = await dispatch(services.googleLogin(code));
                 console.log('Response:', response);
-                router.push('/builder');
+                router.replace('/builder');
             } catch (error) {
                 if (error instanceof Error) {
                     setErrorMessage(error.message);

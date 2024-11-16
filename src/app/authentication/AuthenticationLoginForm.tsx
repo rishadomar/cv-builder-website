@@ -12,13 +12,13 @@ import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import PasswordField from '@/app/builder/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
-import LinkButton from './core/LinkButton';
+import LinkButton from '@/components/core/LinkButton';
 
-interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;
 }
 
-export function UserAuthLoginForm({ onForgotPassword, className, ...props }: UserAuthLoginFormProps) {
+export function AuthenticationLoginForm({ onForgotPassword, className, ...props }: AuthenticationLoginFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<HTMLInputElement>(null);
