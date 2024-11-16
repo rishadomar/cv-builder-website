@@ -15,7 +15,7 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
             <div
                 className={`fixed top-0 left-0 h-full w-64 sm:w-80 md:w-96 bg-gray-800 text-white transform ${
                     isOpen ? 'translate-x-0' : '-translate-x-full'
-                } transition-transform duration-300 ease-in-out z-50`}
+                } transition-transform duration-300 ease-in-out z-50  overflow-y-auto`}
             >
                 <div className='p-4 flex justify-between items-center'>
                     <span className='text-lg font-bold'>Progress</span>
