@@ -72,23 +72,29 @@ export default function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWork
 
     return (
         <Form {...formHook}>
-            <h2>RemoteWork details</h2>
-            <form onSubmit={onSubmit} className='flex flex-col space-y-4'>
-                <div className='h-[500px] overflow-auto space-y-4 px-2'>
-                    <YesNoFormField
-                        formHook={formHook}
-                        label='Are you prepared to work remotely?'
-                        fieldName='remoteWork'
-                    />
-                    <YesNoFormField
-                        formHook={formHook}
-                        label='Are you prepared to work partially remotely?'
-                        fieldName='partiallyRemote'
-                    />
-                    <YesNoFormField formHook={formHook} label='Do you prefer remote work?' fieldName='preferRemote' />
+            <h1 className='pl-4'>RemoteWork details</h1>
+            <form onSubmit={onSubmit}>
+                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4'>
+                        <YesNoFormField
+                            formHook={formHook}
+                            label='Are you prepared to work remotely?'
+                            fieldName='remoteWork'
+                        />
+                        <YesNoFormField
+                            formHook={formHook}
+                            label='Are you prepared to work partially remotely?'
+                            fieldName='partiallyRemote'
+                        />
+                        <YesNoFormField
+                            formHook={formHook}
+                            label='Do you prefer remote work?'
+                            fieldName='preferRemote'
+                        />
+                    </div>
                 </div>
 
-                <StepButtons onPrevious={onPrevious} onNext={onNext} className='mt-auto' />
+                <StepButtons onPrevious={onPrevious} onNext={onNext} />
             </form>
         </Form>
     );

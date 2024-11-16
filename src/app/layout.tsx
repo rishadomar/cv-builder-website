@@ -35,11 +35,11 @@ export default function RootLayout({
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <StoreProvider>
                     <CookieLoader />
-                    <div className='flex flex-col h-screen'>
+                    <div className='min-h-screen flex flex-col'>
                         <Navbar />
-                        <div className='flex flex-1'>
-                            <main className='flex-1 p-4 overflow-auto'>{children}</main>
-                        </div>
+                        <main className='flex-1 pt-16 relative'>
+                            <div className='max-w-3xl mx-auto'>{children}</div>
+                        </main>
                     </div>
                 </StoreProvider>
             </body>

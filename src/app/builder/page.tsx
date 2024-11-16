@@ -68,7 +68,7 @@ export default function BuilderPage() {
     };
 
     return (
-        <div className='h-full w-full max-w-md'>
+        <>
             <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
             <div className='bg-gray-50 py-6 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <ContactDetailsForm onNext={nextPage} />}
@@ -96,6 +96,6 @@ export default function BuilderPage() {
                 )}
                 {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
             </div>
-        </div>
+        </>
     );
 }

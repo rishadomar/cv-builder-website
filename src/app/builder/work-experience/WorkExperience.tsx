@@ -70,8 +70,8 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
 
     return (
         <>
-            <div className='p-6 sm:p-10'>
-                <div className='after:absolute after:inset-y-0 after:w-px after:bg-gray-500/20 relative pl-6 after:left-0 grid gap-10 dark:after:bg-gray-400/20'>
+            <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+                <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
                     {busyUpdatingList && <OverlaySpinner />}
                     {workExperienceEntries &&
                         workExperienceEntries.map((workExperienceEntry, index) => (
@@ -82,13 +82,13 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                             />
                         ))}
                 </div>
-            </div>
 
-            <div className='mt-4'>
-                <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
-                <form onSubmit={onSubmit} className='flex flex-col'>
-                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
-                </form>
+                <div className='mt-4'>
+                    <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
+                    <form onSubmit={onSubmit} className='flex flex-col'>
+                        <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                    </form>
+                </div>
             </div>
         </>
     );

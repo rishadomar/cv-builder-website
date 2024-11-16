@@ -92,11 +92,10 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     };
 
     return (
-        <>
-            <Form {...formHook}>
-                <h2>Personality details</h2>
-                <form onSubmit={onSubmit} className='flex flex-col space-y-4'>
-                    <div className='h-[500px] overflow-auto space-y-4 px-2'>
+        <Form {...formHook}>
+            <form onSubmit={onSubmit}>
+                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
                         <PillSelectFormField
                             label='Personality Traits'
                             fieldName='descriptionOfSelf'
@@ -109,21 +108,21 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                             }}
                             error={formHook.formState.errors.descriptionOfSelf?.message}
                         />
+                        <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
+                        <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
+                            <Icons.sparkles className='mr-2 h-5 w-5' />
+                            Generate
+                        </Button>
+                        <TextareaFormField
+                            formHook={formHook}
+                            label='Generated Text'
+                            fieldName='personalityText'
+                            placeholder='AI generated text will appear here'
+                        />
                     </div>
-                    <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
-                    <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
-                        <Icons.sparkles className='mr-2 h-5 w-5' />
-                        Generate
-                    </Button>
-                    <TextareaFormField
-                        formHook={formHook}
-                        label='Generated Text'
-                        fieldName='personalityText'
-                        placeholder='AI generated text will appear here'
-                    />
-                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
-                </form>
-            </Form>
-        </>
+                </div>
+                <StepButtons onNext={onNext} onPrevious={onPrevious} />
+            </form>
+        </Form>
     );
 }

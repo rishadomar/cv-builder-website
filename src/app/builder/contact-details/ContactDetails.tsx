@@ -84,27 +84,28 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
 
     return (
         <Form {...formHook}>
-            <h1 className='m-3'>Contact details</h1>
-            <form onSubmit={onSubmit} className='flex flex-col'>
-                <div className='flex-grow overflow-auto space-y-4 px-3'>
-                    <TextFormField
-                        formHook={formHook}
-                        label='Name'
-                        fieldName='name'
-                        description='This is the name that will be displayed on your profile and in emails.'
-                        placeholder='Your name'
-                    />
+            <h1 className='pl-4'>Contact details</h1>
+            <form onSubmit={onSubmit}>
+                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                        <TextFormField
+                            formHook={formHook}
+                            label='Name'
+                            fieldName='name'
+                            description='This is the name that will be displayed on your profile and in emails.'
+                            placeholder='Your name'
+                        />
 
-                    <TextFormField
-                        formHook={formHook}
-                        label='Contact number'
-                        fieldName='phoneNumber'
-                        placeholder='Your contact number'
-                    />
+                        <TextFormField
+                            formHook={formHook}
+                            label='Contact number'
+                            fieldName='phoneNumber'
+                            placeholder='Your contact number'
+                        />
+                    </div>
                 </div>
-                <div className='my-4'>
-                    <StepButtons onNext={onNext} />
-                </div>
+
+                <StepButtons onNext={onNext} />
             </form>
         </Form>
     );

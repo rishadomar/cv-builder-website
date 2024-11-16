@@ -14,9 +14,15 @@ type MilestoneCaptureDataProps = {
 
 export default function MilestoneCaptureData({ onNext, onPrevious }: MilestoneCaptureDataProps) {
     const fieldValues = useAppSelector((state) => state.fieldValues);
-
-    if (fieldValues.payment) {
-        return <PaymentComplete paymentDetails={fieldValues.payment} onNext={onNext} onPrevious={onPrevious} />;
-    }
-    return <PaymentPrompt onNext={onNext} onPrevious={onPrevious} />;
+    return (
+        <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                {fieldValues.payment ? (
+                    <PaymentComplete paymentDetails={fieldValues.payment} onNext={onNext} onPrevious={onPrevious} />
+                ) : (
+                    <PaymentPrompt onNext={onNext} onPrevious={onPrevious} />
+                )}
+            </div>
+        </div>
+    );
 }

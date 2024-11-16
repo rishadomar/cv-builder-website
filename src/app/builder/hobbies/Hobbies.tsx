@@ -86,26 +86,28 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
 
     return (
         <Form {...formHook}>
-            <form onSubmit={onSubmit} className='flex flex-col space-y-4'>
-                <div className='h-[500px] overflow-auto space-y-4 px-2'>
-                    <PillSelectFormField
-                        label='Hobbies'
-                        fieldName='hobbies'
-                        availablePills={Hobbies}
-                        selectedPills={formHook.getValues().hobbies}
-                        setSelectedPills={(selectedPills) => {
-                            formHook.reset({
-                                hobbies: selectedPills
-                            });
-                        }}
-                        error={formHook.formState.errors.hobbies?.message}
-                    />
-                    <TextFormField
-                        formHook={formHook}
-                        label='Other hobbies'
-                        fieldName='otherHobbies'
-                        description='Any other hobbies'
-                    />
+            <form onSubmit={onSubmit}>
+                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                        <PillSelectFormField
+                            label='Hobbies'
+                            fieldName='hobbies'
+                            availablePills={Hobbies}
+                            selectedPills={formHook.getValues().hobbies}
+                            setSelectedPills={(selectedPills) => {
+                                formHook.reset({
+                                    hobbies: selectedPills
+                                });
+                            }}
+                            error={formHook.formState.errors.hobbies?.message}
+                        />
+                        <TextFormField
+                            formHook={formHook}
+                            label='Other hobbies'
+                            fieldName='otherHobbies'
+                            description='Any other hobbies'
+                        />
+                    </div>
                 </div>
                 <StepButtons onNext={onNext} onPrevious={onPrevious} />
             </form>

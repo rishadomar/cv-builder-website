@@ -16,9 +16,9 @@ const Navbar: React.FC = () => {
     }
 
     return (
-        <>
-            <nav className='bg-gray-800 p-4'>
-                <div className='container mx-auto flex justify-between items-center'>
+        <nav className='fixed top-0 left-0 right-0 bg-white border-b shadow-sm z-50'>
+            <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8'>
+                <div className='flex items-center justify-between h-16'>
                     <Icons.bars4
                         className='h-5 w-5 text-gray-400 mr-3'
                         aria-hidden='true'
@@ -37,9 +37,9 @@ const Navbar: React.FC = () => {
                     </div>
                     <LogoutButton />
                 </div>
-            </nav>
+            </div>
             <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
-        </>
+        </nav>
     );
 };
 

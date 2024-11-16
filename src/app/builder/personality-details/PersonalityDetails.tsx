@@ -83,22 +83,24 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
 
     return (
         <Form {...formHook}>
-            <form onSubmit={onSubmit} className='flex flex-col space-y-4'>
-                <div className='h-[500px] overflow-auto space-y-4 px-2'>
-                    <PillSelectFormField
-                        label='Personality Traits'
-                        fieldName='descriptionOfSelf'
-                        availablePills={Traits}
-                        selectedPills={formHook.getValues().descriptionOfSelf}
-                        setSelectedPills={(selectedPills) => {
-                            formHook.reset({
-                                descriptionOfSelf: selectedPills
-                            });
-                        }}
-                        error={formHook.formState.errors.descriptionOfSelf?.message}
-                    />
+            <form onSubmit={onSubmit}>
+                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                        <PillSelectFormField
+                            label='Personality Traits'
+                            fieldName='descriptionOfSelf'
+                            availablePills={Traits}
+                            selectedPills={formHook.getValues().descriptionOfSelf}
+                            setSelectedPills={(selectedPills) => {
+                                formHook.reset({
+                                    descriptionOfSelf: selectedPills
+                                });
+                            }}
+                            error={formHook.formState.errors.descriptionOfSelf?.message}
+                        />
+                        <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
+                    </div>
                 </div>
-                <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
                 <StepButtons onNext={onNext} onPrevious={onPrevious} />
             </form>
         </Form>

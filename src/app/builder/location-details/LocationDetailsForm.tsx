@@ -95,42 +95,44 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
 
     return (
         <Form {...formHook}>
-            <h2>Location details</h2>
+            <h1 className='pl-4'>Location details</h1>
 
-            <form onSubmit={onSubmit} className='flex flex-col space-y-4'>
-                <div className='h-[500px] overflow-auto space-y-4 px-2'>
-                    <TextFormField
-                        formHook={formHook}
-                        label='Country'
-                        fieldName='country'
-                        description='This is the country where you are located'
-                        placeholder='Your country'
-                    />
+            <form onSubmit={onSubmit}>
+                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                        <TextFormField
+                            formHook={formHook}
+                            label='Country'
+                            fieldName='country'
+                            description='This is the country where you are located'
+                            placeholder='Your country'
+                        />
 
-                    <TextFormField
-                        formHook={formHook}
-                        label='City'
-                        fieldName='city'
-                        description='This is the city where you are located'
-                        placeholder='Your city'
-                    />
+                        <TextFormField
+                            formHook={formHook}
+                            label='City'
+                            fieldName='city'
+                            description='This is the city where you are located'
+                            placeholder='Your city'
+                        />
 
-                    <TextFormField
-                        formHook={formHook}
-                        label='Province'
-                        fieldName='province'
-                        description='This is the province where you are located'
-                        placeholder='Your province'
-                    />
+                        <TextFormField
+                            formHook={formHook}
+                            label='Province'
+                            fieldName='province'
+                            description='This is the province where you are located'
+                            placeholder='Your province'
+                        />
 
-                    <YesNoFormField
-                        formHook={formHook}
-                        label='Are you prepared to relocate to another city?'
-                        fieldName='preparedToRelocate'
-                    />
+                        <YesNoFormField
+                            formHook={formHook}
+                            label='Are you prepared to relocate to another city?'
+                            fieldName='preparedToRelocate'
+                        />
+                    </div>
                 </div>
 
-                <StepButtons onPrevious={onPrevious} onNext={onNext} className='mt-auto' />
+                <StepButtons onPrevious={onPrevious} onNext={onNext} />
             </form>
         </Form>
     );
