@@ -6,7 +6,6 @@ import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
 import { useState } from 'react';
 import LoginSwitchButton from './LoginSwitchButton';
-import LogoutButton from '@/app/authentication/LogoutButton';
 import { AuthenticationLoginForm } from '@/app/authentication/AuthenticationLoginForm';
 import SignupSwitchButton from './SignupSwitchButton';
 import { ForgotPasswordForm } from '@/app/authentication/ForgotPasswordForm';
@@ -20,10 +19,9 @@ export default function AuthenticationPage() {
     const [showSignupForm, setShowSignupForm] = useState(true);
     const router = useRouter();
 
-    const renderLoginSection = () => {
+    const renderAlreadyLoggedInSection = () => {
         return (
             <div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]'>
-                <LogoutButton />
                 <p>You are already logged in</p>
                 <Button
                     onClick={() => {
@@ -93,7 +91,7 @@ export default function AuthenticationPage() {
 
     return (
         <div className='container relative h-full'>
-            <div className='lg:p-8'>{isLoggedIn ? renderLoginSection() : renderLoginSignupSection()}</div>
+            <div className='lg:p-8'>{isLoggedIn ? renderAlreadyLoggedInSection() : renderLoginSignupSection()}</div>
         </div>
     );
 }

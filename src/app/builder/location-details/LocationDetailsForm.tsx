@@ -2,11 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { z } from 'zod';
-import { StepButtons } from './StepButtons';
-import TextFormField from './TextFormField';
+import { StepButtons } from '../StepButtons';
+import TextFormField from '../TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
-import YesNoFormField from './YesNoFormField';
+import YesNoFormField from '../YesNoFormField';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 
