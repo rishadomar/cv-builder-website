@@ -34,7 +34,7 @@ export function UserAuthLoginForm({ onForgotPassword, className, ...props }: Use
         if (email && password) {
             try {
                 await dispatch(services.login(email, password));
-                router.push('/builder');
+                router.replace('/builder');
             } catch (error: unknown) {
                 if (error instanceof CustomError) {
                     setErrorMessage(error.message);
