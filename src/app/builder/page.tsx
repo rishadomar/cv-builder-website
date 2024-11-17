@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ContactDetailsForm from '@/app/builder/contact-details/ContactDetails';
 import PersonalDetailsForm from './personal-details/PersonalDetails';
@@ -68,7 +68,7 @@ export default function BuilderPage() {
     };
 
     return (
-        <>
+        <Suspense>
             <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
             <div className='bg-gray-50 py-6 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <ContactDetailsForm onNext={nextPage} />}
@@ -96,6 +96,6 @@ export default function BuilderPage() {
                 )}
                 {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
             </div>
-        </>
+        </Suspense>
     );
 }
