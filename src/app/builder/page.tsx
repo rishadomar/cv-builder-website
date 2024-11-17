@@ -16,7 +16,8 @@ import { Steps } from '@/components/ProgressSteps';
 
 const NumberOfPages = Steps.length;
 
-export default function BuilderPage() {
+// Create a separate component for the form content
+function FormContent() {
     const searchParams = useSearchParams();
     const [currentPage, setCurrentPage] = useState<string>('contact-details');
     const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
@@ -68,7 +69,7 @@ export default function BuilderPage() {
     };
 
     return (
-        <Suspense>
+        <>
             <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
             <div className='bg-gray-50 py-6 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <ContactDetailsForm onNext={nextPage} />}
@@ -96,6 +97,15 @@ export default function BuilderPage() {
                 )}
                 {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
             </div>
+        </>
+    );
+}
+
+// Main component with proper Suspense boundary
+export default function BuilderPage() {
+    return (
+        <Suspense fallback={<div className='p-4'>Loading...</div>}>
+            <FormContent />
         </Suspense>
     );
 }
