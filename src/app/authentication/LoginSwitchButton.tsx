@@ -8,11 +8,10 @@ interface LoginSwitchButtonProps {
 
 export default function LoginSwitchButton({ onClick }: LoginSwitchButtonProps) {
     return (
-        <Button
-            onClick={onClick}
-            className={cn(buttonVariants({ variant: 'secondary' }), 'absolute right-2 top-2 md:right-8 md:top-8')}
-        >
-            Login
-        </Button>
+        <div className='absolute top-4 right-4 md:top-6 md:right-6'>
+            <Button onClick={onClick} className={cn(buttonVariants({ variant: 'secondary' }))}>
+                Login
+            </Button>
+        </div>
     );
 }

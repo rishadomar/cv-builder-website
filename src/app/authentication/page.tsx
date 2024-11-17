@@ -44,8 +44,8 @@ export default function AuthenticationPage() {
                             setShowSignupForm(false);
                         }}
                     />
-                    <div className='mt-10 lg:p-8'>
-                        <div className='mx-auto flex w-full max-w-md flex-col justify-center space-y-6 p-4 sm:w-[350px]'>
+                    <div className='flex items-center justify-center min-h-screen -mt-40'>
+                        <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
                             <AuthenticationSignupForm />
                             <GoogleLoginForm />
                             <PrivacyLinks />
@@ -65,12 +65,16 @@ export default function AuthenticationPage() {
                         }}
                     />
 
-                    <AuthenticationLoginForm
-                        onForgotPassword={() => {
-                            setShowForgotPassword(true);
-                            setShowLoginForm(false);
-                        }}
-                    />
+                    <div className='flex items-center justify-center min-h-screen -mt-40'>
+                        <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
+                            <AuthenticationLoginForm
+                                onForgotPassword={() => {
+                                    setShowForgotPassword(true);
+                                    setShowLoginForm(false);
+                                }}
+                            />
+                        </div>
+                    </div>
                 </>
             );
         }
@@ -78,19 +82,29 @@ export default function AuthenticationPage() {
         if (showForgotPassword) {
             return (
                 <>
-                    <ForgotPasswordForm
-                        onLogin={() => {
+                    <LoginSwitchButton
+                        onClick={() => {
                             setShowForgotPassword(false);
                             setShowLoginForm(true);
                         }}
                     />
+                    <div className='flex items-center justify-center min-h-screen -mt-40'>
+                        <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
+                            <ForgotPasswordForm
+                                onClick={() => {
+                                    setShowForgotPassword(false);
+                                    setShowLoginForm(true);
+                                }}
+                            />
+                        </div>
+                    </div>
                 </>
             );
         }
     };
 
     return (
-        <div className='container relative h-full'>
+        <div className='min-h-screen relative p-4 md:p-6'>
             <div className='lg:p-8'>{isLoggedIn ? renderAlreadyLoggedInSection() : renderLoginSignupSection()}</div>
         </div>
     );

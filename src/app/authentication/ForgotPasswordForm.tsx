@@ -11,13 +11,10 @@ import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
-import LoginSwitchButton from '@/app/authentication/LoginSwitchButton';
 
-interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
-    onLogin: () => void;
-}
+interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function ForgotPasswordForm({ onLogin, className, ...props }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({ className, ...props }: ForgotPasswordFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<HTMLInputElement>(null);
@@ -47,7 +44,6 @@ export function ForgotPasswordForm({ onLogin, className, ...props }: ForgotPassw
 
     return (
         <>
-            <LoginSwitchButton onClick={onLogin} />
             <div className='flex flex-col space-y-2 text-center'>
                 <h1 className='text-2xl font-semibold tracking-tight'>Forgot password</h1>
                 <p className='text-sm text-muted-foreground'>Enter your email to reset your password</p>
