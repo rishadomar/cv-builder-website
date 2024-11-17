@@ -89,10 +89,10 @@ export const Steps = [
 ];
 
 type ProgressStepsProps = {
-    onClose: () => void;
+    onSelect: () => void;
 };
 
-const ProgressSteps: React.FC<ProgressStepsProps> = ({ onClose }: ProgressStepsProps) => {
+const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
     const router = useRouter();
     return (
         <Card className='w-full max-w-md'>
@@ -107,7 +107,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onClose }: ProgressStepsP
                             key={step.id}
                             className='flex items-center space-x-4'
                             onClick={() => {
-                                onClose();
+                                onSelect();
                                 router.replace(`/builder?page=${step.path}`);
                             }}
                         >

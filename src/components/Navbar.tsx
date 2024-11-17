@@ -1,15 +1,14 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
 import Image from 'next/image';
-import { Icons } from './icons';
-import Drawer from './Drawer';
+import StepDrawer from './StepDrawer';
 import ProfileDropdown from './ProfileDropdown';
 
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    // const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     if (!isLoggedIn) {
         return null;
@@ -19,11 +18,7 @@ const Navbar: React.FC = () => {
         <nav className='fixed top-0 left-0 right-0 bg-gray-800 border-b shadow-sm z-50'>
             <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex items-center justify-between h-16'>
-                    <Icons.bars4
-                        className='h-5 w-5 text-gray-400 mr-3'
-                        aria-hidden='true'
-                        onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                    />
+                    <StepDrawer />
                     <div className='flex items-center'>
                         <Image
                             //className='dark:invert'
@@ -38,7 +33,7 @@ const Navbar: React.FC = () => {
                     <ProfileDropdown />
                 </div>
             </div>
-            <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+            {/* <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} /> */}
         </nav>
     );
 };
