@@ -21,15 +21,19 @@ export default function AuthenticationPage() {
 
     const renderAlreadyLoggedInSection = () => {
         return (
-            <div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]'>
-                <p>You are already logged in</p>
-                <Button
-                    onClick={() => {
-                        router.replace('/builder');
-                    }}
-                >
-                    Continue
-                </Button>
+            <div className='flex items-center justify-center min-h-screen -mt-32'>
+                <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
+                    <div className='text-center'>You have successfully logged in</div>
+                    <div className='flex justify-center'>
+                        <Button
+                            onClick={() => {
+                                router.replace('/builder');
+                            }}
+                        >
+                            Continue
+                        </Button>
+                    </div>
+                </div>
             </div>
         );
     };
@@ -44,7 +48,7 @@ export default function AuthenticationPage() {
                             setShowSignupForm(false);
                         }}
                     />
-                    <div className='flex items-center justify-center min-h-screen -mt-40'>
+                    <div className='flex items-center justify-center min-h-screen -mt-32'>
                         <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                             <AuthenticationSignupForm />
                             <GoogleLoginForm />
@@ -65,7 +69,7 @@ export default function AuthenticationPage() {
                         }}
                     />
 
-                    <div className='flex items-center justify-center min-h-screen -mt-40'>
+                    <div className='flex items-center justify-center min-h-screen -mt-32'>
                         <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                             <AuthenticationLoginForm
                                 onForgotPassword={() => {
@@ -88,7 +92,7 @@ export default function AuthenticationPage() {
                             setShowLoginForm(true);
                         }}
                     />
-                    <div className='flex items-center justify-center min-h-screen -mt-40'>
+                    <div className='flex items-center justify-center min-h-screen -mt-32'>
                         <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
                             <ForgotPasswordForm
                                 onClick={() => {
