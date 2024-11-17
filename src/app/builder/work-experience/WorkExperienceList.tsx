@@ -81,13 +81,12 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                                 setBusyUpdatingList={setBusyUpdatingList}
                             />
                         ))}
-                </div>
-
-                <div className='mt-4'>
-                    <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
-                    <form onSubmit={onSubmit} className='flex flex-col'>
-                        <StepButtons onNext={onNext} onPrevious={onPrevious} />
-                    </form>
+                    <div>
+                        <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
+                        <form onSubmit={onSubmit} className='flex flex-col'>
+                            <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                        </form>
+                    </div>
                 </div>
             </div>
         </>
