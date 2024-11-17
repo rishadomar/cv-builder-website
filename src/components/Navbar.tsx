@@ -5,11 +5,12 @@ import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice
 import Image from 'next/image';
 import StepDrawer from './StepDrawer';
 import ProfileDropdown from './ProfileDropdown';
+import { useRouter } from 'next/navigation';
 
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
+    const router = useRouter();
     // const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
     if (!isLoggedIn) {
         return null;
     }
@@ -19,7 +20,7 @@ const Navbar: React.FC = () => {
             <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex items-center justify-between h-16'>
                     <StepDrawer />
-                    <div className='flex items-center'>
+                    <div className='flex items-center' onClick={() => router.push('/')}>
                         <Image
                             //className='dark:invert'
                             src='https://cvbuilder.co.za/images/logo-pencil.jpeg'
