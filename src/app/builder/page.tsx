@@ -6,7 +6,7 @@ import PersonalDetailsForm from './personal-details/PersonalDetails';
 import { LocationDetailsForm } from './location-details/LocationDetailsForm';
 import RemoteWorkDetailsForm from '@/app/builder/remote-work-details/RemoteWorkDetails';
 import HobbyDetailsForm from '@/app/builder/hobbies/Hobbies';
-import WorkExperienceList from '@/app/builder/work-experience/WorkExperience';
+import WorkExperienceList from '@/app/builder/work-experience/WorkExperienceList';
 import PersonalityDetailsForm from '@/app/builder/personality-details/PersonalityDetails';
 import MilestoneCaptureData from '@/app/builder/milestone-capture-data/MilestoneCaptureData';
 import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-details/ReviewPersonalityDetails';
