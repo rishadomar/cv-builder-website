@@ -45,12 +45,12 @@ export default function AuthenticationPage() {
                         }}
                     />
                     <div className='flex items-center justify-center min-h-screen -mt-40'>
-                        <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
+                        <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                             <AuthenticationSignupForm />
                             <GoogleLoginForm />
-                            <PrivacyLinks />
                         </div>
                     </div>
+                    <PrivacyLinks />
                 </>
             );
         }
@@ -66,7 +66,7 @@ export default function AuthenticationPage() {
                     />
 
                     <div className='flex items-center justify-center min-h-screen -mt-40'>
-                        <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
+                        <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                             <AuthenticationLoginForm
                                 onForgotPassword={() => {
                                     setShowForgotPassword(true);
