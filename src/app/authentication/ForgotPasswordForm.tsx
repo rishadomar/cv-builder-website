@@ -29,7 +29,7 @@ export function ForgotPasswordForm({ className, ...props }: ForgotPasswordFormPr
         if (email) {
             try {
                 await dispatch(services.forgotPassword(email));
-                router.push('/authentication/signin');
+                router.push('/authentication');
             } catch (error: unknown) {
                 if (error instanceof CustomError) {
                     setErrorMessage(error.message);

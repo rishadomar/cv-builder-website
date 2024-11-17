@@ -12,18 +12,12 @@ export default function Welcome() {
                     height={38}
                     priority
                 />
-                <div>Build: 13 Nov 2024 7am</div>
+                <div>Build: 17 Nov 2024 4pm</div>
                 <ol className='list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]'>
                     <li className='mb-2'>
                         Get started by signing up using an email address or via Google
                         <a href='/authentication/' target='_self' className='ml-2 underline underline-offset-4'>
                             Signup
-                        </a>
-                    </li>
-                    <li className='mb-2'>
-                        Already registered? Then
-                        <a href='/authentication/signin' target='_self' className='ml-2 underline underline-offset-4'>
-                            Login
                         </a>
                     </li>
                     <li>Fill in the easy to answer questionnaire. No large text required - just the facts</li>
