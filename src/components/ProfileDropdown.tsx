@@ -48,10 +48,15 @@ const ProfileDropdown: React.FC = () => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant='outline'>{email}</Button>
+                    <span>
+                        <Icons.userCircle className='text-white' />
+                    </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-56'>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuItem disabled>
+                        <span>{email}</span>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem onSelect={() => handleBilling()}>

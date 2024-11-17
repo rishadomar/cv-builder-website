@@ -31,7 +31,6 @@ const Navbar: React.FC = () => {
                             alt='CV Builder logo'
                             width={20}
                             height={20}
-                            className='hidden sm:block'
                             priority
                         />
                         <span className='text-white ml-2'>CV Builder</span>
