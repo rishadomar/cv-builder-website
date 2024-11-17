@@ -45,5 +45,6 @@ export const { setAuthenticationDetails, resetAuthenticationDetails } = authenti
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectIsLoggedIn = (state: RootState) => state.authentication.sub !== undefined;
+export const selectUserEmail = (state: RootState) => state.authentication.email;
 
 export default authenticationSlice.reducer;

@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
 import Image from 'next/image';
-import LogoutButton from '../app/authentication/LogoutButton';
 import { Icons } from './icons';
 import Drawer from './Drawer';
+import ProfileDropdown from './ProfileDropdown';
 
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -31,11 +31,12 @@ const Navbar: React.FC = () => {
                             alt='CV Builder logo'
                             width={20}
                             height={20}
+                            className='hidden sm:block'
                             priority
                         />
                         <span className='text-white ml-2'>CV Builder</span>
                     </div>
-                    <LogoutButton />
+                    <ProfileDropdown />
                 </div>
             </div>
             <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
