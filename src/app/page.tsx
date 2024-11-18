@@ -1,9 +1,9 @@
-import Welcome from '@/app/Welcome';
+import CVBuilderLandingPage from './CVBuilderLandingPage';
 
 export default function Home() {
     return (
         <>
-            <Welcome />
+            <CVBuilderLandingPage />
         </>
     );
 }
