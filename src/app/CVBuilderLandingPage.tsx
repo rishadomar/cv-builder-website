@@ -16,7 +16,7 @@ const CVBuilderLandingPage = () => {
             {/* Hero Section - Mobile First */}
             <div className='container mx-auto px-4 py-12 lg:py-24 flex flex-col-reverse lg:flex-row items-center'>
                 {/* Mobile: Swap image and content order */}
-                <div className='w-full lg:w-1/2 mt-8 lg:mt-0 flex justify-center'>
+                <div className='w-full lg:w-1/2 mt-8 lg:mt-0 lg:mr-6 flex justify-center'>
                     <Image
                         src='/images/Designer.png'
                         alt='CV Builder Hero'
