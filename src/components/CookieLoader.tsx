@@ -8,7 +8,9 @@ const CookieLoader: React.FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(loadOnRefresh());
+        setTimeout(() => {
+            dispatch(loadOnRefresh());
+        }, 0);
     }, [dispatch]);
 
     return null;
