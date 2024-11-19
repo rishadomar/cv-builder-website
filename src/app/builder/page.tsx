@@ -13,6 +13,8 @@ import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-detai
 import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Steps } from '@/components/ProgressSteps';
+import { useAuth } from '@/hooks/useAuth';
+import Spinner from '@/components/core/Spinner';
 
 const NumberOfPages = Steps.length;
 
@@ -103,6 +105,20 @@ function FormContent() {
 
 // Main component with proper Suspense boundary
 export default function BuilderPage() {
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+        return (
+            <div className='flex items-center justify-center h-screen'>
+                <Spinner />
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return null; // or loading state
+    }
+
     return (
         <Suspense fallback={<div className='p-4'>Loading...</div>}>
             <FormContent />
