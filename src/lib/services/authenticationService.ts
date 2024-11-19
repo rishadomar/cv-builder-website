@@ -128,10 +128,12 @@ export const logout = () => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
         dispatch(setLoading(true));
         try {
-            const email = getState().authentication.email;
-            const accessToken = getState().authentication.accessToken;
-            if (email && accessToken) {
-                await authApi.logout(email, accessToken);
+            if (!getCookie('Google')) {
+                const email = getState().authentication.email;
+                const accessToken = getState().authentication.accessToken;
+                if (email && accessToken) {
+                    await authApi.logout(email, accessToken);
+                }
             }
         } catch (error) {
             console.error('Logout error:', error);
