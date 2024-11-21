@@ -2,8 +2,8 @@
 import React from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import PaymentInformation from './PaymentDetails';
-import { PaymentPrompt } from '@/components/PaymentPrompt';
 import { useRouter } from 'next/navigation';
+import Paywall from '@/app/builder/paywall/Paywall';
 
 const BillingPage = () => {
     const fieldValues = useAppSelector((state) => state.fieldValues);
@@ -14,7 +14,7 @@ const BillingPage = () => {
             {fieldValues.payment ? (
                 <PaymentInformation paymentValues={fieldValues.payment} />
             ) : (
-                <PaymentPrompt
+                <Paywall
                     onNext={() => {
                         router.replace('/billing');
                     }}
