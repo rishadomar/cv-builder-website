@@ -26,7 +26,7 @@ export default function RootLayout({
                     <CookieLoader />
                     <div className='min-h-screen flex flex-col'>
                         <Navbar />
-                        <main className='flex-1 pt-16 relative'>
+                        <main className='flex-1 relative'>
                             <div className='max-w-3xl mx-auto'>{children}</div>
                         </main>
                     </div>

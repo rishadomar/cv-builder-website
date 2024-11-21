@@ -45,9 +45,9 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
 
     return (
         <>
-            <h1 className='pl-4'>Generate and download PDF</h1>
             <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                    <h1>Generate and download PDF</h1>
                     <div>You can review the PDF and return here to make any changes</div>
                     <div className='flex flex-col space-y-2'>
                         <Button variant='outline' disabled={isLoading} onClick={() => callGeneratePDF()}>

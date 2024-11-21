@@ -84,10 +84,10 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
 
     return (
         <Form {...formHook}>
-            <h1 className='pl-4'>Contact details</h1>
             <form onSubmit={onSubmit}>
                 <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                        <h1>Contact details</h1>
                         <TextFormField
                             formHook={formHook}
                             label='Name'

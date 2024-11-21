@@ -25,9 +25,9 @@ const StepDrawer: React.FC<DrawerProps> = () => {
     return (
         <Drawer open={isOpen} onOpenChange={setIsOpen}>
             <DrawerTrigger>
-                <div className='flex flex-col'>
+                <div className='flex flex-row'>
                     <Menu className='h-5 w-5 text-gray-400 mr-1' aria-hidden='true' />
-                    <span className='text-white text-xs'>Menu</span>
+                    <span className='text-gray-400 text-xs'>Menu</span>
                 </div>
             </DrawerTrigger>
             <DrawerContent>
