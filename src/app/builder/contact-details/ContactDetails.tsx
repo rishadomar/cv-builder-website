@@ -10,6 +10,9 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
+import StepHeader from '../StepHeader';
+import { Contact, LucideIcon } from 'lucide-react';
+import { getStep } from '@/lib/utils/step';
 
 const PhoneNumberRegex = /^(\+?\d{1,3})?[\s-]?(\(?\d{1,4}\)?)?[\s-]?\d{1,4}[\s-]?\d{1,4}[\s-]?\d{1,9}$/;
 
@@ -47,6 +50,7 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
     const formHook = useForm<ContactDetailsFormValues>({
         resolver: zodResolver(contactDetailsFormSchema)
     });
+    const step = getStep('contact-details');
 
     useEffect(() => {
         if (allFieldValues) {
@@ -87,7 +91,7 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
             <form onSubmit={onSubmit}>
                 <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                        <h1>Contact details</h1>
+                        <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                         <TextFormField
                             formHook={formHook}
                             label='Name'

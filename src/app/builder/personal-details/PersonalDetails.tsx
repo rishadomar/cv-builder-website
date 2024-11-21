@@ -9,6 +9,9 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import YesNoFormField from '@/app/builder/YesNoFormField';
 import { KeyValuePairArray } from '@/lib/type';
+import StepHeader from '../StepHeader';
+import { LucideIcon } from 'lucide-react';
+import { getStep } from '@/lib/utils/step';
 
 const personalDetailsFormSchema = z.object({
     preferredPronoun: z
@@ -35,6 +38,7 @@ export default function PersonalDetailsForm({ onNext, onPrevious }: PersonalDeta
     const formHook = useForm<PersonalDetailsFormValues>({
         resolver: zodResolver(personalDetailsFormSchema)
     });
+    const step = getStep('personal-details');
 
     useEffect(() => {
         if (allFieldValues) {
@@ -76,7 +80,7 @@ export default function PersonalDetailsForm({ onNext, onPrevious }: PersonalDeta
                 <form onSubmit={onSubmit}>
                     <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                            <h1>Personal details</h1>
+                            <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                             <TextFormField
                                 formHook={formHook}
                                 label='Preferred pronoun'

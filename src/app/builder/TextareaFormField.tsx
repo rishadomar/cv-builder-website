@@ -8,13 +8,15 @@ interface TextareaFormFieldProps {
     fieldName: string;
     description?: string;
     placeholder: string;
+    rows?: number;
 }
 export default function TextareaFormField({
     formHook,
     label,
     fieldName,
     description,
-    placeholder
+    placeholder,
+    rows = 5
 }: TextareaFormFieldProps) {
     const error = formHook.formState.errors[fieldName];
 
@@ -26,7 +28,7 @@ export default function TextareaFormField({
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <Textarea placeholder={placeholder} {...field} />
+                        <Textarea placeholder={placeholder} {...field} rows={rows} />
                     </FormControl>
                     {description && <FormDescription>{description}</FormDescription>}
                     {error && (

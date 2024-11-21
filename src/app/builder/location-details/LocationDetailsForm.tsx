@@ -9,6 +9,9 @@ import { save } from '@/lib/services';
 import YesNoFormField from '../YesNoFormField';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
+import { getStep } from '@/lib/utils/step';
+import StepHeader from '../StepHeader';
+import { LucideIcon } from 'lucide-react';
 
 const locationDetailsFormSchema = z.object({
     country: z
@@ -56,6 +59,7 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
     const formHook = useForm<LocationDetailsFormValues>({
         resolver: zodResolver(locationDetailsFormSchema)
     });
+    const step = getStep('location-details');
 
     useEffect(() => {
         if (allFieldValues) {
@@ -98,7 +102,7 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
             <form onSubmit={onSubmit}>
                 <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                        <h1>Location details</h1>
+                        <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                         <TextFormField
                             formHook={formHook}
                             label='Country'

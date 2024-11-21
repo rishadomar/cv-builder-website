@@ -9,6 +9,9 @@ import { useEffect } from 'react';
 import PillSelectFormField from '../PillSelectFormField';
 import TextFormField from '../TextFormField';
 import { KeyValuePairArray } from '@/lib/type';
+import { getStep } from '@/lib/utils/step';
+import StepHeader from '../StepHeader';
+import { LucideIcon } from 'lucide-react';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -49,6 +52,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const formHook = useForm<HobbyDetailsFormValues>({
         resolver: zodResolver(hobbyDetailsFormSchema)
     });
+    const step = getStep('hobbies');
 
     useEffect(() => {
         if (allFieldValues) {
@@ -88,7 +92,8 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
         <Form {...formHook}>
             <form onSubmit={onSubmit}>
                 <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4'>
+                        <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                         <PillSelectFormField
                             label='Hobbies'
                             fieldName='hobbies'

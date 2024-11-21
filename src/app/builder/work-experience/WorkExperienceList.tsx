@@ -5,6 +5,9 @@ import { useAppSelector } from '@/lib/store/hooks';
 import OverlaySpinner from '@/components/core/OverlaySpinner';
 import { WorkExperienceEntry } from '@/lib/type';
 import WorkExperienceEntryActionsDropdown from './WorkExperienceEntryActionsDropdown';
+import { getStep } from '@/lib/utils/step';
+import StepHeader from '../StepHeader';
+import { LucideIcon } from 'lucide-react';
 
 type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -47,6 +50,7 @@ type WorkExperienceListProps = {
 export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienceListProps) {
     const workExperienceEntries = useAppSelector((state) => state.fieldValues.workExperiences);
     const [busyUpdatingList, setBusyUpdatingList] = useState(false);
+    const step = getStep('work-experience');
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter;
@@ -69,6 +73,7 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
             <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
                     {busyUpdatingList && <OverlaySpinner />}
+                    <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                     {workExperienceEntries &&
                         workExperienceEntries.map((workExperienceEntry, index) => (
                             <WorkExperienceItem

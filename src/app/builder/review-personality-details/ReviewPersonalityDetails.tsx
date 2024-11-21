@@ -13,6 +13,9 @@ import { StepButtons } from '../StepButtons';
 import TextFormField from '../TextFormField';
 import PillSelectFormField from '../PillSelectFormField';
 import { WandSparkles } from 'lucide-react';
+import { getStep } from '@/lib/utils/step';
+import StepHeader from '../StepHeader';
+import { LucideIcon } from 'lucide-react';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     descriptionOfSelf: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -52,6 +55,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
         resolver: zodResolver(reviewPersonalityDetailsFormSchema)
     });
     const isLoading = useAppSelector((state) => state.loading.isLoading);
+    const step = getStep('personality-details');
 
     useEffect(() => {
         console.log('all field values changed: ', allFieldValues);
@@ -96,6 +100,8 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
             <form onSubmit={onSubmit}>
                 <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
+                        <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
+
                         <PillSelectFormField
                             label='Personality Traits'
                             fieldName='descriptionOfSelf'
@@ -118,6 +124,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                             label='Generated Text'
                             fieldName='personalityText'
                             placeholder='AI generated text will appear here'
+                            rows={10}
                         />
                     </div>
                 </div>
