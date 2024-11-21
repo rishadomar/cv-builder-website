@@ -6,7 +6,6 @@ import { paymentComplete } from '@/lib/services/paymentService';
 import { Button } from '@/components/ui/button';
 import { Cost } from '@/constants';
 import { Currency } from 'react-paystack/dist/types';
-import PaystackSecurity from './PaystackSecurity';
 
 const features = [
     'Full CV creation and management',

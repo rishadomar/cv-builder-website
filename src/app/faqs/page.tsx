@@ -1,6 +1,6 @@
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ChevronDownIcon, HelpCircleIcon } from 'lucide-react';
+import { HelpCircleIcon } from 'lucide-react';
 
 // FAQ Item Type
 interface FAQItem {
