@@ -11,7 +11,7 @@ import { save } from '@/lib/services';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import StepHeader from '../StepHeader';
-import { Contact, LucideIcon } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
 
 const PhoneNumberRegex = /^(\+?\d{1,3})?[\s-]?(\(?\d{1,4}\)?)?[\s-]?\d{1,4}[\s-]?\d{1,4}[\s-]?\d{1,9}$/;

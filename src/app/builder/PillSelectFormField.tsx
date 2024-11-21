@@ -1,7 +1,6 @@
 import Pill from '@/components/core/Pill';
 
 interface PillSelectFormFieldProps {
-    label: string;
     fieldName: string;
     availablePills: string[];
     selectedPills: string[];
@@ -9,7 +8,6 @@ interface PillSelectFormFieldProps {
     error?: string;
 }
 export default function PillSelectFormField({
-    label,
     fieldName,
     availablePills,
     selectedPills,
