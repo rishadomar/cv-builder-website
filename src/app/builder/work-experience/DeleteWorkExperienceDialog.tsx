@@ -6,21 +6,23 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
+    AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import { WorkExperienceEntry } from '@/lib/type';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { useToast } from '@/hooks/use-toast';
 import { deleteWorkExperience } from '@/lib/services';
-import { Icons } from '@/components/icons';
 
 interface DeleteWorkExperienceDialogProps {
+    dialogIsOpen: boolean;
+    setDialogState: (v: boolean) => void;
     workExperienceEntryToDelete: WorkExperienceEntry;
     setBusyDeleting: (v: boolean) => void;
 }
 
 export default function DeleteWorkExperienceDialog({
+    dialogIsOpen,
+    setDialogState,
     workExperienceEntryToDelete,
     setBusyDeleting
 }: DeleteWorkExperienceDialogProps) {
@@ -28,10 +30,7 @@ export default function DeleteWorkExperienceDialog({
     const { toast } = useToast();
 
     return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <Icons.trash className='w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer' />
-            </AlertDialogTrigger>
+        <AlertDialog open={dialogIsOpen} onOpenChange={(v) => setDialogState(v)}>
             <AlertDialogContent className='bg-white opacity-100'>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

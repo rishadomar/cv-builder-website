@@ -1,11 +1,10 @@
 import { StepButtons } from '../StepButtons';
 import AddWorkExperienceDialog from './AddWorkExperienceDialog';
-import EditWorkExperienceDialog from './EditWorkExperienceDialog';
-import DeleteWorkExperienceDialog from './DeleteWorkExperienceDialog';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import OverlaySpinner from '@/components/core/OverlaySpinner';
 import { WorkExperienceEntry } from '@/lib/type';
+import WorkExperienceEntryActionsDropdown from './WorkExperienceEntryActionsDropdown';
 
 type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -30,19 +29,16 @@ function WorkExperienceItem({ workExperienceEntry, setBusyUpdatingList }: WorkEx
                 <div className='text-gray-500 dark:text-gray-400'>{workExperienceEntry.role}</div>
                 <div className='text-gray-500 dark:text-gray-400'>{workExperienceEntry.description}</div>
             </div>
-            <div className='flex flex-col items-end space-y-2 mt-4'>
-                <EditWorkExperienceDialog
-                    workExperienceEntryToEdit={workExperienceEntry}
-                    setBusyUpdating={(v) => setBusyUpdatingList(v)}
-                />
-                <DeleteWorkExperienceDialog
-                    workExperienceEntryToDelete={workExperienceEntry}
-                    setBusyDeleting={(v) => setBusyUpdatingList(v)}
+            <div className=''>
+                <WorkExperienceEntryActionsDropdown
+                    workExperienceEntry={workExperienceEntry}
+                    setBusyUpdatingList={setBusyUpdatingList}
                 />
             </div>
         </div>
     );
 }
+
 type WorkExperienceListProps = {
     onNext: () => void;
     onPrevious: () => void;

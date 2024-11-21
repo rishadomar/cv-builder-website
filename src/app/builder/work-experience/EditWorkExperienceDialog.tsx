@@ -1,33 +1,23 @@
 'use client';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { WorkExperienceEntry } from '@/lib/type';
 import WorkExperienceForm from './WorkExperienceForm';
-import { Icons } from '@/components/icons';
 
 interface EditWorkExperienceDialogProps {
     workExperienceEntryToEdit: WorkExperienceEntry;
     setBusyUpdating: (v: boolean) => void;
+    dialogIsOpen: boolean;
+    setDialogState: (v: boolean) => void;
 }
 
 export default function EditWorkExperienceDialog({
+    dialogIsOpen,
+    setDialogState,
     workExperienceEntryToEdit,
     setBusyUpdating
 }: EditWorkExperienceDialogProps) {
-    const [dialogIsOpen, setDialogIsOpen] = useState(false);
-
     return (
-        <Dialog open={dialogIsOpen} onOpenChange={(v) => setDialogIsOpen(v)}>
-            <DialogTrigger asChild>
-                <div className='flex justify-center items-center'>
-                    <Icons.pen
-                        className='w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer'
-                        onClick={() => {
-                            setDialogIsOpen(true);
-                        }}
-                    />
-                </div>
-            </DialogTrigger>
+        <Dialog open={dialogIsOpen} onOpenChange={(v) => setDialogState(v)}>
             <DialogContent aria-describedby='Capture job specification' className='sm:max-w-[425px] bg-white'>
                 <DialogHeader>
                     <DialogTitle>Job specification</DialogTitle>
@@ -36,7 +26,7 @@ export default function EditWorkExperienceDialog({
                 <WorkExperienceForm
                     workExperienceEntryToEdit={workExperienceEntryToEdit}
                     setBusyUpdating={setBusyUpdating}
-                    onClose={() => setDialogIsOpen(false)}
+                    onClose={() => setDialogState(false)}
                 />
             </DialogContent>
         </Dialog>
