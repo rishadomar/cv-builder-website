@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={`${inter.variable} font-sans antialiased`}>
+            <body className={inter.className}>
                 <StoreProvider>
                     <CookieLoader />
                     <div className='min-h-screen flex flex-col'>
