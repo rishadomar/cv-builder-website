@@ -49,7 +49,7 @@ const ProfileDropdown: React.FC = () => {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <span>
-                        <CircleUserRound className='text-white' />
+                        <CircleUserRound className='text-gray-400' />
                     </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-56'>

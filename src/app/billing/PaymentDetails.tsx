@@ -25,7 +25,9 @@ function PaymentInformation({ paymentValues }: PaymentInformationProps) {
                         <WalletIcon className='w-6 h-6 text-primary' />
                         <span className='font-medium text-gray-700'>Payment Amount</span>
                     </div>
-                    <span className='font-bold text-gray-900'>{formatAmount(paymentCurrency, paymentAmount)}</span>
+                    <span className='font-bold text-gray-900'>
+                        {formatAmount(paymentCurrency, paymentAmount, true)}
+                    </span>
                 </div>
 
                 <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>

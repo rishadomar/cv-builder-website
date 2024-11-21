@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Check } from 'lucide-react';
 import CallToAction from '@/components/CallToAction';
+import { formatProductCost } from '@/lib/utils';
 
 export default function Home() {
     return (
@@ -11,7 +12,7 @@ export default function Home() {
                 {/* Mobile: Swap image and content order */}
                 <div className='w-full lg:w-1/2 mt-8 lg:mt-0 lg:mr-6 flex justify-center'>
                     <Image
-                        src='/images/Designer.png'
+                        src='/images/FuturisticOffice.png'
                         alt='CV Builder Hero'
                         width={500}
                         height={400}
@@ -32,7 +33,7 @@ export default function Home() {
 
                     {/* Pricing Highlighted */}
                     <div className='bg-blue-100 inline-block px-4 py-2 rounded-lg'>
-                        <span className='text-blue-800 font-bold text-xl'>Only R59</span>
+                        <span className='text-blue-800 font-bold text-xl'>Only {formatProductCost()}</span>
                         <span className='text-gray-600 ml-2 text-sm'>One-time payment</span>
                     </div>
 
@@ -132,7 +133,8 @@ export default function Home() {
             <div className='bg-blue-600 text-white py-12 text-center'>
                 <h2 className='text-2xl md:text-4xl font-bold mb-4 px-4'>Ready to Supercharge Your Job Application?</h2>
                 <p className='text-base md:text-xl mb-6 px-4'>
-                    Build a professional CV for just R59 and take the first step towards your dream job
+                    Build a professional CV for just {formatProductCost()} and take the first step towards your dream
+                    job
                 </p>
                 <CallToAction label='Get Started Now' color='blue' withArrow={false} />
             </div>
