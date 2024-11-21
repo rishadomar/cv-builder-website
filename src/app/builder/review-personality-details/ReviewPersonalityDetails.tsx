@@ -103,7 +103,6 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                         <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
 
                         <PillSelectFormField
-                            label='Personality Traits'
                             fieldName='descriptionOfSelf'
                             availablePills={Traits}
                             selectedPills={formHook.getValues().descriptionOfSelf}

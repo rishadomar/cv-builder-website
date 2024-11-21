@@ -5,11 +5,11 @@ import {
     Bike,
     BookText,
     CircleChevronRight,
-    Contact,
     CreditCard,
     Download,
     Globe,
     Heart,
+    Mail,
     MapPinHouse,
     User
 } from 'lucide-react';
@@ -44,7 +44,7 @@ export const Steps = [
     {
         id: 1,
         title: 'Contact',
-        icon: Contact,
+        icon: Mail,
         description: 'Provide contact details',
         completed: true,
         path: 'contact-details',

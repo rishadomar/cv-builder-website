@@ -92,7 +92,6 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4'>
                         <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                         <PillSelectFormField
-                            label='Personality Traits'
                             fieldName='descriptionOfSelf'
                             availablePills={Traits}
                             selectedPills={formHook.getValues().descriptionOfSelf}

@@ -95,7 +95,6 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4'>
                         <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                         <PillSelectFormField
-                            label='Hobbies'
                             fieldName='hobbies'
                             availablePills={Hobbies}
                             selectedPills={formHook.getValues().hobbies}
