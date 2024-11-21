@@ -14,6 +14,7 @@ import {
     selectIsWorkExperiencePopulated
 } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { useAppSelector } from '@/lib/store/hooks';
+import { Button } from './ui/button';
 
 export type StepPath =
     | 'contact-details'
@@ -203,6 +204,21 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                         </li>
                     ))}
                 </ol>
+                <div className='flex items-center mt-4 space-x-4 rounded-md border p-4 justify-center text-center'>
+                    <Button
+                        onClick={() => {
+                            onSelect();
+                            if (isPaymentComplete) {
+                                router.replace(`/builder?page=generate-pdf`);
+                            } else {
+                                router.replace(`/billing`);
+                            }
+                        }}
+                        variant='default'
+                    >
+                        Generate PDF
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     );

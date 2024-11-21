@@ -19,6 +19,7 @@ export async function paymentComplete(
         console.log('Payment complete: response.data = ', response.data);
         // Return the response data
         return {
+            currency: response.data.payment.currency,
             amount: response.data.payment.amount,
             date: new Date(response.data.payment.date).toISOString()
         };
