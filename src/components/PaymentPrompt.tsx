@@ -5,9 +5,8 @@ import PaystackButton from '@/components/PaystackButton';
 import { paymentComplete } from '@/lib/services/paymentService';
 import { Button } from '@/components/ui/button';
 import { Icons } from './icons';
-
-const Currency = 'ZAR';
-const Amount = 5900;
+import { Cost } from '@/constants';
+import { Currency } from 'react-paystack/dist/types';
 
 const features = [
     'Full CV creation and management',
@@ -27,7 +26,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     const authentication = useAppSelector((state) => state.authentication);
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
-        await dispatch(paymentComplete(Currency, Amount, response.reference));
+        await dispatch(paymentComplete(Cost.currency as Currency, Cost.amount, response.reference));
     };
 
     return (
@@ -66,8 +65,8 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                     label='Pay now'
                     options={{
                         email: authentication.email!,
-                        currency: 'ZAR',
-                        amount: Amount,
+                        currency: Cost.currency as Currency,
+                        amount: Cost.amount,
                         reference: `payment_${new Date().getTime().toString()}`
                     }}
                     onSuccess={async (response) => {

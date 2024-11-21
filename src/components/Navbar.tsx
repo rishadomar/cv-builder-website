@@ -2,7 +2,6 @@
 import React from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
-import Image from 'next/image';
 import StepDrawer from './StepDrawer';
 import ProfileDropdown from './ProfileDropdown';
 import { useRouter } from 'next/navigation';
@@ -10,7 +9,6 @@ import { useRouter } from 'next/navigation';
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
     const router = useRouter();
-    // const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     if (!isLoggedIn) {
         return null;
     }
@@ -26,7 +24,6 @@ const Navbar: React.FC = () => {
                     <ProfileDropdown />
                 </div>
             </div>
-            {/* <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} /> */}
         </nav>
     );
 };
