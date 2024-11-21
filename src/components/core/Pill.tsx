@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icons } from '@/components/icons';
+import { Check } from 'lucide-react';
 
 interface PillProps {
     variant: 'selected' | 'outline';
@@ -13,7 +13,7 @@ const Pill: React.FC<PillProps> = ({ variant, onClick, children }) => {
 
     return (
         <span className={`${baseClasses} ${variantClasses}`} onClick={onClick}>
-            {variant === 'selected' && <Icons.check className='mr-1' />} {children}
+            {variant === 'selected' && <Check className='mr-1' />} {children}
         </span>
     );
 };

@@ -10,7 +10,6 @@ type PaymentCompleteProps = {
 };
 
 export function PaymentComplete({ paymentDetails, onNext, onPrevious }: PaymentCompleteProps) {
-    console.log('-----   PaymentComplete: paymentDetails', paymentDetails);
     return (
         <Card className='w-[350px]'>
             <CardHeader>

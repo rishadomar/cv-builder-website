@@ -1,10 +1,9 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { CheckIcon, ClockIcon } from 'lucide-react';
+import { CheckIcon, CircleChevronLeft, ClockIcon } from 'lucide-react';
 import PaystackButton from '@/components/PaystackButton';
 import { paymentComplete } from '@/lib/services/paymentService';
 import { Button } from '@/components/ui/button';
-import { Icons } from './icons';
 import { Cost } from '@/constants';
 import { Currency } from 'react-paystack/dist/types';
 import PaystackSecurity from './PaystackSecurity';
@@ -53,7 +52,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
 
             <div className='flex space-x-4'>
                 <Button variant='outline' onClick={() => onPrevious()}>
-                    <Icons.chevronLeft className='mr-2 h-4 w-4' />
+                    <CircleChevronLeft className='mr-2 h-4 w-4' />
                     Back
                 </Button>
 

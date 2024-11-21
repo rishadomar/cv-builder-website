@@ -3,7 +3,6 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +10,7 @@ import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import PasswordField from '@/app/builder/PasswordField';
+import { Loader } from 'lucide-react';
 
 interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {
@@ -65,7 +65,7 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
                                 withHelp={true}
                             />
                             <Button disabled={isLoading} name='sign-in'>
-                                {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
+                                {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                                 Create Account
                             </Button>
                         </div>
@@ -102,7 +102,7 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
                             />
                         </div>
                         <Button disabled={isLoading} name='sign-in'>
-                            {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
+                            {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                             Continue with Email
                         </Button>
                     </div>

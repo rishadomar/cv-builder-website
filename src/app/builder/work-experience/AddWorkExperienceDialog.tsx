@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useState } from 'react';
 import WorkExperienceForm from './WorkExperienceForm';
-import { Icons } from '@/components/icons';
+import { Plus } from 'lucide-react';
 
 type AddWorkExperienceDialogProps = {
     setBusyUpdating: (v: boolean) => void;
@@ -18,7 +18,7 @@ export default function AddWorkExperienceDialog({ setBusyUpdating }: AddWorkExpe
             <DialogTrigger asChild>
                 <div className='flex justify-center items-center'>
                     <Button variant='outline' onClick={() => setDialogIsOpen(true)}>
-                        <Icons.plus className='mr-2' />
+                        <Plus className='mr-2' />
                         Add work experience
                     </Button>
                 </div>

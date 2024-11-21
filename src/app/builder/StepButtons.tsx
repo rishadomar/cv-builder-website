@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/icons';
+import { CircleChevronLeft, CircleChevronRight } from 'lucide-react';
 
 type StepButtonsProps = {
     onPrevious?: () => void;
@@ -19,7 +19,7 @@ export function StepButtons({ onPrevious, onNext, asSubmit = true }: StepButtons
                         type={asSubmit ? 'submit' : 'button'}
                         onClick={asSubmit || !onPrevious ? undefined : () => onPrevious()}
                     >
-                        <Icons.chevronLeft className='mr-2 h-4 w-4' />
+                        <CircleChevronLeft className='mr-2 h-4 w-4' />
                         Previous
                     </Button>
 
@@ -31,7 +31,7 @@ export function StepButtons({ onPrevious, onNext, asSubmit = true }: StepButtons
                         onClick={asSubmit || !onNext ? undefined : () => onNext()}
                     >
                         Next
-                        <Icons.chevronRight className={`ml-2 h-4 w-4 ${onNext ? 'text-white' : 'text-black'}`} />
+                        <CircleChevronRight className={`ml-2 h-4 w-4 ${onNext ? 'text-white' : 'text-black'}`} />
                     </Button>
                 </div>
             </div>

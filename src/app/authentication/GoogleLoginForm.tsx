@@ -2,15 +2,10 @@
 
 import * as React from 'react';
 import GoogleButton from './GoogleButton';
-// import { Icons } from '@/components/icons';
-// import { Button } from '@/components/ui/button';
 
 export function GoogleLoginForm() {
-    // const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
     async function onGoogleSignInSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
-        //setIsLoading(true);
 
         const COGNITO_DOMAIN = process.env.NEXT_PUBLIC_COGNITO_DOMAIN;
         const COGNITO_APP_CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID;
@@ -46,14 +41,6 @@ export function GoogleLoginForm() {
             </div>
             <div className='flex justify-center mt-4'>
                 <GoogleButton />
-                {/* <Button variant='outline' type='submit' disabled={isLoading} name='google-sign-in' className='w-64'>
-                    {isLoading ? (
-                        <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-                    ) : (
-                        <Icons.google className='mr-2 h-4 w-4' />
-                    )}{' '}
-                    Google
-                </Button> */}
             </div>
         </form>
     );

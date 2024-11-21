@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectUserEmail } from '@/lib/store/authentication/authenticationSlice';
-import { Icons } from './icons';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { getCookie } from '@/lib/utils';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { DialogFooter, DialogHeader } from './ui/dialog';
+import { CircleUserRound, Cog, CreditCard, LogOut } from 'lucide-react';
 
 const ProfileDropdown: React.FC = () => {
     const email = useAppSelector(selectUserEmail);
@@ -49,7 +49,7 @@ const ProfileDropdown: React.FC = () => {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <span>
-                        <Icons.userCircle className='text-white' />
+                        <CircleUserRound className='text-white' />
                     </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-56'>
@@ -60,17 +60,17 @@ const ProfileDropdown: React.FC = () => {
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem onSelect={() => handleBilling()}>
-                            <Icons.creditCard />
+                            <CreditCard />
                             <span>Billing</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => handleSettings()}>
-                            <Icons.cog6Tooth />
+                            <Cog />
                             <span>Settings</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => handleLogout()}>
-                        <Icons.arrowRightStartOnRectangle />
+                        <LogOut />
                         Logout
                     </DropdownMenuItem>
                 </DropdownMenuContent>

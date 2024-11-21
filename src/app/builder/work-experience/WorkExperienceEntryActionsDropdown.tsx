@@ -6,11 +6,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Icons } from '@/components/icons';
 import EditWorkExperienceDialog from './EditWorkExperienceDialog';
 import DeleteWorkExperienceDialog from './DeleteWorkExperienceDialog';
 import { WorkExperienceEntry } from '@/lib/type';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
 
 type WorkExperienceEntryActionsDropdownProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -29,20 +29,20 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <span>
-                        <Icons.ellipsisVertical className='w-6 h-6 text-gray-600 cursor-pointer' />
+                        <EllipsisVertical className='w-6 h-6 text-gray-600 cursor-pointer' />
                     </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuGroup>
                         <DropdownMenuItem onSelect={() => setShowUpdateDialog(!showUpdateDialog)}>
-                            <Icons.pen />
+                            <PencilLine />
                             <span>Update</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem onSelect={() => setShowDeleteDialog(!showDeleteDialog)}>
-                            <Icons.trash className='text-red-500' />
+                            <Trash2 className='text-red-500' />
                             <span className='text-red-500'>Delete</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>

@@ -3,7 +3,6 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +12,7 @@ import * as services from '@/lib/services';
 import PasswordField from '@/app/builder/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
 import LinkButton from '@/components/core/LinkButton';
+import { Loader } from 'lucide-react';
 
 interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;
@@ -77,7 +77,7 @@ export function AuthenticationLoginForm({ onForgotPassword, className, ...props 
                             disabled={isLoading || email.trim().length === 0 || password.trim().length === 0}
                             name='sign-in'
                         >
-                            {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
+                            {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                             Login
                         </Button>
                         <LinkButton onClick={onForgotPassword} label='Forgot Password?' />

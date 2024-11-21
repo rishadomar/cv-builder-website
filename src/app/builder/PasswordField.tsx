@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
-import { Icons } from '@/components/icons';
+import { EyeIcon, EyeOff } from 'lucide-react';
 
 interface PasswordFieldProps {
     value: string;
@@ -52,7 +52,7 @@ export default function PasswordField({ value, onChange, isLoading, withHelp }: 
                 />
                 {showPassword ? (
                     <>
-                        <Icons.eye
+                        <EyeIcon
                             className='absolute right-2 top-2 h-4 w-4 text-muted-foreground'
                             onClick={() => {
                                 setShowPassword(!showPassword);
@@ -61,7 +61,7 @@ export default function PasswordField({ value, onChange, isLoading, withHelp }: 
                     </>
                 ) : (
                     <>
-                        <Icons.eyeSlash
+                        <EyeOff
                             className='absolute right-2 top-2 h-4 w-4 text-muted-foreground'
                             onClick={() => {
                                 setShowPassword(!showPassword);

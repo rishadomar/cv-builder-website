@@ -3,7 +3,6 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +10,7 @@ import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
+import { Loader } from 'lucide-react';
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -68,7 +68,7 @@ export function ForgotPasswordForm({ className, ...props }: ForgotPasswordFormPr
                         </div>
                         {errorMessage && <p className='text-green-500 text-sm'>{errorMessage}</p>}
                         <Button disabled={isLoading || email.trim().length === 0} name='sign-in'>
-                            {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
+                            {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                             Send Reset Link
                         </Button>
                     </div>

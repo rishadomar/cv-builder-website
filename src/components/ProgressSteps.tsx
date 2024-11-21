@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
+import { Check, CircleChevronRight } from 'lucide-react';
 
 export type StepPath =
     | 'contact-details'
@@ -128,7 +128,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                 aria-hidden='true'
                             >
                                 {step.id < 5 ? (
-                                    <Icons.check className='h-5 w-5 text-white' />
+                                    <Check className='h-5 w-5 text-white' />
                                 ) : (
                                     <span className='text-gray-600'>{index}</span>
                                 )}
@@ -138,7 +138,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                 {/* <p className='text-sm text-gray-500'>{step.description}</p> */}
                             </div>
                             {index < Steps.length - 1 && (
-                                <Icons.chevronRight className='h-5 w-5 text-gray-400' aria-hidden='true' />
+                                <CircleChevronRight className='h-5 w-5 text-gray-400' aria-hidden='true' />
                             )}
                         </li>
                     ))}

@@ -7,12 +7,12 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { Button } from '@/components/ui/button';
 import { generatePersonalityText } from '@/lib/services/aiService';
-import { Icons } from '@/components/icons';
 import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
 import TextFormField from '../TextFormField';
 import PillSelectFormField from '../PillSelectFormField';
+import { WandSparkles } from 'lucide-react';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     descriptionOfSelf: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -110,7 +110,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                         />
                         <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
                         <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
-                            <Icons.sparkles className='mr-2 h-5 w-5' />
+                            <WandSparkles className='mr-2 h-5 w-5' />
                             Generate
                         </Button>
                         <TextareaFormField
