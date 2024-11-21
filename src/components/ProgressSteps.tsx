@@ -1,7 +1,18 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
-import { Circle, CircleCheckBig, CircleChevronRight } from 'lucide-react';
+import {
+    Bike,
+    BookText,
+    CircleChevronRight,
+    Contact,
+    CreditCard,
+    Download,
+    Globe,
+    Heart,
+    MapPinHouse,
+    User
+} from 'lucide-react';
 import {
     selectIsContactDetailsPopulated,
     selectIsHobbiesPopulated,
@@ -15,6 +26,7 @@ import {
 } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { useAppSelector } from '@/lib/store/hooks';
 import { Button } from './ui/button';
+import StepHeader from '@/app/builder/StepHeader';
 
 export type StepPath =
     | 'contact-details'
@@ -32,6 +44,7 @@ export const Steps = [
     {
         id: 1,
         title: 'Contact',
+        icon: Contact,
         description: 'Provide contact details',
         completed: true,
         path: 'contact-details',
@@ -41,6 +54,7 @@ export const Steps = [
     {
         id: 2,
         title: 'Personal',
+        icon: User,
         description: 'Enter details about yourself',
         completed: true,
         path: 'personal-details',
@@ -50,6 +64,7 @@ export const Steps = [
     {
         id: 3,
         title: 'Your location',
+        icon: MapPinHouse,
         description: 'Provide your current location',
         completed: false,
         path: 'location-details',
@@ -59,6 +74,7 @@ export const Steps = [
     {
         id: 4,
         title: 'Remote work preferences',
+        icon: Globe,
         description: 'Select remote work preferences',
         completed: false,
         path: 'remote-work-details',
@@ -68,6 +84,7 @@ export const Steps = [
     {
         id: 5,
         title: 'Personality',
+        icon: Heart,
         description: 'Dive deeper into your personality',
         completed: false,
         path: 'personality-details',
@@ -77,6 +94,7 @@ export const Steps = [
     {
         id: 6,
         title: 'Hobbies',
+        icon: Bike,
         description: 'What do you enjoy doing to accomplish a life/work balance',
         completed: false,
         path: 'hobbies',
@@ -86,6 +104,7 @@ export const Steps = [
     {
         id: 7,
         title: 'Work experience',
+        icon: BookText,
         description: 'Professional experience',
         completed: false,
         path: 'work-experience',
@@ -95,6 +114,7 @@ export const Steps = [
     {
         id: 8,
         title: 'Paywall capture',
+        icon: CreditCard,
         description: 'Pay please to continue',
         completed: false,
         path: 'paywall',
@@ -103,6 +123,7 @@ export const Steps = [
     {
         id: 9,
         title: 'Review personality',
+        icon: Heart,
         description: 'Let AI guide you to describe your personality',
         completed: false,
         path: 'review-personality-details',
@@ -112,6 +133,7 @@ export const Steps = [
     {
         id: 10,
         title: 'Generate & download CV',
+        icon: Download,
         description: 'A PDF will be generated which you can download for keeps',
         completed: false,
         path: 'generate-pdf',
@@ -167,11 +189,11 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                 <CardDescription>Complete these steps to complete your CV</CardDescription>
             </CardHeader>
             <CardContent className='mt-3'>
-                <ol className='space-y-4'>
+                <ol className='space-y-2'>
                     {Steps.filter((step) => step.showInSections).map((step, index) => (
                         <li
                             key={step.id}
-                            className='flex items-center space-x-4'
+                            className='group cursor-pointer flex items-center space-x-4 px-2 hover:bg-gray-50 rounded-lg transition-colors'
                             onClick={() => {
                                 if (!step.paymentRequired || isPaymentComplete) {
                                     onSelect();
@@ -182,29 +204,33 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                 }
                             }}
                         >
-                            <div className='flex h-8 w-8 items-center justify-center rounded-full' aria-hidden='true'>
+                            {/* <div className='flex items-center justify-center'>
                                 {getStatus(step) === 'complete' ? (
-                                    <CircleCheckBig className='h-5 w-5 text-green-400' />
+                                    <CircleCheckBig className='h-6 w-6 text-green-500' />
                                 ) : (
-                                    <Circle className='h-5 w-5 text-gray-400' />
+                                    <Circle className='h-6 w-6 text-gray-400' />
                                 )}
                             </div>
-                            <div className='flex-1'>
-                                <h3
-                                    className={`text-sm ${
-                                        !step.paymentRequired || isPaymentComplete ? 'font-semibold' : 'text-gray-200'
-                                    }`}
-                                >
-                                    {step.title}
-                                </h3>
+ */}
+                            <div className='flex-grow'>
+                                <StepHeader
+                                    icon={step.icon}
+                                    iconColor={getStatus(step) === 'complete' ? 'done' : 'todo'}
+                                    title={step.title}
+                                />
                             </div>
+
                             {index < Steps.length - 1 && (
-                                <CircleChevronRight className='h-5 w-5 text-gray-400' aria-hidden='true' />
+                                <CircleChevronRight
+                                    className='h-5 w-5 text-gray-300 group-hover:text-gray-500 transition-colors'
+                                    aria-hidden='true'
+                                />
                             )}
                         </li>
                     ))}
                 </ol>
-                <div className='flex items-center mt-4 space-x-4 rounded-md border p-4 justify-center text-center'>
+
+                <div className='mt-6'>
                     <Button
                         onClick={() => {
                             onSelect();
@@ -214,6 +240,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                 router.replace(`/billing`);
                             }
                         }}
+                        className='w-full'
                         variant='default'
                     >
                         Generate PDF
