@@ -20,6 +20,7 @@ export const readRecord = (sub: string, email: string) => {
                     return {
                         field: field as keyof FieldValuesState,
                         value: {
+                            currency: (value as PaymentDetails).currency,
                             amount: (value as PaymentDetails).amount,
                             date: dateValue ? dateValue.toISOString() : undefined
                         }

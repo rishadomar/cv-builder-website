@@ -37,7 +37,7 @@ const ProfileDropdown: React.FC = () => {
     };
 
     const handleBilling = () => {
-        setIsDialogOpen(true);
+        router.push('/billing');
     };
 
     const handleSettings = () => {

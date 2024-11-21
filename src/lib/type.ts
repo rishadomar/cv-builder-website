@@ -1,5 +1,7 @@
 //import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
+import { Currency } from 'react-paystack/dist/types';
+
 export type AuthenticationPayload = {
     idToken: string;
     accessToken: string;
@@ -39,8 +41,9 @@ export interface Cell {
 // }
 
 export type PaymentDetails = {
+    currency: Currency;
     amount: number;
-    date: Date;
+    date: string;
 };
 
 export type FieldValuesState = {

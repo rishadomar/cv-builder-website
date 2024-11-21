@@ -1,12 +1,13 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { CheckIcon, ClockIcon, ShieldCheckIcon } from 'lucide-react';
+import { CheckIcon, ClockIcon } from 'lucide-react';
 import PaystackButton from '@/components/PaystackButton';
 import { paymentComplete } from '@/lib/services/paymentService';
 import { Button } from '@/components/ui/button';
 import { Icons } from './icons';
 import { Cost } from '@/constants';
 import { Currency } from 'react-paystack/dist/types';
+import PaystackSecurity from './PaystackSecurity';
 
 const features = [
     'Full CV creation and management',
@@ -50,11 +51,6 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                 <span>Access valid for 12 months from purchase date</span>
             </div>
 
-            <div className='flex items-center text-sm text-gray-600 mt-2'>
-                <ShieldCheckIcon className='w-4 h-4 mr-2' />
-                <span>Secure one-time payment</span>
-            </div>
-
             <div className='flex space-x-4'>
                 <Button variant='outline' onClick={() => onPrevious()}>
                     <Icons.chevronLeft className='mr-2 h-4 w-4' />
@@ -79,6 +75,8 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                     }}
                 />
             </div>
+
+            <PaystackSecurity />
 
             <div className='mt-6 text-center text-sm text-gray-500'>
                 <p>
