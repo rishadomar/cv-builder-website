@@ -5,5 +5,5 @@ type ComponentProps = {
 };
 
 export function ProgressBar({ value }: ComponentProps) {
-    return <Progress value={value} className='w-[100%]' />;
+    return <Progress value={value} className='[&>*]:bg-green-300 w-[100%]' />;
 }

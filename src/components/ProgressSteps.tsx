@@ -113,7 +113,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                         >
                             <div
                                 className={`flex h-8 w-8 items-center justify-center rounded-full ${
-                                    step.id < 5 ? 'bg-green-500' : 'bg-gray-200'
+                                    step.id < 5 ? 'bg-green-300' : 'bg-gray-200'
                                 }`}
                                 aria-hidden='true'
                             >

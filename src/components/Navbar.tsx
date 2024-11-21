@@ -16,19 +16,11 @@ const Navbar: React.FC = () => {
     }
 
     return (
-        <nav className='fixed top-0 left-0 right-0 bg-gray-800 border-b shadow-sm z-50'>
+        <nav className='fixed top-0 left-0 right-0 bg-black border-b shadow-sm z-50'>
             <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex items-center justify-between h-16'>
                     <StepDrawer />
                     <div className='flex items-center' onClick={() => router.push('/')}>
-                        <Image
-                            //className='dark:invert'
-                            src='https://cvbuilder.co.za/images/logo-pencil.jpeg'
-                            alt='CV Builder logo'
-                            width={20}
-                            height={20}
-                            priority
-                        />
                         <span className='text-white ml-2'>CV Builder</span>
                     </div>
                     <ProfileDropdown />
