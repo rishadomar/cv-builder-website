@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { CheckIcon, CircleChevronLeft, ClockIcon } from 'lucide-react';
+import { CheckIcon, ChevronLeft, ClockIcon } from 'lucide-react';
 import PaystackButton from '@/components/PaystackButton';
 import { paymentComplete } from '@/lib/services/paymentService';
 import { Button } from '@/components/ui/button';
@@ -51,11 +51,6 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
             </div>
 
             <div className='flex space-x-4'>
-                <Button variant='outline' onClick={() => onPrevious()}>
-                    <CircleChevronLeft className='mr-2 h-4 w-4' />
-                    Back
-                </Button>
-
                 <PaystackButton
                     label='Pay now'
                     options={{
@@ -75,9 +70,12 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                 />
             </div>
 
-            <PaystackSecurity />
+            <Button variant='outline' onClick={() => onPrevious()}>
+                <ChevronLeft className='mr-2 h-4 w-4' />
+                Back
+            </Button>
 
-            <div className='mt-6 text-center text-sm text-gray-500'>
+            <div className='text-center text-sm text-gray-500'>
                 <p>
                     Need help?{' '}
                     <a href='/faqs' className='text-primary underline'>
