@@ -11,7 +11,7 @@ export type StepPath =
     | 'personality-details'
     | 'hobbies'
     | 'work-experience'
-    | 'milestone-capture-data'
+    | 'paywall'
     | 'review-personality-details'
     | 'generate-pdf';
 
@@ -21,70 +21,80 @@ export const Steps = [
         title: 'Contact',
         description: 'Provide contact details',
         completed: true,
-        path: 'contact-details'
+        path: 'contact-details',
+        showInSections: true
     },
     {
         id: 2,
         title: 'Personal',
         description: 'Enter details about yourself',
         completed: true,
-        path: 'personal-details'
+        path: 'personal-details',
+        showInSections: true
     },
     {
         id: 3,
         title: 'Your location',
         description: 'Provide your current location',
         completed: false,
-        path: 'location-details'
+        path: 'location-details',
+        showInSections: true
     },
     {
         id: 4,
         title: 'Remote work preferences',
         description: 'Select remote work preferences',
         completed: false,
-        path: 'remote-work-details'
+        path: 'remote-work-details',
+        showInSections: true
     },
     {
         id: 5,
         title: 'Personality',
         description: 'Dive deeper into your personality',
         completed: false,
-        path: 'personality-details'
+        path: 'personality-details',
+        showInSections: true
     },
     {
         id: 6,
         title: 'Hobbies',
         description: 'What do you enjoy doing to accomplish a life/work balance',
         completed: false,
-        path: 'hobbies'
+        path: 'hobbies',
+        showInSections: true
     },
     {
         id: 7,
         title: 'Work experience',
         description: 'Professional experience',
         completed: false,
-        path: 'work-experience'
+        path: 'work-experience',
+        showInSections: true
     },
     {
         id: 8,
-        title: 'Milestone capture',
+        title: 'Paywall capture',
         description: 'Pay please to continue',
         completed: false,
-        path: 'milestone-capture-data'
+        path: 'paywall',
+        showInSections: false
     },
     {
         id: 9,
         title: 'Review personality',
         description: 'Let AI guide you to describe your personality',
         completed: false,
-        path: 'review-personality-details'
+        path: 'review-personality-details',
+        showInSections: true
     },
     {
         id: 10,
         title: 'Generate & download CV',
         description: 'A PDF will be generated which you can download for keeps',
         completed: false,
-        path: 'generate-pdf'
+        path: 'generate-pdf',
+        showInSections: false
     }
 ];
 
@@ -102,7 +112,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
             </CardHeader>
             <CardContent className='mt-3'>
                 <ol className='space-y-4'>
-                    {Steps.map((step, index) => (
+                    {Steps.filter((step) => step.showInSections).map((step, index) => (
                         <li
                             key={step.id}
                             className='flex items-center space-x-4'
@@ -120,7 +130,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                 {step.id < 5 ? (
                                     <Icons.check className='h-5 w-5 text-white' />
                                 ) : (
-                                    <span className='text-gray-600'>{step.id}</span>
+                                    <span className='text-gray-600'>{index}</span>
                                 )}
                             </div>
                             <div className='flex-1'>

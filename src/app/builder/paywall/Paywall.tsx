@@ -7,12 +7,12 @@ const PaymentPrompt = dynamic(() => import('@/components/PaymentPrompt').then((m
     loading: () => <div>Loading...</div>
 });
 
-type MilestoneCaptureDataProps = {
+type PaywallDataProps = {
     onNext: () => void;
     onPrevious: () => void;
 };
 
-export default function MilestoneCaptureData({ onNext, onPrevious }: MilestoneCaptureDataProps) {
+export default function PaywallData({ onNext, onPrevious }: PaywallDataProps) {
     const fieldValues = useAppSelector((state) => state.fieldValues);
     return (
         <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>

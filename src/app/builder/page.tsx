@@ -8,13 +8,14 @@ import RemoteWorkDetailsForm from '@/app/builder/remote-work-details/RemoteWorkD
 import HobbyDetailsForm from '@/app/builder/hobbies/Hobbies';
 import WorkExperienceList from '@/app/builder/work-experience/WorkExperienceList';
 import PersonalityDetailsForm from '@/app/builder/personality-details/PersonalityDetails';
-import MilestoneCaptureData from '@/app/builder/milestone-capture-data/MilestoneCaptureData';
+import Paywall from '@/app/builder/paywall/Paywall';
 import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-details/ReviewPersonalityDetails';
 import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Steps } from '@/components/ProgressSteps';
 import { useAuth } from '@/hooks/useAuth';
 import Spinner from '@/components/core/Spinner';
+import { useAppSelector } from '@/lib/store/hooks';
 
 const NumberOfPages = Steps.length;
 
@@ -23,6 +24,7 @@ function FormContent() {
     const searchParams = useSearchParams();
     const [currentPage, setCurrentPage] = useState<string>('contact-details');
     const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
+    const fieldValues = useAppSelector((state) => state.fieldValues);
 
     useEffect(() => {
         const page = searchParams.get('page');
@@ -52,6 +54,9 @@ function FormContent() {
             if (index + 1 >= Steps.length) {
                 return 'contact-details';
             }
+            if (Steps[index + 1].path === 'paywall' && fieldValues.payment) {
+                return Steps[index + 2].path;
+            }
             return Steps[index + 1].path;
         });
     };
@@ -65,6 +70,9 @@ function FormContent() {
             const index = Steps.indexOf(p);
             if (index - 1 < 0) {
                 return 'contact-details';
+            }
+            if (Steps[index - 1].path === 'paywall' && fieldValues.payment) {
+                return Steps[index - 2].path;
             }
             return Steps[index - 1].path;
         });
@@ -91,9 +99,7 @@ function FormContent() {
                 {currentPage === 'work-experience' && (
                     <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />
                 )}
-                {currentPage === 'milestone-capture-data' && (
-                    <MilestoneCaptureData onNext={nextPage} onPrevious={previousPage} />
-                )}
+                {currentPage === 'paywall' && <Paywall onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'review-personality-details' && (
                     <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
