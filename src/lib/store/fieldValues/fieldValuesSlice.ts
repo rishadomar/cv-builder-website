@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { FieldValue, FieldValuesState, WorkExperienceEntry } from '../../type';
+import { RootState } from '../store';
 //import { compareWorkExperienceEntries } from '@/lib/firebase/saveData';
 
 // Define the initial state using that type
@@ -77,5 +78,41 @@ export const fieldvalueSlice = createSlice({
 });
 
 export const { setFieldValue, resetFieldValues, setFieldValues, setWorkExperiences } = fieldvalueSlice.actions;
+
+export const selectIsRemoteWorkPopulated = (state: RootState) => {
+    return state.fieldValues.remoteWork !== undefined;
+};
+
+export const selectIsContactDetailsPopulated = (state: RootState) => {
+    return state.fieldValues.sub !== undefined;
+};
+
+export const selectIsPersonalDetailsPopulated = (state: RootState) => {
+    return state.fieldValues.name !== undefined;
+};
+
+export const selectIsLocationDetailsPopulated = (state: RootState) => {
+    return state.fieldValues.city !== undefined;
+};
+
+export const selectIsPersonalityDetailsPopulated = (state: RootState) => {
+    return state.fieldValues.personalityText !== undefined;
+};
+
+export const selectIsHobbiesPopulated = (state: RootState) => {
+    return state.fieldValues.hobbies !== undefined;
+};
+
+export const selectIsWorkExperiencePopulated = (state: RootState) => {
+    return state.fieldValues.workExperiences !== undefined;
+};
+
+export const selectIsReviewPersonalityDetailsPopulated = (state: RootState) => {
+    return state.fieldValues.descriptionOfSelf !== undefined;
+};
+
+export const selectIsPaymentComplete = (state: RootState) => {
+    return state.fieldValues.payment !== undefined;
+};
 
 export default fieldvalueSlice.reducer;
