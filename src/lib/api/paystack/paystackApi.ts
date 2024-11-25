@@ -29,3 +29,37 @@ export async function paymentComplete(
         throw error;
     }
 }
+
+export async function validatePromoCode(sub: string, promoCode: string) {
+    try {
+        // Make the GET request using Axios
+        const response = await axiosInstance.post('/validatePromoCode', {
+            sub,
+            promoCode
+        });
+        console.log('Validate promo code: response.data = ', response.data);
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export async function applyPromoCode(sub: string, promoCode: string) {
+    try {
+        // Make the GET request using Axios
+        const response = await axiosInstance.post('/applyPromoCode', {
+            sub,
+            promoCode
+        });
+        console.log('Apply promo code: response.data = ', response.data);
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}

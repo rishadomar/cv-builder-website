@@ -25,3 +25,41 @@ export const paymentComplete = (currency: Currency, amount: number, reference: s
         }
     };
 };
+
+export const validatePromoCode = async (promoCode: string) => {
+    return async (dispatch: Dispatch, getState: () => RootState) => {
+        if (!getState().authentication.sub) {
+            throw new Error('No sub found');
+        }
+        dispatch(setLoading(true));
+        try {
+            const response = await api.validatePromoCode(getState().authentication.sub!, promoCode);
+            dispatch(setFieldValues([{ field: 'payment', value: response }]));
+        } catch (error) {
+            console.error('Promo code validation error:', error);
+            dispatch(addAxiosError({ title: 'Promo code validation', error: error as Error }));
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+};
+
+export const applyPromoCode = async (promoCode: string) => {
+    return async (dispatch: Dispatch, getState: () => RootState) => {
+        if (!getState().authentication.sub) {
+            throw new Error('No sub found');
+        }
+        dispatch(setLoading(true));
+        try {
+            const response = await api.applyPromoCode(getState().authentication.sub!, promoCode);
+            dispatch(setFieldValues([{ field: 'payment', value: response }]));
+        } catch (error) {
+            console.error('Promo code application error:', error);
+            dispatch(addAxiosError({ title: 'Promo code application', error: error as Error }));
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+};
