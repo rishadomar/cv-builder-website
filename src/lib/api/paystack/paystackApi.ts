@@ -49,16 +49,12 @@ export async function validatePromoCode(sub: string, promoCode: string) {
 
 export async function applyPromoCode(sub: string, promoCode: string) {
     try {
-        // Make the GET request using Axios
         const response = await axiosInstance.post('/applyPromoCode', {
             sub,
             promoCode
         });
-        console.log('Apply promo code: response.data = ', response.data);
-        // Return the response data
-        return response.data;
+        return response.data.payment;
     } catch (error) {
-        // Handle any errors
         console.error('Error fetching data:', error);
         throw error;
     }

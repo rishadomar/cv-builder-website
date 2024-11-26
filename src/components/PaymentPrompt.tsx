@@ -103,7 +103,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                     </p>
                 </div>
             </div>
-            <StepButtons onNext={paymentComplete ? onNext : undefined} onPrevious={onPrevious} />
+            <StepButtons asSubmit={false} onNext={paymentComplete ? onNext : undefined} onPrevious={onPrevious} />
         </>
     );
 }

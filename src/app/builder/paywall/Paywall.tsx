@@ -2,10 +2,11 @@ import { useAppSelector } from '@/lib/store/hooks';
 import { PaymentComplete } from '@/app/builder/PaymentComplete';
 import dynamic from 'next/dynamic';
 import { selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
+import { OverlaySpinner } from '@/components/OverlaySpinner';
 
 const PaymentPrompt = dynamic(() => import('@/components/PaymentPrompt').then((mod) => mod.PaymentPrompt), {
     ssr: false,
-    loading: () => <div>Loading...</div>
+    loading: () => <OverlaySpinner />
 });
 
 type PaywallProps = {
