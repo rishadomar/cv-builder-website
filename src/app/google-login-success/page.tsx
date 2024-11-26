@@ -3,7 +3,7 @@ import GoogleLoginSuccess from './GoogleLoginSuccess';
 
 export default function GoogleLoginSuccessWrapper() {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading (suspense)...</div>}>
             <GoogleLoginSuccess />
         </Suspense>
     );

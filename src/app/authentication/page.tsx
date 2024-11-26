@@ -11,6 +11,7 @@ import SignupSwitchButton from './SignupSwitchButton';
 import { ForgotPasswordForm } from '@/app/authentication/ForgotPasswordForm';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { OverlaySpinner } from '@/components/OverlaySpinner';
 
 export default function AuthenticationPage() {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -18,6 +19,7 @@ export default function AuthenticationPage() {
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(true);
     const router = useRouter();
+    const isLoading = useAppSelector((state) => state.loading.isLoading);
 
     const renderAlreadyLoggedInSection = () => {
         return (
@@ -109,6 +111,7 @@ export default function AuthenticationPage() {
 
     return (
         <div className='min-h-screen relative p-4 md:p-6'>
+            {isLoading && <OverlaySpinner />}
             <div className='lg:p-8'>{isLoggedIn ? renderAlreadyLoggedInSection() : renderLoginSignupSection()}</div>
         </div>
     );

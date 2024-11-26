@@ -14,9 +14,9 @@ import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Steps } from '@/components/ProgressSteps';
 import { useAuth } from '@/hooks/useAuth';
-import Spinner from '@/components/core/Spinner';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
+import { OverlaySpinner } from '@/components/OverlaySpinner';
 
 const NumberOfPages = Steps.length;
 
@@ -116,7 +116,7 @@ export default function BuilderPage() {
     if (isLoading) {
         return (
             <div className='flex items-center justify-center h-screen'>
-                <Spinner />
+                <OverlaySpinner />
             </div>
         );
     }
@@ -126,7 +126,7 @@ export default function BuilderPage() {
     }
 
     return (
-        <Suspense fallback={<div className='p-4'>Loading...</div>}>
+        <Suspense fallback={<OverlaySpinner />}>
             <FormContent />
         </Suspense>
     );
