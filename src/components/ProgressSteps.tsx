@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import {
     Bike,
     BookText,
+    Check,
     CircleChevronRight,
     CreditCard,
     Download,
@@ -219,7 +220,12 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                 />
                             </div>
 
-                            {index < Steps.length - 1 && (
+                            {index < Steps.length - 1 && getStatus(step) === 'complete' ? (
+                                <Check
+                                    className='h-5 w-5 text-green-500 group-hover:text-green-700 transition-colors'
+                                    aria-hidden='true'
+                                />
+                            ) : (
                                 <CircleChevronRight
                                     className='h-5 w-5 text-gray-300 group-hover:text-gray-500 transition-colors'
                                     aria-hidden='true'
