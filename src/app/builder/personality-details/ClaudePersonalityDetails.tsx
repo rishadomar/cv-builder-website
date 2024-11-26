@@ -4,22 +4,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
+// import {
+//     AlertDialog,
+//     AlertDialogAction,
+//     AlertDialogCancel,
+//     AlertDialogContent,
+//     AlertDialogDescription,
+//     AlertDialogFooter,
+//     AlertDialogHeader,
+//     AlertDialogTitle,
+//     AlertDialogTrigger
+// } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, RefreshCw, Check, X, Wand2 } from 'lucide-react';
 
 const PersonalityTraitsStep = () => {
-    const [selectedTraits, setSelectedTraits] = useState([]);
+    const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
     const [customTrait, setCustomTrait] = useState('');
     const [generatedText, setGeneratedText] = useState('');
     const [previousText, setPreviousText] = useState('');
@@ -42,7 +42,7 @@ const PersonalityTraitsStep = () => {
         'Communication'
     ];
 
-    const handleTraitToggle = (trait) => {
+    const handleTraitToggle = (trait: string) => {
         setSelectedTraits((prev) => (prev.includes(trait) ? prev.filter((t) => t !== trait) : [...prev, trait]));
     };
 
