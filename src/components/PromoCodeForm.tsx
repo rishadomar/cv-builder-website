@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader } from 'lucide-react';
 
 // Form validation schema
 const formSchema = z.object({
@@ -19,6 +19,8 @@ interface PromoCodeFormProps {
 }
 
 export function PromoCodeForm({ onSubmit }: PromoCodeFormProps) {
+    const [busySubmitting, setBusySubmitting] = React.useState(false);
+
     const form = useForm<PromoFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -28,12 +30,15 @@ export function PromoCodeForm({ onSubmit }: PromoCodeFormProps) {
 
     const handleSubmit = async (data: PromoFormValues) => {
         try {
+            setBusySubmitting(true);
             await onSubmit(data);
         } catch (error) {
             form.setError('promoCode', {
                 type: 'manual',
-                message: 'Invalid promo code'
+                message: (error as Error).message
             });
+        } finally {
+            setBusySubmitting(false);
         }
     };
 
@@ -53,7 +58,11 @@ export function PromoCodeForm({ onSubmit }: PromoCodeFormProps) {
                                     <Input placeholder='Enter promo code' {...field} />
                                 </FormControl>
                                 <Button variant='outline' type='submit' className='flex-shrink-0'>
-                                    <ArrowRight className='w-6 h-6' />
+                                    {busySubmitting ? (
+                                        <Loader className='w-6 h-6 animate-spin' />
+                                    ) : (
+                                        <ArrowRight className='w-6 h-6' />
+                                    )}
                                 </Button>
                             </div>
                             <FormMessage />

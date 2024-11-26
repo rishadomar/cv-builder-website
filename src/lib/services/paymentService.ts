@@ -26,7 +26,7 @@ export const paymentComplete = (currency: Currency, amount: number, reference: s
     };
 };
 
-export const validatePromoCode = async (promoCode: string) => {
+export const validatePromoCodeInService = (promoCode: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
         if (!getState().authentication.sub) {
             throw new Error('No sub found');
@@ -45,7 +45,7 @@ export const validatePromoCode = async (promoCode: string) => {
     };
 };
 
-export const applyPromoCode = async (promoCode: string) => {
+export const applyPromoCode = (promoCode: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
         if (!getState().authentication.sub) {
             throw new Error('No sub found');

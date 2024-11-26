@@ -22,7 +22,8 @@ export const readRecord = (sub: string, email: string) => {
                         value: {
                             currency: (value as PaymentDetails).currency,
                             amount: (value as PaymentDetails).amount,
-                            date: dateValue ? dateValue.toISOString() : undefined
+                            date: dateValue ? dateValue.toISOString() : undefined,
+                            promoCode: (value as PaymentDetails).promoCode
                         }
                     };
                 } else {

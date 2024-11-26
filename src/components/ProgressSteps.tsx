@@ -17,7 +17,7 @@ import {
     selectIsContactDetailsPopulated,
     selectIsHobbiesPopulated,
     selectIsLocationDetailsPopulated,
-    selectIsPaymentComplete,
+    selectIsPaymentValid,
     selectIsPersonalDetailsPopulated,
     selectIsPersonalityDetailsPopulated,
     selectIsRemoteWorkPopulated,
@@ -156,9 +156,8 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
     const isHobbiesPopulated = useAppSelector(selectIsHobbiesPopulated);
     const isWorkExperiencePopulated = useAppSelector(selectIsWorkExperiencePopulated);
     const isReviewPersonalityDetailsPopulated = useAppSelector(selectIsReviewPersonalityDetailsPopulated);
-    const isPaymentComplete = useAppSelector(selectIsPaymentComplete);
+    const isPaymentValid = useAppSelector(selectIsPaymentValid);
 
-    console.log('Is payment complete ' + isPaymentComplete);
     const getStatus = (step: (typeof Steps)[0]) => {
         switch (step.path) {
             case 'contact-details':
@@ -195,7 +194,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                             key={step.id}
                             className='group cursor-pointer flex items-center space-x-4 px-2 hover:bg-gray-50 rounded-lg transition-colors'
                             onClick={() => {
-                                if (!step.paymentRequired || isPaymentComplete) {
+                                if (!step.paymentRequired || isPaymentValid) {
                                     onSelect();
                                     router.replace(`/builder?page=${step.path}`);
                                 } else {
@@ -234,7 +233,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                     <Button
                         onClick={() => {
                             onSelect();
-                            if (isPaymentComplete) {
+                            if (isPaymentValid) {
                                 router.replace(`/builder?page=generate-pdf`);
                             } else {
                                 router.replace(`/billing`);

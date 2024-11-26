@@ -44,6 +44,7 @@ export type PaymentDetails = {
     currency: Currency;
     amount: number;
     date: string;
+    promoCode?: string;
 };
 
 export type FieldValuesState = {

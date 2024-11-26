@@ -1,17 +1,12 @@
 import { WalletIcon, CalendarIcon } from 'lucide-react';
 import { formatAmount, formatDate } from '@/lib/utils';
 import { PaymentDetails } from '@/lib/type';
-import PaystackSecurity from '@/components/PaystackSecurity';
 
 interface PaymentInformationProps {
     paymentValues: PaymentDetails;
 }
 
 function PaymentInformation({ paymentValues }: PaymentInformationProps) {
-    const paymentCurrency = paymentValues.currency;
-    const paymentAmount = paymentValues.amount;
-    const paymentDate = paymentValues.date;
-
     return (
         <div className='w-full max-w-md bg-white shadow-md rounded-lg p-6 space-y-6'>
             <div className='text-center'>
@@ -20,26 +15,33 @@ function PaymentInformation({ paymentValues }: PaymentInformationProps) {
             </div>
 
             <div className='space-y-4'>
-                <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
-                    <div className='flex items-center space-x-3'>
-                        <WalletIcon className='w-6 h-6 text-primary' />
-                        <span className='font-medium text-gray-700'>Payment Amount</span>
+                {paymentValues.promoCode ? (
+                    <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
+                        <div className='flex items-center space-x-3'>
+                            <WalletIcon className='w-6 h-6 text-primary' />
+                            <span className='font-medium text-gray-700'>Promotion applied</span>
+                        </div>
                     </div>
-                    <span className='font-bold text-gray-900'>
-                        {formatAmount(paymentCurrency, paymentAmount, true)}
-                    </span>
-                </div>
+                ) : (
+                    <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
+                        <div className='flex items-center space-x-3'>
+                            <WalletIcon className='w-6 h-6 text-primary' />
+                            <span className='font-medium text-gray-700'>Payment Amount</span>
+                        </div>
+                        <span className='font-bold text-gray-900'>
+                            {formatAmount(paymentValues.currency, paymentValues.amount, true)}
+                        </span>
+                    </div>
+                )}
 
                 <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
                     <div className='flex items-center space-x-3'>
                         <CalendarIcon className='w-6 h-6 text-primary' />
                         <span className='font-medium text-gray-700'>Payment Date</span>
                     </div>
-                    <span className='font-bold text-gray-900'>{formatDate(new Date(paymentDate))}</span>
+                    <span className='font-bold text-gray-900'>{formatDate(new Date(paymentValues.date))}</span>
                 </div>
             </div>
-
-            <PaystackSecurity />
 
             <div className='text-center text-sm text-gray-500 mt-4'>
                 <p>Access valid for 1 year from payment date</p>

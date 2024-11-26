@@ -2,11 +2,12 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { CheckIcon, ClockIcon } from 'lucide-react';
 import PaystackButton from '@/components/PaystackButton';
-import { paymentComplete } from '@/lib/services/paymentService';
+import * as services from '@/lib/services';
 import { Cost } from '@/constants';
 import { Currency } from 'react-paystack/dist/types';
 import { PromoCodeForm, PromoFormValues } from './PromoCodeForm';
 import { StepButtons } from '@/app/builder/StepButtons';
+import { Button } from './ui/button';
 
 const features = [
     'Full CV creation and management',
@@ -24,23 +25,17 @@ type PaymentPromptProps = {
 export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     const dispatch = useAppDispatch();
     const authentication = useAppSelector((state) => state.authentication);
+    const [paymentComplete, setPaymentComplete] = React.useState(false);
 
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
-        await dispatch(paymentComplete(Cost.currency as Currency, Cost.amount, response.reference));
+        await dispatch(services.paymentComplete(Cost.currency as Currency, Cost.amount, response.reference));
     };
 
     const handlePromoSubmit = async (data: PromoFormValues) => {
-        try {
-            console.log('Submitting promo code:', data.promoCode);
-            // Add your promo code validation/application logic here
-            // For example:
-            // await validatePromoCode(data.promoCode);
-            // await applyPromoCode(data.promoCode);
-        } catch (error) {
-            console.error('Error applying promo code:', error);
-            throw error; // This will trigger the error handling in the PromoCodeForm
-        }
+        console.log('Submitting promo code:', data.promoCode);
+        await dispatch(services.applyPromoCode(data.promoCode));
+        setPaymentComplete(true);
     };
 
     return (
@@ -66,23 +61,33 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                 </div>
 
                 <div className='flex space-x-4'>
-                    <PaystackButton
-                        label='Pay now'
-                        options={{
-                            email: authentication.email!,
-                            currency: Cost.currency as Currency,
-                            amount: Cost.amount,
-                            reference: `payment_${new Date().getTime().toString()}`
-                        }}
-                        onSuccess={async (response) => {
-                            console.log(response);
-                            await onSuccess(response);
-                            onNext();
-                        }}
-                        onClose={() => {
-                            console.log('closed');
-                        }}
-                    />
+                    {paymentComplete ? (
+                        <Button
+                            onClick={onNext}
+                            variant='outline'
+                            className='flex items-center justify-center flex-grow py-2 rounded-lg'
+                        >
+                            Thank you for your support.
+                        </Button>
+                    ) : (
+                        <PaystackButton
+                            label='Pay now'
+                            options={{
+                                email: authentication.email!,
+                                currency: Cost.currency as Currency,
+                                amount: Cost.amount,
+                                reference: `payment_${new Date().getTime().toString()}`
+                            }}
+                            onSuccess={async (response) => {
+                                console.log(response);
+                                await onSuccess(response);
+                                onNext();
+                            }}
+                            onClose={() => {
+                                console.log('closed');
+                            }}
+                        />
+                    )}
                 </div>
 
                 <div className='border border-gray-300 p-4 rounded-lg'>
@@ -98,7 +103,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                     </p>
                 </div>
             </div>
-            <StepButtons onNext={undefined} onPrevious={onPrevious} />
+            <StepButtons onNext={paymentComplete ? onNext : undefined} onPrevious={onPrevious} />
         </>
     );
 }

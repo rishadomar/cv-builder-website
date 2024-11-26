@@ -16,15 +16,15 @@ import { Steps } from '@/components/ProgressSteps';
 import { useAuth } from '@/hooks/useAuth';
 import Spinner from '@/components/core/Spinner';
 import { useAppSelector } from '@/lib/store/hooks';
+import { selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 
 const NumberOfPages = Steps.length;
 
-// Create a separate component for the form content
 function FormContent() {
     const searchParams = useSearchParams();
     const [currentPage, setCurrentPage] = useState<string>('contact-details');
     const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
-    const fieldValues = useAppSelector((state) => state.fieldValues);
+    const isPaymentValid = useAppSelector(selectIsPaymentValid);
 
     useEffect(() => {
         const page = searchParams.get('page');
@@ -54,7 +54,7 @@ function FormContent() {
             if (index + 1 >= Steps.length) {
                 return 'contact-details';
             }
-            if (Steps[index + 1].path === 'paywall' && fieldValues.payment) {
+            if (Steps[index + 1].path === 'paywall' && isPaymentValid) {
                 return Steps[index + 2].path;
             }
             return Steps[index + 1].path;
@@ -71,7 +71,7 @@ function FormContent() {
             if (index - 1 < 0) {
                 return 'contact-details';
             }
-            if (Steps[index - 1].path === 'paywall' && fieldValues.payment) {
+            if (Steps[index - 1].path === 'paywall' && isPaymentValid) {
                 return Steps[index - 2].path;
             }
             return Steps[index - 1].path;

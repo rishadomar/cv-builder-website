@@ -111,8 +111,17 @@ export const selectIsReviewPersonalityDetailsPopulated = (state: RootState) => {
     return state.fieldValues.descriptionOfSelf !== undefined;
 };
 
-export const selectIsPaymentComplete = (state: RootState) => {
-    return state.fieldValues.payment !== undefined;
+export const selectIsPaymentValid = (state: RootState) => {
+    const paymentDate = state.fieldValues.payment?.date;
+    if (!paymentDate) {
+        return false;
+    }
+
+    const today = new Date();
+    const oneYearFromToday = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+    const paymentDateObj = new Date(paymentDate);
+
+    return paymentDateObj <= oneYearFromToday;
 };
 
 export default fieldvalueSlice.reducer;
