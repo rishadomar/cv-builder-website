@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
     const router = useRouter();
+
     if (!isLoggedIn) {
         return null;
     }
