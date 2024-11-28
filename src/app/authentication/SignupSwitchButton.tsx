@@ -8,7 +8,7 @@ interface SignupSwitchButtonProps {
 
 export default function SignupSwitchButton({ onClick }: SignupSwitchButtonProps) {
     return (
-        <div className='absolute top-4 right-4 md:top-6 md:right-6'>
+        <div className='absolute top-20 right-4 md:top-24 md:right-6'>
             <Button onClick={onClick} className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Signup
             </Button>

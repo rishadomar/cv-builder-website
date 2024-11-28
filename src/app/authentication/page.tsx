@@ -11,7 +11,6 @@ import SignupSwitchButton from './SignupSwitchButton';
 import { ForgotPasswordForm } from '@/app/authentication/ForgotPasswordForm';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { OverlaySpinner } from '@/components/OverlaySpinner';
 
 export default function AuthenticationPage() {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -19,11 +18,10 @@ export default function AuthenticationPage() {
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(true);
     const router = useRouter();
-    const isLoading = useAppSelector((state) => state.loading.isLoading);
 
     const renderAlreadyLoggedInSection = () => {
         return (
-            <div className='flex items-center justify-center min-h-screen -mt-32'>
+            <div className='flex items-center justify-center min-h-screen -mt-24'>
                 <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                     <div className='text-center'>You have successfully logged in</div>
                     <div className='flex justify-center'>
@@ -50,7 +48,7 @@ export default function AuthenticationPage() {
                             setShowSignupForm(false);
                         }}
                     />
-                    <div className='flex items-center justify-center min-h-screen -mt-32'>
+                    <div className='flex items-center justify-center min-h-screen -mt-24'>
                         <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                             <AuthenticationSignupForm />
                             <GoogleLoginForm />
@@ -71,7 +69,7 @@ export default function AuthenticationPage() {
                         }}
                     />
 
-                    <div className='flex items-center justify-center min-h-screen -mt-32'>
+                    <div className='flex items-center justify-center min-h-screen -mt-24'>
                         <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                             <AuthenticationLoginForm
                                 onForgotPassword={() => {
@@ -94,7 +92,7 @@ export default function AuthenticationPage() {
                             setShowLoginForm(true);
                         }}
                     />
-                    <div className='flex items-center justify-center min-h-screen -mt-32'>
+                    <div className='flex items-center justify-center min-h-screen -mt-24'>
                         <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
                             <ForgotPasswordForm
                                 onClick={() => {
@@ -111,7 +109,6 @@ export default function AuthenticationPage() {
 
     return (
         <div className='min-h-screen relative p-4 md:p-6'>
-            {isLoading && <OverlaySpinner />}
             <div className='lg:p-8'>{isLoggedIn ? renderAlreadyLoggedInSection() : renderLoginSignupSection()}</div>
         </div>
     );
