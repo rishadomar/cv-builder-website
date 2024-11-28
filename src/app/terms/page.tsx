@@ -13,7 +13,7 @@ const TermsPage: React.FC = () => {
     };
 
     return (
-        <div className='container mx-auto py-4 px-4 sm:p-4 lg:p-6'>
+        <div className='container mx-auth px-4 py-20 overflow-y-auto'>
             <TermsAndConditions />
             <Button onClick={handleBackClick} className='mb-4'>
                 Back

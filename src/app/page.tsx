@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <div className='min-h-screen bg-gray-50'>
             {/* Hero Section - Mobile First */}
-            <div className='container mx-auto px-4 py-12 lg:py-24 flex flex-col-reverse lg:flex-row items-center'>
+            <div className='container mx-auto px-4 py-20 lg:py-24 flex flex-col-reverse lg:flex-row items-center'>
                 {/* Mobile: Swap image and content order */}
                 <div className='w-full lg:w-1/2 mt-8 lg:mt-0 lg:mr-6 flex justify-center'>
                     <Image
