@@ -81,7 +81,7 @@ function FormContent() {
     return (
         <>
             <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
-            <div className='bg-gray-50 py-16 sm:px-6 lg:px-8'>
+            <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <ContactDetailsForm onNext={nextPage} />}
                 {currentPage === 'personal-details' && (
                     <PersonalDetailsForm onNext={nextPage} onPrevious={previousPage} />
