@@ -10,7 +10,6 @@ import { generatePersonalityText } from '@/lib/services/aiService';
 import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
-import TextFormField from '../TextFormField';
 import PillSelectFormField from '../PillSelectFormField';
 import { WandSparkles } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
@@ -21,7 +20,6 @@ import { CompareText } from '@/components/compareText/CompareText';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
-    otherTraits: z.string().default(''),
     personalityText: z.string().default('')
 });
 
@@ -72,7 +70,6 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
         if (allFieldValues) {
             formHook.reset({
                 personalityTraits: allFieldValues.personalityTraits || [],
-                otherTraits: allFieldValues.otherTraits || '',
                 personalityText: allFieldValues.personalityText || ''
             });
         }
@@ -104,10 +101,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
 
     const generateAiText = async () => {
         const data = formHook.getValues();
-        const otherTraits = data.otherTraits ? data.otherTraits.split(' ') : [];
-        const newText = await dispatch(
-            generatePersonalityText(data.personalityTraits.concat(otherTraits), data.personalityText)
-        );
+        const newText = await dispatch(generatePersonalityText(data.personalityTraits, data.personalityText));
         console.log('newText: ', newText);
         console.log('data.personalityText: ', data.personalityText);
         if (data.personalityText && data.personalityText.length > 0) {
@@ -119,7 +113,6 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                     setCompareText(undefined);
                 },
                 onReject: () => {
-                    //dispatch(setFieldValue({ field: 'personalityText', value: data.personalityText }));
                     setCompareText(undefined);
                 }
             });
@@ -145,9 +138,12 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                         personalityTraits: selectedPills
                                     });
                                 }}
+                                customPills={{
+                                    allow: true,
+                                    placeholder: 'Add custom trait'
+                                }}
                                 error={formHook.formState.errors.personalityTraits?.message}
                             />
-                            <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
                             <Button
                                 className='w-full'
                                 variant='outline'

@@ -7,15 +7,13 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { useEffect } from 'react';
 import PillSelectFormField from '../PillSelectFormField';
-import TextFormField from '../TextFormField';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 
 const hobbyDetailsFormSchema = z.object({
-    hobbies: z.array(z.string()).default([]),
-    otherHobbies: z.string().default('')
+    hobbies: z.array(z.string()).default([])
 });
 
 type HobbyDetailsFormValues = z.infer<typeof hobbyDetailsFormSchema>;
@@ -57,8 +55,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     useEffect(() => {
         if (allFieldValues) {
             formHook.reset({
-                hobbies: allFieldValues.hobbies || [],
-                otherHobbies: allFieldValues.otherHobbies || ''
+                hobbies: allFieldValues.hobbies || []
             });
         }
     }, [allFieldValues, formHook]);
@@ -104,12 +101,10 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 });
                             }}
                             error={formHook.formState.errors.hobbies?.message}
-                        />
-                        <TextFormField
-                            formHook={formHook}
-                            label='Other hobbies'
-                            fieldName='otherHobbies'
-                            description='Any other hobbies'
+                            customPills={{
+                                allow: true,
+                                placeholder: 'Add custom hobby'
+                            }}
                         />
                     </div>
                 </div>
