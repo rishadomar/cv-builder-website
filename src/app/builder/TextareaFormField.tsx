@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 interface TextareaFormFieldProps {
     formHook: any;
-    label: string;
+    label?: string;
     fieldName: string;
     description?: string;
     placeholder: string;
@@ -26,7 +26,7 @@ export default function TextareaFormField({
             name={fieldName}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel>{label}</FormLabel>
+                    {label && <FormLabel>{label}</FormLabel>}
                     <FormControl>
                         <Textarea placeholder={placeholder} {...field} rows={rows} />
                     </FormControl>

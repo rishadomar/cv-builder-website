@@ -6,7 +6,7 @@ import { Form } from '@/components/ui/form';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { Button } from '@/components/ui/button';
-import { generatePersonalityText } from '@/lib/services/aiService';
+import { generatePersonalityText, improvePersonalityText } from '@/lib/services/aiService';
 import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
@@ -61,6 +61,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     const formHook = useForm<ReviewPersonalityDetailsFormValues>({
         resolver: zodResolver(reviewPersonalityDetailsFormSchema)
     });
+    const watchedPersonalityText = formHook.watch('personalityText');
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
@@ -101,7 +102,29 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
 
     const generateAiText = async () => {
         const data = formHook.getValues();
-        const newText = await dispatch(generatePersonalityText(data.personalityTraits, data.personalityText));
+        const newText = await dispatch(generatePersonalityText(data.personalityTraits));
+        console.log('newText: ', newText);
+        console.log('data.personalityText: ', data.personalityText);
+        if (data.personalityText && data.personalityText.length > 0) {
+            setCompareText({
+                previousText: data.personalityText,
+                newText: newText,
+                onAccept: (acceptedText: string) => {
+                    dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
+                    setCompareText(undefined);
+                },
+                onReject: () => {
+                    setCompareText(undefined);
+                }
+            });
+        } else {
+            dispatch(setFieldValue({ field: 'personalityText', value: newText }));
+        }
+    };
+
+    const improveAiText = async () => {
+        const data = formHook.getValues();
+        const newText = await dispatch(improvePersonalityText(data.personalityTraits, data.personalityText));
         console.log('newText: ', newText);
         console.log('data.personalityText: ', data.personalityText);
         if (data.personalityText && data.personalityText.length > 0) {
@@ -144,24 +167,30 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 }}
                                 error={formHook.formState.errors.personalityTraits?.message}
                             />
-                            <Button
-                                className='w-full'
-                                variant='outline'
-                                disabled={isLoading}
-                                onClick={() => generateAiText()}
-                            >
-                                <WandSparkles className='mr-2 h-5 w-5' />
-                                {allFieldValues.personalityText && allFieldValues.personalityText.length > 0
-                                    ? 'Re-generate'
-                                    : 'Generate'}
-                            </Button>
                             <TextareaFormField
                                 formHook={formHook}
-                                label='Generated Text'
                                 fieldName='personalityText'
                                 placeholder='AI generated text will appear here'
                                 rows={10}
                             />
+                            <div className='flex justify-end gap-2 mt-4'>
+                                <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
+                                    <WandSparkles className='mr-2 h-5 w-5' />
+                                    {watchedPersonalityText && watchedPersonalityText.length > 0
+                                        ? 'Generate new text with AI'
+                                        : 'Generate text with AI'}
+                                </Button>
+                                <Button
+                                    variant='outline'
+                                    disabled={
+                                        isLoading || !watchedPersonalityText || watchedPersonalityText.length === 0
+                                    }
+                                    onClick={() => improveAiText()}
+                                >
+                                    <WandSparkles className='mr-2 h-5 w-5' />
+                                    Improve with AI
+                                </Button>
+                            </div>
                         </div>
                     </div>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
