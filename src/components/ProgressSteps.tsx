@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import {
     Bike,
@@ -183,11 +183,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
     };
 
     return (
-        <Card className='w-full max-w-md'>
-            <CardHeader className='hidden sm:block'>
-                <CardTitle>Build your CV</CardTitle>
-                <CardDescription>Complete these steps to complete your CV</CardDescription>
-            </CardHeader>
+        <Card className='mx-2'>
             <CardContent className='mt-3'>
                 <ol className='space-y-2'>
                     {Steps.filter((step) => step.showInSections).map((step, index) => (
