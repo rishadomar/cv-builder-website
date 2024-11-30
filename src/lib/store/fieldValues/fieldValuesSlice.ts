@@ -19,7 +19,7 @@ const initialState: FieldValuesState = {
     remoteWork: undefined,
     partiallyRemote: undefined,
     preferRemote: undefined,
-    descriptionOfSelf: undefined,
+    personalityTraits: undefined,
     otherTraits: undefined,
     personalityText: undefined,
     hobbies: undefined,
@@ -52,7 +52,7 @@ export const fieldvalueSlice = createSlice({
             state.remoteWork = undefined;
             state.partiallyRemote = undefined;
             state.preferRemote = undefined;
-            state.descriptionOfSelf = undefined;
+            state.personalityTraits = undefined;
             state.otherTraits = undefined;
             state.personalityText = undefined;
             state.hobbies = undefined;
@@ -108,7 +108,7 @@ export const selectIsWorkExperiencePopulated = (state: RootState) => {
 };
 
 export const selectIsReviewPersonalityDetailsPopulated = (state: RootState) => {
-    return state.fieldValues.descriptionOfSelf !== undefined;
+    return state.fieldValues.personalityTraits !== undefined;
 };
 
 export const selectIsPaymentValid = (state: RootState) => {

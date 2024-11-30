@@ -61,7 +61,7 @@ export type FieldValuesState = {
     remoteWork?: YesNoType;
     partiallyRemote?: YesNoType;
     preferRemote?: YesNoType;
-    descriptionOfSelf?: string[];
+    personalityTraits?: string[];
     otherTraits?: string;
     personalityText?: string;
     hobbies?: string[];
