@@ -14,7 +14,7 @@ import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 
 const personalityDetailsFormSchema = z.object({
-    descriptionOfSelf: z.array(z.string()).min(1, 'At least one description is required').default([]),
+    personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
     otherTraits: z.string().default('')
 });
 
@@ -54,7 +54,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     useEffect(() => {
         if (allFieldValues) {
             formHook.reset({
-                descriptionOfSelf: allFieldValues.descriptionOfSelf || [],
+                personalityTraits: allFieldValues.personalityTraits || [],
                 otherTraits: allFieldValues.otherTraits || ''
             });
         }
@@ -92,15 +92,15 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4'>
                         <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                         <PillSelectFormField
-                            fieldName='descriptionOfSelf'
+                            fieldName='personalityTraits'
                             availablePills={Traits}
-                            selectedPills={formHook.getValues().descriptionOfSelf}
+                            selectedPills={formHook.getValues().personalityTraits}
                             setSelectedPills={(selectedPills) => {
                                 formHook.reset({
-                                    descriptionOfSelf: selectedPills
+                                    personalityTraits: selectedPills
                                 });
                             }}
-                            error={formHook.formState.errors.descriptionOfSelf?.message}
+                            error={formHook.formState.errors.personalityTraits?.message}
                         />
                         <TextFormField formHook={formHook} label='Other Traits' fieldName='otherTraits' />
                     </div>
