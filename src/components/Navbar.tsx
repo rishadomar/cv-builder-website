@@ -14,13 +14,13 @@ const Navbar: React.FC = () => {
         <nav className='fixed top-0 left-0 right-0 bg-black border-b shadow-sm z-50'>
             <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex items-center justify-between h-16'>
-                    <div className='flex items-center'>{isLoggedIn && <StepDrawer />}</div>
-                    <div className='flex-grow text-center'>
+                    <div className='w-24 flex items-center'>{isLoggedIn && <StepDrawer />}</div>
+                    <div className='flex-grow flex justify-center'>
                         <span className='text-white cursor-pointer' onClick={() => router.push('/')}>
                             CV Builder
                         </span>
                     </div>
-                    <div className='flex items-center'>{isLoggedIn && <ProfileDropdown />}</div>
+                    <div className='w-24 flex items-center justify-end'>{isLoggedIn && <ProfileDropdown />}</div>
                 </div>
             </div>
         </nav>
