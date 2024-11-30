@@ -65,6 +65,7 @@ export type FieldValuesState = {
     otherTraits?: string;
     personalityText?: string;
     hobbies?: string[];
+    hobbiesText?: string;
     otherHobbies?: string;
     workExperiences?: WorkExperienceEntry[];
     payment?: PaymentDetails;

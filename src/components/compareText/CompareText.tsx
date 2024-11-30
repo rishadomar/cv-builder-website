@@ -1,6 +1,13 @@
 import { DrawerDialog } from '../DrawerDialog';
 import { Details } from './Details';
 
+export type CompareTextState = {
+    previousText: string;
+    newText: string;
+    onAccept: (acceptedText: string) => void;
+    onReject: () => void;
+};
+
 interface CompareTextProps {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;

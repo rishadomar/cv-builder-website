@@ -48,3 +48,47 @@ export const improvePersonalityText = (traits: Array<string>, previousText: stri
         }
     };
 };
+
+export const generateHobbiesText = (hobbies: Array<string>) => {
+    return async (dispatch: Dispatch, getState: () => RootState) => {
+        if (!getState().authentication.sub) {
+            throw new Error('No sub found');
+        }
+        dispatch(setLoading(true));
+        try {
+            const response = await api.generateHobbiesText(getState().authentication.sub!, hobbies);
+            // await api.delay(3000);
+            // const newText = 'gen: ' + hobbies.join(', ');
+            // const response = newText;
+            return response;
+        } catch (error) {
+            console.error('Generate hobbies text error:', error);
+            dispatch(addAxiosError({ title: '', error: error as Error }));
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+};
+
+export const improveHobbiesText = (hobbies: Array<string>, previousText: string) => {
+    return async (dispatch: Dispatch, getState: () => RootState) => {
+        if (!getState().authentication.sub) {
+            throw new Error('No sub found');
+        }
+        dispatch(setLoading(true));
+        try {
+            const response = await api.improveHobbiesText(getState().authentication.sub!, hobbies, previousText);
+            // await api.delay(3000);
+            // const newText = 'gen: ' + hobbies.join(', ');
+            // const response = previousText ? 'was: ' + previousText + ' ' + newText : newText;
+            return response;
+        } catch (error) {
+            console.error('Improve hobbies text error:', error);
+            dispatch(addAxiosError({ title: '', error: error as Error }));
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+};

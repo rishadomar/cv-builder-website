@@ -36,7 +36,7 @@ export default function PillSelectFormField({
             }
         });
         setAllAvailablePills((prev) => [...prev, ...customSelectedPills]);
-    }, []);
+    }, [availablePills, selectedPills]);
 
     return (
         <div className='space-y-4'>

@@ -23,6 +23,7 @@ const initialState: FieldValuesState = {
     otherTraits: undefined,
     personalityText: undefined,
     hobbies: undefined,
+    hobbiesText: undefined,
     otherHobbies: undefined,
     workExperiences: undefined,
     payment: undefined,
@@ -56,6 +57,7 @@ export const fieldvalueSlice = createSlice({
             state.otherTraits = undefined;
             state.personalityText = undefined;
             state.hobbies = undefined;
+            state.hobbiesText = undefined;
             state.otherHobbies = undefined;
             state.workExperiences = undefined;
             state.payment = undefined;
@@ -100,7 +102,7 @@ export const selectIsPersonalityDetailsPopulated = (state: RootState) => {
 };
 
 export const selectIsHobbiesPopulated = (state: RootState) => {
-    return state.fieldValues.hobbies !== undefined;
+    return state.fieldValues.hobbiesText !== undefined;
 };
 
 export const selectIsWorkExperiencePopulated = (state: RootState) => {

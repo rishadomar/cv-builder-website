@@ -16,7 +16,7 @@ import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
-import { CompareText } from '@/components/compareText/CompareText';
+import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -28,13 +28,6 @@ type ReviewPersonalityDetailsFormValues = z.infer<typeof reviewPersonalityDetail
 type ReviewPersonalityDetailsFormProps = {
     onNext?: () => void;
     onPrevious: () => void;
-};
-
-type CompareTextState = {
-    previousText: string;
-    newText: string;
-    onAccept: (acceptedText: string) => void;
-    onReject: () => void;
 };
 
 const Traits = [

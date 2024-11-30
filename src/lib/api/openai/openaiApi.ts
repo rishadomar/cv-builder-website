@@ -57,3 +57,38 @@ export async function improvePersonalityText(
         throw error;
     }
 }
+
+export async function generateHobbiesText(sub: string, hobbies: Array<string>): Promise<string> {
+    try {
+        // Make the GET request using Axios
+        const response = await axiosInstance.post('/hobbiesText', {
+            sub: sub,
+            hobbies: hobbies
+        });
+        console.log(response.data);
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+export async function improveHobbiesText(sub: string, hobbies: Array<string>, previousText: string): Promise<string> {
+    try {
+        // Make the GET request using Axios
+        const response = await axiosInstance.post('/improveHobbiesText', {
+            sub: sub,
+            hobbies: hobbies,
+            previousText: previousText
+        });
+        console.log(response.data);
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
