@@ -35,3 +35,25 @@ export async function generatePersonalityText(sub: string, traits: Array<string>
         throw error;
     }
 }
+
+export async function improvePersonalityText(
+    sub: string,
+    traits: Array<string>,
+    previousText: string
+): Promise<string> {
+    try {
+        // Make the GET request using Axios
+        const response = await axiosInstance.post('/improvePersonalityText', {
+            sub: sub,
+            traits: traits,
+            previousText: previousText
+        });
+        console.log(response.data);
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle any errors
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}

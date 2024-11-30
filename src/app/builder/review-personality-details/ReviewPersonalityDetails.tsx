@@ -11,7 +11,7 @@ import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
 import PillSelectFormField from '../PillSelectFormField';
-import { WandSparkles } from 'lucide-react';
+import { RefreshCw, Sparkles, Wand2 } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
@@ -151,7 +151,6 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                     <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
                             <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-
                             <PillSelectFormField
                                 fieldName='personalityTraits'
                                 availablePills={Traits}
@@ -173,9 +172,13 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 placeholder='AI generated text will appear here'
                                 rows={10}
                             />
-                            <div className='flex justify-end gap-2 mt-4'>
+                            <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
-                                    <WandSparkles className='mr-2 h-5 w-5' />
+                                    {watchedPersonalityText && watchedPersonalityText.length > 0 ? (
+                                        <RefreshCw className='mr-2 h-5 w-5' />
+                                    ) : (
+                                        <Sparkles className='mr-2 h-5 w-5' />
+                                    )}
                                     {watchedPersonalityText && watchedPersonalityText.length > 0
                                         ? 'Generate new text with AI'
                                         : 'Generate text with AI'}
@@ -187,10 +190,10 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                     }
                                     onClick={() => improveAiText()}
                                 >
-                                    <WandSparkles className='mr-2 h-5 w-5' />
+                                    <Wand2 className='mr-2 h-5 w-5' />
                                     Improve with AI
                                 </Button>
-                            </div>
+                            </div>{' '}
                         </div>
                     </div>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
