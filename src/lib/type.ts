@@ -67,6 +67,7 @@ export type FieldValuesState = {
     hobbies?: string[];
     hobbiesText?: string;
     otherHobbies?: string;
+    educationEntries?: EducationEntry[];
     workExperiences?: WorkExperienceEntry[];
     payment?: PaymentDetails;
     pdf_id?: string;
@@ -87,6 +88,16 @@ export interface PayloadActionAddItemToList {
 export interface YearMonth {
     year: string;
     month: string;
+}
+
+export interface EducationEntry {
+    id: number;
+    description: string;
+    institution: string;
+    graduationDate?: YearMonth;
+    location: string;
+    subjects: string;
+    comment: string;
 }
 
 export interface WorkExperienceEntry {

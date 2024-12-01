@@ -9,6 +9,7 @@ import {
     CreditCard,
     Download,
     Globe,
+    GraduationCap,
     Heart,
     Mail,
     MapPinHouse,
@@ -16,11 +17,11 @@ import {
 } from 'lucide-react';
 import {
     selectIsContactDetailsPopulated,
+    selectIsEducationPopulated,
     selectIsHobbiesPopulated,
     selectIsLocationDetailsPopulated,
     selectIsPaymentValid,
     selectIsPersonalDetailsPopulated,
-    selectIsPersonalityDetailsPopulated,
     selectIsRemoteWorkPopulated,
     selectIsReviewPersonalityDetailsPopulated,
     selectIsWorkExperiencePopulated
@@ -36,9 +37,10 @@ export type StepPath =
     | 'remote-work-details'
     | 'personality-details'
     | 'hobbies'
+    | 'education'
     | 'work-experience'
     | 'paywall'
-    | 'review-personality-details'
+    | 'preview'
     | 'generate-pdf';
 
 export const Steps = [
@@ -94,26 +96,6 @@ export const Steps = [
     },
     {
         id: 6,
-        title: 'Hobbies',
-        icon: Bike,
-        description: 'What do you enjoy doing to accomplish a life/work balance',
-        completed: false,
-        path: 'hobbies',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 7,
-        title: 'Work experience',
-        icon: BookText,
-        description: 'Professional experience',
-        completed: false,
-        path: 'work-experience',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 8,
         title: 'Paywall capture',
         icon: CreditCard,
         description: 'Pay please to continue',
@@ -122,17 +104,47 @@ export const Steps = [
         showInSections: false
     },
     {
-        id: 9,
-        title: 'Review personality',
-        icon: Heart,
-        description: 'Let AI guide you to describe your personality',
+        id: 7,
+        title: 'Hobbies',
+        icon: Bike,
+        description: 'What do you enjoy doing to accomplish a life/work balance',
         completed: false,
-        path: 'review-personality-details',
+        path: 'hobbies',
+        showInSections: true,
+        paymentRequired: true
+    },
+    {
+        id: 8,
+        title: 'Education',
+        icon: GraduationCap,
+        description: 'Educational background',
+        completed: false,
+        path: 'education',
+        showInSections: true,
+        paymentRequired: true
+    },
+    {
+        id: 9,
+        title: 'Work experience',
+        icon: BookText,
+        description: 'Professional experience',
+        completed: false,
+        path: 'work-experience',
         showInSections: true,
         paymentRequired: true
     },
     {
         id: 10,
+        title: 'Preview',
+        icon: Download,
+        description: 'Preview your CV',
+        completed: false,
+        path: 'preview',
+        showInSections: false,
+        paymentRequired: true
+    },
+    {
+        id: 11,
         title: 'Generate & download CV',
         icon: Download,
         description: 'A PDF will be generated which you can download for keeps',
@@ -153,8 +165,8 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
     const isContactDetailsPopulated = useAppSelector(selectIsContactDetailsPopulated);
     const isPersonalDetailsPopulated = useAppSelector(selectIsPersonalDetailsPopulated);
     const isLocationDetailsPopulated = useAppSelector(selectIsLocationDetailsPopulated);
-    const isPersonalityDetailsPopulated = useAppSelector(selectIsPersonalityDetailsPopulated);
     const isHobbiesPopulated = useAppSelector(selectIsHobbiesPopulated);
+    const isEducationPopulated = useAppSelector(selectIsEducationPopulated);
     const isWorkExperiencePopulated = useAppSelector(selectIsWorkExperiencePopulated);
     const isReviewPersonalityDetailsPopulated = useAppSelector(selectIsReviewPersonalityDetailsPopulated);
     const isPaymentValid = useAppSelector(selectIsPaymentValid);
@@ -170,13 +182,13 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
             case 'location-details':
                 return isLocationDetailsPopulated ? 'complete' : 'incomplete';
             case 'personality-details':
-                return isPersonalityDetailsPopulated ? 'complete' : 'incomplete';
+                return isReviewPersonalityDetailsPopulated ? 'complete' : 'incomplete';
             case 'hobbies':
                 return isHobbiesPopulated ? 'complete' : 'incomplete';
+            case 'education':
+                return isEducationPopulated ? 'complete' : 'incomplete';
             case 'work-experience':
                 return isWorkExperiencePopulated ? 'complete' : 'incomplete';
-            case 'review-personality-details':
-                return isReviewPersonalityDetailsPopulated ? 'complete' : 'incomplete';
             default:
                 return 'unknown';
         }
@@ -200,14 +212,6 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                 }
                             }}
                         >
-                            {/* <div className='flex items-center justify-center'>
-                                {getStatus(step) === 'complete' ? (
-                                    <CircleCheckBig className='h-6 w-6 text-green-500' />
-                                ) : (
-                                    <Circle className='h-6 w-6 text-gray-400' />
-                                )}
-                            </div>
- */}
                             <div className='flex-grow'>
                                 <StepHeader
                                     icon={step.icon}

@@ -7,7 +7,6 @@ import { LocationDetailsForm } from './location-details/LocationDetailsForm';
 import RemoteWorkDetailsForm from '@/app/builder/remote-work-details/RemoteWorkDetails';
 import HobbyDetailsForm from '@/app/builder/hobbies/Hobbies';
 import WorkExperienceList from '@/app/builder/work-experience/WorkExperienceList';
-import PersonalityDetailsForm from '@/app/builder/personality-details/PersonalityDetails';
 import Paywall from '@/app/builder/paywall/Paywall';
 import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-details/ReviewPersonalityDetails';
 import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
@@ -17,6 +16,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
+import EducationList from './education/EducationList';
 
 const NumberOfPages = Steps.length;
 
@@ -93,16 +93,14 @@ function FormContent() {
                     <RemoteWorkDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
                 {currentPage === 'personality-details' && (
-                    <PersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                    <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
                 {currentPage === 'hobbies' && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
+                {currentPage === 'education' && <EducationList onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'work-experience' && (
                     <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />
                 )}
                 {currentPage === 'paywall' && <Paywall onNext={nextPage} onPrevious={previousPage} />}
-                {currentPage === 'review-personality-details' && (
-                    <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
-                )}
                 {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
             </div>
         </>

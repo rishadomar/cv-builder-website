@@ -3,3 +3,5 @@ export * from './databaseService';
 export * from './paymentService';
 export * from './aiService';
 export * from './pdfService';
+export * from './educationService';
+export * from './workExperienceService';

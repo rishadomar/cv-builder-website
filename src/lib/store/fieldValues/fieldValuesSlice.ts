@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { FieldValue, FieldValuesState, WorkExperienceEntry } from '../../type';
+import { EducationEntry, FieldValue, FieldValuesState, WorkExperienceEntry } from '../../type';
 import { RootState } from '../store';
-//import { compareWorkExperienceEntries } from '@/lib/firebase/saveData';
 
 // Define the initial state using that type
 const initialState: FieldValuesState = {
@@ -25,6 +24,7 @@ const initialState: FieldValuesState = {
     hobbies: undefined,
     hobbiesText: undefined,
     otherHobbies: undefined,
+    educationEntries: undefined,
     workExperiences: undefined,
     payment: undefined,
     pdf_id: undefined,
@@ -59,6 +59,7 @@ export const fieldvalueSlice = createSlice({
             state.hobbies = undefined;
             state.hobbiesText = undefined;
             state.otherHobbies = undefined;
+            state.educationEntries = undefined;
             state.workExperiences = undefined;
             state.payment = undefined;
             state.pdf_id = undefined;
@@ -72,6 +73,10 @@ export const fieldvalueSlice = createSlice({
                 state[fieldValue.field] = fieldValue.value;
             });
         },
+        setEducationEntries: (state, action: PayloadAction<EducationEntry[]>) => {
+            state.educationEntries = action.payload;
+            //state.educationEntries?.sort(compareEducationEntries);
+        },
         setWorkExperiences: (state, action: PayloadAction<WorkExperienceEntry[]>) => {
             state.workExperiences = action.payload;
             //state.workExperiences?.sort(compareWorkExperienceEntries);
@@ -79,7 +84,8 @@ export const fieldvalueSlice = createSlice({
     }
 });
 
-export const { setFieldValue, resetFieldValues, setFieldValues, setWorkExperiences } = fieldvalueSlice.actions;
+export const { setFieldValue, resetFieldValues, setFieldValues, setWorkExperiences, setEducationEntries } =
+    fieldvalueSlice.actions;
 
 export const selectIsRemoteWorkPopulated = (state: RootState) => {
     return state.fieldValues.remoteWork !== undefined;
@@ -103,6 +109,10 @@ export const selectIsPersonalityDetailsPopulated = (state: RootState) => {
 
 export const selectIsHobbiesPopulated = (state: RootState) => {
     return state.fieldValues.hobbiesText !== undefined;
+};
+
+export const selectIsEducationPopulated = (state: RootState) => {
+    return state.fieldValues.educationEntries !== undefined;
 };
 
 export const selectIsWorkExperiencePopulated = (state: RootState) => {
