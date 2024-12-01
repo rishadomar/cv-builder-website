@@ -70,7 +70,7 @@ const FAQPage = () => {
         {
             id: 'support',
             question: 'Do you offer customer support?',
-            answer: 'Yes, we provide customer support via email. Our team is dedicated to helping you create the perfect CV.'
+            answer: 'Yes, we provide customer support via email. Our team is dedicated to helping you create the perfect CV. Send an email to: techsolns4+support@gmail.com'
         }
     ];
 
