@@ -7,7 +7,6 @@ import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { WorkExperienceItem } from './WorkExperienceItem';
-import HorizontalTimeline from './HorizontalTimeline';
 
 type WorkExperienceListProps = {
     onNext: () => void;

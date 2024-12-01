@@ -20,14 +20,14 @@ const workExperienceDetailsFormSchema = z.object({
         .default(''),
     startDate: z
         .object({
-            year: z.string(),
-            month: z.string()
+            year: z.number(),
+            month: z.number()
         })
-        .default({ year: '2000', month: 'January' }),
+        .default({ year: 2000, month: 1 }),
     endDate: z
         .object({
-            year: z.string(),
-            month: z.string()
+            year: z.number().optional(),
+            month: z.number().optional()
         })
         .optional(),
     location: z
@@ -67,7 +67,7 @@ export default function WorkExperienceForm({
     const { toast } = useToast();
     const defaultValues: Partial<WorkExperienceDetailsFormValues> = {
         company: workExperienceEntryToEdit?.company || '',
-        startDate: workExperienceEntryToEdit?.startDate || { year: '2000', month: 'January' },
+        startDate: workExperienceEntryToEdit?.startDate,
         endDate: workExperienceEntryToEdit?.endDate || undefined,
         location: workExperienceEntryToEdit?.location || '',
         role: workExperienceEntryToEdit?.role || '',
@@ -119,7 +119,6 @@ export default function WorkExperienceForm({
     return (
         <Form {...formHook}>
             {/* {busySaving && <OverlaySpinner />} */}
-            {/* <h2>Location details</h2> */}
             <form onSubmit={onSubmit} className='flex flex-col bg-white'>
                 <div className='xs:max-w-[400px] max-h-[500px] overflow-auto space-y-4 px-2'>
                     <TextFormField formHook={formHook} label='Company' fieldName='company' placeholder='Company name' />

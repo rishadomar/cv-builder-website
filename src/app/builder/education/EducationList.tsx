@@ -2,42 +2,11 @@ import { StepButtons } from '../StepButtons';
 import AddEducationDialog from './AddEducationDialog';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
-import { EducationEntry } from '@/lib/type';
-import EducationEntryActionsDropdown from './EducationEntryActionsDropdown';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
-
-type EducationItemProps = {
-    educationEntry: EducationEntry;
-    setBusyUpdatingList: (v: boolean) => void;
-};
-
-function EducationItem({ educationEntry, setBusyUpdatingList }: EducationItemProps) {
-    return (
-        <div className='grid grid-cols-[1fr_auto] gap-4 text-sm relative'>
-            <div className='grid gap-1'>
-                <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-0 translate-x-[-29.5px] z-10 top-1 dark:bg-gray-50' />
-                <div className='text-lg font-bold'>{educationEntry.institution}</div>
-                <div className='text-gray-500 dark:text-gray-400'>{educationEntry.location}</div>
-                {educationEntry.graduationDate && (
-                    <div className='text-gray-500 dark:text-gray-400'>
-                        {educationEntry.graduationDate.month} {educationEntry.graduationDate.year}
-                    </div>
-                )}
-                <div className='text-gray-500 dark:text-gray-400'>{educationEntry.description}</div>
-                <div className='text-gray-500 dark:text-gray-400'>{educationEntry.comment}</div>
-            </div>
-            <div className=''>
-                <EducationEntryActionsDropdown
-                    educationEntry={educationEntry}
-                    setBusyUpdatingList={setBusyUpdatingList}
-                />
-            </div>
-        </div>
-    );
-}
+import { EducationItem } from './EducationItem';
 
 type EducationListProps = {
     onNext: () => void;

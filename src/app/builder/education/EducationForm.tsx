@@ -26,8 +26,8 @@ const educationDetailsFormSchema = z.object({
         .default(''),
     graduationDate: z
         .object({
-            year: z.string(),
-            month: z.string()
+            year: z.number().optional(),
+            month: z.number().optional()
         })
         .optional(),
     location: z

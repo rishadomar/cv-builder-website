@@ -1,5 +1,7 @@
 import { WorkExperienceEntry } from '@/lib/type';
 import WorkExperienceEntryActionsDropdown from './WorkExperienceEntryActionsDropdown';
+import { Calendar } from 'lucide-react';
+import { getMonth } from '@/lib/utils';
 
 type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -15,9 +17,12 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({ workExpe
                 <div className='text-gray-500 dark:text-gray-400'>{workExperienceEntry.location}</div>
                 {workExperienceEntry.startDate && (
                     <div className='text-gray-500 dark:text-gray-400'>
-                        {workExperienceEntry.startDate.month} {workExperienceEntry.startDate.year} -{' '}
-                        {workExperienceEntry.endDate
-                            ? `${workExperienceEntry.endDate.month} ${workExperienceEntry.endDate.year}`
+                        <Calendar className='w-4 h-4 inline-block mr-1' />
+                        {getMonth(workExperienceEntry.startDate.month)} {workExperienceEntry.startDate.year} -{' '}
+                        {workExperienceEntry.endDate &&
+                        workExperienceEntry.endDate.month &&
+                        workExperienceEntry.endDate.year
+                            ? `${getMonth(workExperienceEntry.endDate.month)} ${workExperienceEntry.endDate.year}`
                             : 'Present'}
                     </div>
                 )}
