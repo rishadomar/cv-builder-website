@@ -163,7 +163,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 formHook={formHook}
                                 fieldName='personalityText'
                                 placeholder='AI generated text will appear here'
-                                rows={10}
+                                rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
                             />
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>

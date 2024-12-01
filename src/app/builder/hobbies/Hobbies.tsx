@@ -161,7 +161,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 formHook={formHook}
                                 fieldName='hobbiesText'
                                 placeholder='AI generated text will appear here'
-                                rows={10}
+                                rows={watchedHobbiesText && watchedHobbiesText.length > 0 ? 10 : 3}
                             />
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
