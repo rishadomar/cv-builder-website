@@ -3,7 +3,9 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
-import { FileDown, FileText } from 'lucide-react';
+import { FileDown, FileText, LucideIcon } from 'lucide-react';
+import StepHeader from '../StepHeader';
+import { getStep } from '@/lib/utils/step';
 
 type GeneratePDFProps = {
     onNext?: () => void;
@@ -14,6 +16,7 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
     const dispatch = useAppDispatch();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const allFieldValues = useAppSelector((state) => state.fieldValues);
+    const step = getStep('generate-pdf');
 
     useEffect(() => {
         if (allFieldValues.pdf_url) {
@@ -47,7 +50,7 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
         <>
             <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                    <h1>Generate and download PDF</h1>
+                    <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
                     <div>You can review the PDF and return here to make any changes</div>
                     <div className='flex flex-col space-y-2'>
                         <Button variant='outline' disabled={isLoading} onClick={() => callGeneratePDF()}>

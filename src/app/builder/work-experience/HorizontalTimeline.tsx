@@ -8,33 +8,29 @@ const HorizontalTimeline = ({ experiences }: { experiences: WorkExperienceEntry[
         return new Date(date.year, date.month - 1);
     };
 
-    const fexperiences = [
-        {
-            company: 'Company 1',
-            startDate: { year: '2010', month: '1' },
-            endDate: { year: '2018', month: '1' }
-        },
-        {
-            company: 'Company 2',
-            startDate: { year: '2019', month: '1' },
-            endDate: { year: '2022', month: '1' }
-        },
-        {
-            company: 'Company 3',
-            startDate: { year: '2022', month: '1' },
-            endDate: { year: '2023', month: '1' }
-        }
-    ];
+    // const fexperiences = [
+    //     {
+    //         company: 'Company 1',
+    //         startDate: { year: '2010', month: '1' },
+    //         endDate: { year: '2018', month: '1' }
+    //     },
+    //     {
+    //         company: 'Company 2',
+    //         startDate: { year: '2019', month: '1' },
+    //         endDate: { year: '2022', month: '1' }
+    //     },
+    //     {
+    //         company: 'Company 3',
+    //         startDate: { year: '2022', month: '1' },
+    //         endDate: { year: '2023', month: '1' }
+    //     }
+    // ];
 
-    const uexperiences = fexperiences.map((exp) => {
+    const uexperiences = experiences.map((exp) => {
         return {
             ...exp,
-            startDate: exp.startDate
-                ? toDate({ year: parseInt(exp.startDate.year!), month: parseInt(exp.startDate.month!) })
-                : new Date(),
-            endDate: exp.endDate
-                ? toDate({ year: parseInt(exp.endDate.year!), month: parseInt(exp.endDate.month!) })
-                : new Date()
+            startDate: exp.startDate ? toDate({ year: exp.startDate.year!, month: exp.startDate.month! }) : new Date(),
+            endDate: exp.endDate ? toDate({ year: exp.endDate.year!, month: exp.endDate.month! }) : new Date()
         };
     });
 
@@ -52,10 +48,10 @@ const HorizontalTimeline = ({ experiences }: { experiences: WorkExperienceEntry[
     // Function to calculate position and width percentages
     const getTimelinePosition = (experience: WorkExperienceEntry) => {
         const start = experience.startDate
-            ? toDate({ year: parseInt(experience.startDate.year!), month: parseInt(experience.startDate.month!) })
+            ? toDate({ year: experience.startDate.year!, month: experience.startDate.month! })
             : new Date();
         const end = experience.endDate
-            ? toDate({ year: parseInt(experience.endDate.year!), month: parseInt(experience.endDate.month!) })
+            ? toDate({ year: experience.endDate.year!, month: experience.endDate.month! })
             : new Date();
 
         const startOffset =
@@ -95,7 +91,7 @@ const HorizontalTimeline = ({ experiences }: { experiences: WorkExperienceEntry[
 
                 {/* Timeline bars */}
                 <div className='relative space-y-3'>
-                    {fexperiences.map((exp, index) => {
+                    {experiences.map((exp, index) => {
                         const position = getTimelinePosition(exp);
                         return (
                             <div key={index} className='relative h-8'>

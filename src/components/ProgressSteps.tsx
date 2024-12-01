@@ -8,9 +8,11 @@ import {
     CircleChevronRight,
     CreditCard,
     Download,
+    BookCheck,
     Globe,
     GraduationCap,
     Heart,
+    LucideIcon,
     Mail,
     MapPinHouse,
     User
@@ -136,7 +138,7 @@ export const Steps = [
     {
         id: 10,
         title: 'Preview',
-        icon: Download,
+        icon: BookCheck,
         description: 'Preview your CV',
         completed: false,
         path: 'preview',
@@ -214,7 +216,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                         >
                             <div className='flex-grow'>
                                 <StepHeader
-                                    icon={step.icon}
+                                    icon={step.icon as LucideIcon}
                                     iconColor={getStatus(step) === 'complete' ? 'done' : 'todo'}
                                     title={step.title}
                                 />
