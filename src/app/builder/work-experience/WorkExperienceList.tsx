@@ -55,7 +55,6 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                     </form>
                 </div>
             </div>
-            {workExperienceEntries && <HorizontalTimeline experiences={workExperienceEntries} />}
         </div>
     );
 }

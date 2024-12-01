@@ -9,8 +9,8 @@ type WorkExperienceItemProps = {
 export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({ workExperienceEntry, setBusyUpdatingList }) => {
     return (
         <div className='grid grid-cols-[1fr_auto] gap-4 text-sm relative'>
-            <div className='grid gap-1'>
-                <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-1 translate-x-[-29.5px] z-10 top-2 dark:bg-gray-50' />
+            <div className='pl-4 grid gap-1'>
+                <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-1 translate-x-[-12.5px] z-10 top-2 dark:bg-gray-50' />
                 <div className='text-lg font-bold'>{workExperienceEntry.company}</div>
                 <div className='text-gray-500 dark:text-gray-400'>{workExperienceEntry.location}</div>
                 {workExperienceEntry.startDate && (
