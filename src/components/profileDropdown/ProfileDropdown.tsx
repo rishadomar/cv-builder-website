@@ -10,13 +10,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/lib/utils';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
-import { DialogFooter, DialogHeader } from './ui/dialog';
-import { CircleUserRound, Cog, CreditCard, LogOut } from 'lucide-react';
-import { DrawerDialog } from './DrawerDialog';
+import { DialogFooter, DialogHeader } from '../ui/dialog';
+import { CircleUserRound, Cog, CreditCard, LogOut, SquareArrowOutUpRight } from 'lucide-react';
+import { DrawerDialog } from '../DrawerDialog';
 import { QuickLinks } from './QuickLinks';
 
 const ProfileDropdown: React.FC = () => {
@@ -71,7 +71,7 @@ const ProfileDropdown: React.FC = () => {
                             <span>Settings</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => setIsQuickLinksDialogOpen(true)}>
-                            <Cog />
+                            <SquareArrowOutUpRight />
                             <span>Quick links</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>

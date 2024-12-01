@@ -3,7 +3,7 @@ import React from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice';
 import StepDrawer from './StepDrawer';
-import ProfileDropdown from './ProfileDropdown';
+import ProfileDropdown from './profileDropdown/ProfileDropdown';
 import { useRouter } from 'next/navigation';
 
 const Navbar: React.FC = () => {
