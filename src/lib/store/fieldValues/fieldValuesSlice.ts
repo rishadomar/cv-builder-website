@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { EducationEntry, FieldValue, FieldValuesState, WorkExperienceEntry } from '../../type';
 import { RootState } from '../store';
+import { compareEducationEntries, compareWorkExperienceEntries } from '@/lib/utils';
 
 // Define the initial state using that type
 const initialState: FieldValuesState = {
@@ -75,11 +76,11 @@ export const fieldvalueSlice = createSlice({
         },
         setEducationEntries: (state, action: PayloadAction<EducationEntry[]>) => {
             state.educationEntries = action.payload;
-            //state.educationEntries?.sort(compareEducationEntries);
+            state.educationEntries?.sort(compareEducationEntries);
         },
         setWorkExperiences: (state, action: PayloadAction<WorkExperienceEntry[]>) => {
             state.workExperiences = action.payload;
-            //state.workExperiences?.sort(compareWorkExperienceEntries);
+            state.workExperiences?.sort(compareWorkExperienceEntries);
         }
     }
 });

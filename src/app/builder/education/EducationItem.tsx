@@ -18,7 +18,7 @@ export const EducationItem: React.FC<EducationItemProps> = ({ educationEntry, se
                 <div className='text-gray-500 dark:text-gray-400'>{educationEntry.location}</div>
                 {educationEntry.graduationDate &&
                     educationEntry.graduationDate.year &&
-                    educationEntry.graduationDate.month && (
+                    educationEntry.graduationDate.month >= 0 && (
                         <div className='text-gray-500 dark:text-gray-400'>
                             <Check className='w-4 h-4 inline-block mr-1' />
                             {getMonth(educationEntry.graduationDate.month)} {educationEntry.graduationDate.year}

@@ -5,6 +5,7 @@ import * as api from '@/lib/api';
 import { setFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
 import type { FieldValuesState, KeyValuePairArray, PaymentDetails, Error } from '@/lib/type';
 import { addAxiosError } from '@/lib/store/alert/alertSlice';
+import { compareEducationEntries, compareWorkExperienceEntries } from '../utils';
 
 export const readRecord = (sub: string, email: string) => {
     return async (dispatch: Dispatch) => {
@@ -26,6 +27,32 @@ export const readRecord = (sub: string, email: string) => {
                             promoCode: (value as PaymentDetails).promoCode
                         }
                     };
+                } else if (field === 'workExperiences') {
+                    if (value && Array.isArray(value)) {
+                        const sortedArray = value.sort(compareWorkExperienceEntries);
+                        return {
+                            field: field as keyof FieldValuesState,
+                            value: sortedArray
+                        };
+                    } else {
+                        return {
+                            field: field as keyof FieldValuesState,
+                            value
+                        };
+                    }
+                } else if (field === 'educationEntries') {
+                    if (value && Array.isArray(value)) {
+                        const sortedArray = value.sort(compareEducationEntries);
+                        return {
+                            field: field as keyof FieldValuesState,
+                            value: sortedArray
+                        };
+                    } else {
+                        return {
+                            field: field as keyof FieldValuesState,
+                            value
+                        };
+                    }
                 } else {
                     return {
                         field: field as keyof FieldValuesState,
