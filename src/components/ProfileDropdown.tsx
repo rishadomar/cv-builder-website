@@ -16,11 +16,14 @@ import { getCookie } from '@/lib/utils';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { DialogFooter, DialogHeader } from './ui/dialog';
 import { CircleUserRound, Cog, CreditCard, LogOut } from 'lucide-react';
+import { DrawerDialog } from './DrawerDialog';
+import { QuickLinks } from './QuickLinks';
 
 const ProfileDropdown: React.FC = () => {
     const email = useAppSelector(selectUserEmail);
     const router = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isQuickLinksDialogOpen, setIsQuickLinksDialogOpen] = useState(false);
 
     const handleLogout = async () => {
         console.log('Logout clicked');
@@ -67,6 +70,10 @@ const ProfileDropdown: React.FC = () => {
                             <Cog />
                             <span>Settings</span>
                         </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => setIsQuickLinksDialogOpen(true)}>
+                            <Cog />
+                            <span>Quick links</span>
+                        </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => handleLogout()}>
@@ -75,6 +82,17 @@ const ProfileDropdown: React.FC = () => {
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            {isQuickLinksDialogOpen && (
+                <DrawerDialog
+                    isOpen={isQuickLinksDialogOpen}
+                    setIsOpen={setIsQuickLinksDialogOpen}
+                    title='Quick links'
+                    description='Handy quick links to help you navigate the builder.'
+                    closeText='Close'
+                    content={<QuickLinks />}
+                />
+            )}
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className='fixed inset-0 flex items-center justify-center'>
