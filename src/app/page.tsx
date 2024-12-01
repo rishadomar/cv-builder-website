@@ -32,8 +32,8 @@ export default function Home() {
                     </p>
 
                     {/* Pricing Highlighted */}
-                    <div className='bg-blue-100 inline-block px-4 py-2 rounded-lg'>
-                        <span className='text-blue-800 font-bold text-xl'>Only {formatProductCost()}</span>
+                    <div className='bg-gray-200 inline-block px-4 py-2 rounded-lg'>
+                        <span className='text-gray-900 font-bold text-xl'>Only {formatProductCost()}</span>
                         <span className='text-gray-600 ml-2 text-sm'>One-time payment</span>
                     </div>
 
@@ -108,7 +108,7 @@ export default function Home() {
                     <div className='grid md:grid-cols-2 gap-6'>
                         <div className='bg-white p-6 rounded-lg'>
                             <div className='flex items-center mb-4'>
-                                <Check className='text-green-500 mr-3' />
+                                <Check className='text-gray-700 mr-3' />
                                 <h3 className='text-lg font-semibold'>AI-Powered Content</h3>
                             </div>
                             <p className='text-gray-600 text-sm'>
@@ -118,7 +118,7 @@ export default function Home() {
 
                         <div className='bg-white p-6 rounded-lg'>
                             <div className='flex items-center mb-4'>
-                                <Check className='text-green-500 mr-3' />
+                                <Check className='text-gray-700 mr-3' />
                                 <h3 className='text-lg font-semibold'>Professional Formatting</h3>
                             </div>
                             <p className='text-gray-600 text-sm'>
@@ -130,13 +130,13 @@ export default function Home() {
             </div>
 
             {/* Call to Action - Mobile Optimized */}
-            <div className='bg-blue-600 text-white py-12 text-center'>
+            <div className='bg-gray-900 text-white py-12 text-center'>
                 <h2 className='text-2xl md:text-4xl font-bold mb-4 px-4'>Ready to Supercharge Your Job Application?</h2>
                 <p className='text-base md:text-xl mb-6 px-4'>
                     Build a professional CV for just {formatProductCost()} and take the first step towards your dream
                     job
                 </p>
-                <CallToAction label='Get Started Now' color='blue' withArrow={false} />
+                <CallToAction label='Get Started Now' color='gray' withArrow={false} />
             </div>
         </div>
     );
