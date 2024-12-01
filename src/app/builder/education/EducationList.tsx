@@ -47,7 +47,7 @@ type EducationListProps = {
 export default function EducationList({ onNext, onPrevious }: EducationListProps) {
     const educationEntries = useAppSelector((state) => state.fieldValues.educationEntries);
     const [busyUpdatingList, setBusyUpdatingList] = useState(false);
-    const step = getStep('work-experience');
+    const step = getStep('education');
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter;
