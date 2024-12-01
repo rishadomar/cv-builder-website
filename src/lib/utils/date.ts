@@ -6,3 +6,8 @@ export const formatDate = (date: Date) => {
         day: 'numeric'
     }).format(date);
 };
+
+export const getMonth = (monthIndex: number) => {
+    const date = new Date(0, monthIndex);
+    return date.toLocaleString('en-US', { month: 'short' });
+};

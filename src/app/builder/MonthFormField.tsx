@@ -44,15 +44,18 @@ export default function MonthFormField({ formHook, label, fieldName, description
                     <div className='flex items-center space-x-4'>
                         <FormLabel>{label}</FormLabel>
                         <FormControl>
-                            <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                            <Select
+                                value={field.value?.toString()}
+                                onValueChange={(value) => field.onChange(Number(value))}
+                            >
                                 <SelectTrigger className='w-[180px]'>
                                     <SelectValue placeholder={label} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
                                         <SelectLabel>Month</SelectLabel>
-                                        {months.map((month) => (
-                                            <SelectItem key={month} value={month}>
+                                        {months.map((month, index) => (
+                                            <SelectItem key={month} value={index.toString()}>
                                                 {month}
                                             </SelectItem>
                                         ))}

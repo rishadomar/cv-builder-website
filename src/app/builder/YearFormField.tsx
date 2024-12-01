@@ -30,7 +30,10 @@ export default function YearFormField({ formHook, label, fieldName, description,
                     <div className='flex items-center space-x-4'>
                         <FormLabel>{label}</FormLabel>
                         <FormControl>
-                            <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                            <Select
+                                value={field.value?.toString()}
+                                onValueChange={(value) => field.onChange(Number(value))}
+                            >
                                 <SelectTrigger className='w-[180px]'>
                                     <SelectValue placeholder={label} />
                                 </SelectTrigger>

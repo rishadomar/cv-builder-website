@@ -86,8 +86,8 @@ export interface PayloadActionAddItemToList {
 }
 
 export interface YearMonth {
-    year: string;
-    month: string;
+    year: number;
+    month: number;
 }
 
 export interface EducationEntry {
