@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import {
     Bike,
-    BookText,
+    Briefcase,
     Check,
     CircleChevronRight,
     CreditCard,
@@ -126,7 +126,7 @@ export const Steps = [
     {
         id: 9,
         title: 'Work experience',
-        icon: BookText,
+        icon: Briefcase,
         description: 'Professional experience',
         completed: false,
         path: 'work-experience',
