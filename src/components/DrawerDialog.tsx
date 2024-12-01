@@ -45,11 +45,9 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
                     </DrawerHeader>
                     {content}
                     {closeText && (
-                        <DrawerFooter>
-                            <DrawerClose>
-                                <Button variant='outline'>{closeText}</Button>
-                            </DrawerClose>
-                        </DrawerFooter>
+                        <Button className='m-4' variant='outline' onClick={() => setIsOpen(!isOpen)}>
+                            {closeText}
+                        </Button>
                     )}
                 </DrawerContent>
             </Drawer>
