@@ -10,11 +10,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/lib/utils';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
-import { DialogFooter, DialogHeader } from '../ui/dialog';
 import { CircleUserRound, Cog, CreditCard, LogOut, SquareArrowOutUpRight } from 'lucide-react';
 import { DrawerDialog } from '../DrawerDialog';
 import { QuickLinks } from './QuickLinks';
@@ -94,19 +91,16 @@ const ProfileDropdown: React.FC = () => {
                 />
             )}
 
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className='fixed inset-0 flex items-center justify-center'>
-                    <div className='bg-gray-200 p-6 rounded-lg shadow-lg space-y-6'>
-                        <DialogHeader>
-                            <DialogTitle>Coming Soon</DialogTitle>
-                            <DialogDescription>This feature is coming soon. Stay tuned!</DialogDescription>
-                        </DialogHeader>
-                        <DialogFooter>
-                            <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
-                        </DialogFooter>
-                    </div>
-                </DialogContent>
-            </Dialog>
+            {isDialogOpen && (
+                <DrawerDialog
+                    isOpen={isDialogOpen}
+                    setIsOpen={setIsDialogOpen}
+                    title='Coming soon'
+                    description='This feature is coming soon. Stay tuned!'
+                    closeText='Close'
+                    content={<div />}
+                />
+            )}
         </>
     );
 };
