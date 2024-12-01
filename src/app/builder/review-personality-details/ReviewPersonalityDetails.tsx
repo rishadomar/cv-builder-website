@@ -54,6 +54,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     const formHook = useForm<ReviewPersonalityDetailsFormValues>({
         resolver: zodResolver(reviewPersonalityDetailsFormSchema)
     });
+    const watchedPersonalityTraits = formHook.watch('personalityTraits');
     const watchedPersonalityText = formHook.watch('personalityText');
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('personality-details');
@@ -90,8 +91,6 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
 
         event?.preventDefault();
     };
-
-    console.log('allFieldValues personalityText: ', allFieldValues.personalityText);
 
     const generateAiText = async () => {
         const data = formHook.getValues();
@@ -147,11 +146,9 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                             <PillSelectFormField
                                 fieldName='personalityTraits'
                                 availablePills={Traits}
-                                selectedPills={formHook.getValues().personalityTraits}
+                                selectedPills={watchedPersonalityTraits}
                                 setSelectedPills={(selectedPills) => {
-                                    formHook.reset({
-                                        personalityTraits: selectedPills
-                                    });
+                                    formHook.setValue('personalityTraits', selectedPills);
                                 }}
                                 customPills={{
                                     allow: true,

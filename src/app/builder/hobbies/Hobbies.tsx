@@ -55,6 +55,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const formHook = useForm<HobbyDetailsFormValues>({
         resolver: zodResolver(hobbyDetailsFormSchema)
     });
+    const watchedHobbies = formHook.watch('hobbies');
     const watchedHobbiesText = formHook.watch('hobbiesText');
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('hobbies');
@@ -145,11 +146,9 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                             <PillSelectFormField
                                 fieldName='hobbies'
                                 availablePills={Hobbies}
-                                selectedPills={formHook.getValues().hobbies}
+                                selectedPills={watchedHobbies}
                                 setSelectedPills={(selectedPills) => {
-                                    formHook.reset({
-                                        hobbies: selectedPills
-                                    });
+                                    formHook.setValue('hobbies', selectedPills);
                                 }}
                                 error={formHook.formState.errors.hobbies?.message}
                                 customPills={{
