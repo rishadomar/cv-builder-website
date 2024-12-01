@@ -4,6 +4,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 import PaymentInformation from './PaymentDetails';
 import { useRouter } from 'next/navigation';
 import Paywall from '@/app/builder/paywall/Paywall';
+import { BackButton } from '@/components/BackButton';
 
 const BillingPage = () => {
     const fieldValues = useAppSelector((state) => state.fieldValues);
@@ -19,10 +20,11 @@ const BillingPage = () => {
                         router.replace('/billing');
                     }}
                     onPrevious={() => {
-                        router.push('/builder');
+                        router.back();
                     }}
                 />
             )}
+            <BackButton />
         </div>
     );
 };
