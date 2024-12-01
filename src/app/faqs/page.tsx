@@ -1,6 +1,7 @@
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { HelpCircleIcon } from 'lucide-react';
+import { BackButton } from '@/components/BackButton';
 
 // FAQ Item Type
 interface FAQItem {
@@ -20,7 +21,7 @@ const FAQSection: React.FC<{
     faqs
 }) => {
     return (
-        <div className='w-full max-w-2xl mx-auto py-20 px-4'>
+        <div className='w-full max-w-2xl mx-auto pt-20 pb-4 px-4'>
             <div className='text-center mb-10'>
                 <h1 className='text-3xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-3'>
                     <HelpCircleIcon className='w-8 h-8 text-primary' />
@@ -81,6 +82,7 @@ const FAQPage = () => {
                 description="Got questions about our CV management platform? We've got answers!"
                 faqs={cvBuilderFAQs}
             />
+            <BackButton />
         </div>
     );
 };

@@ -8,6 +8,7 @@ import { Currency } from 'react-paystack/dist/types';
 import { PromoCodeForm, PromoFormValues } from './PromoCodeForm';
 import { StepButtons } from '@/app/builder/StepButtons';
 import { Button } from './ui/button';
+import { useRouter } from 'next/navigation';
 
 const features = [
     'Full CV creation and management',
@@ -26,6 +27,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     const dispatch = useAppDispatch();
     const authentication = useAppSelector((state) => state.authentication);
     const [paymentComplete, setPaymentComplete] = React.useState(false);
+    const router = useRouter();
 
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
@@ -97,7 +99,14 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                 <div className='text-center text-sm text-gray-500'>
                     <p>
                         Need help?{' '}
-                        <a href='/faqs' className='text-primary underline'>
+                        <a
+                            href='#'
+                            className='text-primary underline'
+                            onClick={(e) => {
+                                e.preventDefault();
+                                router.push('/faqs');
+                            }}
+                        >
                             Read our FAQs
                         </a>
                     </p>
