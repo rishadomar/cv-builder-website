@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ContactDetailsForm from '@/app/builder/contact-details/ContactDetails';
 import PersonalDetailsForm from './personal-details/PersonalDetails';
 import { LocationDetailsForm } from './location-details/LocationDetailsForm';
@@ -21,6 +21,7 @@ import EducationList from './education/EducationList';
 const NumberOfPages = Steps.length;
 
 function FormContent() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const [currentPage, setCurrentPage] = useState<string>('contact-details');
     const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
@@ -43,6 +44,10 @@ function FormContent() {
             setCurrentPageNumber(Steps.indexOf(p) + 1);
         }
     }, [currentPage]);
+
+    useEffect(() => {
+        router.push(`?page=${currentPage}`);
+    }, [currentPage, router]);
 
     const nextPage = () => {
         setCurrentPage((currentPage) => {
