@@ -95,11 +95,11 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
 
     const generateAiText = async () => {
         try {
-            const result = await generatePersonalityText({ traits: watchedPersonalityTraits }).unwrap();
+            const newText = await generatePersonalityText({ traits: watchedPersonalityTraits }).unwrap();
             if (watchedPersonalityText && watchedPersonalityText.length > 0) {
                 setCompareText({
                     previousText: watchedPersonalityText,
-                    newText: result,
+                    newText: newText,
                     onAccept: (acceptedText: string) => {
                         dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
                         setCompareText(undefined);
@@ -109,7 +109,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                     }
                 });
             } else {
-                dispatch(setFieldValue({ field: 'personalityText', value: result }));
+                dispatch(setFieldValue({ field: 'personalityText', value: newText }));
             }
         } catch {}
     };
@@ -151,6 +151,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 selectedPills={watchedPersonalityTraits}
                                 setSelectedPills={(selectedPills) => {
                                     formHook.setValue('personalityTraits', selectedPills);
+                                    setFieldValue({ field: 'personalityTraits', value: selectedPills });
                                 }}
                                 customPills={{
                                     allow: true,
@@ -204,7 +205,6 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
             </Form>
-            {/* {error && <div>Error: {error as string}</div>} */}
             {compareText && <CompareText isOpen={true} setIsOpen={() => setCompareText(undefined)} {...compareText} />}
         </>
     );
