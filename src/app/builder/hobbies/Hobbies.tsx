@@ -2,9 +2,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
+import { save } from '@/lib/services';
 import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { generateHobbiesText, improveHobbiesText, save } from '@/lib/services';
 import { useEffect, useState } from 'react';
 import PillSelectFormField from '../PillSelectFormField';
 import { KeyValuePairArray } from '@/lib/type';
@@ -15,6 +15,7 @@ import { CompareText, CompareTextState } from '@/components/compareText/CompareT
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
+import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -57,9 +58,10 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     });
     const watchedHobbies = formHook.watch('hobbies');
     const watchedHobbiesText = formHook.watch('hobbiesText');
-    const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('hobbies');
     const [compareText, setCompareText] = useState<CompareTextState>();
+    const [generateHobbiesText, { isLoading }] = useGenerateHobbiesTextMutation();
+    const [improveHobbiesText] = useImproveHobbiesTextMutation();
 
     useEffect(() => {
         if (allFieldValues) {
@@ -93,47 +95,48 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     }
 
     const generateAiText = async () => {
-        const data = formHook.getValues();
-        const newText = await dispatch(generateHobbiesText(data.hobbies));
-        console.log('newText: ', newText);
-        console.log('data.hobbiesText: ', data.hobbiesText);
-        if (data.hobbiesText && data.hobbiesText.length > 0) {
-            setCompareText({
-                previousText: data.hobbiesText,
-                newText: newText,
-                onAccept: (acceptedText: string) => {
-                    dispatch(setFieldValue({ field: 'hobbiesText', value: acceptedText }));
-                    setCompareText(undefined);
-                },
-                onReject: () => {
-                    setCompareText(undefined);
-                }
-            });
-        } else {
-            dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
-        }
+        try {
+            const newText = await generateHobbiesText({ hobbies: watchedHobbies }).unwrap();
+            if (watchedHobbies && watchedHobbiesText.length > 0) {
+                setCompareText({
+                    previousText: watchedHobbiesText,
+                    newText: newText,
+                    onAccept: (acceptedText: string) => {
+                        dispatch(setFieldValue({ field: 'hobbiesText', value: acceptedText }));
+                        setCompareText(undefined);
+                    },
+                    onReject: () => {
+                        setCompareText(undefined);
+                    }
+                });
+            } else {
+                dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
+            }
+        } catch {}
     };
 
     const improveAiText = async () => {
-        const data = formHook.getValues();
-        const newText = await dispatch(improveHobbiesText(data.hobbies, data.hobbiesText));
-        console.log('newText: ', newText);
-        console.log('data.hobbiesText: ', data.hobbiesText);
-        if (data.hobbiesText && data.hobbiesText.length > 0) {
-            setCompareText({
-                previousText: data.hobbiesText,
-                newText: newText,
-                onAccept: (acceptedText: string) => {
-                    dispatch(setFieldValue({ field: 'hobbiesText', value: acceptedText }));
-                    setCompareText(undefined);
-                },
-                onReject: () => {
-                    setCompareText(undefined);
-                }
-            });
-        } else {
-            dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
-        }
+        try {
+            const newText = await improveHobbiesText({
+                hobbies: watchedHobbies,
+                previousText: watchedHobbiesText
+            }).unwrap();
+            if (watchedHobbies && watchedHobbiesText.length > 0) {
+                setCompareText({
+                    previousText: watchedHobbiesText,
+                    newText: newText,
+                    onAccept: (acceptedText: string) => {
+                        dispatch(setFieldValue({ field: 'hobbiesText', value: acceptedText }));
+                        setCompareText(undefined);
+                    },
+                    onReject: () => {
+                        setCompareText(undefined);
+                    }
+                });
+            } else {
+                dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
+            }
+        } catch {}
     };
 
     return (

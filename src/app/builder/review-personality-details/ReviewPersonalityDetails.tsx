@@ -6,7 +6,6 @@ import { Form } from '@/components/ui/form';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { Button } from '@/components/ui/button';
-import { improvePersonalityText } from '@/lib/services/aiService';
 import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
@@ -17,7 +16,7 @@ import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
-import { useGeneratePersonalityTextMutation } from '@/lib/store/api/apiSlice';
+import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -61,6 +60,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generatePersonalityText, { isLoading }] = useGeneratePersonalityTextMutation();
+    const [improvePersonalityText] = useImprovePersonalityTextMutation();
 
     useEffect(() => {
         console.log('all field values changed: ', allFieldValues);
@@ -118,24 +118,27 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
 
     const improveAiText = async () => {
         const data = formHook.getValues();
-        const newText = await dispatch(improvePersonalityText(data.personalityTraits, data.personalityText));
-        console.log('newText: ', newText);
-        console.log('data.personalityText: ', data.personalityText);
-        if (data.personalityText && data.personalityText.length > 0) {
-            setCompareText({
-                previousText: data.personalityText,
-                newText: newText,
-                onAccept: (acceptedText: string) => {
-                    dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
-                    setCompareText(undefined);
-                },
-                onReject: () => {
-                    setCompareText(undefined);
-                }
-            });
-        } else {
-            dispatch(setFieldValue({ field: 'personalityText', value: newText }));
-        }
+        try {
+            const newText = await improvePersonalityText({
+                traits: data.personalityTraits,
+                previousText: data.personalityText
+            }).unwrap();
+            if (data.personalityText && data.personalityText.length > 0) {
+                setCompareText({
+                    previousText: data.personalityText,
+                    newText: newText,
+                    onAccept: (acceptedText: string) => {
+                        dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
+                        setCompareText(undefined);
+                    },
+                    onReject: () => {
+                        setCompareText(undefined);
+                    }
+                });
+            } else {
+                dispatch(setFieldValue({ field: 'personalityText', value: newText }));
+            }
+        } catch {}
     };
 
     return (

@@ -3,7 +3,7 @@ import alertReducer from './alert/alertSlice';
 import loadingReducer from './loading/loadingSlice';
 import fieldValuesReducer from './fieldValues/fieldValuesSlice';
 import authenticationReducer from './authentication/authenticationSlice';
-import { apiSlice } from './api/apiSlice';
+import { aiApiSlice } from './api/aiApiSlice';
 import errorMiddleware from './api/errorMiddleware';
 
 export const makeStore = () => {
@@ -13,9 +13,9 @@ export const makeStore = () => {
             loading: loadingReducer,
             authentication: authenticationReducer,
             fieldValues: fieldValuesReducer,
-            [apiSlice.reducerPath]: apiSlice.reducer
+            [aiApiSlice.reducerPath]: aiApiSlice.reducer
         },
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware, errorMiddleware)
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(aiApiSlice.middleware, errorMiddleware)
     });
 };
 

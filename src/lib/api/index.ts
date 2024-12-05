@@ -1,5 +1,4 @@
 export * from './auth/authApi';
-export * from './openai/openaiApi';
 export * from './database/databaseApi';
 export * from './database/workExperienceApi';
 export * from './database/educationApi';
