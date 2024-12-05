@@ -10,7 +10,7 @@ import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
 import PillSelectFormField from '../PillSelectFormField';
-import { RefreshCw, Sparkles, Wand2 } from 'lucide-react';
+import { Loader, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
@@ -158,12 +158,19 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 }}
                                 error={formHook.formState.errors.personalityTraits?.message}
                             />
-                            <TextareaFormField
-                                formHook={formHook}
-                                fieldName='personalityText'
-                                placeholder='AI generated text will appear here'
-                                rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
-                            />
+                            <div className='relative'>
+                                <TextareaFormField
+                                    formHook={formHook}
+                                    fieldName='personalityText'
+                                    placeholder='AI generated text will appear here'
+                                    rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
+                                />
+                                {(isGeneratingPersonalityText || isImprovingPersonalityText) && (
+                                    <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
+                                        <Loader className='w-6 h-6 animate-spin' />
+                                    </div>
+                                )}
+                            </div>
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
                                     variant='outline'
