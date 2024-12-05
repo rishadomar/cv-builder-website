@@ -116,7 +116,7 @@ export default function EducationForm({ educationEntryToEdit, setBusyUpdating, o
             {/* <h2>Location details</h2> */}
             <form onSubmit={onSubmit} className='flex flex-col bg-white'>
                 <div className='xs:max-w-[400px] max-h-[500px] overflow-auto space-y-4 px-2'>
-                    <TextareaFormField
+                    <TextFormField
                         formHook={formHook}
                         label='Description'
                         fieldName='description'
