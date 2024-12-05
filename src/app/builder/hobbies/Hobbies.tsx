@@ -10,7 +10,7 @@ import PillSelectFormField from '../PillSelectFormField';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
-import { LucideIcon, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
+import { Loader, LucideIcon, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import TextareaFormField from '../TextareaFormField';
@@ -60,8 +60,8 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const watchedHobbiesText = formHook.watch('hobbiesText');
     const step = getStep('hobbies');
     const [compareText, setCompareText] = useState<CompareTextState>();
-    const [generateHobbiesText, { isLoading }] = useGenerateHobbiesTextMutation();
-    const [improveHobbiesText] = useImproveHobbiesTextMutation();
+    const [generateHobbiesText, { isLoading: isGeneratingHobbiesText }] = useGenerateHobbiesTextMutation();
+    const [improveHobbiesText, { isLoading: isImprovingHobbiesText }] = useImproveHobbiesTextMutation();
 
     useEffect(() => {
         if (allFieldValues) {
@@ -159,14 +159,25 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                     placeholder: 'Add custom hobby'
                                 }}
                             />
-                            <TextareaFormField
-                                formHook={formHook}
-                                fieldName='hobbiesText'
-                                placeholder='AI generated text will appear here'
-                                rows={watchedHobbiesText && watchedHobbiesText.length > 0 ? 10 : 3}
-                            />
+                            <div className='relative'>
+                                <TextareaFormField
+                                    formHook={formHook}
+                                    fieldName='hobbiesText'
+                                    placeholder='AI generated text will appear here'
+                                    rows={watchedHobbiesText && watchedHobbiesText.length > 0 ? 10 : 3}
+                                />
+                                {(isGeneratingHobbiesText || isImprovingHobbiesText) && (
+                                    <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
+                                        <Loader className='w-6 h-6 animate-spin' />
+                                    </div>
+                                )}
+                            </div>
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
-                                <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
+                                <Button
+                                    variant='outline'
+                                    disabled={isGeneratingHobbiesText}
+                                    onClick={() => generateAiText()}
+                                >
                                     {watchedHobbiesText && watchedHobbiesText.length > 0 ? (
                                         <RefreshCw className='mr-2 h-5 w-5' />
                                     ) : (
@@ -178,7 +189,9 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 </Button>
                                 <Button
                                     variant='outline'
-                                    disabled={isLoading || !watchedHobbiesText || watchedHobbiesText.length === 0}
+                                    disabled={
+                                        isImprovingHobbiesText || !watchedHobbiesText || watchedHobbiesText.length === 0
+                                    }
                                     onClick={() => improveAiText()}
                                 >
                                     <Wand2 className='mr-2 h-5 w-5' />

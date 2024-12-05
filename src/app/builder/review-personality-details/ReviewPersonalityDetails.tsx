@@ -56,11 +56,10 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     });
     const watchedPersonalityTraits = formHook.watch('personalityTraits');
     const watchedPersonalityText = formHook.watch('personalityText');
-    //const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
-    const [generatePersonalityText, { isLoading }] = useGeneratePersonalityTextMutation();
-    const [improvePersonalityText] = useImprovePersonalityTextMutation();
+    const [generatePersonalityText, { isLoading: isGeneratingPersonalityText }] = useGeneratePersonalityTextMutation();
+    const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
 
     useEffect(() => {
         console.log('all field values changed: ', allFieldValues);
@@ -95,12 +94,11 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     };
 
     const generateAiText = async () => {
-        const formData = formHook.getValues();
         try {
-            const result = await generatePersonalityText({ traits: formData.personalityTraits }).unwrap();
-            if (formData.personalityText && formData.personalityText.length > 0) {
+            const result = await generatePersonalityText({ traits: watchedPersonalityTraits }).unwrap();
+            if (watchedPersonalityText && watchedPersonalityText.length > 0) {
                 setCompareText({
-                    previousText: formData.personalityText,
+                    previousText: watchedPersonalityText,
                     newText: result,
                     onAccept: (acceptedText: string) => {
                         dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
@@ -117,15 +115,14 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     };
 
     const improveAiText = async () => {
-        const data = formHook.getValues();
         try {
             const newText = await improvePersonalityText({
-                traits: data.personalityTraits,
-                previousText: data.personalityText
+                traits: watchedPersonalityTraits,
+                previousText: watchedPersonalityText
             }).unwrap();
-            if (data.personalityText && data.personalityText.length > 0) {
+            if (watchedPersonalityText && watchedPersonalityText.length > 0) {
                 setCompareText({
-                    previousText: data.personalityText,
+                    previousText: watchedPersonalityText,
                     newText: newText,
                     onAccept: (acceptedText: string) => {
                         dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
@@ -168,7 +165,11 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
                             />
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
-                                <Button variant='outline' disabled={isLoading} onClick={() => generateAiText()}>
+                                <Button
+                                    variant='outline'
+                                    disabled={isGeneratingPersonalityText}
+                                    onClick={() => generateAiText()}
+                                >
                                     {watchedPersonalityText && watchedPersonalityText.length > 0 ? (
                                         <RefreshCw className='mr-2 h-5 w-5' />
                                     ) : (
@@ -181,7 +182,9 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 <Button
                                     variant='outline'
                                     disabled={
-                                        isLoading || !watchedPersonalityText || watchedPersonalityText.length === 0
+                                        isImprovingPersonalityText ||
+                                        !watchedPersonalityText ||
+                                        watchedPersonalityText.length === 0
                                     }
                                     onClick={() => improveAiText()}
                                 >
