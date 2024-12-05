@@ -3,6 +3,8 @@ import alertReducer from './alert/alertSlice';
 import loadingReducer from './loading/loadingSlice';
 import fieldValuesReducer from './fieldValues/fieldValuesSlice';
 import authenticationReducer from './authentication/authenticationSlice';
+import { apiSlice } from './api/apiSlice';
+import errorMiddleware from './api/errorMiddleware';
 
 export const makeStore = () => {
     return configureStore({
@@ -10,8 +12,10 @@ export const makeStore = () => {
             alert: alertReducer,
             loading: loadingReducer,
             authentication: authenticationReducer,
-            fieldValues: fieldValuesReducer
-        }
+            fieldValues: fieldValuesReducer,
+            [apiSlice.reducerPath]: apiSlice.reducer
+        },
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware, errorMiddleware)
     });
 };
 

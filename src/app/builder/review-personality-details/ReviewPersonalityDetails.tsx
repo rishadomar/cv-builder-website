@@ -6,7 +6,7 @@ import { Form } from '@/components/ui/form';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { Button } from '@/components/ui/button';
-import { generatePersonalityText, improvePersonalityText } from '@/lib/services/aiService';
+import { improvePersonalityText } from '@/lib/services/aiService';
 import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
@@ -17,6 +17,7 @@ import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
+import { useGeneratePersonalityTextMutation } from '@/lib/store/api/apiSlice';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -56,9 +57,10 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     });
     const watchedPersonalityTraits = formHook.watch('personalityTraits');
     const watchedPersonalityText = formHook.watch('personalityText');
-    const isLoading = useAppSelector((state) => state.loading.isLoading);
+    //const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
+    const [generatePersonalityText, { isLoading }] = useGeneratePersonalityTextMutation();
 
     useEffect(() => {
         console.log('all field values changed: ', allFieldValues);
@@ -93,25 +95,25 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     };
 
     const generateAiText = async () => {
-        const data = formHook.getValues();
-        const newText = await dispatch(generatePersonalityText(data.personalityTraits));
-        console.log('newText: ', newText);
-        console.log('data.personalityText: ', data.personalityText);
-        if (data.personalityText && data.personalityText.length > 0) {
-            setCompareText({
-                previousText: data.personalityText,
-                newText: newText,
-                onAccept: (acceptedText: string) => {
-                    dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
-                    setCompareText(undefined);
-                },
-                onReject: () => {
-                    setCompareText(undefined);
-                }
-            });
-        } else {
-            dispatch(setFieldValue({ field: 'personalityText', value: newText }));
-        }
+        const formData = formHook.getValues();
+        try {
+            const result = await generatePersonalityText({ traits: formData.personalityTraits }).unwrap();
+            if (formData.personalityText && formData.personalityText.length > 0) {
+                setCompareText({
+                    previousText: formData.personalityText,
+                    newText: result,
+                    onAccept: (acceptedText: string) => {
+                        dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
+                        setCompareText(undefined);
+                    },
+                    onReject: () => {
+                        setCompareText(undefined);
+                    }
+                });
+            } else {
+                dispatch(setFieldValue({ field: 'personalityText', value: result }));
+            }
+        } catch {}
     };
 
     const improveAiText = async () => {
@@ -189,6 +191,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
             </Form>
+            {/* {error && <div>Error: {error as string}</div>} */}
             {compareText && <CompareText isOpen={true} setIsOpen={() => setCompareText(undefined)} {...compareText} />}
         </>
     );
