@@ -151,7 +151,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                                 selectedPills={watchedPersonalityTraits}
                                 setSelectedPills={(selectedPills) => {
                                     formHook.setValue('personalityTraits', selectedPills);
-                                    setFieldValue({ field: 'personalityTraits', value: selectedPills });
+                                    dispatch(setFieldValue({ field: 'personalityTraits', value: selectedPills }));
                                 }}
                                 customPills={{
                                     allow: true,

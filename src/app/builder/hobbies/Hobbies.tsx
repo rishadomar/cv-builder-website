@@ -152,7 +152,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 selectedPills={watchedHobbies}
                                 setSelectedPills={(selectedPills) => {
                                     formHook.setValue('hobbies', selectedPills);
-                                    setFieldValue({ field: 'hobbies', value: selectedPills });
+                                    dispatch(setFieldValue({ field: 'hobbies', value: selectedPills }));
                                 }}
                                 error={formHook.formState.errors.hobbies?.message}
                                 customPills={{
