@@ -16,9 +16,15 @@ import EmailField, { EmailFieldRef } from '@/components/EmailField';
 
 interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;
+    onConfirmForgotPassword: () => void;
 }
 
-export function AuthenticationLoginForm({ onForgotPassword, className, ...props }: AuthenticationLoginFormProps) {
+export function AuthenticationLoginForm({
+    onForgotPassword,
+    onConfirmForgotPassword,
+    className,
+    ...props
+}: AuthenticationLoginFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<EmailFieldRef>(null);
@@ -87,6 +93,10 @@ export function AuthenticationLoginForm({ onForgotPassword, className, ...props 
                             Login
                         </Button>
                         <LinkButton onClick={onForgotPassword} label='Forgot Password?' />
+                        <LinkButton
+                            onClick={onConfirmForgotPassword}
+                            label='Have a code to reset forgotten password?'
+                        />
                     </div>
                 </form>
             </div>

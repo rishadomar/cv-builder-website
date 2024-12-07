@@ -18,7 +18,7 @@ export default function AuthenticationPage() {
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(true);
-    const [showPasswordResetForm, setShowPasswordResetForm] = useState(false);
+    const [showConfirmPasswordResetForm, setShowConfirmPasswordResetForm] = useState(false);
     const router = useRouter();
 
     const renderAlreadyLoggedInSection = () => {
@@ -40,13 +40,13 @@ export default function AuthenticationPage() {
         );
     };
 
-    const renderPasswordResetForm = () => {
+    const renderConfirmPasswordResetForm = () => {
         return (
             <>
                 <LoginSwitchButton
                     onClick={() => {
                         setShowLoginForm(true);
-                        setShowPasswordResetForm(false);
+                        setShowConfirmPasswordResetForm(false);
                     }}
                 />
 
@@ -54,7 +54,7 @@ export default function AuthenticationPage() {
                     <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
                         <ConfirmForgotPasswordForm
                             onSuccess={() => {
-                                setShowPasswordResetForm(false);
+                                setShowConfirmPasswordResetForm(false);
                                 setShowLoginForm(true);
                             }}
                         />
@@ -102,6 +102,10 @@ export default function AuthenticationPage() {
                                     setShowForgotPassword(true);
                                     setShowLoginForm(false);
                                 }}
+                                onConfirmForgotPassword={() => {
+                                    setShowForgotPassword(false);
+                                    setShowConfirmPasswordResetForm(true);
+                                }}
                             />
                         </div>
                     </div>
@@ -123,7 +127,7 @@ export default function AuthenticationPage() {
                             <ForgotPasswordForm
                                 onSuccess={() => {
                                     setShowForgotPassword(false);
-                                    setShowPasswordResetForm(true);
+                                    setShowConfirmPasswordResetForm(true);
                                 }}
                             />
                         </div>
@@ -135,8 +139,8 @@ export default function AuthenticationPage() {
 
     return (
         <div className='min-h-screen relative p-4 md:p-6'>
-            {showPasswordResetForm
-                ? renderPasswordResetForm()
+            {showConfirmPasswordResetForm
+                ? renderConfirmPasswordResetForm()
                 : isLoggedIn
                 ? renderAlreadyLoggedInSection()
                 : renderLoginSignupSection()}
