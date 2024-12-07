@@ -11,11 +11,18 @@ export function useAuth() {
     useEffect(() => {
         try {
             // Check for Cognito authentication cookies
-            const authCookie = document.cookie.includes('AccessToken');
+            const accessTokenCookie = document.cookie.includes('AccessToken');
+            const idTokenCookie = document.cookie.includes('IdToken');
+            const refreshTokenCookie = document.cookie.includes('RefreshToken');
+            const subCookie = document.cookie.includes('Sub');
+            const emailCookie = document.cookie.includes('Email');
 
-            setIsAuthenticated(authCookie);
+            const allCookiesAvailable =
+                accessTokenCookie && idTokenCookie && refreshTokenCookie && subCookie && emailCookie;
 
-            if (!authCookie) {
+            setIsAuthenticated(allCookiesAvailable);
+
+            if (!allCookiesAvailable) {
                 router.replace('/authentication');
             }
         } catch (error) {
