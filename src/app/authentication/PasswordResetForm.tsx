@@ -26,7 +26,8 @@ export function PasswordResetForm({ onSuccess, className, ...props }: PasswordRe
     const [email, setEmail] = React.useState<string>('');
     const [emailIsValid, setEmailIsValid] = React.useState<boolean>(false);
     const [password, setPassword] = React.useState<string>('');
-    const [passwordIsValid, setPasswordIsValid] = React.useState<boolean>(false);
+    const [confirmPassword, setConfirmPassword] = React.useState<string>('');
+    const confirmPasswordRef = React.useRef<PasswordFieldRef>(null);
     const [code, setCode] = React.useState<string>('');
 
     React.useEffect(() => {
@@ -41,33 +42,29 @@ export function PasswordResetForm({ onSuccess, className, ...props }: PasswordRe
         }
     }, [email]);
 
-    React.useEffect(() => {
-        if (passwordRef.current?.isValid()) {
-            setPasswordIsValid(true);
-        } else {
-            setPasswordIsValid(false);
-        }
-    }, [password]);
-
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
         setIsLoading(true);
-        if (email) {
-            try {
-                await dispatch(services.forgotPassword(email));
-                toast.success('Password reset code sent to your email');
-                onSuccess();
-            } catch (error: unknown) {
-                toast.error((error as CustomError).message);
-            } finally {
-                setIsLoading(false);
-            }
+
+        try {
+            await dispatch(services.resetPassword(email, password, code));
+            toast.success('Password successfully reset');
+            onSuccess();
+        } catch (error: unknown) {
+            toast.error((error as CustomError).message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
+    console.log(
+        'Confirm Password valiud',
+        confirmPasswordRef.current?.validate(),
+        confirmPasswordRef.current?.isValid()
+    );
     return (
         <>
-            <div className='flex flex-col space-y-2 text-center mb-4'>
+            <div className='flex flex-col space-y-2 text-center mb-4 mt-4'>
                 <h1 className='text-2xl font-semibold tracking-tight'>Reset your password</h1>
                 <p className='text-sm text-muted-foreground'>Enter details below to reset your password</p>
             </div>
@@ -82,6 +79,18 @@ export function PasswordResetForm({ onSuccess, className, ...props }: PasswordRe
                             isLoading={isLoading}
                             withHelp={true}
                             ref={passwordRef}
+                            autoComplete='off'
+                            autoHide={false}
+                        />
+                        <PasswordField
+                            value={confirmPassword}
+                            onChange={setConfirmPassword}
+                            isLoading={isLoading}
+                            withHelp={true}
+                            ref={confirmPasswordRef}
+                            autoComplete='off'
+                            autoHide={false}
+                            match={password}
                         />
                         <Label className='sr-only' htmlFor='code'>
                             Code via email
@@ -96,7 +105,13 @@ export function PasswordResetForm({ onSuccess, className, ...props }: PasswordRe
                             onChange={(event) => setCode(event.target.value)}
                         />
                         <Button
-                            disabled={isLoading || !passwordIsValid || !emailIsValid || code.length === 0}
+                            disabled={
+                                isLoading ||
+                                !passwordRef.current?.isValid() ||
+                                password !== confirmPassword ||
+                                !emailIsValid ||
+                                code.length === 0
+                            }
                             name='sign-in'
                         >
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}

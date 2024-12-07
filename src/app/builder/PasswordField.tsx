@@ -8,6 +8,9 @@ interface PasswordFieldProps {
     onChange: (value: string) => void;
     isLoading: boolean;
     withHelp: boolean;
+    autoComplete?: 'off' | 'on';
+    autoHide?: boolean;
+    match?: string;
 }
 
 export interface PasswordFieldRef {
@@ -18,32 +21,37 @@ export interface PasswordFieldRef {
         hasMinLength: boolean;
         hasNumber: boolean;
         hasLowerCase: boolean;
+        isMatching: boolean;
     };
 }
 
-const validatePassword = (password: string) => {
+const validatePassword = (password: string, match?: string) => {
     const hasMinLength = password.length >= 8;
     const hasNumber = /\d/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
+    // Only check matching if this is a confirmation field (match prop exists)
+    const isMatching = match === undefined ? true : password === match;
 
     return {
         hasMinLength,
         hasNumber,
         hasLowerCase,
-        isValid: hasMinLength && hasNumber && hasLowerCase
+        isMatching,
+        // For confirmation field, only check matching. For regular field, check all criteria
+        isValid: match === undefined ? hasMinLength && hasNumber && hasLowerCase : isMatching
     };
 };
 
 const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
-    ({ value, onChange, isLoading, withHelp }, ref) => {
+    ({ value, onChange, isLoading, withHelp, autoComplete = 'on', autoHide = true, match }, ref) => {
         const [showPassword, setShowPassword] = React.useState<boolean>(false);
         const inputRef = useRef<HTMLInputElement>(null);
-        const validation = validatePassword(value);
+        const validation = validatePassword(value, match);
 
         useImperativeHandle(ref, () => ({
-            isValid: () => validatePassword(value).isValid,
+            isValid: () => validatePassword(value, match).isValid,
             focus: () => inputRef.current?.focus(),
-            validate: () => validatePassword(value)
+            validate: () => validatePassword(value, match)
         }));
 
         useEffect(() => {
@@ -66,18 +74,21 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
                 <div
                     className='relative'
                     onBlur={() => {
-                        setShowPassword(false);
+                        if (autoHide) {
+                            setShowPassword(false);
+                        }
                     }}
                 >
                     <Input
-                        id='password'
+                        id={`password${match ? '-confirm' : ''}`}
                         type={showPassword ? 'text' : 'password'}
-                        placeholder='Password'
+                        placeholder={match ? 'Confirm password' : 'Password'}
                         autoCapitalize='none'
                         disabled={isLoading}
                         value={value}
                         onChange={(event) => onChange(event.target.value)}
                         ref={inputRef}
+                        autoComplete={autoComplete}
                     />
                     <div className='absolute right-2 top-2 flex gap-2'>
                         {value && (
@@ -104,25 +115,40 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
                 </div>
                 {withHelp && (
                     <div className='flex flex-col'>
-                        <span
-                            className={`text-xs ${
-                                validation.hasMinLength ? 'text-green-500' : 'text-muted-foreground'
-                            }`}
-                        >
-                            ✓ Must be at least 8 characters long
-                        </span>
-                        <span
-                            className={`text-xs ${validation.hasNumber ? 'text-green-500' : 'text-muted-foreground'}`}
-                        >
-                            ✓ Must contain at least 1 number
-                        </span>
-                        <span
-                            className={`text-xs ${
-                                validation.hasLowerCase ? 'text-green-500' : 'text-muted-foreground'
-                            }`}
-                        >
-                            ✓ Must contain at least 1 lowercase letter
-                        </span>
+                        {!match && (
+                            <>
+                                <span
+                                    className={`text-xs ${
+                                        validation.hasMinLength ? 'text-green-500' : 'text-muted-foreground'
+                                    }`}
+                                >
+                                    ✓ Must be at least 8 characters long
+                                </span>
+                                <span
+                                    className={`text-xs ${
+                                        validation.hasNumber ? 'text-green-500' : 'text-muted-foreground'
+                                    }`}
+                                >
+                                    ✓ Must contain at least 1 number
+                                </span>
+                                <span
+                                    className={`text-xs ${
+                                        validation.hasLowerCase ? 'text-green-500' : 'text-muted-foreground'
+                                    }`}
+                                >
+                                    ✓ Must contain at least 1 lowercase letter
+                                </span>
+                            </>
+                        )}
+                        {match && (
+                            <span
+                                className={`text-xs ${
+                                    validation.isMatching ? 'text-green-500' : 'text-muted-foreground'
+                                }`}
+                            >
+                                ✓ Passwords match
+                            </span>
+                        )}
                     </div>
                 )}
             </div>

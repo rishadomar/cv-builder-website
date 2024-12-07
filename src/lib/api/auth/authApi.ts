@@ -128,6 +128,27 @@ export async function forgotPassword(email: string) {
     }
 }
 
+export async function resetPassword(email: string, newPassword: string, verificationCode: string) {
+    try {
+        // Make the GET request using Axios
+        const response = await axiosInstance.post('/resetPassword', { email, newPassword, verificationCode });
+        console.log(response.data);
+        return response.data;
+    } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            console.log('Error fetching data:', error.response?.data);
+            throw new CustomError(
+                error.response?.data?.error || 'An error occurred resetting password',
+                error.response?.status || 500,
+                error.response?.data
+            );
+        } else {
+            console.log('Error fetching data:', error);
+            throw new CustomError('An unknown error occurred', 500, error);
+        }
+    }
+}
+
 export async function confirmSignup(email: string, verificationCode: string) {
     try {
         // Make the GET request using Axios

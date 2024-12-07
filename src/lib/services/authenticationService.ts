@@ -166,3 +166,17 @@ export const forgotPassword = (email: string) => {
         }
     };
 };
+
+export const resetPassword = (email: string, newPassword: string, code: string) => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setLoading(true));
+        try {
+            await authApi.resetPassword(email, newPassword, code);
+        } catch (error) {
+            console.error('Reset password error:', error);
+            throw error;
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+};
