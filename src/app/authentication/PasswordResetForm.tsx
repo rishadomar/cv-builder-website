@@ -84,17 +84,21 @@ export function PasswordResetForm({ onSuccess, className, ...props }: PasswordRe
                             ref={passwordRef}
                         />
                         <Label className='sr-only' htmlFor='code'>
-                            Code
+                            Code via email
                         </Label>
                         <Input
                             id='code'
                             autoCapitalize='none'
                             placeholder='The code emailed to you'
+                            autoComplete='off'
                             type='text'
                             value={code}
                             onChange={(event) => setCode(event.target.value)}
                         />
-                        <Button disabled={isLoading || !passwordIsValid || !emailIsValid} name='sign-in'>
+                        <Button
+                            disabled={isLoading || !passwordIsValid || !emailIsValid || code.length === 0}
+                            name='sign-in'
+                        >
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                             Reset Password
                         </Button>
