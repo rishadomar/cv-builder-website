@@ -13,6 +13,7 @@ import PasswordField from '@/app/builder/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
 import LinkButton from '@/components/core/LinkButton';
 import { Loader } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;
@@ -24,23 +25,17 @@ export function AuthenticationLoginForm({ onForgotPassword, className, ...props 
     const emailRef = React.useRef<HTMLInputElement>(null);
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
-    const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const router = useRouter();
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
-        setErrorMessage(null);
         setIsLoading(true);
         if (email && password) {
             try {
                 await dispatch(services.login(email, password));
                 router.replace('/builder');
             } catch (error: unknown) {
-                if (error instanceof CustomError) {
-                    setErrorMessage(error.message);
-                } else {
-                    setErrorMessage('An unknown error occurred. Please try again.');
-                }
+                toast.error((error as CustomError).message);
             } finally {
                 setIsLoading(false);
             }
@@ -72,7 +67,6 @@ export function AuthenticationLoginForm({ onForgotPassword, className, ...props 
                             />
                         </div>
                         <PasswordField onChange={setPassword} value={password} withHelp={false} isLoading={false} />
-                        {errorMessage && <p className='text-red-500 text-sm'>{errorMessage}</p>}
                         <Button
                             disabled={isLoading || email.trim().length === 0 || password.trim().length === 0}
                             name='sign-in'
