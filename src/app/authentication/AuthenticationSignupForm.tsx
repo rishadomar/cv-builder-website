@@ -11,6 +11,9 @@ import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import PasswordField from '@/app/builder/PasswordField';
 import { Loader } from 'lucide-react';
+import { CustomError } from '@/lib/utils/customError';
+import { toast } from 'react-toastify';
+import { validateEmail } from '@/lib/utils/email';
 
 interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {
@@ -19,7 +22,7 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
-    const [, setErrorMessage] = React.useState<string | null>(null);
+    const [emailValid, setEmailValid] = React.useState<boolean>(false);
     const router = useRouter();
 
     async function onSubmit(event: React.SyntheticEvent) {
@@ -31,7 +34,7 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
                 router.push('/builder');
             } catch (error) {
                 console.error('Login error:', error);
-                setErrorMessage('An error occurred. Please try again.');
+                toast.error((error as CustomError).message);
             } finally {
                 setIsLoading(false);
             }
@@ -98,12 +101,19 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
                                 autoCorrect='off'
                                 disabled={isLoading}
                                 value={email}
-                                onChange={(event) => setEmail(event.target.value)}
+                                onChange={(event) => {
+                                    setEmail(event.target.value);
+                                    if (validateEmail(event.target.value)) {
+                                        setEmailValid(true);
+                                    } else {
+                                        setEmailValid(false);
+                                    }
+                                }}
                             />
                         </div>
-                        <Button disabled={isLoading} name='sign-in'>
+                        <Button disabled={isLoading || !emailValid} name='sign-in'>
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
-                            Continue with Email
+                            Create account with Email
                         </Button>
                     </div>
                 </form>

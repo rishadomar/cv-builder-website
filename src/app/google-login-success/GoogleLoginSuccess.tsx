@@ -4,6 +4,7 @@ import React from 'react';
 import * as services from '@/lib/services';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppDispatch } from '@/lib/store/hooks';
+import { OverlaySpinner } from '@/components/OverlaySpinner';
 
 export default function GoogleLoginSuccess() {
     const [loading] = React.useState<boolean>(true);
@@ -50,7 +51,7 @@ export default function GoogleLoginSuccess() {
 
     return (
         <div className='min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-            {loading && <p>Loading...</p>}
+            {loading && <OverlaySpinner />}
             {errorMessage && <p>Some error {errorMessage}</p>}
             {!loading && !errorMessage && <p>Authenticated successfully!</p>}
         </div>

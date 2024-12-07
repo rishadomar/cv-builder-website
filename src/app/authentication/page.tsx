@@ -9,7 +9,7 @@ import LoginSwitchButton from './LoginSwitchButton';
 import { AuthenticationLoginForm } from '@/app/authentication/AuthenticationLoginForm';
 import SignupSwitchButton from './SignupSwitchButton';
 import { ForgotPasswordForm } from '@/app/authentication/ForgotPasswordForm';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 export default function AuthenticationPage() {
@@ -18,6 +18,7 @@ export default function AuthenticationPage() {
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(true);
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const renderAlreadyLoggedInSection = () => {
         return (
@@ -106,6 +107,16 @@ export default function AuthenticationPage() {
             );
         }
     };
+
+    if (searchParams.get('error')) {
+        return (
+            <div className='flex items-center justify-center min-h-screen -mt-24'>
+                <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
+                    <div className='text-center'>An error occurred: {searchParams.get('error')}</div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className='min-h-screen relative p-4 md:p-6'>
