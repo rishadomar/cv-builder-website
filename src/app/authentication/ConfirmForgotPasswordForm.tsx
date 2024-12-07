@@ -11,14 +11,14 @@ import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
 import { Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
-import PasswordField, { PasswordFieldRef } from '../builder/PasswordField';
-import EmailField, { EmailFieldRef } from '../builder/EmailField';
+import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
+import EmailField, { EmailFieldRef } from '@/components/EmailField';
 
-interface PasswordResetFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ConfirmForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onSuccess: () => void;
 }
 
-export function PasswordResetForm({ onSuccess, className, ...props }: PasswordResetFormProps) {
+export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: ConfirmForgotPasswordFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<EmailFieldRef>(null);
@@ -47,7 +47,7 @@ export function PasswordResetForm({ onSuccess, className, ...props }: PasswordRe
         setIsLoading(true);
 
         try {
-            await dispatch(services.resetPassword(email, password, code));
+            await dispatch(services.confirmForgotPassword(email, password, code));
             toast.success('Password successfully reset');
             onSuccess();
         } catch (error: unknown) {
@@ -57,11 +57,6 @@ export function PasswordResetForm({ onSuccess, className, ...props }: PasswordRe
         }
     }
 
-    console.log(
-        'Confirm Password valiud',
-        confirmPasswordRef.current?.validate(),
-        confirmPasswordRef.current?.isValid()
-    );
     return (
         <>
             <div className='flex flex-col space-y-2 text-center mb-4 mt-4'>

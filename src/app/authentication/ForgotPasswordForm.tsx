@@ -9,7 +9,7 @@ import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
 import { Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
-import EmailField, { EmailFieldRef } from '../builder/EmailField';
+import EmailField, { EmailFieldRef } from '@/components/EmailField';
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onSuccess: () => void;

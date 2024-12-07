@@ -128,10 +128,10 @@ export async function forgotPassword(email: string) {
     }
 }
 
-export async function resetPassword(email: string, newPassword: string, verificationCode: string) {
+export async function confirmForgotPassword(email: string, newPassword: string, verificationCode: string) {
     try {
         // Make the GET request using Axios
-        const response = await axiosInstance.post('/resetPassword', { email, newPassword, verificationCode });
+        const response = await axiosInstance.post('/confirmForgotPassword', { email, newPassword, verificationCode });
         console.log(response.data);
         return response.data;
     } catch (error: unknown) {
@@ -153,18 +153,6 @@ export async function confirmSignup(email: string, verificationCode: string) {
     try {
         // Make the GET request using Axios
         const response = await axiosInstance.post('/confirmSignup', { email, verificationCode });
-        console.log(response.data);
-        return response.data;
-    } catch (error: unknown) {
-        // Handle any errors
-        throw (error as Error).cause;
-    }
-}
-
-export async function confirmForgotPassword(email: string, verificationCode: string, password: string) {
-    try {
-        // Make the GET request using Axios
-        const response = await axiosInstance.post('/confirmForgotPassword', { email, verificationCode, password });
         console.log(response.data);
         return response.data;
     } catch (error: unknown) {

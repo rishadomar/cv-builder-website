@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
-import PasswordField, { PasswordFieldRef } from '@/app/builder/PasswordField';
+import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
 import LinkButton from '@/components/core/LinkButton';
 import { Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
-import EmailField, { EmailFieldRef } from '../builder/EmailField';
+import EmailField, { EmailFieldRef } from '@/components/EmailField';
 
 interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;

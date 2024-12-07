@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
-import PasswordField, { PasswordFieldRef } from '@/app/builder/PasswordField';
+import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import { Loader } from 'lucide-react';
 import { CustomError } from '@/lib/utils/customError';
 import { toast } from 'react-toastify';
-import EmailField, { EmailFieldRef } from '../builder/EmailField';
+import EmailField, { EmailFieldRef } from '@/components/EmailField';
 
 interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {

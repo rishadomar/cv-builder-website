@@ -11,7 +11,7 @@ import SignupSwitchButton from './SignupSwitchButton';
 import { ForgotPasswordForm } from '@/app/authentication/ForgotPasswordForm';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { PasswordResetForm } from './PasswordResetForm';
+import { ConfirmForgotPasswordForm } from './ConfirmForgotPasswordForm';
 
 export default function AuthenticationPage() {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -53,7 +53,7 @@ export default function AuthenticationPage() {
 
                 <div className='flex items-center justify-center min-h-screen -mt-24'>
                     <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
-                        <PasswordResetForm
+                        <ConfirmForgotPasswordForm
                             onSuccess={() => {
                                 setShowPasswordResetForm(false);
                                 setShowLoginForm(true);
