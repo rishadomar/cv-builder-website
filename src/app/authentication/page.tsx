@@ -11,12 +11,14 @@ import SignupSwitchButton from './SignupSwitchButton';
 import { ForgotPasswordForm } from '@/app/authentication/ForgotPasswordForm';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { PasswordResetForm } from './PasswordResetForm';
 
 export default function AuthenticationPage() {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(true);
+    const [showPasswordResetForm, setShowPasswordResetForm] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -36,6 +38,30 @@ export default function AuthenticationPage() {
                     </div>
                 </div>
             </div>
+        );
+    };
+
+    const renderPasswordResetForm = () => {
+        return (
+            <>
+                <LoginSwitchButton
+                    onClick={() => {
+                        setShowLoginForm(true);
+                        setShowPasswordResetForm(false);
+                    }}
+                />
+
+                <div className='flex items-center justify-center min-h-screen -mt-24'>
+                    <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg space-y-6'>
+                        <PasswordResetForm
+                            onSuccess={() => {
+                                setShowPasswordResetForm(false);
+                                setShowLoginForm(true);
+                            }}
+                        />
+                    </div>
+                </div>
+            </>
         );
     };
 
@@ -96,9 +122,9 @@ export default function AuthenticationPage() {
                     <div className='flex items-center justify-center min-h-screen -mt-24'>
                         <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
                             <ForgotPasswordForm
-                                onClick={() => {
+                                onSuccess={() => {
                                     setShowForgotPassword(false);
-                                    setShowLoginForm(true);
+                                    setShowPasswordResetForm(true);
                                 }}
                             />
                         </div>
@@ -120,7 +146,11 @@ export default function AuthenticationPage() {
 
     return (
         <div className='min-h-screen relative p-4 md:p-6'>
-            <div className='lg:p-8'>{isLoggedIn ? renderAlreadyLoggedInSection() : renderLoginSignupSection()}</div>
+            {showPasswordResetForm
+                ? renderPasswordResetForm()
+                : isLoggedIn
+                ? renderAlreadyLoggedInSection()
+                : renderLoginSignupSection()}
         </div>
     );
 }

@@ -4,38 +4,46 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useAppDispatch } from '@/lib/store/hooks';
-import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
 import { Loader } from 'lucide-react';
+import { toast } from 'react-toastify';
+import EmailField, { EmailFieldRef } from '../builder/EmailField';
 
-interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
+    onSuccess: () => void;
+}
 
-export function ForgotPasswordForm({ className, ...props }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({ onSuccess, className, ...props }: ForgotPasswordFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const emailRef = React.useRef<HTMLInputElement>(null);
+    const emailRef = React.useRef<EmailFieldRef>(null);
     const [email, setEmail] = React.useState<string>('');
-    const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-    const router = useRouter();
+    const [emailIsValid, setEmailIsValid] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        emailRef.current?.focus();
+    }, []);
+
+    React.useEffect(() => {
+        if (emailRef.current?.isValid()) {
+            setEmailIsValid(true);
+        } else {
+            setEmailIsValid(false);
+        }
+    }, [email]);
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
-        setErrorMessage(null);
         setIsLoading(true);
         if (email) {
             try {
                 await dispatch(services.forgotPassword(email));
-                router.push('/authentication');
+                toast.success('Password reset code sent to your email');
+                onSuccess();
             } catch (error: unknown) {
-                if (error instanceof CustomError) {
-                    setErrorMessage(error.message);
-                } else {
-                    setErrorMessage('An unknown error occurred. Please try again.');
-                }
+                toast.error((error as CustomError).message);
             } finally {
                 setIsLoading(false);
             }
@@ -52,24 +60,10 @@ export function ForgotPasswordForm({ className, ...props }: ForgotPasswordFormPr
             <div className={cn('grid gap-6', className)} {...props}>
                 <form onSubmit={onSubmit}>
                     <div className='grid gap-2'>
-                        <div className='grid gap-1'>
-                            <Label className='sr-only' htmlFor='email'>
-                                Email
-                            </Label>
-                            <Input
-                                id='email'
-                                autoCapitalize='none'
-                                placeholder='Email'
-                                type='email'
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                ref={emailRef}
-                            />
-                        </div>
-                        {errorMessage && <p className='text-green-500 text-sm'>{errorMessage}</p>}
-                        <Button disabled={isLoading || email.trim().length === 0} name='sign-in'>
+                        <EmailField isLoading={isLoading} value={email} onChange={setEmail} ref={emailRef} />
+                        <Button disabled={isLoading || !emailIsValid} name='sign-in'>
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
-                            Send Reset Link
+                            Email reset code
                         </Button>
                     </div>
                 </form>

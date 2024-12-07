@@ -4,26 +4,47 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
-import PasswordField from '@/app/builder/PasswordField';
+import PasswordField, { PasswordFieldRef } from '@/app/builder/PasswordField';
 import { Loader } from 'lucide-react';
 import { CustomError } from '@/lib/utils/customError';
 import { toast } from 'react-toastify';
-import { validateEmail } from '@/lib/utils/email';
+import EmailField, { EmailFieldRef } from '../builder/EmailField';
 
 interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>('');
+    const emailRef = React.useRef<EmailFieldRef>(null);
     const [password, setPassword] = React.useState<string>('');
+    const passwordRef = React.useRef<PasswordFieldRef>(null);
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
-    const [emailValid, setEmailValid] = React.useState<boolean>(false);
+    const [emailIsValid, setEmailIsValid] = React.useState<boolean>(false);
+    const [passwordIsValid, setPasswordIsValid] = React.useState<boolean>(false);
     const router = useRouter();
+
+    React.useEffect(() => {
+        emailRef.current?.focus();
+    }, []);
+
+    React.useEffect(() => {
+        if (emailRef.current?.isValid()) {
+            setEmailIsValid(true);
+        } else {
+            setEmailIsValid(false);
+        }
+    }, [email]);
+
+    React.useEffect(() => {
+        if (passwordRef.current?.isValid()) {
+            setPasswordIsValid(true);
+        } else {
+            setPasswordIsValid(false);
+        }
+    }, [password]);
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
@@ -55,19 +76,15 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
                 <div className={cn('grid gap-6', className)} {...props}>
                     <form onSubmit={onSubmit}>
                         <div className='grid gap-2'>
-                            <div className='grid gap-1'>
-                                <Label className='sr-only' htmlFor='email'>
-                                    Email
-                                </Label>
-                                <Input id='email' type='email' readOnly value={email} />
-                            </div>
+                            <EmailField value={email} onChange={setEmail} isLoading={isLoading} ref={emailRef} />
                             <PasswordField
                                 value={password}
                                 onChange={setPassword}
                                 isLoading={isLoading}
                                 withHelp={true}
+                                ref={passwordRef}
                             />
-                            <Button disabled={isLoading} name='sign-in'>
+                            <Button disabled={isLoading || !emailIsValid || !passwordIsValid} name='sign-in'>
                                 {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                                 Create Account
                             </Button>
@@ -88,30 +105,8 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
             <div className={cn('grid gap-6', className)} {...props}>
                 <form onSubmit={onSubmit}>
                     <div className='grid gap-2'>
-                        <div className='grid gap-1'>
-                            <Label className='sr-only' htmlFor='email'>
-                                Email
-                            </Label>
-                            <Input
-                                id='email'
-                                placeholder='name@example.com'
-                                type='email'
-                                autoCapitalize='none'
-                                autoComplete='email'
-                                autoCorrect='off'
-                                disabled={isLoading}
-                                value={email}
-                                onChange={(event) => {
-                                    setEmail(event.target.value);
-                                    if (validateEmail(event.target.value)) {
-                                        setEmailValid(true);
-                                    } else {
-                                        setEmailValid(false);
-                                    }
-                                }}
-                            />
-                        </div>
-                        <Button disabled={isLoading || !emailValid} name='sign-in'>
+                        <EmailField isLoading={isLoading} value={email} onChange={setEmail} ref={emailRef} />
+                        <Button disabled={isLoading || !emailIsValid} name='sign-up'>
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                             Create account with Email
                         </Button>

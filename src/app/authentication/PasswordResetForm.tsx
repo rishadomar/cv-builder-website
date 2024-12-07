@@ -4,30 +4,30 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useAppDispatch } from '@/lib/store/hooks';
-import { useRouter } from 'next/navigation';
 import * as services from '@/lib/services';
-import PasswordField, { PasswordFieldRef } from '@/app/builder/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
-import LinkButton from '@/components/core/LinkButton';
 import { Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
+import PasswordField, { PasswordFieldRef } from '../builder/PasswordField';
 import EmailField, { EmailFieldRef } from '../builder/EmailField';
 
-interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
-    onForgotPassword: () => void;
+interface PasswordResetFormProps extends React.HTMLAttributes<HTMLDivElement> {
+    onSuccess: () => void;
 }
 
-export function AuthenticationLoginForm({ onForgotPassword, className, ...props }: AuthenticationLoginFormProps) {
+export function PasswordResetForm({ onSuccess, className, ...props }: PasswordResetFormProps) {
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<EmailFieldRef>(null);
-    const [email, setEmail] = React.useState<string>('');
-    const [password, setPassword] = React.useState<string>('');
-    const [emailIsValid, setEmailIsValid] = React.useState<boolean>(false);
-    const [passwordIsValid, setPasswordIsValid] = React.useState<boolean>(false);
     const passwordRef = React.useRef<PasswordFieldRef>(null);
-    const router = useRouter();
+    const [email, setEmail] = React.useState<string>('');
+    const [emailIsValid, setEmailIsValid] = React.useState<boolean>(false);
+    const [password, setPassword] = React.useState<string>('');
+    const [passwordIsValid, setPasswordIsValid] = React.useState<boolean>(false);
+    const [code, setCode] = React.useState<string>('');
 
     React.useEffect(() => {
         emailRef.current?.focus();
@@ -52,10 +52,11 @@ export function AuthenticationLoginForm({ onForgotPassword, className, ...props 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
         setIsLoading(true);
-        if (email && password) {
+        if (email) {
             try {
-                await dispatch(services.login(email, password));
-                router.replace('/builder');
+                await dispatch(services.forgotPassword(email));
+                toast.success('Password reset code sent to your email');
+                onSuccess();
             } catch (error: unknown) {
                 toast.error((error as CustomError).message);
             } finally {
@@ -67,8 +68,8 @@ export function AuthenticationLoginForm({ onForgotPassword, className, ...props 
     return (
         <>
             <div className='flex flex-col space-y-2 text-center mb-4'>
-                <h1 className='text-2xl font-semibold tracking-tight'>Sign In</h1>
-                <p className='text-sm text-muted-foreground'>Enter your email & password below to sign in</p>
+                <h1 className='text-2xl font-semibold tracking-tight'>Reset your password</h1>
+                <p className='text-sm text-muted-foreground'>Enter details below to reset your password</p>
             </div>
 
             <div className={cn('grid gap-6', className)} {...props}>
@@ -76,17 +77,27 @@ export function AuthenticationLoginForm({ onForgotPassword, className, ...props 
                     <div className='grid gap-2'>
                         <EmailField value={email} onChange={setEmail} isLoading={isLoading} ref={emailRef} />
                         <PasswordField
-                            onChange={setPassword}
                             value={password}
-                            withHelp={false}
-                            isLoading={false}
+                            onChange={setPassword}
+                            isLoading={isLoading}
+                            withHelp={true}
                             ref={passwordRef}
                         />
-                        <Button disabled={isLoading || !emailIsValid || !passwordIsValid} name='sign-in'>
+                        <Label className='sr-only' htmlFor='code'>
+                            Code
+                        </Label>
+                        <Input
+                            id='code'
+                            autoCapitalize='none'
+                            placeholder='The code emailed to you'
+                            type='text'
+                            value={code}
+                            onChange={(event) => setCode(event.target.value)}
+                        />
+                        <Button disabled={isLoading || !passwordIsValid || !emailIsValid} name='sign-in'>
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
-                            Login
+                            Reset Password
                         </Button>
-                        <LinkButton onClick={onForgotPassword} label='Forgot Password?' />
                     </div>
                 </form>
             </div>
