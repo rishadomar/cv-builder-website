@@ -32,6 +32,16 @@ export const aiApiSlice = createApi({
                 method: 'POST',
                 body: { hobbies, previousText }
             })
+        }),
+        improveWorkDescriptionText: builder.mutation<
+            string,
+            { workDetails: { company: string }; previousText: string }
+        >({
+            query: ({ workDetails, previousText }) => ({
+                url: '/improveWorkDescriptionText',
+                method: 'POST',
+                body: { workDetails, previousText }
+            })
         })
     })
 });
@@ -40,5 +50,6 @@ export const {
     useGeneratePersonalityTextMutation,
     useImprovePersonalityTextMutation,
     useGenerateHobbiesTextMutation,
-    useImproveHobbiesTextMutation
+    useImproveHobbiesTextMutation,
+    useImproveWorkDescriptionTextMutation
 } = aiApiSlice;

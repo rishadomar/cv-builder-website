@@ -10,6 +10,10 @@ import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
 import { useToast } from '@/hooks/use-toast';
+import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
+import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlice';
+import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
+import { useState } from 'react';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z
@@ -77,7 +81,12 @@ export default function WorkExperienceForm({
         resolver: zodResolver(workExperienceDetailsFormSchema),
         defaultValues
     });
+    const [compareText, setCompareText] = useState<CompareTextState>();
+    const watchedDescription = formHook.watch('description');
+    const watchedCompany = formHook.watch('company');
     const isLoading = useAppSelector((state) => state.loading.isLoading);
+    const [improveWorkDescriptionText, { isLoading: isImprovingWorkDescriptionText }] =
+        useImproveWorkDescriptionTextMutation();
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: WorkExperienceDetailsFormValues) => {
@@ -116,39 +125,73 @@ export default function WorkExperienceForm({
         event?.preventDefault();
     }
 
+    console.log('watchedDescription', watchedDescription);
     return (
-        <Form {...formHook}>
-            {/* {busySaving && <OverlaySpinner />} */}
-            <form onSubmit={onSubmit} className='flex flex-col bg-white'>
-                <div className='xs:max-w-[400px] max-h-[500px] overflow-auto space-y-4 px-2'>
-                    <TextFormField formHook={formHook} label='Company' fieldName='company' placeholder='Company name' />
-                    <YearMonthFormField formHook={formHook} label='Start date' fieldName='startDate' />
-                    <YearMonthFormField formHook={formHook} label='End date' fieldName='endDate' />
-                    <TextFormField
-                        formHook={formHook}
-                        label='Role'
-                        fieldName='role'
-                        placeholder='Eg. Intern, Software Engineer'
-                    />
-                    <TextFormField
-                        formHook={formHook}
-                        label='Location'
-                        fieldName='location'
-                        placeholder='Eg. Lagos, Nigeria'
-                    />
-                    <TextareaFormField
-                        formHook={formHook}
-                        label='Description'
-                        fieldName='description'
-                        placeholder='Eg. I was responsible for...'
-                    />
-                </div>
-                <div className='mt-4 flex justify-end'>
-                    <Button type='submit' disabled={isLoading}>
-                        Save
-                    </Button>
-                </div>
-            </form>
-        </Form>
+        <>
+            <Form {...formHook}>
+                {/* {busySaving && <OverlaySpinner />} */}
+                <form onSubmit={onSubmit} className='flex flex-col bg-white'>
+                    <div className='xs:max-w-[400px] max-h-[500px] overflow-auto space-y-4 px-2'>
+                        <TextFormField
+                            formHook={formHook}
+                            label='Company'
+                            fieldName='company'
+                            placeholder='Company name'
+                        />
+                        <YearMonthFormField formHook={formHook} label='Start date' fieldName='startDate' />
+                        <YearMonthFormField formHook={formHook} label='End date' fieldName='endDate' />
+                        <TextFormField
+                            formHook={formHook}
+                            label='Role'
+                            fieldName='role'
+                            placeholder='Eg. Intern, Software Engineer'
+                        />
+                        <TextFormField
+                            formHook={formHook}
+                            label='Location'
+                            fieldName='location'
+                            placeholder='Eg. Lagos, Nigeria'
+                        />
+                        <div className='relative'>
+                            <TextareaFormField
+                                formHook={formHook}
+                                label='Description'
+                                fieldName='description'
+                                placeholder='Eg. I was responsible for...'
+                            />
+                            <ImproveWithAIButton
+                                disabled={watchedDescription.length === 0 || isImprovingWorkDescriptionText}
+                                onClick={async () => {
+                                    const newDescription = await improveWorkDescriptionText({
+                                        workDetails: { company: watchedCompany },
+                                        previousText: watchedDescription
+                                    }).unwrap();
+                                    setCompareText({
+                                        previousText: watchedDescription,
+                                        newText: newDescription,
+                                        onAccept: (acceptedText: string) => {
+                                            formHook.setValue('description', acceptedText, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            });
+                                            setCompareText(undefined);
+                                        },
+                                        onReject: () => {
+                                            setCompareText(undefined);
+                                        }
+                                    });
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className='mt-4 flex justify-end'>
+                        <Button type='submit' disabled={isLoading}>
+                            Save
+                        </Button>
+                    </div>
+                </form>
+            </Form>
+            {compareText && <CompareText isOpen={true} setIsOpen={() => setCompareText(undefined)} {...compareText} />}
+        </>
     );
 }

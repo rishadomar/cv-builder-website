@@ -2,6 +2,7 @@ import { WorkExperienceEntry } from '@/lib/type';
 import WorkExperienceEntryActionsDropdown from './WorkExperienceEntryActionsDropdown';
 import { Calendar } from 'lucide-react';
 import { getMonth } from '@/lib/utils';
+import { CollapsibleDescription } from '@/components/CollapsibleDescription';
 
 type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -29,7 +30,9 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({ workExpe
                         </div>
                     )}
                 <div className='text-gray-500 dark:text-gray-400'>{workExperienceEntry.role}</div>
-                <div className='text-gray-500 dark:text-gray-400'>{workExperienceEntry.description}</div>
+                <div className='text-gray-500 dark:text-gray-400'>
+                    <CollapsibleDescription text={workExperienceEntry.description} />
+                </div>
             </div>
             <div className=''>
                 <WorkExperienceEntryActionsDropdown
