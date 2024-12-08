@@ -27,7 +27,7 @@ export default function YearMonthFormField({
             render={() => (
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
-                    <div className={'flex flex-col justify-between gap-3'}>
+                    <div className={'flex flex-row gap-3'}>
                         <YearFormField
                             formHook={formHook}
                             label='Year'

@@ -41,14 +41,14 @@ export default function MonthFormField({ formHook, label, fieldName, description
             name={fieldName}
             render={({ field }) => (
                 <FormItem>
-                    <div className='flex items-center space-x-4'>
-                        <FormLabel>{label}</FormLabel>
+                    <div className='flex items-center'>
+                        <FormLabel className='sr-only'>{label}</FormLabel>
                         <FormControl>
                             <Select
                                 value={field.value?.toString()}
                                 onValueChange={(value) => field.onChange(Number(value))}
                             >
-                                <SelectTrigger className='w-[180px]'>
+                                <SelectTrigger className='w-[120px]'>
                                     <SelectValue placeholder={label} />
                                 </SelectTrigger>
                                 <SelectContent>
