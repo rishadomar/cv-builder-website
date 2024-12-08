@@ -30,7 +30,7 @@ const validatePassword = (password: string, match?: string) => {
     const hasNumber = /\d/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     // Only check matching if this is a confirmation field (match prop exists)
-    const isMatching = match === undefined ? true : password === match;
+    const isMatching = match === undefined ? true : password.length > 0 && password === match;
 
     return {
         hasMinLength,
@@ -115,7 +115,7 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
                 </div>
                 {withHelp && (
                     <div className='flex flex-col'>
-                        {!match && (
+                        {match === undefined && (
                             <>
                                 <span
                                     className={`text-xs ${
@@ -140,7 +140,7 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
                                 </span>
                             </>
                         )}
-                        {match && (
+                        {match !== undefined && (
                             <span
                                 className={`text-xs ${
                                     validation.isMatching ? 'text-green-500' : 'text-muted-foreground'
