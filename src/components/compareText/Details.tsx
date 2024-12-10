@@ -21,10 +21,10 @@ export const Details: React.FC<DetailsProps> = ({ previousText, newText, onAccep
                         <TabsTrigger value='new'>New</TabsTrigger>
                     </TabsList>
                     <TabsContent value='previous'>
-                        <Textarea readOnly value={previousText} className='min-h-32' />
+                        <Textarea readOnly value={previousText} className='min-h-72' />
                     </TabsContent>
                     <TabsContent value='new'>
-                        <Textarea readOnly value={newText} className='min-h-32' />
+                        <Textarea readOnly value={newText} className='min-h-72' />
                     </TabsContent>
                     <div className='flex justify-end gap-2 mt-4'>
                         <Button variant='outline' onClick={onReject}>
