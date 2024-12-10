@@ -3,6 +3,7 @@ import WorkExperienceEntryActionsDropdown from './WorkExperienceEntryActionsDrop
 import { Calendar } from 'lucide-react';
 import { getMonth } from '@/lib/utils';
 import { CollapsibleDescription } from '@/components/CollapsibleDescription';
+import { useRef } from 'react';
 
 type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -10,8 +11,10 @@ type WorkExperienceItemProps = {
 };
 
 export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({ workExperienceEntry, setBusyUpdatingList }) => {
+    const parentRef = useRef<HTMLDivElement>(null);
+
     return (
-        <div className='grid grid-cols-[1fr_auto] gap-4 text-sm relative'>
+        <div ref={parentRef} className='grid grid-cols-[1fr_auto] gap-4 text-sm relative'>
             <div className='pl-4 grid gap-1'>
                 <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-1 translate-x-[-12.5px] z-10 top-2 dark:bg-gray-50' />
                 <div className='text-lg font-bold'>{workExperienceEntry.company}</div>
@@ -31,7 +34,7 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({ workExpe
                     )}
                 <div className='text-gray-500 dark:text-gray-400'>{workExperienceEntry.role}</div>
                 <div className='text-gray-500 dark:text-gray-400'>
-                    <CollapsibleDescription text={workExperienceEntry.description} />
+                    <CollapsibleDescription text={workExperienceEntry.description} parentRef={parentRef} />
                 </div>
             </div>
             <div className=''>
