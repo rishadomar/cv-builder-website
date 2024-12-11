@@ -42,7 +42,7 @@ export type StepPath =
     | 'education'
     | 'work-experience'
     | 'paywall'
-    | 'preview'
+    | 'review'
     | 'generate-pdf';
 
 export const Steps = [
@@ -137,11 +137,11 @@ export const Steps = [
     },
     {
         id: 10,
-        title: 'Preview',
+        title: 'Review',
         icon: BookCheck,
-        description: 'Preview your CV',
+        description: 'Review your CV',
         completed: false,
-        path: 'preview',
+        path: 'review',
         showInSections: false,
         paymentRequired: true
     },

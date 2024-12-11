@@ -17,7 +17,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import EducationList from './education/EducationList';
-import { Preview } from './preview/Preview';
+import { Review } from './review/Review';
 
 const NumberOfPages = Steps.length;
 
@@ -106,7 +106,7 @@ function FormContent() {
                 {currentPage === 'work-experience' && (
                     <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />
                 )}
-                {currentPage === 'preview' && <Preview onNext={nextPage} onPrevious={previousPage} />}
+                {currentPage === 'review' && <Review onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'paywall' && <Paywall onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
             </div>
