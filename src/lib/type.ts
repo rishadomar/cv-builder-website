@@ -1,5 +1,6 @@
 //import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
+import { LucideIcon } from 'lucide-react';
 import { Currency } from 'react-paystack/dist/types';
 
 export type AuthenticationPayload = {
@@ -136,4 +137,28 @@ export type Error = {
             error: string;
         };
     };
+};
+
+export type StepPath =
+    | 'contact-details'
+    | 'personal-details'
+    | 'location-details'
+    | 'remote-work-details'
+    | 'personality-details'
+    | 'hobbies'
+    | 'education'
+    | 'work-experience'
+    | 'paywall'
+    | 'review'
+    | 'generate-pdf';
+
+export type StepType = {
+    id: number;
+    title: string;
+    icon: LucideIcon;
+    description: string;
+    completed: boolean;
+    path: StepPath;
+    showInSections: boolean;
+    paymentRequired: boolean;
 };

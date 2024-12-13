@@ -31,21 +31,9 @@ import {
 import { useAppSelector } from '@/lib/store/hooks';
 import { Button } from './ui/button';
 import StepHeader from '@/app/builder/StepHeader';
+import { StepType } from '@/lib/type';
 
-export type StepPath =
-    | 'contact-details'
-    | 'personal-details'
-    | 'location-details'
-    | 'remote-work-details'
-    | 'personality-details'
-    | 'hobbies'
-    | 'education'
-    | 'work-experience'
-    | 'paywall'
-    | 'review'
-    | 'generate-pdf';
-
-export const Steps = [
+export const Steps: StepType[] = [
     {
         id: 1,
         title: 'Contact',
@@ -103,7 +91,8 @@ export const Steps = [
         description: 'Pay please to continue',
         completed: false,
         path: 'paywall',
-        showInSections: false
+        showInSections: false,
+        paymentRequired: false
     },
     {
         id: 7,
