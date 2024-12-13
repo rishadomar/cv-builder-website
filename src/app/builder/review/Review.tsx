@@ -1,9 +1,7 @@
 import { getStep } from '@/lib/utils/step';
 import { StepButtons } from '../StepButtons';
 import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
 import { ContactDetailsReview } from '../contact-details/ContactDetailsReview';
-import PersonalDetailsForm from '../personal-details/PersonalDetails';
 import { PersonalDetailsReview } from '../personal-details/PersonalDetailsReview';
 import { LocationDetailsReview } from '../location-details/LocationDetailsReview';
 import { RemoteWorkDetailsReview } from '../remote-work-details/RemoteWorkDetailsReview';
@@ -11,7 +9,6 @@ import { PersonalityDetailsReview } from '../personality-details/PersonalityDeta
 import { HobbiesReview } from '../hobbies/HobbiesReview';
 import { EducationReview } from '../education/EducationReview';
 import { WorkExperienceReview } from '../work-experience/WorkExperienceReview';
-// import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 
 type ReviewProps = {
     onNext?: () => void;
@@ -19,9 +16,6 @@ type ReviewProps = {
 };
 
 export const Review: React.FC<ReviewProps> = ({ onNext, onPrevious }) => {
-    // const dispatch = useAppDispatch();
-    // const isLoading = useAppSelector((state) => state.loading.isLoading);
-    // const allFieldValues = useAppSelector((state) => state.fieldValues);
     const step = getStep('review');
 
     return (

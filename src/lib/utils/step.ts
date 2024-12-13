@@ -1,5 +1,5 @@
 import { Bird } from 'lucide-react';
-import { StepPath, StepType } from '../type';
+import { StepPath } from '../type';
 import { Steps } from '@/components/ProgressSteps';
 
 const UnfoundStep = {
