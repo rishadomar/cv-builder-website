@@ -231,7 +231,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                         onClick={() => {
                             onSelect();
                             if (isPaymentValid) {
-                                router.replace(`/builder?page=generate-pdf`);
+                                router.replace(`/builder?page=review`);
                             } else {
                                 router.replace(`/billing`);
                             }
@@ -239,7 +239,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                         className='w-full'
                         variant='default'
                     >
-                        Generate PDF
+                        Review
                     </Button>
                 </div>
             </CardContent>
