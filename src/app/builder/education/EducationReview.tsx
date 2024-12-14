@@ -9,11 +9,15 @@ export const EducationReview: React.FC = () => {
 
     return (
         <div>
-            <StepHeader icon={step.icon} title={step.title} />
-            {educationEntries &&
-                educationEntries.map((educationEntry, index) => (
-                    <EducationItem key={index} educationEntry={educationEntry} setBusyUpdatingList={() => {}} />
-                ))}
+            <div className='mb-3'>
+                <StepHeader icon={step.icon} title={step.title} />
+            </div>
+            <div className='flex flex-col gap-6'>
+                {educationEntries &&
+                    educationEntries.map((educationEntry, index) => (
+                        <EducationItem key={index} educationEntry={educationEntry} setBusyUpdatingList={() => {}} />
+                    ))}
+            </div>
         </div>
     );
 };

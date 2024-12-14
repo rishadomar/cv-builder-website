@@ -9,15 +9,21 @@ export const WorkExperienceReview: React.FC = () => {
 
     return (
         <div>
-            <StepHeader icon={step.icon} title={step.title} />
-            {workExperienceEntries &&
-                workExperienceEntries.map((workExperienceEntry, index) => (
-                    <WorkExperienceItem
-                        key={index}
-                        workExperienceEntry={workExperienceEntry}
-                        setBusyUpdatingList={() => {}}
-                    />
-                ))}
+            <div className='mb-3'>
+                <StepHeader icon={step.icon} title={step.title} />
+            </div>
+
+            <div className='flex flex-col gap-6'>
+                {workExperienceEntries &&
+                    workExperienceEntries.map((workExperienceEntry, index) => (
+                        <WorkExperienceItem
+                            key={index}
+                            workExperienceEntry={workExperienceEntry}
+                            setBusyUpdatingList={() => {}}
+                            collapseDescription={false}
+                        />
+                    ))}
+            </div>
         </div>
     );
 };

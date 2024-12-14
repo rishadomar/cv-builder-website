@@ -1,7 +1,7 @@
 import { EducationEntry } from '@/lib/type';
 import EducationEntryActionsDropdown from './EducationEntryActionsDropdown';
 import { getMonth } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { FieldValueReview } from '../FieldValueReview';
 
 type EducationItemProps = {
     educationEntry: EducationEntry;
@@ -11,20 +11,23 @@ type EducationItemProps = {
 export const EducationItem: React.FC<EducationItemProps> = ({ educationEntry, setBusyUpdatingList }) => {
     return (
         <div className='grid grid-cols-[1fr_auto] gap-4 text-sm relative'>
-            <div className='pl-4 grid gap-1'>
-                <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-1 translate-x-[-12.5px] z-10 top-2 dark:bg-gray-50' />{' '}
-                <div className='text-lg font-bold'>{educationEntry.description}</div>
-                <div className='text-gray-500 dark:text-gray-400'>{educationEntry.institution}</div>
-                <div className='text-gray-500 dark:text-gray-400'>{educationEntry.location}</div>
+            <div className='pl-9 grid gap-1'>
+                <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-6 translate-x-[-12.5px] z-10 top-1 dark:bg-gray-50' />{' '}
+                <FieldValueReview value={educationEntry.description} />
+                <FieldValueReview field='Institution' value={educationEntry.institution} />
+                <FieldValueReview field='Location' value={educationEntry.location} />
                 {educationEntry.graduationDate &&
                     educationEntry.graduationDate.year &&
                     educationEntry.graduationDate.month >= 0 && (
-                        <div className='text-gray-500 dark:text-gray-400'>
-                            <Check className='w-4 h-4 inline-block mr-1' />
-                            {getMonth(educationEntry.graduationDate.month)} {educationEntry.graduationDate.year}
-                        </div>
+                        <FieldValueReview
+                            withCheck
+                            field='Graduation date'
+                            value={`${getMonth(educationEntry.graduationDate.month)} ${
+                                educationEntry.graduationDate.year
+                            }`}
+                        />
                     )}
-                <div className='text-gray-500 dark:text-gray-400'>{educationEntry.comment}</div>
+                <FieldValueReview value={educationEntry.comment} />
             </div>
             <div className=''>
                 <EducationEntryActionsDropdown

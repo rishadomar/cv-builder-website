@@ -1,6 +1,7 @@
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
+import { FieldValueReview } from '../FieldValueReview';
 
 export const RemoteWorkDetailsReview: React.FC = () => {
     const allFieldValues = useAppSelector((state) => state.fieldValues);
@@ -8,10 +9,14 @@ export const RemoteWorkDetailsReview: React.FC = () => {
 
     return (
         <div>
-            <StepHeader icon={step.icon} title={step.title} />
-            <div>Prepared to work remotely: {allFieldValues.remoteWork}</div>
-            <div>Partially remote: {allFieldValues.partiallyRemote}</div>
-            <div>Prefer remote: {allFieldValues.preferRemote}</div>
+            <div className='mb-3'>
+                <StepHeader icon={step.icon} title={step.title} />
+            </div>
+            <div className='p-1'>
+                <FieldValueReview field='Prepared to work remotely' value={allFieldValues.remoteWork} />
+                <FieldValueReview field='Partially remote' value={allFieldValues.partiallyRemote} />
+                <FieldValueReview field='Prefer remote' value={allFieldValues.preferRemote} />
+            </div>
         </div>
     );
 };

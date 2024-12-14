@@ -208,6 +208,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                                     icon={step.icon as LucideIcon}
                                     iconColor={getStatus(step) === 'complete' ? 'done' : 'todo'}
                                     title={step.title}
+                                    renderInContents
                                 />
                             </div>
 

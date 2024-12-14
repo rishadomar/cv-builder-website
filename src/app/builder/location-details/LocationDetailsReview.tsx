@@ -1,6 +1,7 @@
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
+import { FieldValueReview } from '../FieldValueReview';
 
 export const LocationDetailsReview: React.FC = () => {
     const allFieldValues = useAppSelector((state) => state.fieldValues);
@@ -8,11 +9,15 @@ export const LocationDetailsReview: React.FC = () => {
 
     return (
         <div>
-            <StepHeader icon={step.icon} title={step.title} />
-            <div>Country: {allFieldValues.country}</div>
-            <div>City: {allFieldValues.city}</div>
-            <div>Province: {allFieldValues.province}</div>
-            <div>Prepared to relocate: {allFieldValues.preparedToRelocate}</div>
+            <div className='mb-3'>
+                <StepHeader icon={step.icon} title={step.title} />
+            </div>
+            <div className='p-1'>
+                <FieldValueReview field='Country' value={allFieldValues.country} />
+                <FieldValueReview field='City' value={allFieldValues.city} />
+                <FieldValueReview field='Province' value={allFieldValues.province} />
+                <FieldValueReview field='Prepared to relocate' value={allFieldValues.preparedToRelocate} />
+            </div>
         </div>
     );
 };

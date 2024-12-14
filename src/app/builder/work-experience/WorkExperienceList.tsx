@@ -45,6 +45,7 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                             key={index}
                             workExperienceEntry={workExperienceEntry}
                             setBusyUpdatingList={setBusyUpdatingList}
+                            collapseDescription={true}
                         />
                     ))}
                 <div>
