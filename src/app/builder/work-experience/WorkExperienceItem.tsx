@@ -1,9 +1,10 @@
 import { WorkExperienceEntry } from '@/lib/type';
 import WorkExperienceEntryActionsDropdown from './WorkExperienceEntryActionsDropdown';
-import { Calendar, MapPin } from 'lucide-react';
+import { Calendar, Icon, MapPin } from 'lucide-react';
 import { getMonth } from '@/lib/utils';
 import { useRef } from 'react';
 import { FieldValueReview } from '../FieldValueReview';
+import { IconValueReview } from '../IconValueReview';
 
 type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -20,6 +21,27 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
 }) => {
     const parentRef = useRef<HTMLDivElement>(null);
 
+    const getPeriod = () => {
+        if (
+            !workExperienceEntry.startDate ||
+            !workExperienceEntry.startDate.year ||
+            !workExperienceEntry.startDate.month
+        ) {
+            return '';
+        }
+        const startDateString = `${getMonth(workExperienceEntry.startDate.month)} ${
+            workExperienceEntry.startDate.year
+        }`;
+
+        if (!workExperienceEntry.endDate || !workExperienceEntry.endDate.year || !workExperienceEntry.endDate.month) {
+            return `${startDateString} - Present`;
+        }
+
+        return `${startDateString} - ${getMonth(workExperienceEntry.endDate.month)} ${
+            workExperienceEntry.endDate.year
+        }`;
+    };
+
     return (
         <div ref={parentRef} className='grid grid-cols-[1fr_auto] gap-4 text-sm relative'>
             <div className='pl-9 grid gap-1'>
@@ -27,21 +49,8 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
                 <FieldValueReview value={workExperienceEntry.company} />
                 {workExperienceEntry.startDate &&
                     workExperienceEntry.startDate.year &&
-                    workExperienceEntry.startDate.month >= 0 && (
-                        <div className='text-gray-500 dark:text-gray-400'>
-                            <Calendar className='w-4 h-4 inline-block mr-1' />
-                            {getMonth(workExperienceEntry.startDate.month)} {workExperienceEntry.startDate.year} -{' '}
-                            {workExperienceEntry.endDate &&
-                            workExperienceEntry.endDate.month >= 0 &&
-                            workExperienceEntry.endDate.year
-                                ? `${getMonth(workExperienceEntry.endDate.month)} ${workExperienceEntry.endDate.year}`
-                                : 'Present'}
-                        </div>
-                    )}
-                <div>
-                    <MapPin className='w-4 h-4 inline-block mr-1 text-gray-500 dark:text-gray-400' />
-                    {workExperienceEntry.location}
-                </div>
+                    workExperienceEntry.startDate.month >= 0 && <IconValueReview icon={Calendar} value={getPeriod()} />}
+                <IconValueReview icon={MapPin} value={workExperienceEntry.location} />
                 <FieldValueReview value={workExperienceEntry.role} />
                 <FieldValueReview
                     collapseOptions={collapseDescription ? { collapsable: true, parentRef } : undefined}
