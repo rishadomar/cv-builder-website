@@ -1,10 +1,5 @@
 import { LucideIcon } from 'lucide-react';
 
-type CollapseOptions = {
-    collapsable: boolean;
-    parentRef: React.RefObject<HTMLDivElement>;
-};
-
 type IconValueReviewProps = {
     icon: LucideIcon;
     value?: string;
