@@ -9,9 +9,8 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import YesNoFormField from '@/app/builder/YesNoFormField';
 import { KeyValuePairArray } from '@/lib/type';
-import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
+import { StepContainer } from '../StepContainer';
 
 const personalDetailsFormSchema = z.object({
     preferredPronoun: z
@@ -78,23 +77,20 @@ export default function PersonalDetailsForm({ onNext, onPrevious }: PersonalDeta
         <>
             <Form {...formHook}>
                 <form onSubmit={onSubmit}>
-                    <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                            <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                            <TextFormField
-                                formHook={formHook}
-                                label='Preferred pronoun'
-                                fieldName='preferredPronoun'
-                                description='Enter she/her, he/him, they/them.'
-                                placeholder='Your preferred pronoun'
-                            />
-                            <YesNoFormField
-                                formHook={formHook}
-                                label='Exclude my gender details from my CV?'
-                                fieldName='excludeGender'
-                            />
-                        </div>
-                    </div>
+                    <StepContainer step={step}>
+                        <TextFormField
+                            formHook={formHook}
+                            label='Preferred pronoun'
+                            fieldName='preferredPronoun'
+                            description='Enter she/her, he/him, they/them.'
+                            placeholder='Your preferred pronoun'
+                        />
+                        <YesNoFormField
+                            formHook={formHook}
+                            label='Exclude my gender details from my CV?'
+                            fieldName='excludeGender'
+                        />
+                    </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
             </Form>

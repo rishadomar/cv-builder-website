@@ -10,9 +10,8 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
-import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
+import { StepContainer } from '../StepContainer';
 
 const PhoneNumberRegex = /^(\+?\d{1,3})?[\s-]?(\(?\d{1,4}\)?)?[\s-]?\d{1,4}[\s-]?\d{1,4}[\s-]?\d{1,9}$/;
 
@@ -89,25 +88,22 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
     return (
         <Form {...formHook}>
             <form onSubmit={onSubmit}>
-                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                        <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                        <TextFormField
-                            formHook={formHook}
-                            label='Name'
-                            fieldName='name'
-                            description='This is the name that will be displayed on your profile and in emails.'
-                            placeholder='Your name'
-                        />
+                <StepContainer step={step}>
+                    <TextFormField
+                        formHook={formHook}
+                        label='Name'
+                        fieldName='name'
+                        description='This is the name that will be displayed on your profile and in emails.'
+                        placeholder='Your name'
+                    />
 
-                        <TextFormField
-                            formHook={formHook}
-                            label='Contact number'
-                            fieldName='phoneNumber'
-                            placeholder='Your contact number'
-                        />
-                    </div>
-                </div>
+                    <TextFormField
+                        formHook={formHook}
+                        label='Contact number'
+                        fieldName='phoneNumber'
+                        placeholder='Your contact number'
+                    />
+                </StepContainer>
 
                 <StepButtons onNext={onNext} />
             </form>

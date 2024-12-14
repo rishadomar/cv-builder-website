@@ -12,11 +12,10 @@ import { StepButtons } from '../StepButtons';
 import PillSelectFormField from '../PillSelectFormField';
 import { Loader, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
-import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
+import { StepContainer } from '../StepContainer';
 
 const reviewPersonalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -142,66 +141,63 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
         <>
             <Form {...formHook}>
                 <form onSubmit={onSubmit}>
-                    <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                            <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                            <PillSelectFormField
-                                fieldName='personalityTraits'
-                                availablePills={Traits}
-                                selectedPills={watchedPersonalityTraits}
-                                setSelectedPills={(selectedPills) => {
-                                    formHook.setValue('personalityTraits', selectedPills);
-                                    dispatch(setFieldValue({ field: 'personalityTraits', value: selectedPills }));
-                                }}
-                                customPills={{
-                                    allow: true,
-                                    placeholder: 'Add custom trait'
-                                }}
-                                error={formHook.formState.errors.personalityTraits?.message}
+                    <StepContainer step={step}>
+                        <PillSelectFormField
+                            fieldName='personalityTraits'
+                            availablePills={Traits}
+                            selectedPills={watchedPersonalityTraits}
+                            setSelectedPills={(selectedPills) => {
+                                formHook.setValue('personalityTraits', selectedPills);
+                                dispatch(setFieldValue({ field: 'personalityTraits', value: selectedPills }));
+                            }}
+                            customPills={{
+                                allow: true,
+                                placeholder: 'Add custom trait'
+                            }}
+                            error={formHook.formState.errors.personalityTraits?.message}
+                        />
+                        <div className='relative'>
+                            <TextareaFormField
+                                formHook={formHook}
+                                fieldName='personalityText'
+                                placeholder='AI generated text will appear here'
+                                rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
                             />
-                            <div className='relative'>
-                                <TextareaFormField
-                                    formHook={formHook}
-                                    fieldName='personalityText'
-                                    placeholder='AI generated text will appear here'
-                                    rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
-                                />
-                                {(isGeneratingPersonalityText || isImprovingPersonalityText) && (
-                                    <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
-                                        <Loader className='w-6 h-6 animate-spin' />
-                                    </div>
-                                )}
-                            </div>
-                            <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
-                                <Button
-                                    variant='outline'
-                                    disabled={isGeneratingPersonalityText}
-                                    onClick={() => generateAiText()}
-                                >
-                                    {watchedPersonalityText && watchedPersonalityText.length > 0 ? (
-                                        <RefreshCw className='mr-2 h-5 w-5' />
-                                    ) : (
-                                        <Sparkles className='mr-2 h-5 w-5' />
-                                    )}
-                                    {watchedPersonalityText && watchedPersonalityText.length > 0
-                                        ? 'Generate new text with AI'
-                                        : 'Generate text with AI'}
-                                </Button>
-                                <Button
-                                    variant='outline'
-                                    disabled={
-                                        isImprovingPersonalityText ||
-                                        !watchedPersonalityText ||
-                                        watchedPersonalityText.length === 0
-                                    }
-                                    onClick={() => improveAiText()}
-                                >
-                                    <Wand2 className='mr-2 h-5 w-5' />
-                                    Improve with AI
-                                </Button>
-                            </div>{' '}
+                            {(isGeneratingPersonalityText || isImprovingPersonalityText) && (
+                                <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
+                                    <Loader className='w-6 h-6 animate-spin' />
+                                </div>
+                            )}
                         </div>
-                    </div>
+                        <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
+                            <Button
+                                variant='outline'
+                                disabled={isGeneratingPersonalityText}
+                                onClick={() => generateAiText()}
+                            >
+                                {watchedPersonalityText && watchedPersonalityText.length > 0 ? (
+                                    <RefreshCw className='mr-2 h-5 w-5' />
+                                ) : (
+                                    <Sparkles className='mr-2 h-5 w-5' />
+                                )}
+                                {watchedPersonalityText && watchedPersonalityText.length > 0
+                                    ? 'Generate new text with AI'
+                                    : 'Generate text with AI'}
+                            </Button>
+                            <Button
+                                variant='outline'
+                                disabled={
+                                    isImprovingPersonalityText ||
+                                    !watchedPersonalityText ||
+                                    watchedPersonalityText.length === 0
+                                }
+                                onClick={() => improveAiText()}
+                            >
+                                <Wand2 className='mr-2 h-5 w-5' />
+                                Improve with AI
+                            </Button>
+                        </div>{' '}
+                    </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
             </Form>

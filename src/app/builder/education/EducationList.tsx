@@ -3,10 +3,9 @@ import AddEducationDialog from './AddEducationDialog';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
-import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { EducationItem } from './EducationItem';
+import { StepContainer } from '../StepContainer';
 
 type EducationListProps = {
     onNext: () => void;
@@ -35,27 +34,22 @@ export default function EducationList({ onNext, onPrevious }: EducationListProps
     }
 
     return (
-        <>
-            <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                    {busyUpdatingList && <OverlaySpinner />}
-                    <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                    {educationEntries &&
-                        educationEntries.map((educationEntry, index) => (
-                            <EducationItem
-                                key={index}
-                                educationEntry={educationEntry}
-                                setBusyUpdatingList={setBusyUpdatingList}
-                            />
-                        ))}
-                    <div>
-                        <AddEducationDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
-                        <form onSubmit={onSubmit} className='flex flex-col'>
-                            <StepButtons onNext={onNext} onPrevious={onPrevious} />
-                        </form>
-                    </div>
-                </div>
+        <StepContainer step={step}>
+            {busyUpdatingList && <OverlaySpinner />}
+            {educationEntries &&
+                educationEntries.map((educationEntry, index) => (
+                    <EducationItem
+                        key={index}
+                        educationEntry={educationEntry}
+                        setBusyUpdatingList={setBusyUpdatingList}
+                    />
+                ))}
+            <div>
+                <AddEducationDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
+                <form onSubmit={onSubmit} className='flex flex-col'>
+                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                </form>
             </div>
-        </>
+        </StepContainer>
     );
 }

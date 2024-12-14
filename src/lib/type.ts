@@ -1,5 +1,3 @@
-//import { IconProp } from '@fortawesome/fontawesome-svg-core';
-
 import { LucideIcon } from 'lucide-react';
 import { Currency } from 'react-paystack/dist/types';
 
@@ -155,7 +153,7 @@ export type StepPath =
 export type StepType = {
     id: number;
     title: string;
-    icon: LucideIcon;
+    icon?: LucideIcon;
     description: string;
     completed: boolean;
     path: StepPath;

@@ -11,13 +11,13 @@ import Paywall from '@/app/builder/paywall/Paywall';
 import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-details/ReviewPersonalityDetails';
 import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
 import { ProgressBar } from '@/components/ProgressBar';
-import { Steps } from '@/components/ProgressSteps';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import EducationList from './education/EducationList';
 import { Review } from './review/Review';
+import { Steps } from '@/lib/utils/step';
 
 const NumberOfPages = Steps.length;
 

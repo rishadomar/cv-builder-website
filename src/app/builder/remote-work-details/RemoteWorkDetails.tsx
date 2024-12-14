@@ -9,8 +9,7 @@ import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import YesNoFormField from '../YesNoFormField';
 import { getStep } from '@/lib/utils/step';
-import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
+import { StepContainer } from '../StepContainer';
 
 const remoteworkDetailsFormSchema = z.object({
     remoteWork: z.enum(['yes', 'no'], {
@@ -77,26 +76,19 @@ export default function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWork
     return (
         <Form {...formHook}>
             <form onSubmit={onSubmit}>
-                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4'>
-                        <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                        <YesNoFormField
-                            formHook={formHook}
-                            label='Are you prepared to work remotely?'
-                            fieldName='remoteWork'
-                        />
-                        <YesNoFormField
-                            formHook={formHook}
-                            label='Are you prepared to work partially remotely?'
-                            fieldName='partiallyRemote'
-                        />
-                        <YesNoFormField
-                            formHook={formHook}
-                            label='Do you prefer remote work?'
-                            fieldName='preferRemote'
-                        />
-                    </div>
-                </div>
+                <StepContainer step={step}>
+                    <YesNoFormField
+                        formHook={formHook}
+                        label='Are you prepared to work remotely?'
+                        fieldName='remoteWork'
+                    />
+                    <YesNoFormField
+                        formHook={formHook}
+                        label='Are you prepared to work partially remotely?'
+                        fieldName='partiallyRemote'
+                    />
+                    <YesNoFormField formHook={formHook} label='Do you prefer remote work?' fieldName='preferRemote' />
+                </StepContainer>
 
                 <StepButtons onPrevious={onPrevious} onNext={onNext} />
             </form>

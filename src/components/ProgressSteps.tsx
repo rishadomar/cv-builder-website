@@ -1,22 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
-import {
-    Bike,
-    Briefcase,
-    Check,
-    CircleChevronRight,
-    CreditCard,
-    Download,
-    BookCheck,
-    Globe,
-    GraduationCap,
-    Heart,
-    LucideIcon,
-    Mail,
-    MapPinHouse,
-    User
-} from 'lucide-react';
+import { Check, CircleChevronRight, LucideIcon } from 'lucide-react';
 import {
     selectIsContactDetailsPopulated,
     selectIsEducationPopulated,
@@ -31,120 +16,7 @@ import {
 import { useAppSelector } from '@/lib/store/hooks';
 import { Button } from './ui/button';
 import StepHeader from '@/app/builder/StepHeader';
-import { StepType } from '@/lib/type';
-
-export const Steps: StepType[] = [
-    {
-        id: 1,
-        title: 'Contact',
-        icon: Mail,
-        description: 'Provide contact details',
-        completed: true,
-        path: 'contact-details',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 2,
-        title: 'Personal',
-        icon: User,
-        description: 'Enter details about yourself',
-        completed: true,
-        path: 'personal-details',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 3,
-        title: 'Your location',
-        icon: MapPinHouse,
-        description: 'Provide your current location',
-        completed: false,
-        path: 'location-details',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 4,
-        title: 'Remote work preferences',
-        icon: Globe,
-        description: 'Select remote work preferences',
-        completed: false,
-        path: 'remote-work-details',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 5,
-        title: 'Personality',
-        icon: Heart,
-        description: 'Dive deeper into your personality',
-        completed: false,
-        path: 'personality-details',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 6,
-        title: 'Paywall capture',
-        icon: CreditCard,
-        description: 'Pay please to continue',
-        completed: false,
-        path: 'paywall',
-        showInSections: false,
-        paymentRequired: false
-    },
-    {
-        id: 7,
-        title: 'Hobbies',
-        icon: Bike,
-        description: 'What do you enjoy doing to accomplish a life/work balance',
-        completed: false,
-        path: 'hobbies',
-        showInSections: true,
-        paymentRequired: true
-    },
-    {
-        id: 8,
-        title: 'Education',
-        icon: GraduationCap,
-        description: 'Educational background',
-        completed: false,
-        path: 'education',
-        showInSections: true,
-        paymentRequired: true
-    },
-    {
-        id: 9,
-        title: 'Work experience',
-        icon: Briefcase,
-        description: 'Professional experience',
-        completed: false,
-        path: 'work-experience',
-        showInSections: true,
-        paymentRequired: true
-    },
-    {
-        id: 10,
-        title: 'Review',
-        icon: BookCheck,
-        description: 'Review your CV',
-        completed: false,
-        path: 'review',
-        showInSections: false,
-        paymentRequired: true
-    },
-    {
-        id: 11,
-        title: 'Generate & download CV',
-        icon: Download,
-        description: 'A PDF will be generated which you can download for keeps',
-        completed: false,
-        path: 'generate-pdf',
-        showInSections: false,
-        paymentRequired: true
-    }
-];
+import { Steps } from '@/lib/utils/step';
 
 type ProgressStepsProps = {
     onSelect: () => void;

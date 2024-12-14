@@ -9,13 +9,13 @@ import { useEffect, useState } from 'react';
 import PillSelectFormField from '../PillSelectFormField';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
-import StepHeader from '../StepHeader';
-import { Loader, LucideIcon, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
+import { Loader, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
 import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
+import { StepContainer } from '../StepContainer';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -143,64 +143,61 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
         <>
             <Form {...formHook}>
                 <form onSubmit={onSubmit}>
-                    <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4'>
-                            <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                            <PillSelectFormField
-                                fieldName='hobbies'
-                                availablePills={Hobbies}
-                                selectedPills={watchedHobbies}
-                                setSelectedPills={(selectedPills) => {
-                                    formHook.setValue('hobbies', selectedPills);
-                                    dispatch(setFieldValue({ field: 'hobbies', value: selectedPills }));
-                                }}
-                                error={formHook.formState.errors.hobbies?.message}
-                                customPills={{
-                                    allow: true,
-                                    placeholder: 'Add custom hobby'
-                                }}
+                    <StepContainer step={step}>
+                        <PillSelectFormField
+                            fieldName='hobbies'
+                            availablePills={Hobbies}
+                            selectedPills={watchedHobbies}
+                            setSelectedPills={(selectedPills) => {
+                                formHook.setValue('hobbies', selectedPills);
+                                dispatch(setFieldValue({ field: 'hobbies', value: selectedPills }));
+                            }}
+                            error={formHook.formState.errors.hobbies?.message}
+                            customPills={{
+                                allow: true,
+                                placeholder: 'Add custom hobby'
+                            }}
+                        />
+                        <div className='relative'>
+                            <TextareaFormField
+                                formHook={formHook}
+                                fieldName='hobbiesText'
+                                placeholder='AI generated text will appear here'
+                                rows={watchedHobbiesText && watchedHobbiesText.length > 0 ? 10 : 3}
                             />
-                            <div className='relative'>
-                                <TextareaFormField
-                                    formHook={formHook}
-                                    fieldName='hobbiesText'
-                                    placeholder='AI generated text will appear here'
-                                    rows={watchedHobbiesText && watchedHobbiesText.length > 0 ? 10 : 3}
-                                />
-                                {(isGeneratingHobbiesText || isImprovingHobbiesText) && (
-                                    <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
-                                        <Loader className='w-6 h-6 animate-spin' />
-                                    </div>
-                                )}
-                            </div>
-                            <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
-                                <Button
-                                    variant='outline'
-                                    disabled={isGeneratingHobbiesText}
-                                    onClick={() => generateAiText()}
-                                >
-                                    {watchedHobbiesText && watchedHobbiesText.length > 0 ? (
-                                        <RefreshCw className='mr-2 h-5 w-5' />
-                                    ) : (
-                                        <Sparkles className='mr-2 h-5 w-5' />
-                                    )}
-                                    {watchedHobbiesText && watchedHobbiesText.length > 0
-                                        ? 'Generate new text with AI'
-                                        : 'Generate text with AI'}
-                                </Button>
-                                <Button
-                                    variant='outline'
-                                    disabled={
-                                        isImprovingHobbiesText || !watchedHobbiesText || watchedHobbiesText.length === 0
-                                    }
-                                    onClick={() => improveAiText()}
-                                >
-                                    <Wand2 className='mr-2 h-5 w-5' />
-                                    Improve with AI
-                                </Button>
-                            </div>{' '}
+                            {(isGeneratingHobbiesText || isImprovingHobbiesText) && (
+                                <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
+                                    <Loader className='w-6 h-6 animate-spin' />
+                                </div>
+                            )}
                         </div>
-                    </div>
+                        <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
+                            <Button
+                                variant='outline'
+                                disabled={isGeneratingHobbiesText}
+                                onClick={() => generateAiText()}
+                            >
+                                {watchedHobbiesText && watchedHobbiesText.length > 0 ? (
+                                    <RefreshCw className='mr-2 h-5 w-5' />
+                                ) : (
+                                    <Sparkles className='mr-2 h-5 w-5' />
+                                )}
+                                {watchedHobbiesText && watchedHobbiesText.length > 0
+                                    ? 'Generate new text with AI'
+                                    : 'Generate text with AI'}
+                            </Button>
+                            <Button
+                                variant='outline'
+                                disabled={
+                                    isImprovingHobbiesText || !watchedHobbiesText || watchedHobbiesText.length === 0
+                                }
+                                onClick={() => improveAiText()}
+                            >
+                                <Wand2 className='mr-2 h-5 w-5' />
+                                Improve with AI
+                            </Button>
+                        </div>{' '}
+                    </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
             </Form>

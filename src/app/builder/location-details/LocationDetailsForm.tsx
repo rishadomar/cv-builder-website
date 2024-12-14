@@ -10,8 +10,7 @@ import YesNoFormField from '../YesNoFormField';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
-import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
+import { StepContainer } from '../StepContainer';
 
 const locationDetailsFormSchema = z.object({
     country: z
@@ -100,40 +99,37 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
     return (
         <Form {...formHook}>
             <form onSubmit={onSubmit}>
-                <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                        <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                        <TextFormField
-                            formHook={formHook}
-                            label='Country'
-                            fieldName='country'
-                            description='This is the country where you are located'
-                            placeholder='Your country'
-                        />
+                <StepContainer step={step}>
+                    <TextFormField
+                        formHook={formHook}
+                        label='Country'
+                        fieldName='country'
+                        description='This is the country where you are located'
+                        placeholder='Your country'
+                    />
 
-                        <TextFormField
-                            formHook={formHook}
-                            label='City'
-                            fieldName='city'
-                            description='This is the city where you are located'
-                            placeholder='Your city'
-                        />
+                    <TextFormField
+                        formHook={formHook}
+                        label='City'
+                        fieldName='city'
+                        description='This is the city where you are located'
+                        placeholder='Your city'
+                    />
 
-                        <TextFormField
-                            formHook={formHook}
-                            label='Province'
-                            fieldName='province'
-                            description='This is the province where you are located'
-                            placeholder='Your province'
-                        />
+                    <TextFormField
+                        formHook={formHook}
+                        label='Province'
+                        fieldName='province'
+                        description='This is the province where you are located'
+                        placeholder='Your province'
+                    />
 
-                        <YesNoFormField
-                            formHook={formHook}
-                            label='Are you prepared to relocate to another city?'
-                            fieldName='preparedToRelocate'
-                        />
-                    </div>
-                </div>
+                    <YesNoFormField
+                        formHook={formHook}
+                        label='Are you prepared to relocate to another city?'
+                        fieldName='preparedToRelocate'
+                    />
+                </StepContainer>
 
                 <StepButtons onPrevious={onPrevious} onNext={onNext} />
             </form>

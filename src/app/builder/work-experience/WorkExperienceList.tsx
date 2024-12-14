@@ -7,6 +7,7 @@ import StepHeader from '../StepHeader';
 import { LucideIcon } from 'lucide-react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { WorkExperienceItem } from './WorkExperienceItem';
+import { StepContainer } from '../StepContainer';
 
 type WorkExperienceListProps = {
     onNext: () => void;
@@ -35,26 +36,23 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
     }
 
     return (
-        <div className='h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] overflow-y-auto'>
-            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6'>
-                {busyUpdatingList && <OverlaySpinner />}
-                <StepHeader icon={step?.icon as LucideIcon} title={step?.title ?? ''} />
-                {workExperienceEntries &&
-                    workExperienceEntries.map((workExperienceEntry, index) => (
-                        <WorkExperienceItem
-                            key={index}
-                            workExperienceEntry={workExperienceEntry}
-                            setBusyUpdatingList={setBusyUpdatingList}
-                            collapseDescription={true}
-                        />
-                    ))}
-                <div>
-                    <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
-                    <form onSubmit={onSubmit} className='flex flex-col'>
-                        <StepButtons onNext={onNext} onPrevious={onPrevious} />
-                    </form>
-                </div>
+        <StepContainer step={step}>
+            {busyUpdatingList && <OverlaySpinner />}
+            {workExperienceEntries &&
+                workExperienceEntries.map((workExperienceEntry, index) => (
+                    <WorkExperienceItem
+                        key={index}
+                        workExperienceEntry={workExperienceEntry}
+                        setBusyUpdatingList={setBusyUpdatingList}
+                        collapseDescription={true}
+                    />
+                ))}
+            <div>
+                <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
+                <form onSubmit={onSubmit} className='flex flex-col'>
+                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                </form>
             </div>
-        </div>
+        </StepContainer>
     );
 }
