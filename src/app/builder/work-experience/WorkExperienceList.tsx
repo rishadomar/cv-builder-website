@@ -3,8 +3,6 @@ import AddWorkExperienceDialog from './AddWorkExperienceDialog';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
-import StepHeader from '../StepHeader';
-import { LucideIcon } from 'lucide-react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { WorkExperienceItem } from './WorkExperienceItem';
 import { StepContainer } from '../StepContainer';

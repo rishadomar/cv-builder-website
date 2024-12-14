@@ -1,5 +1,4 @@
-import { CollapsibleDescription } from '@/components/CollapsibleDescription';
-import { Check, LucideIcon } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 type CollapseOptions = {
     collapsable: boolean;

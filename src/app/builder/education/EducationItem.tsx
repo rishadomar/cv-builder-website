@@ -2,7 +2,7 @@ import { EducationEntry } from '@/lib/type';
 import EducationEntryActionsDropdown from './EducationEntryActionsDropdown';
 import { getMonth } from '@/lib/utils';
 import { FieldValueReview } from '../FieldValueReview';
-import { Calendar, Icon, MapPin, University } from 'lucide-react';
+import { Calendar, MapPin, University } from 'lucide-react';
 import { IconValueReview } from '../IconValueReview';
 
 type EducationItemProps = {

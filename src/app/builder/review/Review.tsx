@@ -1,6 +1,5 @@
 import { getStep } from '@/lib/utils/step';
 import { StepButtons } from '../StepButtons';
-import StepHeader from '../StepHeader';
 import { ContactDetailsReview } from '../contact-details/ContactDetailsReview';
 import { PersonalDetailsReview } from '../personal-details/PersonalDetailsReview';
 import { LocationDetailsReview } from '../location-details/LocationDetailsReview';

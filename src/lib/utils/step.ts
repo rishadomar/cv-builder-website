@@ -3,14 +3,12 @@ import {
     Briefcase,
     CreditCard,
     Download,
-    BookCheck,
     Globe,
     GraduationCap,
     Heart,
     Mail,
     MapPinHouse,
-    User,
-    Bird
+    User
 } from 'lucide-react';
 import { StepPath, StepType } from '../type';
 

@@ -1,6 +1,6 @@
 import { WorkExperienceEntry } from '@/lib/type';
 import WorkExperienceEntryActionsDropdown from './WorkExperienceEntryActionsDropdown';
-import { Calendar, Icon, MapPin } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 import { getMonth } from '@/lib/utils';
 import { useRef } from 'react';
 import { FieldValueReview } from '../FieldValueReview';
