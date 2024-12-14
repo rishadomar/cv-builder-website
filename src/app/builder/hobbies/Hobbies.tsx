@@ -58,6 +58,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     });
     const watchedHobbies = formHook.watch('hobbies');
     const watchedHobbiesText = formHook.watch('hobbiesText');
+    const { isDirty } = formHook.formState;
     const step = getStep('hobbies');
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generateHobbiesText, { isLoading: isGeneratingHobbiesText }] = useGenerateHobbiesTextMutation();
@@ -77,7 +78,9 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
         const submitterName = submitter?.name;
 
         const saveValues = (data: unknown) => {
-            dispatch(save(data as KeyValuePairArray));
+            if (isDirty) {
+                dispatch(save(data as KeyValuePairArray));
+            }
         };
 
         if (onNext && submitterName === 'next') {

@@ -36,6 +36,7 @@ export default function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWork
     const formHook = useForm<RemoteWorkDetailsFormValues>({
         resolver: zodResolver(remoteworkDetailsFormSchema)
     });
+    const { isDirty } = formHook.formState;
     const step = getStep('remote-work-details');
 
     useEffect(() => {
@@ -56,7 +57,9 @@ export default function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWork
                 : undefined;
 
         const saveValues = (data: unknown) => {
-            dispatch(save(data as KeyValuePairArray));
+            if (isDirty) {
+                dispatch(save(data as KeyValuePairArray));
+            }
         };
 
         if (onNext && submitterName === 'next') {

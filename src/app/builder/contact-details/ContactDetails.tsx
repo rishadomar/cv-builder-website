@@ -49,6 +49,7 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
     const formHook = useForm<ContactDetailsFormValues>({
         resolver: zodResolver(contactDetailsFormSchema)
     });
+    const { isDirty } = formHook.formState;
     const step = getStep('contact-details');
 
     useEffect(() => {
@@ -68,7 +69,9 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
                 : undefined;
 
         const saveValues = (data: unknown) => {
-            dispatch(save(data as KeyValuePairArray));
+            if (isDirty) {
+                dispatch(save(data as KeyValuePairArray));
+            }
         };
 
         if (onNext && submitterName === 'next') {

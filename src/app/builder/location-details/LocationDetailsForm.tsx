@@ -58,6 +58,7 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
     const formHook = useForm<LocationDetailsFormValues>({
         resolver: zodResolver(locationDetailsFormSchema)
     });
+    const { isDirty } = formHook.formState;
     const step = getStep('location-details');
 
     useEffect(() => {
@@ -79,7 +80,9 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
                 : undefined;
 
         const saveValues = (data: unknown) => {
-            dispatch(save(data as KeyValuePairArray));
+            if (isDirty) {
+                dispatch(save(data as KeyValuePairArray));
+            }
         };
 
         if (onNext && submitterName === 'next') {

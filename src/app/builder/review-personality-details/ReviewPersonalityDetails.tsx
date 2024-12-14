@@ -55,13 +55,13 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
     });
     const watchedPersonalityTraits = formHook.watch('personalityTraits');
     const watchedPersonalityText = formHook.watch('personalityText');
+    const { isDirty } = formHook.formState;
     const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generatePersonalityText, { isLoading: isGeneratingPersonalityText }] = useGeneratePersonalityTextMutation();
     const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
 
     useEffect(() => {
-        console.log('all field values changed: ', allFieldValues);
         if (allFieldValues) {
             formHook.reset({
                 personalityTraits: allFieldValues.personalityTraits || [],
@@ -75,7 +75,9 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
         const submitterName = submitter?.name;
 
         const saveValues = (data: unknown) => {
-            dispatch(save(data as KeyValuePairArray));
+            if (isDirty) {
+                dispatch(save(data as KeyValuePairArray));
+            }
         };
 
         if (onNext && submitterName === 'next') {

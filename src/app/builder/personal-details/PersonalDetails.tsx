@@ -37,6 +37,7 @@ export default function PersonalDetailsForm({ onNext, onPrevious }: PersonalDeta
     const formHook = useForm<PersonalDetailsFormValues>({
         resolver: zodResolver(personalDetailsFormSchema)
     });
+    const { isDirty } = formHook.formState;
     const step = getStep('personal-details');
 
     useEffect(() => {
@@ -56,7 +57,9 @@ export default function PersonalDetailsForm({ onNext, onPrevious }: PersonalDeta
                 : undefined;
 
         const saveValues = (data: unknown) => {
-            dispatch(save(data as KeyValuePairArray));
+            if (isDirty) {
+                dispatch(save(data as KeyValuePairArray));
+            }
         };
 
         if (onNext && submitterName === 'next') {

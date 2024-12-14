@@ -78,7 +78,6 @@ export default function EducationForm({ educationEntryToEdit, setBusyUpdating, o
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: EducationDetailsFormValues) => {
             try {
-                console.log('Set busy adding to true', data);
                 setBusyUpdating(true);
                 if (educationEntryToEdit) {
                     await dispatch(updateEducation({ ...(data as EducationEntry), id: educationEntryToEdit.id }));
@@ -98,7 +97,6 @@ export default function EducationForm({ educationEntryToEdit, setBusyUpdating, o
                     description: 'Failed to save'
                 });
             } finally {
-                console.log('Set busy adding to false');
                 setBusyUpdating(false);
             }
         };
