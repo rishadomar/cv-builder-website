@@ -45,6 +45,7 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                         workExperienceEntry={workExperienceEntry}
                         setBusyUpdatingList={setBusyUpdatingList}
                         collapseDescription={true}
+                        editable={true}
                     />
                 ))}
             <div>

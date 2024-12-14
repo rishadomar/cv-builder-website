@@ -9,12 +9,14 @@ type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
     setBusyUpdatingList: (v: boolean) => void;
     collapseDescription: boolean;
+    editable?: boolean;
 };
 
 export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
     workExperienceEntry,
     setBusyUpdatingList,
-    collapseDescription
+    collapseDescription,
+    editable = false
 }) => {
     const parentRef = useRef<HTMLDivElement>(null);
 
@@ -46,12 +48,12 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
                     value={workExperienceEntry.description}
                 />
             </div>
-            <div className=''>
+            {editable && (
                 <WorkExperienceEntryActionsDropdown
                     workExperienceEntry={workExperienceEntry}
                     setBusyUpdatingList={setBusyUpdatingList}
                 />
-            </div>
+            )}
         </div>
     );
 };

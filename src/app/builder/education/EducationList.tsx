@@ -42,6 +42,7 @@ export default function EducationList({ onNext, onPrevious }: EducationListProps
                         key={index}
                         educationEntry={educationEntry}
                         setBusyUpdatingList={setBusyUpdatingList}
+                        editable={true}
                     />
                 ))}
             <div>
