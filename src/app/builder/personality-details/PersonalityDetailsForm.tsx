@@ -127,7 +127,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
                                     variant='outline'
-                                    disabled={watchedPersonalityTraits?.length === 0 || isImprovingPersonalityText}
+                                    disabled={watchedPersonalityTraits?.length === 0 || isGeneratingPersonalityText}
                                     onClick={() => generateAiText()}
                                 >
                                     <Sparkles className='mr-2 h-5 w-5' />
@@ -140,7 +140,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                 formHook={formHook}
                                 fieldName='personalityText'
                                 placeholder='AI generated text will appear here'
-                                rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
+                                rows={watchedPersonalityText?.length > 0 ? 10 : 3}
                             />
                             <ImproveWithAIButton
                                 isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}

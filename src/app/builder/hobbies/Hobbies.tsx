@@ -16,6 +16,7 @@ import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
 import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
+import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -53,8 +54,13 @@ const Hobbies = [
 export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
+    const defaultValues: Partial<HobbyDetailsFormValues> = {
+        hobbies: allFieldValues.hobbies || [],
+        hobbiesText: allFieldValues.hobbiesText || ''
+    };
     const formHook = useForm<HobbyDetailsFormValues>({
-        resolver: zodResolver(hobbyDetailsFormSchema)
+        resolver: zodResolver(hobbyDetailsFormSchema),
+        defaultValues
     });
     const watchedHobbies = formHook.watch('hobbies');
     const watchedHobbiesText = formHook.watch('hobbiesText');
@@ -63,15 +69,6 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generateHobbiesText, { isLoading: isGeneratingHobbiesText }] = useGenerateHobbiesTextMutation();
     const [improveHobbiesText, { isLoading: isImprovingHobbiesText }] = useImproveHobbiesTextMutation();
-
-    useEffect(() => {
-        if (allFieldValues) {
-            formHook.reset({
-                hobbies: allFieldValues.hobbies || [],
-                hobbiesText: allFieldValues.hobbiesText || ''
-            });
-        }
-    }, [allFieldValues, formHook]);
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
@@ -98,48 +95,12 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     }
 
     const generateAiText = async () => {
-        try {
-            const newText = await generateHobbiesText({ hobbies: watchedHobbies }).unwrap();
-            if (watchedHobbies && watchedHobbiesText.length > 0) {
-                setCompareText({
-                    previousText: watchedHobbiesText,
-                    newText: newText,
-                    onAccept: (acceptedText: string) => {
-                        dispatch(setFieldValue({ field: 'hobbiesText', value: acceptedText }));
-                        setCompareText(undefined);
-                    },
-                    onReject: () => {
-                        setCompareText(undefined);
-                    }
-                });
-            } else {
-                dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
-            }
-        } catch {}
-    };
-
-    const improveAiText = async () => {
-        try {
-            const newText = await improveHobbiesText({
-                hobbies: watchedHobbies,
-                previousText: watchedHobbiesText
-            }).unwrap();
-            if (watchedHobbies && watchedHobbiesText.length > 0) {
-                setCompareText({
-                    previousText: watchedHobbiesText,
-                    newText: newText,
-                    onAccept: (acceptedText: string) => {
-                        dispatch(setFieldValue({ field: 'hobbiesText', value: acceptedText }));
-                        setCompareText(undefined);
-                    },
-                    onReject: () => {
-                        setCompareText(undefined);
-                    }
-                });
-            } else {
-                dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
-            }
-        } catch {}
+        const newText = await generateHobbiesText({ hobbies: watchedHobbies }).unwrap();
+        formHook.setValue('hobbiesText', newText, {
+            shouldValidate: true,
+            shouldDirty: true
+        });
+        dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
     };
 
     return (
@@ -161,45 +122,54 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 placeholder: 'Add custom hobby'
                             }}
                         />
+                        <small className='text-gray-500'>
+                            Select the hobbies you enjoy. You can also add custom hobbies. The AI will generate a text
+                            based on your hobbies.
+                        </small>
+                        {watchedHobbiesText?.length === 0 && (
+                            <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
+                                <Button
+                                    variant='outline'
+                                    disabled={watchedHobbies?.length === 0 || isGeneratingHobbiesText}
+                                    onClick={() => generateAiText()}
+                                >
+                                    <Sparkles className='mr-2 h-5 w-5' />
+                                    Generate text with AI
+                                </Button>
+                            </div>
+                        )}
                         <div className='relative'>
                             <TextareaFormField
                                 formHook={formHook}
                                 fieldName='hobbiesText'
                                 placeholder='AI generated text will appear here'
-                                rows={watchedHobbiesText && watchedHobbiesText.length > 0 ? 10 : 3}
+                                rows={watchedHobbiesText?.length > 0 ? 10 : 3}
                             />
-                            {(isGeneratingHobbiesText || isImprovingHobbiesText) && (
-                                <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
-                                    <Loader className='w-6 h-6 animate-spin' />
-                                </div>
-                            )}
+                            <ImproveWithAIButton
+                                isBusyImproving={isGeneratingHobbiesText || isImprovingHobbiesText}
+                                disabled={!watchedHobbiesText || watchedHobbiesText.length === 0}
+                                onClick={async () => {
+                                    const newText = await improveHobbiesText({
+                                        hobbies: watchedHobbies,
+                                        previousText: watchedHobbiesText
+                                    }).unwrap();
+                                    setCompareText({
+                                        previousText: watchedHobbiesText,
+                                        newText,
+                                        onAccept: (acceptedText: string) => {
+                                            formHook.setValue('hobbiesText', acceptedText, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            });
+                                            setCompareText(undefined);
+                                        },
+                                        onReject: () => {
+                                            setCompareText(undefined);
+                                        }
+                                    });
+                                }}
+                            />
                         </div>
-                        <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
-                            <Button
-                                variant='outline'
-                                disabled={isGeneratingHobbiesText}
-                                onClick={() => generateAiText()}
-                            >
-                                {watchedHobbiesText && watchedHobbiesText.length > 0 ? (
-                                    <RefreshCw className='mr-2 h-5 w-5' />
-                                ) : (
-                                    <Sparkles className='mr-2 h-5 w-5' />
-                                )}
-                                {watchedHobbiesText && watchedHobbiesText.length > 0
-                                    ? 'Generate new text with AI'
-                                    : 'Generate text with AI'}
-                            </Button>
-                            <Button
-                                variant='outline'
-                                disabled={
-                                    isImprovingHobbiesText || !watchedHobbiesText || watchedHobbiesText.length === 0
-                                }
-                                onClick={() => improveAiText()}
-                            >
-                                <Wand2 className='mr-2 h-5 w-5' />
-                                Improve with AI
-                            </Button>
-                        </div>{' '}
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
