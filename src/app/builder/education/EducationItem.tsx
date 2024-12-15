@@ -7,8 +7,8 @@ import { IconValueReview } from '../IconValueReview';
 
 type EducationItemProps = {
     educationEntry: EducationEntry;
-    busyUpdatingList: boolean;
-    setBusyUpdatingList: (v: boolean) => void;
+    busyUpdatingList?: boolean;
+    setBusyUpdatingList?: (v: boolean) => void;
     editable?: boolean;
 };
 
@@ -37,12 +37,14 @@ export const EducationItem: React.FC<EducationItemProps> = ({
                 <IconValueReview icon={MapPin} value={educationEntry.location} />
                 <FieldValueReview value={educationEntry.comment} />
             </div>
-            {editable && (
-                <EducationEntryActionsDropdown
-                    educationEntry={educationEntry}
-                    busyUpdating={busyUpdatingList}
-                    setBusyUpdatingList={setBusyUpdatingList}
-                />
+            {editable === true && busyUpdatingList !== undefined && setBusyUpdatingList !== undefined && (
+                <div className='self-start'>
+                    <EducationEntryActionsDropdown
+                        educationEntry={educationEntry}
+                        busyUpdating={busyUpdatingList}
+                        setBusyUpdatingList={setBusyUpdatingList}
+                    />
+                </div>
             )}
         </div>
     );

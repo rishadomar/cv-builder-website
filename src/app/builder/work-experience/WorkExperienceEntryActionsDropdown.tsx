@@ -27,24 +27,30 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     return (
-        <>
+        <div className='relative'>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <span>
+                    <button className='inline-flex items-center justify-center'>
                         <EllipsisVertical className='w-6 h-6 text-gray-600 cursor-pointer' />
-                    </span>
+                    </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent align='end'>
                     <DropdownMenuGroup>
-                        <DropdownMenuItem onSelect={() => setShowUpdateDialog(!showUpdateDialog)}>
-                            <PencilLine />
+                        <DropdownMenuItem
+                            className='flex items-center gap-2'
+                            onSelect={() => setShowUpdateDialog(!showUpdateDialog)}
+                        >
+                            <PencilLine className='w-4 h-4' />
                             <span>Update</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                        <DropdownMenuItem onSelect={() => setShowDeleteDialog(!showDeleteDialog)}>
-                            <Trash2 className='text-red-500' />
+                        <DropdownMenuItem
+                            className='flex items-center gap-2'
+                            onSelect={() => setShowDeleteDialog(!showDeleteDialog)}
+                        >
+                            <Trash2 className='w-4 h-4 text-red-500' />
                             <span className='text-red-500'>Delete</span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -64,7 +70,7 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                 workExperienceEntryToDelete={workExperienceEntry}
                 setBusyDeleting={(v) => setBusyUpdatingList(v)}
             />
-        </>
+        </div>
     );
 };
 
