@@ -1,76 +1,73 @@
+import React, { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { save } from '@/lib/services';
-import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { useEffect, useState } from 'react';
-import PillSelectFormField from '../PillSelectFormField';
-import { KeyValuePairArray } from '@/lib/type';
-import { getStep } from '@/lib/utils/step';
-import { Loader, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
-import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
-import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
-import TextareaFormField from '../TextareaFormField';
+import { save } from '@/lib/services';
 import { Button } from '@/components/ui/button';
-import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
+import { KeyValuePairArray } from '@/lib/type';
+import TextareaFormField from '../TextareaFormField';
+import { StepButtons } from '../StepButtons';
+import PillSelectFormField from '../PillSelectFormField';
+import { Loader, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
+import { getStep } from '@/lib/utils/step';
+import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
+import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
+import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
 import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
 
-const hobbyDetailsFormSchema = z.object({
-    hobbies: z.array(z.string()).default([]),
-    hobbiesText: z.string().default('')
+const personalityDetailsFormSchema = z.object({
+    personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
+    personalityText: z.string().default('')
 });
 
-type HobbyDetailsFormValues = z.infer<typeof hobbyDetailsFormSchema>;
+type PersonalityDetailsFormValues = z.infer<typeof personalityDetailsFormSchema>;
 
-type HobbyDetailsFormProps = {
-    onNext: () => void;
+type PersonalityDetailsFormProps = {
+    onNext?: () => void;
     onPrevious: () => void;
 };
 
-const Hobbies = [
-    'Sport',
-    'Music',
-    'Reading',
-    'Cooking',
-    'Gardening',
-    'Crafting',
-    'Photography',
-    'Painting',
-    'Drawing',
-    'Writing',
-    'Dancing',
-    'Singing',
-    'Acting',
-    'Traveling',
-    'Gaming',
-    'Volunteering',
-    'Collecting',
-    'Fishing'
+const Traits = [
+    'Team player',
+    'Introvert',
+    'Fun loving',
+    'Quiet',
+    'Extrovert',
+    'Outgoing',
+    'Creative',
+    'Confident',
+    'Empathetic',
+    'Compassionate',
+    'Adventurous',
+    'Thoughtful',
+    'Humorous',
+    'Optimistic',
+    'Independent'
 ];
 
-export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFormProps) {
+export default function PersonalityDetailsForm({ onNext, onPrevious }: PersonalityDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
-    const defaultValues: Partial<HobbyDetailsFormValues> = {
-        hobbies: allFieldValues.hobbies || [],
-        hobbiesText: allFieldValues.hobbiesText || ''
+    const defaultValues: Partial<PersonalityDetailsFormValues> = {
+        personalityTraits: allFieldValues.personalityTraits || [],
+        personalityText: allFieldValues.personalityText || ''
     };
-    const formHook = useForm<HobbyDetailsFormValues>({
-        resolver: zodResolver(hobbyDetailsFormSchema),
+    const formHook = useForm<PersonalityDetailsFormValues>({
+        resolver: zodResolver(personalityDetailsFormSchema),
         defaultValues
     });
-    const watchedHobbies = formHook.watch('hobbies');
-    const watchedHobbiesText = formHook.watch('hobbiesText');
+    const watchedPersonalityTraits = formHook.watch('personalityTraits');
+    const watchedPersonalityText = formHook.watch('personalityText');
     const { isDirty } = formHook.formState;
-    const step = getStep('hobbies');
+    const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
-    const [generateHobbiesText, { isLoading: isGeneratingHobbiesText }] = useGenerateHobbiesTextMutation();
-    const [improveHobbiesText, { isLoading: isImprovingHobbiesText }] = useImproveHobbiesTextMutation();
+    const [generatePersonalityText, { isLoading: isGeneratingPersonalityText }] = useGeneratePersonalityTextMutation();
+    const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
 
-    function onSubmit(event?: React.BaseSyntheticEvent) {
+    const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
         const submitterName = submitter?.name;
 
@@ -81,7 +78,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
         };
 
         if (onNext && submitterName === 'next') {
-            formHook.handleSubmit((data: HobbyDetailsFormValues) => {
+            formHook.handleSubmit((data: PersonalityDetailsFormValues) => {
                 saveValues(data);
                 onNext();
             })();
@@ -92,15 +89,15 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
         }
 
         event?.preventDefault();
-    }
+    };
 
     const generateAiText = async () => {
-        const newText = await generateHobbiesText({ hobbies: watchedHobbies }).unwrap();
-        formHook.setValue('hobbiesText', newText, {
+        const newText = await generatePersonalityText({ traits: watchedPersonalityTraits }).unwrap();
+        formHook.setValue('personalityText', newText, {
             shouldValidate: true,
             shouldDirty: true
         });
-        dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
+        dispatch(setFieldValue({ field: 'personalityText', value: newText }));
     };
 
     return (
@@ -109,28 +106,28 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                 <form onSubmit={onSubmit}>
                     <StepContainer step={step}>
                         <PillSelectFormField
-                            fieldName='hobbies'
-                            availablePills={Hobbies}
-                            selectedPills={watchedHobbies}
+                            fieldName='personalityTraits'
+                            availablePills={Traits}
+                            selectedPills={watchedPersonalityTraits}
                             setSelectedPills={(selectedPills) => {
-                                formHook.setValue('hobbies', selectedPills);
-                                dispatch(setFieldValue({ field: 'hobbies', value: selectedPills }));
+                                formHook.setValue('personalityTraits', selectedPills);
+                                dispatch(setFieldValue({ field: 'personalityTraits', value: selectedPills }));
                             }}
-                            error={formHook.formState.errors.hobbies?.message}
                             customPills={{
                                 allow: true,
-                                placeholder: 'Add custom hobby'
+                                placeholder: 'Add custom trait'
                             }}
+                            error={formHook.formState.errors.personalityTraits?.message}
                         />
                         <small className='text-gray-500'>
-                            Select the hobbies you enjoy. You can also add custom hobbies. The AI will generate a text
-                            based on your hobbies.
+                            Select the personality traits that best describe the person you are. You can also add custom
+                            traits. The AI will generate text based on these traits.
                         </small>
-                        {watchedHobbiesText?.length === 0 && (
+                        {watchedPersonalityText?.length === 0 && (
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
                                     variant='outline'
-                                    disabled={watchedHobbies?.length === 0 || isGeneratingHobbiesText}
+                                    disabled={watchedPersonalityTraits?.length === 0 || isGeneratingPersonalityText}
                                     onClick={() => generateAiText()}
                                 >
                                     <Sparkles className='mr-2 h-5 w-5' />
@@ -141,23 +138,23 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                         <div className='relative'>
                             <TextareaFormField
                                 formHook={formHook}
-                                fieldName='hobbiesText'
+                                fieldName='personalityText'
                                 placeholder='AI generated text will appear here'
-                                rows={watchedHobbiesText?.length > 0 ? 10 : 3}
+                                rows={watchedPersonalityText?.length > 0 ? 10 : 3}
                             />
                             <ImproveWithAIButton
-                                isBusyImproving={isGeneratingHobbiesText || isImprovingHobbiesText}
-                                disabled={!watchedHobbiesText || watchedHobbiesText.length === 0}
+                                isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}
+                                disabled={!watchedPersonalityText || watchedPersonalityText.length === 0}
                                 onClick={async () => {
-                                    const newText = await improveHobbiesText({
-                                        hobbies: watchedHobbies,
-                                        previousText: watchedHobbiesText
+                                    const newDescription = await improvePersonalityText({
+                                        traits: watchedPersonalityTraits,
+                                        previousText: watchedPersonalityText
                                     }).unwrap();
                                     setCompareText({
-                                        previousText: watchedHobbiesText,
-                                        newText,
+                                        previousText: watchedPersonalityText,
+                                        newText: newDescription,
                                         onAccept: (acceptedText: string) => {
-                                            formHook.setValue('hobbiesText', acceptedText, {
+                                            formHook.setValue('personalityText', acceptedText, {
                                                 shouldValidate: true,
                                                 shouldDirty: true
                                             });

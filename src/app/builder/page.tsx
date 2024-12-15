@@ -8,7 +8,7 @@ import RemoteWorkDetailsForm from '@/app/builder/remote-work-details/RemoteWorkD
 import HobbyDetailsForm from '@/app/builder/hobbies/Hobbies';
 import WorkExperienceList from '@/app/builder/work-experience/WorkExperienceList';
 import Paywall from '@/app/builder/paywall/Paywall';
-import ReviewPersonalityDetailsForm from '@/app/builder/review-personality-details/ReviewPersonalityDetails';
+import PersonalityDetailsForm from '@/app/builder/personality-details/PersonalityDetailsForm';
 import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
 import { ProgressBar } from '@/components/ProgressBar';
 import { useAuth } from '@/hooks/useAuth';
@@ -99,7 +99,7 @@ function FormContent() {
                     <RemoteWorkDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
                 {currentPage === 'personality-details' && (
-                    <ReviewPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                    <PersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
                 {currentPage === 'hobbies' && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'education' && <EducationList onNext={nextPage} onPrevious={previousPage} />}
@@ -116,9 +116,10 @@ function FormContent() {
 
 // Main component with proper Suspense boundary
 export default function BuilderPage() {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+    //const { isLoading: isFieldValuesLoading } = useAppSelector((state) => state.loading);
 
-    if (isLoading) {
+    if (isAuthLoading) {
         return (
             <div className='flex items-center justify-center h-screen'>
                 <OverlaySpinner />

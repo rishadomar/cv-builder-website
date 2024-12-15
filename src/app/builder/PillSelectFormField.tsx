@@ -76,6 +76,7 @@ export default function PillSelectFormField({
                     <Button
                         size='icon'
                         variant='outline'
+                        disabled={!customPill.trim()}
                         onClick={() => {
                             if (customPill.trim()) {
                                 setAllAvailablePills((prev) => [...prev, customPill.trim()]);

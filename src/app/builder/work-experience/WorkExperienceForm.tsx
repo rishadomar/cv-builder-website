@@ -171,7 +171,8 @@ export default function WorkExperienceForm({
                                 placeholder='Eg. I was responsible for...'
                             />
                             <ImproveWithAIButton
-                                disabled={watchedDescription.length === 0 || isImprovingWorkDescriptionText}
+                                isBusyImproving={isImprovingWorkDescriptionText}
+                                disabled={!watchedDescription || watchedDescription.length === 0}
                                 onClick={async () => {
                                     const newDescription = await improveWorkDescriptionText({
                                         workDetails: { company: watchedCompany },
