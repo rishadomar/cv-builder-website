@@ -13,6 +13,8 @@ export type AuthenticationResponse = {
     jwt: string;
 };
 
+export type FieldLayout = 'compact' | 'default';
+
 export type YesNoType = 'yes' | 'no';
 
 export interface Column {

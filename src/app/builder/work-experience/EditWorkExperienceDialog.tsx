@@ -5,6 +5,7 @@ import WorkExperienceForm from './WorkExperienceForm';
 
 interface EditWorkExperienceDialogProps {
     workExperienceEntryToEdit: WorkExperienceEntry;
+    busyUpdating: boolean;
     setBusyUpdating: (v: boolean) => void;
     dialogIsOpen: boolean;
     setDialogState: (v: boolean) => void;
@@ -14,6 +15,7 @@ export default function EditWorkExperienceDialog({
     dialogIsOpen,
     setDialogState,
     workExperienceEntryToEdit,
+    busyUpdating,
     setBusyUpdating
 }: EditWorkExperienceDialogProps) {
     return (
@@ -25,6 +27,7 @@ export default function EditWorkExperienceDialog({
 
                 <WorkExperienceForm
                     workExperienceEntryToEdit={workExperienceEntryToEdit}
+                    busyUpdating={busyUpdating}
                     setBusyUpdating={setBusyUpdating}
                     onClose={() => setDialogState(false)}
                 />

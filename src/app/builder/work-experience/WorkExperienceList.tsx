@@ -41,13 +41,17 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                     <WorkExperienceItem
                         key={index}
                         workExperienceEntry={workExperienceEntry}
+                        busyUpdatingList={busyUpdatingList}
                         setBusyUpdatingList={setBusyUpdatingList}
                         collapseDescription={true}
                         editable={true}
                     />
                 ))}
             <div>
-                <AddWorkExperienceDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
+                <AddWorkExperienceDialog
+                    busyUpdating={busyUpdatingList}
+                    setBusyUpdating={(v) => setBusyUpdatingList(v)}
+                />
                 <form onSubmit={onSubmit} className='flex flex-col'>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>

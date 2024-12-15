@@ -14,11 +14,13 @@ import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
 
 type WorkExperienceEntryActionsDropdownProps = {
     workExperienceEntry: WorkExperienceEntry;
+    busyUpdatingList: boolean;
     setBusyUpdatingList: (v: boolean) => void;
 };
 
 const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDropdownProps> = ({
     workExperienceEntry,
+    busyUpdatingList,
     setBusyUpdatingList
 }) => {
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
@@ -52,6 +54,7 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                 dialogIsOpen={showUpdateDialog}
                 setDialogState={setShowUpdateDialog}
                 workExperienceEntryToEdit={workExperienceEntry}
+                busyUpdating={busyUpdatingList}
                 setBusyUpdating={(v) => setBusyUpdatingList(v)}
             />
 

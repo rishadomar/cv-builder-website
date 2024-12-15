@@ -16,7 +16,7 @@ type DrawerDialogProps = {
     setIsOpen: (isOpen: boolean) => void;
     trigger?: React.ReactNode;
     title: string;
-    description: string;
+    description?: string;
     closeText?: string;
     content: React.ReactNode;
 };
@@ -39,7 +39,7 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
                 <DrawerContent>
                     <DrawerHeader>
                         <DrawerTitle>{title}</DrawerTitle>
-                        <DrawerDescription>{description}</DrawerDescription>
+                        {description && <DrawerDescription>{description}</DrawerDescription>}
                     </DrawerHeader>
                     {content}
                     {closeText && (

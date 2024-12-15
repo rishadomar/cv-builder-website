@@ -14,6 +14,7 @@ import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
 import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useState } from 'react';
+import { OverlaySpinner } from '@/components/OverlaySpinner';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z
@@ -58,12 +59,14 @@ type WorkExperienceDetailsFormValues = z.infer<typeof workExperienceDetailsFormS
 
 interface WorkExperienceFormProps {
     workExperienceEntryToEdit?: WorkExperienceEntry;
+    busyUpdating: boolean;
     setBusyUpdating: (v: boolean) => void;
     onClose: () => void;
 }
 
 export default function WorkExperienceForm({
     workExperienceEntryToEdit,
+    busyUpdating,
     setBusyUpdating,
     onClose
 }: WorkExperienceFormProps) {
@@ -91,7 +94,6 @@ export default function WorkExperienceForm({
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: WorkExperienceDetailsFormValues) => {
             try {
-                console.log('Set busy adding to true', data);
                 setBusyUpdating(true);
                 if (workExperienceEntryToEdit) {
                     await dispatch(
@@ -125,11 +127,10 @@ export default function WorkExperienceForm({
         event?.preventDefault();
     }
 
-    console.log('watchedDescription', watchedDescription);
     return (
         <>
             <Form {...formHook}>
-                {/* {busySaving && <OverlaySpinner />} */}
+                {busyUpdating && <OverlaySpinner />}
                 <form onSubmit={onSubmit} className='flex flex-col bg-white'>
                     <div className='xs:max-w-[400px] max-h-[500px] overflow-auto space-y-4 px-2'>
                         <TextFormField
@@ -138,19 +139,26 @@ export default function WorkExperienceForm({
                             fieldName='company'
                             placeholder='Company name'
                         />
-                        <YearMonthFormField formHook={formHook} label='Start date' fieldName='startDate' />
-                        <YearMonthFormField formHook={formHook} label='End date' fieldName='endDate' />
+                        <YearMonthFormField
+                            formHook={formHook}
+                            label='Start'
+                            fieldName='startDate'
+                            fieldLayout='compact'
+                        />
+                        <YearMonthFormField formHook={formHook} label='End' fieldName='endDate' fieldLayout='compact' />
                         <TextFormField
                             formHook={formHook}
                             label='Role'
                             fieldName='role'
                             placeholder='Eg. Intern, Software Engineer'
+                            fieldLayout='compact'
                         />
                         <TextFormField
                             formHook={formHook}
                             label='Location'
                             fieldName='location'
                             placeholder='Eg. Lagos, Nigeria'
+                            fieldLayout='compact'
                         />
                         <div className='relative'>
                             <TextareaFormField
@@ -184,7 +192,17 @@ export default function WorkExperienceForm({
                             />
                         </div>
                     </div>
-                    <div className='mt-4 flex justify-end'>
+                    <div className='m-4 flex justify-end'>
+                        <Button
+                            className='mr-3'
+                            variant='secondary'
+                            onClick={() => {
+                                onClose();
+                            }}
+                            disabled={isLoading}
+                        >
+                            Cancel
+                        </Button>
                         <Button type='submit' disabled={isLoading}>
                             Save
                         </Button>
