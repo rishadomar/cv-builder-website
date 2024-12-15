@@ -7,9 +7,7 @@ export async function generatePDF(sub: string): Promise<string> {
         const response = await axiosInstance.post('/generatePDF', {
             sub
         });
-        console.log(response.data);
-        // Return the response data
-        return response.data;
+        return response.data.pdf_id;
     } catch (error) {
         // Handle any errors
         console.error('Error fetching data:', error);

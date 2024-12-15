@@ -13,8 +13,8 @@ export const generatePDF = () => {
         }
         dispatch(setLoading(true));
         try {
-            const messageId = await api.generatePDF(getState().authentication.sub!);
-            dispatch(setFieldValues([{ field: 'pdf_id', value: messageId }]));
+            const pdfId = await api.generatePDF(getState().authentication.sub!);
+            dispatch(setFieldValues([{ field: 'pdf_id', value: pdfId }]));
         } catch (error) {
             console.error('Generate PDF error:', error);
             dispatch(addAxiosError({ title: 'Generate PDF ', error: error as Error }));
