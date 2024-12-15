@@ -1,15 +1,24 @@
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 
 type ConfirmDeleteDialogProps = {
+    isOpen: boolean;
+    onOpenChange: (isOpen: boolean) => void;
     onCancel: () => void;
     onDelete: () => void;
 };
 
-export const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({ onCancel, onDelete }) => {
+export const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
+    isOpen,
+    onOpenChange,
+    onCancel,
+    onDelete
+}) => {
     return (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4'>
-            <div className='bg-white p-4 rounded-lg'>
-                <p>Are you sure you want to delete this entry?</p>
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className='px-4'>
+                <DialogTitle>Are you sure you want to delete this entry?</DialogTitle>
+                <DialogDescription>Some description here</DialogDescription>
                 <div className='flex justify-end mt-4'>
                     <Button
                         className='mr-3'
@@ -28,7 +37,7 @@ export const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({ onCanc
                         Delete
                     </Button>
                 </div>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 };

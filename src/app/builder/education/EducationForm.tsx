@@ -178,16 +178,16 @@ export default function EducationForm({
                     </div>
                 </form>
             </Form>
-            {confirmClose && (
-                <ConfirmCloseDialog
-                    onCancel={() => setConfirmClose(false)}
-                    onClose={() => {
-                        console.log('on close');
-                        setConfirmClose(false);
-                        onClose();
-                    }}
-                />
-            )}
+            <ConfirmCloseDialog
+                isOpen={confirmClose}
+                onOpenChange={setConfirmClose}
+                onCancel={() => setConfirmClose(false)}
+                onClose={() => {
+                    console.log('on close');
+                    setConfirmClose(false);
+                    onClose();
+                }}
+            />
         </>
     );
 }

@@ -210,15 +210,16 @@ export default function WorkExperienceForm({
                     </div>
                 </form>
             </Form>
-            {confirmClose && (
-                <ConfirmCloseDialog
-                    onCancel={() => setConfirmClose(false)}
-                    onClose={() => {
-                        setConfirmClose(false);
-                        onClose();
-                    }}
-                />
-            )}
+
+            <ConfirmCloseDialog
+                isOpen={confirmClose}
+                onOpenChange={setConfirmClose}
+                onCancel={() => setConfirmClose(false)}
+                onClose={() => {
+                    setConfirmClose(false);
+                    onClose();
+                }}
+            />
             {compareText && <CompareText isOpen={true} setIsOpen={() => setCompareText(undefined)} {...compareText} />}
         </>
     );

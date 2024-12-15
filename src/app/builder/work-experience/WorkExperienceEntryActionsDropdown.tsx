@@ -7,10 +7,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import EditWorkExperienceDialog from './EditWorkExperienceDialog';
-import DeleteWorkExperienceDialog from './DeleteWorkExperienceDialog';
 import { WorkExperienceEntry } from '@/lib/type';
 import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
+import { DrawerDialog } from '@/components/DrawerDialog';
+import WorkExperienceForm from './WorkExperienceForm';
+import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
+import { deleteWorkExperience } from '@/lib/services';
+import { toast } from 'react-toastify';
+import { useAppDispatch } from '@/lib/store/hooks';
 
 type WorkExperienceEntryActionsDropdownProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -25,6 +29,7 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
 }) => {
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const dispatch = useAppDispatch();
 
     return (
         <div className='relative'>
@@ -56,19 +61,32 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <EditWorkExperienceDialog
-                dialogIsOpen={showUpdateDialog}
-                setDialogState={setShowUpdateDialog}
-                workExperienceEntryToEdit={workExperienceEntry}
-                busyUpdating={busyUpdatingList}
-                setBusyUpdating={(v) => setBusyUpdatingList(v)}
+
+            <DrawerDialog
+                isOpen={showUpdateDialog}
+                setIsOpen={setShowUpdateDialog}
+                title='Update Work Experience'
+                content={
+                    <WorkExperienceForm
+                        workExperienceEntryToEdit={workExperienceEntry}
+                        setBusyUpdating={setBusyUpdatingList}
+                        busyUpdating={busyUpdatingList}
+                        onClose={() => setShowUpdateDialog(false)}
+                    />
+                }
             />
 
-            <DeleteWorkExperienceDialog
-                dialogIsOpen={showDeleteDialog}
-                setDialogState={setShowDeleteDialog}
-                workExperienceEntryToDelete={workExperienceEntry}
-                setBusyDeleting={(v) => setBusyUpdatingList(v)}
+            <ConfirmDeleteDialog
+                isOpen={showDeleteDialog}
+                onOpenChange={setShowDeleteDialog}
+                onCancel={() => setShowDeleteDialog(false)}
+                onDelete={async () => {
+                    setBusyUpdatingList(true);
+                    await dispatch(deleteWorkExperience(workExperienceEntry));
+                    toast.success('Successfully deleted');
+                    setBusyUpdatingList(false);
+                    setShowDeleteDialog(false);
+                }}
             />
         </div>
     );

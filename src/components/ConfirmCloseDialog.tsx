@@ -1,15 +1,19 @@
 import { Button } from './ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 
 type ConfirmCloseDialogProps = {
+    isOpen: boolean;
+    onOpenChange: (isOpen: boolean) => void;
     onCancel: () => void;
     onClose: () => void;
 };
 
-export const ConfirmCloseDialog: React.FC<ConfirmCloseDialogProps> = ({ onCancel, onClose }) => {
+export const ConfirmCloseDialog: React.FC<ConfirmCloseDialogProps> = ({ isOpen, onOpenChange, onCancel, onClose }) => {
     return (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4'>
-            <div className='bg-white p-4 rounded-lg'>
-                <p>Are you sure you want to close? You have unsaved changes.</p>
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className='px-4'>
+                <DialogTitle>Are you sure you want to close this entry?</DialogTitle>
+                <DialogDescription>You may lose any unsaved changes</DialogDescription>
                 <div className='flex justify-end mt-4'>
                     <Button
                         className='mr-3'
@@ -28,7 +32,7 @@ export const ConfirmCloseDialog: React.FC<ConfirmCloseDialogProps> = ({ onCancel
                         Close
                     </Button>
                 </div>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 };
