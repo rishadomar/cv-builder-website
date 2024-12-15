@@ -17,14 +17,14 @@ import { CompareText, CompareTextState } from '@/components/compareText/CompareT
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
 
-const reviewPersonalityDetailsFormSchema = z.object({
+const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
     personalityText: z.string().default('')
 });
 
-type ReviewPersonalityDetailsFormValues = z.infer<typeof reviewPersonalityDetailsFormSchema>;
+type PersonalityDetailsFormValues = z.infer<typeof personalityDetailsFormSchema>;
 
-type ReviewPersonalityDetailsFormProps = {
+type PersonalityDetailsFormProps = {
     onNext?: () => void;
     onPrevious: () => void;
 };
@@ -47,11 +47,11 @@ const Traits = [
     'Independent'
 ];
 
-export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: ReviewPersonalityDetailsFormProps) {
+export default function PersonalityDetailsForm({ onNext, onPrevious }: PersonalityDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
-    const formHook = useForm<ReviewPersonalityDetailsFormValues>({
-        resolver: zodResolver(reviewPersonalityDetailsFormSchema)
+    const formHook = useForm<PersonalityDetailsFormValues>({
+        resolver: zodResolver(personalityDetailsFormSchema)
     });
     const watchedPersonalityTraits = formHook.watch('personalityTraits');
     const watchedPersonalityText = formHook.watch('personalityText');
@@ -81,7 +81,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
         };
 
         if (onNext && submitterName === 'next') {
-            formHook.handleSubmit((data: ReviewPersonalityDetailsFormValues) => {
+            formHook.handleSubmit((data: PersonalityDetailsFormValues) => {
                 saveValues(data);
                 onNext();
             })();
@@ -158,6 +158,10 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                             }}
                             error={formHook.formState.errors.personalityTraits?.message}
                         />
+                        <small className='text-gray-500'>
+                            Select the personality traits that best describe the person you are. You can also add custom
+                            traits. The AI will generate text based on these traits.
+                        </small>
                         <div className='relative'>
                             <TextareaFormField
                                 formHook={formHook}
@@ -174,7 +178,7 @@ export default function ReviewPersonalityDetailsForm({ onNext, onPrevious }: Rev
                         <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                             <Button
                                 variant='outline'
-                                disabled={isGeneratingPersonalityText}
+                                disabled={isGeneratingPersonalityText || watchedPersonalityTraits.length === 0}
                                 onClick={() => generateAiText()}
                             >
                                 {watchedPersonalityText && watchedPersonalityText.length > 0 ? (
