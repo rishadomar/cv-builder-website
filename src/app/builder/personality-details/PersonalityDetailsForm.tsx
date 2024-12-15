@@ -16,6 +16,7 @@ import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
+import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -50,8 +51,13 @@ const Traits = [
 export default function PersonalityDetailsForm({ onNext, onPrevious }: PersonalityDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
+    const defaultValues: Partial<PersonalityDetailsFormValues> = {
+        personalityTraits: allFieldValues.personalityTraits || [],
+        personalityText: allFieldValues.personalityText || ''
+    };
     const formHook = useForm<PersonalityDetailsFormValues>({
-        resolver: zodResolver(personalityDetailsFormSchema)
+        resolver: zodResolver(personalityDetailsFormSchema),
+        defaultValues
     });
     const watchedPersonalityTraits = formHook.watch('personalityTraits');
     const watchedPersonalityText = formHook.watch('personalityText');
@@ -60,15 +66,6 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generatePersonalityText, { isLoading: isGeneratingPersonalityText }] = useGeneratePersonalityTextMutation();
     const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
-
-    useEffect(() => {
-        if (allFieldValues) {
-            formHook.reset({
-                personalityTraits: allFieldValues.personalityTraits || [],
-                personalityText: allFieldValues.personalityText || ''
-            });
-        }
-    }, [allFieldValues, formHook]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
@@ -95,48 +92,12 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     };
 
     const generateAiText = async () => {
-        try {
-            const newText = await generatePersonalityText({ traits: watchedPersonalityTraits }).unwrap();
-            if (watchedPersonalityText && watchedPersonalityText.length > 0) {
-                setCompareText({
-                    previousText: watchedPersonalityText,
-                    newText: newText,
-                    onAccept: (acceptedText: string) => {
-                        dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
-                        setCompareText(undefined);
-                    },
-                    onReject: () => {
-                        setCompareText(undefined);
-                    }
-                });
-            } else {
-                dispatch(setFieldValue({ field: 'personalityText', value: newText }));
-            }
-        } catch {}
-    };
-
-    const improveAiText = async () => {
-        try {
-            const newText = await improvePersonalityText({
-                traits: watchedPersonalityTraits,
-                previousText: watchedPersonalityText
-            }).unwrap();
-            if (watchedPersonalityText && watchedPersonalityText.length > 0) {
-                setCompareText({
-                    previousText: watchedPersonalityText,
-                    newText: newText,
-                    onAccept: (acceptedText: string) => {
-                        dispatch(setFieldValue({ field: 'personalityText', value: acceptedText }));
-                        setCompareText(undefined);
-                    },
-                    onReject: () => {
-                        setCompareText(undefined);
-                    }
-                });
-            } else {
-                dispatch(setFieldValue({ field: 'personalityText', value: newText }));
-            }
-        } catch {}
+        const newText = await generatePersonalityText({ traits: watchedPersonalityTraits }).unwrap();
+        formHook.setValue('personalityText', newText, {
+            shouldValidate: true,
+            shouldDirty: true
+        });
+        dispatch(setFieldValue({ field: 'personalityText', value: newText }));
     };
 
     return (
@@ -162,6 +123,18 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                             Select the personality traits that best describe the person you are. You can also add custom
                             traits. The AI will generate text based on these traits.
                         </small>
+                        {watchedPersonalityText?.length === 0 && (
+                            <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
+                                <Button
+                                    variant='outline'
+                                    disabled={watchedPersonalityTraits?.length === 0 || isImprovingPersonalityText}
+                                    onClick={() => generateAiText()}
+                                >
+                                    <Sparkles className='mr-2 h-5 w-5' />
+                                    Generate text with AI
+                                </Button>
+                            </div>
+                        )}
                         <div className='relative'>
                             <TextareaFormField
                                 formHook={formHook}
@@ -169,40 +142,31 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                 placeholder='AI generated text will appear here'
                                 rows={watchedPersonalityText && watchedPersonalityText.length > 0 ? 10 : 3}
                             />
-                            {(isGeneratingPersonalityText || isImprovingPersonalityText) && (
-                                <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-75'>
-                                    <Loader className='w-6 h-6 animate-spin' />
-                                </div>
-                            )}
+                            <ImproveWithAIButton
+                                isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}
+                                disabled={!watchedPersonalityText || watchedPersonalityText.length === 0}
+                                onClick={async () => {
+                                    const newDescription = await improvePersonalityText({
+                                        traits: watchedPersonalityTraits,
+                                        previousText: watchedPersonalityText
+                                    }).unwrap();
+                                    setCompareText({
+                                        previousText: watchedPersonalityText,
+                                        newText: newDescription,
+                                        onAccept: (acceptedText: string) => {
+                                            formHook.setValue('personalityText', acceptedText, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            });
+                                            setCompareText(undefined);
+                                        },
+                                        onReject: () => {
+                                            setCompareText(undefined);
+                                        }
+                                    });
+                                }}
+                            />
                         </div>
-                        <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
-                            <Button
-                                variant='outline'
-                                disabled={isGeneratingPersonalityText || watchedPersonalityTraits.length === 0}
-                                onClick={() => generateAiText()}
-                            >
-                                {watchedPersonalityText && watchedPersonalityText.length > 0 ? (
-                                    <RefreshCw className='mr-2 h-5 w-5' />
-                                ) : (
-                                    <Sparkles className='mr-2 h-5 w-5' />
-                                )}
-                                {watchedPersonalityText && watchedPersonalityText.length > 0
-                                    ? 'Generate new text with AI'
-                                    : 'Generate text with AI'}
-                            </Button>
-                            <Button
-                                variant='outline'
-                                disabled={
-                                    isImprovingPersonalityText ||
-                                    !watchedPersonalityText ||
-                                    watchedPersonalityText.length === 0
-                                }
-                                onClick={() => improveAiText()}
-                            >
-                                <Wand2 className='mr-2 h-5 w-5' />
-                                Improve with AI
-                            </Button>
-                        </div>{' '}
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
