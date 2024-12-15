@@ -46,12 +46,12 @@ export default function EducationList({ onNext, onPrevious }: EducationListProps
                         editable={true}
                     />
                 ))}
-            <div>
+            <div className='flex justify-center my-4'>
                 <AddEducationDialog busyUpdating={busyUpdatingList} setBusyUpdating={setBusyUpdatingList} />
-                <form onSubmit={onSubmit} className='flex flex-col'>
-                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
-                </form>
             </div>
+            <form onSubmit={onSubmit} className='flex flex-col'>
+                <StepButtons onNext={onNext} onPrevious={onPrevious} />
+            </form>
         </StepContainer>
     );
 }

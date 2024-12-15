@@ -59,7 +59,7 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
                     value={workExperienceEntry.description}
                 />
             </div>
-            {editable && busyUpdatingList && setBusyUpdatingList && (
+            {editable === true && busyUpdatingList !== undefined && setBusyUpdatingList !== undefined && (
                 <WorkExperienceEntryActionsDropdown
                     workExperienceEntry={workExperienceEntry}
                     busyUpdatingList={busyUpdatingList}

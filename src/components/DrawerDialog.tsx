@@ -30,8 +30,6 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
     closeText,
     content
 }) => {
-    console.log('DrawerDialog -> isOpen', isOpen);
-
     if (isMobile()) {
         return (
             <Drawer open={isOpen} onOpenChange={setIsOpen}>

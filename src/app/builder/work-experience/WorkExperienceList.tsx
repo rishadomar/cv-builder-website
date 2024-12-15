@@ -47,15 +47,15 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                         editable={true}
                     />
                 ))}
-            <div>
+            <div className='flex justify-center my-4'>
                 <AddWorkExperienceDialog
                     busyUpdating={busyUpdatingList}
                     setBusyUpdating={(v) => setBusyUpdatingList(v)}
                 />
-                <form onSubmit={onSubmit} className='flex flex-col'>
-                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
-                </form>
             </div>
+            <form onSubmit={onSubmit} className='flex flex-col'>
+                <StepButtons onNext={onNext} onPrevious={onPrevious} />
+            </form>
         </StepContainer>
     );
 }

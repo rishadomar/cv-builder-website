@@ -19,12 +19,10 @@ export default function AddEducationDialog({ busyUpdating, setBusyUpdating }: Ad
             isOpen={dialogIsOpen}
             setIsOpen={setDialogIsOpen}
             trigger={
-                <div className='flex justify-center items-center'>
-                    <Button variant='outline' onClick={() => setDialogIsOpen(true)}>
-                        <Plus className='mr-2' />
-                        Add education
-                    </Button>
-                </div>
+                <Button variant='outline' onClick={() => setDialogIsOpen(true)}>
+                    <Plus className='mr-2' />
+                    Add education
+                </Button>
             }
             title='Education specification'
             content={

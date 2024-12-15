@@ -19,12 +19,10 @@ export default function AddWorkExperienceDialog({ busyUpdating, setBusyUpdating 
             isOpen={dialogIsOpen}
             setIsOpen={setDialogIsOpen}
             trigger={
-                <div className='flex justify-center items-center'>
-                    <Button variant='outline' onClick={() => setDialogIsOpen(true)}>
-                        <Plus className='mr-2' />
-                        Add work experience
-                    </Button>
-                </div>
+                <Button variant='outline' onClick={() => setDialogIsOpen(true)}>
+                    <Plus className='mr-2' />
+                    Add work experience
+                </Button>
             }
             title='Work specification'
             content={
