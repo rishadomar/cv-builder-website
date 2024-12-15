@@ -15,7 +15,12 @@ export const EducationReview: React.FC = () => {
             <div className='flex flex-col gap-6'>
                 {educationEntries &&
                     educationEntries.map((educationEntry, index) => (
-                        <EducationItem key={index} educationEntry={educationEntry} setBusyUpdatingList={() => {}} />
+                        <EducationItem
+                            key={index}
+                            educationEntry={educationEntry}
+                            setBusyUpdatingList={() => {}}
+                            collapseComment={false}
+                        />
                     ))}
             </div>
         </div>

@@ -44,6 +44,7 @@ export default function EducationList({ onNext, onPrevious }: EducationListProps
                         busyUpdatingList={busyUpdatingList}
                         setBusyUpdatingList={setBusyUpdatingList}
                         editable={true}
+                        collapseComment={true}
                     />
                 ))}
             <div className='flex justify-center my-4'>
