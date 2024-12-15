@@ -4,12 +4,12 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import EditWorkExperienceDialog from './EditWorkExperienceDialog';
 import DeleteWorkExperienceDialog from './DeleteWorkExperienceDialog';
 import { WorkExperienceEntry } from '@/lib/type';
-import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
 
 type WorkExperienceEntryActionsDropdownProps = {

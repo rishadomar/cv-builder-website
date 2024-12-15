@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
-import { Label } from '@radix-ui/react-label';
+import { Label } from '@/components/ui/label';
 import { EyeIcon, EyeOff, Check, X } from 'lucide-react';
 
 interface PasswordFieldProps {

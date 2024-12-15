@@ -4,10 +4,10 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { EducationEntry } from '@/lib/type';
-import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
 import EducationForm from './EducationForm';
 import { DrawerDialog } from '@/components/DrawerDialog';

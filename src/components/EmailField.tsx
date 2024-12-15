@@ -1,8 +1,8 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Input } from '@/components/ui/input';
-import { Label } from '@radix-ui/react-label';
 import { Check, X } from 'lucide-react';
 import { validateEmail } from '@/lib/utils/email';
+import { Label } from '@/components/ui/label';
 
 interface EmailFieldProps {
     value: string;
