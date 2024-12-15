@@ -9,6 +9,7 @@ import * as services from '@/lib/services';
 import { getStep } from '@/lib/utils/step';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { formatDateTime } from '@/lib/utils';
+import { toast } from 'react-toastify';
 
 type GeneratePDFProps = {
     onNext?: () => void;
@@ -37,6 +38,7 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
     const handleGeneratePDF = async () => {
         try {
             await dispatch(services.generatePDF());
+            toast.success('PDF generated successfully. Ready to be downloaded.');
         } catch (error) {
             console.error('Generate PDF error:', error);
         } finally {
