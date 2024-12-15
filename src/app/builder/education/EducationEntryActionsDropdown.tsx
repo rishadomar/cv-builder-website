@@ -75,18 +75,18 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
                     />
                 }
             />
-            {showDeleteDialog && (
-                <ConfirmDeleteDialog
-                    onCancel={() => setShowDeleteDialog(false)}
-                    onDelete={async () => {
-                        setBusyUpdatingList(true);
-                        await dispatch(deleteEducation(educationEntry));
-                        toast.success('Successfully deleted');
-                        setBusyUpdatingList(false);
-                        setShowDeleteDialog(false);
-                    }}
-                />
-            )}
+            <ConfirmDeleteDialog
+                isOpen={showDeleteDialog}
+                onOpenChange={setShowDeleteDialog}
+                onCancel={() => setShowDeleteDialog(false)}
+                onDelete={async () => {
+                    setBusyUpdatingList(true);
+                    await dispatch(deleteEducation(educationEntry));
+                    toast.success('Successfully deleted');
+                    setBusyUpdatingList(false);
+                    setShowDeleteDialog(false);
+                }}
+            />
         </div>
     );
 };
