@@ -5,6 +5,7 @@ import EducationForm from './EducationForm';
 
 interface EditEducationDialogProps {
     educationEntryToEdit: EducationEntry;
+    busyUpdating: boolean;
     setBusyUpdating: (v: boolean) => void;
     dialogIsOpen: boolean;
     setDialogState: (v: boolean) => void;
@@ -14,6 +15,7 @@ export default function EditEducationDialog({
     dialogIsOpen,
     setDialogState,
     educationEntryToEdit,
+    busyUpdating,
     setBusyUpdating
 }: EditEducationDialogProps) {
     return (
@@ -25,6 +27,7 @@ export default function EditEducationDialog({
 
                 <EducationForm
                     educationEntryToEdit={educationEntryToEdit}
+                    busyUpdating={busyUpdating}
                     setBusyUpdating={setBusyUpdating}
                     onClose={() => setDialogState(false)}
                 />

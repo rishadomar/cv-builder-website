@@ -36,7 +36,7 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
         return (
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
                 {trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
-                <DrawerContent>
+                <DrawerContent className='px-3'>
                     <DrawerHeader>
                         <DrawerTitle>{title}</DrawerTitle>
                         {description && <DrawerDescription>{description}</DrawerDescription>}
@@ -57,7 +57,7 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
             <DialogContent>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogDescription>{description}</DialogDescription>
+                {description && <DialogDescription>{description}</DialogDescription>}
                 {content}
             </DialogContent>
         </Dialog>

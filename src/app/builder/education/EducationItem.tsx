@@ -7,12 +7,14 @@ import { IconValueReview } from '../IconValueReview';
 
 type EducationItemProps = {
     educationEntry: EducationEntry;
+    busyUpdatingList: boolean;
     setBusyUpdatingList: (v: boolean) => void;
     editable?: boolean;
 };
 
 export const EducationItem: React.FC<EducationItemProps> = ({
     educationEntry,
+    busyUpdatingList,
     setBusyUpdatingList,
     editable = false
 }) => {
@@ -38,6 +40,7 @@ export const EducationItem: React.FC<EducationItemProps> = ({
             {editable && (
                 <EducationEntryActionsDropdown
                     educationEntry={educationEntry}
+                    busyUpdating={busyUpdatingList}
                     setBusyUpdatingList={setBusyUpdatingList}
                 />
             )}

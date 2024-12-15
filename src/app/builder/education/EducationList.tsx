@@ -41,12 +41,13 @@ export default function EducationList({ onNext, onPrevious }: EducationListProps
                     <EducationItem
                         key={index}
                         educationEntry={educationEntry}
+                        busyUpdatingList={busyUpdatingList}
                         setBusyUpdatingList={setBusyUpdatingList}
                         editable={true}
                     />
                 ))}
             <div>
-                <AddEducationDialog setBusyUpdating={(v) => setBusyUpdatingList(v)} />
+                <AddEducationDialog busyUpdating={busyUpdatingList} setBusyUpdating={setBusyUpdatingList} />
                 <form onSubmit={onSubmit} className='flex flex-col'>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>

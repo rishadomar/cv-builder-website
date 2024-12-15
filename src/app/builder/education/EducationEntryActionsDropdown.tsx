@@ -14,11 +14,13 @@ import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
 
 type EducationEntryActionsDropdownProps = {
     educationEntry: EducationEntry;
+    busyUpdating: boolean;
     setBusyUpdatingList: (v: boolean) => void;
 };
 
 const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps> = ({
     educationEntry,
+    busyUpdating,
     setBusyUpdatingList
 }) => {
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
@@ -52,6 +54,7 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
                 dialogIsOpen={showUpdateDialog}
                 setDialogState={setShowUpdateDialog}
                 educationEntryToEdit={educationEntry}
+                busyUpdating={busyUpdating}
                 setBusyUpdating={(v) => setBusyUpdatingList(v)}
             />
 
