@@ -14,7 +14,12 @@ export const generatePDF = () => {
         dispatch(setLoading(true));
         try {
             const pdfId = await api.generatePDF(getState().authentication.sub!);
-            dispatch(setFieldValues([{ field: 'pdf_id', value: pdfId }]));
+            dispatch(
+                setFieldValues([
+                    { field: 'pdf_id', value: pdfId },
+                    { field: 'pdf_generated_date', value: new Date().toISOString() }
+                ])
+            );
         } catch (error) {
             console.error('Generate PDF error:', error);
             dispatch(addAxiosError({ title: 'Generate PDF ', error: error as Error }));
@@ -33,8 +38,7 @@ export const downloadPDF = () => {
         dispatch(setLoading(true));
         try {
             const presignedUrl = await api.downloadPDF(getState().authentication.sub!);
-            console.log('Presigned url', presignedUrl);
-            dispatch(setFieldValues([{ field: 'pdf_url', value: presignedUrl }]));
+            return presignedUrl;
         } catch (error) {
             console.error('Pre-signed URL error:', error);
             dispatch(addAxiosError({ title: 'Pre-signed URL ', error: error as Error }));

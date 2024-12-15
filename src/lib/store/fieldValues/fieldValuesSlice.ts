@@ -29,7 +29,7 @@ const initialState: FieldValuesState = {
     workExperiences: undefined,
     payment: undefined,
     pdf_id: undefined,
-    pdf_url: undefined
+    pdf_generated_date: undefined
 };
 
 export const fieldvalueSlice = createSlice({
@@ -64,7 +64,7 @@ export const fieldvalueSlice = createSlice({
             state.workExperiences = undefined;
             state.payment = undefined;
             state.pdf_id = undefined;
-            state.pdf_url = undefined;
+            state.pdf_generated_date = undefined;
         },
         setFieldValues: (state, action: PayloadAction<FieldValue[]>) => {
             if (!action.payload || !Array.isArray(action.payload) || action.payload.length === 0) {

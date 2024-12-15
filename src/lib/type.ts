@@ -72,7 +72,7 @@ export type FieldValuesState = {
     workExperiences?: WorkExperienceEntry[];
     payment?: PaymentDetails;
     pdf_id?: string;
-    pdf_url?: string;
+    pdf_generated_date?: string;
 };
 
 export interface FieldValue {

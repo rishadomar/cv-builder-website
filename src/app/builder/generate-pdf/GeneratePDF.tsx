@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
 import { getStep } from '@/lib/utils/step';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
+import { formatDateTime } from '@/lib/utils';
 
 type GeneratePDFProps = {
     onNext?: () => void;
@@ -20,19 +21,20 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const { isLoading: busyGenerating } = useAppSelector((state) => state.loading);
+    const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
     const step = getStep('generate-pdf');
 
     console.log('allFieldValues', allFieldValues);
 
     React.useEffect(() => {
-        if (allFieldValues.pdf_url) {
+        if (pdfUrl) {
             const newWindow = window.open('', '_blank');
             if (newWindow) {
                 newWindow.document.title = 'CV PDF';
-                newWindow.location.href = allFieldValues.pdf_url;
+                newWindow.location.href = pdfUrl;
             }
         }
-    }, [allFieldValues.pdf_url]);
+    }, [pdfUrl]);
 
     const handleGeneratePDF = async () => {
         try {
@@ -45,7 +47,8 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
 
     const handleDownloadPDF = async () => {
         try {
-            dispatch(services.downloadPDF());
+            const pdf_url = await dispatch(services.downloadPDF());
+            setPdfUrl(pdf_url);
         } catch (error) {
             console.error('Download PDF error:', error);
         }
@@ -82,12 +85,11 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
                                 <FileText className='mr-2 h-4 w-4' />
                                 Generate New PDF
                             </Button>
-                            {/* {allFieldValues.lastGeneratedDate && (
+                            {allFieldValues.pdf_generated_date && (
                                 <p className='text-xs text-muted-foreground'>
-                                    Last generated: {allFieldValues.lastGeneratedDate}
+                                    Last generated: {formatDateTime(new Date(allFieldValues.pdf_generated_date))}
                                 </p>
-                            )} */}
-                            <p className='text-xs text-muted-foreground'>Last generated: 22 Dec 2024</p>
+                            )}
                         </CardFooter>
                     </Card>
 
