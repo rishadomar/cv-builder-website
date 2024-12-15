@@ -6,7 +6,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
-import { getStep } from '@/lib/utils/step';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { formatDateTime } from '@/lib/utils';
 import { toast } from 'react-toastify';
@@ -75,7 +74,7 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
                         <CardContent>
                             <p className='text-sm text-muted-foreground'>
                                 This will create a professionally formatted PDF version of your CV using the information
-                                you've provided.
+                                you&apos;ve provided.
                             </p>
                         </CardContent>
                         <CardFooter className='flex flex-col items-start space-y-2'>
