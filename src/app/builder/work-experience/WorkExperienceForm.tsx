@@ -15,6 +15,7 @@ import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlic
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
+import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z
@@ -84,6 +85,8 @@ export default function WorkExperienceForm({
         resolver: zodResolver(workExperienceDetailsFormSchema),
         defaultValues
     });
+    const { isDirty } = formHook.formState;
+    const [confirmClose, setConfirmClose] = useState(false);
     const [compareText, setCompareText] = useState<CompareTextState>();
     const watchedDescription = formHook.watch('description');
     const watchedCompany = formHook.watch('company');
@@ -196,8 +199,13 @@ export default function WorkExperienceForm({
                         <Button
                             className='mr-3'
                             variant='secondary'
+                            type='button'
                             onClick={() => {
-                                onClose();
+                                if (isDirty) {
+                                    setConfirmClose(true);
+                                } else {
+                                    onClose();
+                                }
                             }}
                             disabled={isLoading}
                         >
@@ -209,6 +217,15 @@ export default function WorkExperienceForm({
                     </div>
                 </form>
             </Form>
+            {confirmClose && (
+                <ConfirmCloseDialog
+                    onCancel={() => setConfirmClose(false)}
+                    onClose={() => {
+                        setConfirmClose(false);
+                        onClose();
+                    }}
+                />
+            )}
             {compareText && <CompareText isOpen={true} setIsOpen={() => setCompareText(undefined)} {...compareText} />}
         </>
     );
