@@ -9,7 +9,7 @@ import { WorkExperienceEntry } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'react-toastify';
 import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
 import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
@@ -72,7 +72,6 @@ export default function WorkExperienceForm({
     onClose
 }: WorkExperienceFormProps) {
     const dispatch = useAppDispatch();
-    const { toast } = useToast();
     const defaultValues: Partial<WorkExperienceDetailsFormValues> = {
         company: workExperienceEntryToEdit?.company || '',
         startDate: workExperienceEntryToEdit?.startDate,
@@ -106,17 +105,10 @@ export default function WorkExperienceForm({
                     await dispatch(addWorkExperience(data as WorkExperienceEntry));
                 }
                 onClose();
-                toast({
-                    title: 'WorkExperienceEntry',
-                    description: 'Successfully saved'
-                });
+                toast.success('Successfully saved');
             } catch (error) {
                 console.error('Error saving work experience', error);
-                toast({
-                    variant: 'destructive',
-                    title: 'WorkExperienceEntry',
-                    description: 'Failed to save'
-                });
+                toast.error('Failed to save');
             } finally {
                 console.log('Set busy adding to false');
                 setBusyUpdating(false);

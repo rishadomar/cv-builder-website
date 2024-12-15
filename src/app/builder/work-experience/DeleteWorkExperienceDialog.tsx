@@ -10,8 +10,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { WorkExperienceEntry } from '@/lib/type';
 import { useAppDispatch } from '@/lib/store/hooks';
-import { useToast } from '@/hooks/use-toast';
 import { deleteWorkExperience } from '@/lib/services';
+import { toast } from 'react-toastify';
 
 interface DeleteWorkExperienceDialogProps {
     dialogIsOpen: boolean;
@@ -27,7 +27,6 @@ export default function DeleteWorkExperienceDialog({
     setBusyDeleting
 }: DeleteWorkExperienceDialogProps) {
     const dispatch = useAppDispatch();
-    const { toast } = useToast();
 
     return (
         <AlertDialog open={dialogIsOpen} onOpenChange={(v) => setDialogState(v)}>
@@ -43,17 +42,10 @@ export default function DeleteWorkExperienceDialog({
                             try {
                                 setBusyDeleting(true);
                                 await dispatch(deleteWorkExperience(workExperienceEntryToDelete));
-                                toast({
-                                    title: 'WorkExperienceEntry',
-                                    description: 'Successfully deleted'
-                                });
+                                toast.success('Successfully deleted');
                             } catch (error) {
                                 console.error('Error deleting work experience', error);
-                                toast({
-                                    variant: 'destructive',
-                                    title: 'WorkExperienceEntry',
-                                    description: 'Failed to delete'
-                                });
+                                toast.error('Failed to delete');
                             } finally {
                                 setBusyDeleting(false);
                             }

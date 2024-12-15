@@ -6,11 +6,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import EditEducationDialog from './EditEducationDialog';
-import DeleteEducationDialog from './DeleteEducationDialog';
 import { EducationEntry } from '@/lib/type';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
+import EducationForm from './EducationForm';
+import { DrawerDialog } from '@/components/DrawerDialog';
+import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
+import { useAppDispatch } from '@/lib/store/hooks';
+import { toast } from 'react-toastify';
+import { deleteEducation } from '@/lib/services';
 
 type EducationEntryActionsDropdownProps = {
     educationEntry: EducationEntry;
@@ -25,6 +29,7 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
 }) => {
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const dispatch = useAppDispatch();
 
     return (
         <>
@@ -50,20 +55,32 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <EditEducationDialog
-                dialogIsOpen={showUpdateDialog}
-                setDialogState={setShowUpdateDialog}
-                educationEntryToEdit={educationEntry}
-                busyUpdating={busyUpdating}
-                setBusyUpdating={(v) => setBusyUpdatingList(v)}
-            />
 
-            <DeleteEducationDialog
-                dialogIsOpen={showDeleteDialog}
-                setDialogState={setShowDeleteDialog}
-                educationEntryToDelete={educationEntry}
-                setBusyDeleting={(v) => setBusyUpdatingList(v)}
+            <DrawerDialog
+                isOpen={showUpdateDialog}
+                setIsOpen={setShowUpdateDialog}
+                title='Education specification'
+                content={
+                    <EducationForm
+                        educationEntryToEdit={educationEntry}
+                        busyUpdating={busyUpdating}
+                        setBusyUpdating={setBusyUpdatingList}
+                        onClose={() => setShowUpdateDialog(false)}
+                    />
+                }
             />
+            {showDeleteDialog && (
+                <ConfirmDeleteDialog
+                    onCancel={() => setShowDeleteDialog(false)}
+                    onDelete={async () => {
+                        setBusyUpdatingList(true);
+                        await dispatch(deleteEducation(educationEntry));
+                        toast.success('Successfully deleted');
+                        setBusyUpdatingList(false);
+                        setShowDeleteDialog(false);
+                    }}
+                />
+            )}
         </>
     );
 };

@@ -9,10 +9,10 @@ import { EducationEntry } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
-import { useToast } from '@/hooks/use-toast';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
+import { toast } from 'react-toastify';
 
 const educationDetailsFormSchema = z.object({
     description: z
@@ -69,7 +69,6 @@ export default function EducationForm({
     onClose
 }: EducationFormProps) {
     const dispatch = useAppDispatch();
-    const { toast } = useToast();
     const defaultValues: Partial<EducationDetailsFormValues> = {
         description: educationEntryToEdit?.description || '',
         subjects: educationEntryToEdit?.subjects || '',
@@ -96,17 +95,10 @@ export default function EducationForm({
                     await dispatch(addEducation(data as EducationEntry));
                 }
                 onClose();
-                toast({
-                    title: 'EducationEntry',
-                    description: 'Successfully saved'
-                });
+                toast.success('Successfully saved');
             } catch (error) {
                 console.error('Error saving work experience', error);
-                toast({
-                    variant: 'destructive',
-                    title: 'EducationEntry',
-                    description: 'Failed to save'
-                });
+                toast.error('Some error occurred saving work experience');
             } finally {
                 setBusyUpdating(false);
             }
@@ -190,6 +182,7 @@ export default function EducationForm({
                 <ConfirmCloseDialog
                     onCancel={() => setConfirmClose(false)}
                     onClose={() => {
+                        console.log('on close');
                         setConfirmClose(false);
                         onClose();
                     }}
