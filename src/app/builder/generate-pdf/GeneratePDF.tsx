@@ -3,7 +3,6 @@ import { FileText, FileDown, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import StepHeader from '../StepHeader';
 import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
@@ -22,7 +21,6 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const { isLoading: busyGenerating } = useAppSelector((state) => state.loading);
     const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
-    const step = getStep('generate-pdf');
 
     console.log('allFieldValues', allFieldValues);
 
@@ -57,8 +55,6 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
     return (
         <div className='min-h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] flex flex-col'>
             <div className='flex-1 max-w-3xl mx-auto w-full px-4 py-6 space-y-6'>
-                <StepHeader icon={step?.icon} title={step?.title ?? ''} />
-
                 <Alert>
                     <AlertCircle className='h-4 w-4' />
                     <AlertDescription>You can review the PDF and return here to make any changes</AlertDescription>
