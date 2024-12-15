@@ -13,6 +13,9 @@ import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { toast } from 'react-toastify';
+import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
+import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
+import { useImproveEducationCommentMutation } from '@/lib/store/api/aiApiSlice';
 
 const educationDetailsFormSchema = z.object({
     description: z
@@ -82,8 +85,13 @@ export default function EducationForm({
         defaultValues
     });
     const { isDirty } = formHook.formState;
+    const watchedDescription = formHook.watch('description');
+    const watchedComment = formHook.watch('comment');
+    const watchedInstitution = formHook.watch('institution');
     const [confirmClose, setConfirmClose] = useState(false);
+    const [compareText, setCompareText] = useState<CompareTextState>();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
+    const [improveEducationComment, { isLoading: isImprovingEducationComment }] = useImproveEducationCommentMutation();
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: EducationDetailsFormValues) => {
@@ -149,12 +157,45 @@ export default function EducationForm({
                             fieldName='subjects'
                             placeholder='Eg. Mathematics, English, Physics'
                         />
-                        <TextareaFormField
-                            formHook={formHook}
-                            label='Comment'
-                            fieldName='comment'
-                            placeholder='Passed with distinction or Learned a lot about the economy'
-                        />
+                        <div className='relative'>
+                            <TextareaFormField
+                                formHook={formHook}
+                                label='Comment'
+                                fieldName='comment'
+                                placeholder='Passed with distinction or Learned a lot about the economy'
+                            />
+                            <ImproveWithAIButton
+                                isBusyImproving={isImprovingEducationComment}
+                                disabled={
+                                    watchedDescription?.length === 0 ||
+                                    watchedInstitution?.length === 0 ||
+                                    watchedComment?.length === 0
+                                }
+                                onClick={async () => {
+                                    const newDescription = await improveEducationComment({
+                                        educationDetails: {
+                                            description: watchedDescription,
+                                            institution: watchedInstitution
+                                        },
+                                        previousText: watchedComment
+                                    }).unwrap();
+                                    setCompareText({
+                                        previousText: watchedComment,
+                                        newText: newDescription,
+                                        onAccept: (acceptedText: string) => {
+                                            formHook.setValue('comment', acceptedText, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            });
+                                            setCompareText(undefined);
+                                        },
+                                        onReject: () => {
+                                            setCompareText(undefined);
+                                        }
+                                    });
+                                }}
+                            />
+                        </div>
                     </div>
                     <div className='m-4 flex justify-end'>
                         <Button
@@ -188,6 +229,7 @@ export default function EducationForm({
                     onClose();
                 }}
             />
+            {compareText && <CompareText isOpen={true} setIsOpen={() => setCompareText(undefined)} {...compareText} />}
         </>
     );
 }
