@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -10,7 +10,7 @@ import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
 import PillSelectFormField from '../PillSelectFormField';
-import { Loader, RefreshCw, Sparkles, Wand2 } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
 import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';

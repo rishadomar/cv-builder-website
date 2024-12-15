@@ -8,8 +8,8 @@ import { IconValueReview } from '../IconValueReview';
 
 type WorkExperienceItemProps = {
     workExperienceEntry: WorkExperienceEntry;
-    busyUpdatingList: boolean;
-    setBusyUpdatingList: (v: boolean) => void;
+    busyUpdatingList?: boolean;
+    setBusyUpdatingList?: (v: boolean) => void;
     collapseDescription: boolean;
     editable?: boolean;
 };
@@ -59,7 +59,7 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
                     value={workExperienceEntry.description}
                 />
             </div>
-            {editable && (
+            {editable && busyUpdatingList && setBusyUpdatingList && (
                 <WorkExperienceEntryActionsDropdown
                     workExperienceEntry={workExperienceEntry}
                     busyUpdatingList={busyUpdatingList}
