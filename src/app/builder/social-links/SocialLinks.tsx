@@ -115,10 +115,20 @@ export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormP
                             formHook={formHook}
                             label='LinkedIn'
                             fieldName='linkedIn'
-                            placeholder='https://linkedin.com/in/your-profile'
+                            placeholder='https://linkedin.com/in/your-username'
                         />
-                        <TextFormField formHook={formHook} label='GitHub' fieldName='github' placeholder='' />
-                        <TextFormField formHook={formHook} label='Twitter' fieldName='twitter' placeholder='' />
+                        <TextFormField
+                            formHook={formHook}
+                            label='GitHub'
+                            fieldName='github'
+                            placeholder='https://github.com/your-username'
+                        />
+                        <TextFormField
+                            formHook={formHook}
+                            label='Twitter'
+                            fieldName='twitter'
+                            placeholder='https://twitter.com/your-username'
+                        />
                         <TextFormField formHook={formHook} label='Portfolio' fieldName='portfolio' placeholder='' />
                         <RadioFormField
                             formHook={formHook}

@@ -10,6 +10,7 @@ interface TextFormFieldProps {
     description?: string;
     placeholder?: string;
     fieldLayout?: FieldLayout;
+    onFocus?: () => void;
 }
 
 export default function TextFormField({
@@ -18,9 +19,21 @@ export default function TextFormField({
     fieldName,
     description,
     placeholder,
-    fieldLayout = 'default'
+    fieldLayout = 'default',
+    onFocus
 }: TextFormFieldProps) {
     const error = formHook.formState.errors[fieldName];
+
+    const renderField = (field: any) => {
+        return (
+            <>
+                <FormLabel>{label}</FormLabel>
+                <FormControl>
+                    <Input onFocus={onFocus} placeholder={placeholder || ''} {...field} value={field.value ?? ''} />
+                </FormControl>
+            </>
+        );
+    };
 
     return (
         <FormField
@@ -29,19 +42,9 @@ export default function TextFormField({
             render={({ field }) => (
                 <FormItem>
                     {fieldLayout === 'default' ? (
-                        <>
-                            <FormLabel>{label}</FormLabel>
-                            <FormControl>
-                                <Input placeholder={placeholder || ''} {...field} value={field.value ?? ''} />
-                            </FormControl>
-                        </>
+                        renderField(field)
                     ) : (
-                        <div className={'flex flex-row gap-3 items-center'}>
-                            <FormLabel>{label}</FormLabel>
-                            <FormControl>
-                                <Input placeholder={placeholder || ''} {...field} value={field.value ?? ''} />
-                            </FormControl>
-                        </div>
+                        <div className={'flex flex-row gap-3 items-center'}>{renderField(field)}</div>
                     )}
 
                     {description && <FormDescription>{description}</FormDescription>}
