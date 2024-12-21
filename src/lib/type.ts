@@ -54,6 +54,7 @@ export type FieldValuesState = {
     sub?: string;
     email?: string;
     name?: string;
+    professionalTitle?: string;
     phoneNumber?: string;
     preferredPronoun?: string;
     excludeGender?: YesNoType;

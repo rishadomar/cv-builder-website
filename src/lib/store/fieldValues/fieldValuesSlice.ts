@@ -9,6 +9,7 @@ const initialState: FieldValuesState = {
     sub: undefined,
     email: undefined,
     name: undefined,
+    professionalTitle: undefined,
     phoneNumber: undefined,
     preferredPronoun: undefined,
     excludeGender: undefined,
@@ -45,6 +46,7 @@ export const fieldvalueSlice = createSlice({
             state.sub = undefined;
             state.email = undefined;
             state.name = undefined;
+            state.professionalTitle = undefined;
             state.phoneNumber = undefined;
             state.preferredPronoun = undefined;
             state.excludeGender = undefined;

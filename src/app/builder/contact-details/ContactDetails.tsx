@@ -25,6 +25,15 @@ const contactDetailsFormSchema = z.object({
             message: 'Name must not be longer than 60 characters.'
         })
         .default(''),
+    professionalTitle: z
+        .string()
+        .min(2, {
+            message: 'Professional title must be at least 2 characters.'
+        })
+        .max(120, {
+            message: 'Professional title must not be longer than 120 characters.'
+        })
+        .default(''),
     phoneNumber: z
         .string()
         .regex(PhoneNumberRegex, {
@@ -56,6 +65,7 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
         if (allFieldValues) {
             formHook.reset({
                 name: allFieldValues.name || '',
+                professionalTitle: allFieldValues.professionalTitle || '',
                 phoneNumber: allFieldValues.phoneNumber || ''
             });
         }
@@ -68,20 +78,20 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
                 ? submitter.name
                 : undefined;
 
-        const saveValues = (data: unknown) => {
+        const saveValues = async (data: unknown) => {
             if (isDirty) {
-                dispatch(save(data as KeyValuePairArray));
+                await dispatch(save(data as KeyValuePairArray));
             }
         };
 
         if (onNext && submitterName === 'next') {
-            formHook.handleSubmit((data: ContactDetailsFormValues) => {
-                saveValues(data);
+            formHook.handleSubmit(async (data: ContactDetailsFormValues) => {
+                await saveValues(data);
                 onNext();
             })();
         } else if (onPrevious && submitterName === 'previous') {
             const data = formHook.getValues();
-            saveValues(data);
+            await saveValues(data);
             onPrevious();
         }
 
@@ -98,6 +108,14 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
                         fieldName='name'
                         description='This is the name that will be displayed on your profile and in emails.'
                         placeholder='Your name'
+                    />
+
+                    <TextFormField
+                        formHook={formHook}
+                        label='Professional title'
+                        fieldName='professionalTitle'
+                        description='This is your current job title.'
+                        placeholder='Your professional title'
                     />
 
                     <TextFormField
