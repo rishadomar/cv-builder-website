@@ -48,6 +48,8 @@ export type PaymentDetails = {
     promoCode?: string;
 };
 
+export type SocialLinkTypes = 'linkedIn' | 'github' | 'twitter' | 'portfolio';
+
 export type FieldValuesState = {
     sub?: string;
     email?: string;
@@ -75,6 +77,7 @@ export type FieldValuesState = {
         github?: string;
         twitter?: string;
         portfolio?: string;
+        primaryLink?: SocialLinkTypes;
     };
     payment?: PaymentDetails;
     pdf_id?: string;

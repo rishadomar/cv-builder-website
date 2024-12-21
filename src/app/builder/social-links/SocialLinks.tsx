@@ -7,15 +7,17 @@ import { StepButtons } from '../StepButtons';
 import TextFormField from '../TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { save } from '@/lib/services';
-import { KeyValuePairArray } from '@/lib/type';
+import { KeyValuePairArray, SocialLinkTypes } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '../StepContainer';
+import RadioFormField from '../RadioFormField';
 
 const socialLinksFormSchema = z.object({
     linkedIn: z.string().default('').optional(),
     github: z.string().default('').optional(),
     twitter: z.string().default('').optional(),
-    portfolio: z.string().default('').optional()
+    portfolio: z.string().default('').optional(),
+    primaryLink: z.enum(['linkedIn', 'github', 'twitter', 'portfolio']).nullable().default(null).optional()
 });
 
 type SocialLinksFormValues = z.infer<typeof socialLinksFormSchema>;
@@ -28,16 +30,18 @@ type SocialLinksFormProps = {
 export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
-    const defaultValues: Partial<SocialLinksFormValues> = {
-        linkedIn: '',
-        github: '',
-        twitter: '',
-        portfolio: ''
-    };
     const formHook = useForm<SocialLinksFormValues>({
-        resolver: zodResolver(socialLinksFormSchema),
-        defaultValues
+        resolver: zodResolver(socialLinksFormSchema)
     });
+    const isValidLink = (value?: SocialLinkTypes) => {
+        return ['linkedIn', 'github', 'twitter', 'portfolio'].includes(value as string);
+    };
+    const socialLinkOptions = [
+        { label: 'LinkedIn', value: 'linkedIn' },
+        { label: 'GitHub', value: 'github' },
+        { label: 'Twitter', value: 'twitter' },
+        { label: 'Portfolio', value: 'portfolio' }
+    ];
     const { isDirty } = formHook.formState;
     const step = getStep('social-links');
 
@@ -47,7 +51,10 @@ export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormP
                 linkedIn: allFieldValues.socialLinks.linkedIn || '',
                 github: allFieldValues.socialLinks.github || '',
                 twitter: allFieldValues.socialLinks.twitter || '',
-                portfolio: allFieldValues.socialLinks.portfolio || ''
+                portfolio: allFieldValues.socialLinks.portfolio || '',
+                primaryLink: isValidLink(allFieldValues.socialLinks.primaryLink)
+                    ? (allFieldValues.socialLinks.primaryLink as 'linkedIn' | 'github' | 'twitter' | 'portfolio')
+                    : null
             });
         }
     }, [allFieldValues.socialLinks, formHook]);
@@ -79,6 +86,11 @@ export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormP
         event?.preventDefault();
     };
 
+    const shouldShowOption = (value: string) => {
+        const linkValue = formHook.watch(value as keyof SocialLinksFormValues);
+        return !!linkValue;
+    };
+
     return (
         <>
             <Form {...formHook}>
@@ -93,6 +105,13 @@ export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormP
                         <TextFormField formHook={formHook} label='GitHub' fieldName='github' placeholder='' />
                         <TextFormField formHook={formHook} label='Twitter' fieldName='twitter' placeholder='' />
                         <TextFormField formHook={formHook} label='Portfolio' fieldName='portfolio' placeholder='' />
+                        <RadioFormField
+                            formHook={formHook}
+                            label='Primary Link for CV'
+                            fieldName='primaryLink'
+                            options={socialLinkOptions}
+                            showOption={shouldShowOption}
+                        />
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
