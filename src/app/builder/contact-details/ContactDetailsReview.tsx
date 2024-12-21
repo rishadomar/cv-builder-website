@@ -4,6 +4,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
 import { FieldValueReview } from '../FieldValueReview';
+import Link from 'next/link';
 
 export const ContactDetailsReview: React.FC = () => {
     const allFieldValues = useAppSelector((state) => state.fieldValues);
@@ -12,7 +13,9 @@ export const ContactDetailsReview: React.FC = () => {
     return (
         <div>
             <div className='mb-3'>
-                <StepHeader icon={step.icon} title={step.title} />
+                <Link href={`/builder?page=${step.path}`}>
+                    <StepHeader icon={step.icon} title={step.title} />
+                </Link>
             </div>
             <div className='p-1'>
                 <FieldValueReview field='Name' value={allFieldValues.name} />
