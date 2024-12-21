@@ -33,6 +33,6 @@ export const FieldValueReview: React.FC<FieldValueReviewProps> = ({
     } else if (collapseOptions?.collapsable) {
         return <CollapsibleDescription text={value} parentRef={collapseOptions.parentRef}></CollapsibleDescription>;
     } else {
-        return <div className='text-sm'>{value}</div>;
+        return <div className='text-sm whitespace-pre-wrap'>{value}</div>;
     }
 };
