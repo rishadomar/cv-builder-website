@@ -21,11 +21,11 @@ export const CollapsibleDescription: React.FC<CollapsibleDescriptionProps> = ({ 
         }
     };
 
-    if (!shouldTruncate) return <div className='text-gray-500 dark:text-gray-400'>{text}</div>;
+    if (!shouldTruncate) return <div className='text-gray-500 dark:text-gray-400 whitespace-pre-wrap'>{text}</div>;
 
     return (
         <div className='space-y-1'>
-            <div className='text-gray-500 dark:text-gray-400'>{displayText}</div>
+            <div className='text-gray-500 dark:text-gray-400 whitespace-pre-wrap'>{displayText}</div>
             <Button
                 variant='ghost'
                 size='sm'
