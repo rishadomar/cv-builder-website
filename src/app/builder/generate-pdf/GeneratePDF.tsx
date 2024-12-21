@@ -26,11 +26,20 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
 
     React.useEffect(() => {
         if (pdfUrl) {
-            const newWindow = window.open('', '_blank');
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.click();
+
+            // Get the newly opened window
+            const newWindow = window.open('', link.target);
             if (newWindow) {
-                newWindow.document.title = 'CV PDF';
-                newWindow.location.href = pdfUrl;
+                newWindow.document.title = 'cv.pdf';
             }
+
+            // Remove the link
+            link.remove();
         }
     }, [pdfUrl]);
 
