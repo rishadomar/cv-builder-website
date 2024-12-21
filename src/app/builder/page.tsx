@@ -90,26 +90,37 @@ function FormContent() {
             <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
             <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <ContactDetailsForm onNext={nextPage} />}
+
                 {currentPage === 'personal-details' && (
                     <PersonalDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
+
                 {currentPage === 'location-details' && (
                     <LocationDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
+
                 {currentPage === 'remote-work-details' && (
                     <RemoteWorkDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
+
                 {currentPage === 'personality-details' && (
                     <PersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
+
                 {currentPage === 'social-links' && <SocialLinksForm onNext={nextPage} onPrevious={previousPage} />}
+
                 {currentPage === 'hobbies' && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
+
                 {currentPage === 'education' && <EducationList onNext={nextPage} onPrevious={previousPage} />}
+
                 {currentPage === 'work-experience' && (
                     <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />
                 )}
+
                 {currentPage === 'review' && <Review onNext={nextPage} onPrevious={previousPage} />}
+
                 {currentPage === 'paywall' && <Paywall onNext={nextPage} onPrevious={previousPage} />}
+
                 {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
             </div>
         </>
@@ -119,7 +130,7 @@ function FormContent() {
 // Main component with proper Suspense boundary
 export default function BuilderPage() {
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-    //const { isLoading: isFieldValuesLoading } = useAppSelector((state) => state.loading);
+    const { isLoading: isFieldValuesLoading } = useAppSelector((state) => state.loading);
 
     if (isAuthLoading) {
         return (
@@ -136,6 +147,7 @@ export default function BuilderPage() {
     return (
         <Suspense fallback={<OverlaySpinner />}>
             <FormContent />
+            {isFieldValuesLoading && <OverlaySpinner />}
         </Suspense>
     );
 }
