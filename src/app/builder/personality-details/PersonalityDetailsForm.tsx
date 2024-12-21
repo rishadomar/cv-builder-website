@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -52,8 +52,8 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const defaultValues: Partial<PersonalityDetailsFormValues> = {
-        personalityTraits: allFieldValues.personalityTraits || [],
-        personalityText: allFieldValues.personalityText || ''
+        personalityTraits: [],
+        personalityText: ''
     };
     const formHook = useForm<PersonalityDetailsFormValues>({
         resolver: zodResolver(personalityDetailsFormSchema),
@@ -66,6 +66,15 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generatePersonalityText, { isLoading: isGeneratingPersonalityText }] = useGeneratePersonalityTextMutation();
     const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
+
+    useEffect(() => {
+        if (allFieldValues.personalityTraits) {
+            formHook.reset({
+                personalityTraits: allFieldValues.personalityTraits,
+                personalityText: allFieldValues.personalityText || ''
+            });
+        }
+    }, [allFieldValues.personalityTraits, allFieldValues.personalityText, formHook]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;

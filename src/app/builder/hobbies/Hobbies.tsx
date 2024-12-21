@@ -5,7 +5,7 @@ import { Form } from '@/components/ui/form';
 import { save } from '@/lib/services';
 import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PillSelectFormField from '../PillSelectFormField';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
@@ -55,8 +55,8 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const defaultValues: Partial<HobbyDetailsFormValues> = {
-        hobbies: allFieldValues.hobbies || [],
-        hobbiesText: allFieldValues.hobbiesText || ''
+        hobbies: [],
+        hobbiesText: ''
     };
     const formHook = useForm<HobbyDetailsFormValues>({
         resolver: zodResolver(hobbyDetailsFormSchema),
@@ -69,6 +69,15 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generateHobbiesText, { isLoading: isGeneratingHobbiesText }] = useGenerateHobbiesTextMutation();
     const [improveHobbiesText, { isLoading: isImprovingHobbiesText }] = useImproveHobbiesTextMutation();
+
+    useEffect(() => {
+        if (allFieldValues.hobbies) {
+            formHook.reset({
+                hobbies: allFieldValues.hobbies || [],
+                hobbiesText: allFieldValues.hobbiesText || ''
+            });
+        }
+    }, [allFieldValues.hobbies, allFieldValues.hobbiesText, formHook]);
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
