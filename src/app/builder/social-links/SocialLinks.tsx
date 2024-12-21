@@ -59,6 +59,21 @@ export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormP
         }
     }, [allFieldValues.socialLinks, formHook]);
 
+    useEffect(() => {
+        const subscription = formHook.watch((value, { name }) => {
+            if (name && value[name as keyof SocialLinksFormValues] === '') {
+                const currentPrimaryLink = formHook.getValues('primaryLink');
+                if (currentPrimaryLink === name) {
+                    formHook.setValue('primaryLink', null, {
+                        shouldValidate: true,
+                        shouldDirty: true
+                    });
+                }
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [formHook]);
+
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         const submitter = (event?.nativeEvent as SubmitEvent).submitter;
         const submitterName =
