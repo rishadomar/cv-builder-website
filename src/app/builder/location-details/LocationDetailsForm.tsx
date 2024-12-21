@@ -73,26 +73,28 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
     }, [allFieldValues, formHook]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
+        event?.preventDefault(); // Prevent form submission immediately
+
         const submitter = (event?.nativeEvent as SubmitEvent).submitter;
         const submitterName =
             submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement
                 ? submitter.name
                 : undefined;
 
-        const saveValues = (data: unknown) => {
+        const saveValues = async (data: unknown) => {
             if (isDirty) {
-                dispatch(save(data as KeyValuePairArray));
+                await dispatch(save(data as KeyValuePairArray));
             }
         };
 
         if (onNext && submitterName === 'next') {
-            formHook.handleSubmit((data: LocationDetailsFormValues) => {
-                saveValues(data);
+            formHook.handleSubmit(async (data: LocationDetailsFormValues) => {
+                await saveValues(data);
                 onNext();
             })();
         } else if (onPrevious && submitterName === 'previous') {
             const data = formHook.getValues();
-            saveValues(data);
+            await saveValues(data);
             onPrevious();
         }
 

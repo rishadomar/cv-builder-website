@@ -72,6 +72,8 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
     }, [allFieldValues, formHook]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
+        event?.preventDefault(); // Prevent form submission immediately
+
         const submitter = (event?.nativeEvent as SubmitEvent).submitter;
         const submitterName =
             submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement

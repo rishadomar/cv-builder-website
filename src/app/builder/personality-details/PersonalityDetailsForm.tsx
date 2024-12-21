@@ -77,23 +77,25 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     }, [allFieldValues.personalityTraits, allFieldValues.personalityText, formHook]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
+        event?.preventDefault(); // Prevent form submission immediately
+
         const submitter = (event?.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
         const submitterName = submitter?.name;
 
-        const saveValues = (data: unknown) => {
+        const saveValues = async (data: unknown) => {
             if (isDirty) {
-                dispatch(save(data as KeyValuePairArray));
+                await dispatch(save(data as KeyValuePairArray));
             }
         };
 
         if (onNext && submitterName === 'next') {
-            formHook.handleSubmit((data: PersonalityDetailsFormValues) => {
-                saveValues(data);
+            formHook.handleSubmit(async (data: PersonalityDetailsFormValues) => {
+                await saveValues(data);
                 onNext();
             })();
         } else if (onPrevious && submitterName === 'previous') {
             const data = formHook.getValues();
-            saveValues(data);
+            await saveValues(data);
             onPrevious();
         }
 
