@@ -68,7 +68,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
 
     useEffect(() => {
-        if (allFieldValues.personalityTraits) {
+        if (allFieldValues) {
             formHook.reset({
                 personalityTraits: allFieldValues.personalityTraits,
                 personalityText: allFieldValues.personalityText || ''
@@ -117,13 +117,10 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                 <form onSubmit={onSubmit}>
                     <StepContainer step={step}>
                         <PillSelectFormField
+                            formHook={formHook}
                             fieldName='personalityTraits'
                             availablePills={Traits}
                             selectedPills={watchedPersonalityTraits}
-                            setSelectedPills={(selectedPills) => {
-                                formHook.setValue('personalityTraits', selectedPills);
-                                dispatch(setFieldValue({ field: 'personalityTraits', value: selectedPills }));
-                            }}
                             customPills={{
                                 allow: true,
                                 placeholder: 'Add custom trait'

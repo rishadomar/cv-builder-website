@@ -1,14 +1,16 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 
 interface PillSelectFormFieldProps {
+    formHook: UseFormReturn<any>;
     fieldName: string;
     availablePills: string[];
     selectedPills: string[];
-    setSelectedPills: (selectedPills: string[]) => void;
     customPills?: {
         allow: boolean;
         placeholder: string;
@@ -17,10 +19,10 @@ interface PillSelectFormFieldProps {
 }
 
 export default function PillSelectFormField({
+    formHook,
     fieldName,
     availablePills,
     selectedPills,
-    setSelectedPills,
     customPills = undefined,
     error
 }: PillSelectFormFieldProps) {
@@ -39,56 +41,64 @@ export default function PillSelectFormField({
     }, [availablePills, selectedPills]);
 
     return (
-        <div className='space-y-4'>
-            <div id={`pill-${fieldName}`} className='flex flex-wrap gap-2'>
-                {allAvailablePills.map((availablePill) => (
-                    <Badge
-                        key={availablePill}
-                        variant={selectedPills && selectedPills.includes(availablePill) ? 'default' : 'outline'}
-                        className='cursor-pointer'
-                        onClick={() => {
-                            let newSelectedPills;
-                            if (selectedPills.includes(availablePill)) {
-                                newSelectedPills = selectedPills.filter(
-                                    (existingPill: string) => existingPill !== availablePill
-                                );
-                            } else {
-                                newSelectedPills = [...selectedPills, availablePill];
-                            }
-                            setSelectedPills(newSelectedPills);
-                        }}
-                    >
-                        {availablePill}
-                    </Badge>
-                ))}
-                {error && <div className='text-xs col-span-3 text-red-500'>{error}</div>}
-            </div>
-            {customPills && customPills.allow && (
-                <div className='flex gap-2'>
-                    <Input
-                        placeholder={customPills.placeholder}
-                        value={customPill}
-                        onChange={(e) => {
-                            setCustomPill(e.target.value);
-                        }}
-                        className='flex-1'
-                    />
-                    <Button
-                        size='icon'
-                        variant='outline'
-                        disabled={!customPill.trim()}
-                        onClick={() => {
-                            if (customPill.trim()) {
-                                setAllAvailablePills((prev) => [...prev, customPill.trim()]);
-                                setSelectedPills([...selectedPills, customPill.trim()]);
-                                setCustomPill('');
-                            }
-                        }}
-                    >
-                        <Plus className='h-4 w-4' />
-                    </Button>
-                </div>
+        <FormField
+            control={formHook.control}
+            name={fieldName}
+            render={({ field }) => (
+                <>
+                    <div id={`pill-${fieldName}`} className='flex flex-wrap gap-2'>
+                        {allAvailablePills.map((availablePill) => (
+                            <Badge
+                                key={availablePill}
+                                variant={selectedPills && selectedPills.includes(availablePill) ? 'default' : 'outline'}
+                                className='cursor-pointer'
+                                onClick={() => {
+                                    let newSelectedPills;
+                                    if (selectedPills.includes(availablePill)) {
+                                        newSelectedPills = selectedPills.filter(
+                                            (existingPill: string) => existingPill !== availablePill
+                                        );
+                                    } else {
+                                        newSelectedPills = [...selectedPills, availablePill];
+                                    }
+                                    field.onChange(newSelectedPills);
+                                }}
+                            >
+                                {availablePill}
+                            </Badge>
+                        ))}
+                        {error && <div className='text-xs col-span-3 text-red-500'>{error}</div>}
+                    </div>
+                    {customPills && customPills.allow && (
+                        <div className='flex gap-2'>
+                            <Input
+                                placeholder={customPills.placeholder}
+                                value={customPill}
+                                onChange={(e) => {
+                                    setCustomPill(e.target.value);
+                                }}
+                                className='flex-1'
+                            />
+                            <Button
+                                size='icon'
+                                variant='outline'
+                                disabled={!customPill.trim()}
+                                onClick={() => {
+                                    if (customPill.trim()) {
+                                        const newPill = customPill.trim();
+                                        setAllAvailablePills((prev) => [...prev, newPill]);
+                                        const newSelectedPills = [...selectedPills, newPill];
+                                        field.onChange(newSelectedPills);
+                                        setCustomPill('');
+                                    }
+                                }}
+                            >
+                                <Plus className='h-4 w-4' />
+                            </Button>
+                        </div>
+                    )}
+                </>
             )}
-        </div>
+        />
     );
 }

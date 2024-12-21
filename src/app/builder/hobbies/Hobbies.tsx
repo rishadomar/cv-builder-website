@@ -54,13 +54,8 @@ const Hobbies = [
 export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFormProps) {
     const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
-    const defaultValues: Partial<HobbyDetailsFormValues> = {
-        hobbies: [],
-        hobbiesText: ''
-    };
     const formHook = useForm<HobbyDetailsFormValues>({
-        resolver: zodResolver(hobbyDetailsFormSchema),
-        defaultValues
+        resolver: zodResolver(hobbyDetailsFormSchema)
     });
     const watchedHobbies = formHook.watch('hobbies');
     const watchedHobbiesText = formHook.watch('hobbiesText');
@@ -71,13 +66,13 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const [improveHobbiesText, { isLoading: isImprovingHobbiesText }] = useImproveHobbiesTextMutation();
 
     useEffect(() => {
-        if (allFieldValues.hobbies) {
+        if (allFieldValues) {
             formHook.reset({
                 hobbies: allFieldValues.hobbies || [],
                 hobbiesText: allFieldValues.hobbiesText || ''
             });
         }
-    }, [allFieldValues.hobbies, allFieldValues.hobbiesText, formHook]);
+    }, [allFieldValues, formHook]);
 
     async function onSubmit(event?: React.BaseSyntheticEvent) {
         event?.preventDefault(); // Prevent form submission immediately
@@ -120,13 +115,10 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                 <form onSubmit={onSubmit}>
                     <StepContainer step={step}>
                         <PillSelectFormField
+                            formHook={formHook}
                             fieldName='hobbies'
                             availablePills={Hobbies}
                             selectedPills={watchedHobbies}
-                            setSelectedPills={(selectedPills) => {
-                                formHook.setValue('hobbies', selectedPills);
-                                dispatch(setFieldValue({ field: 'hobbies', value: selectedPills }));
-                            }}
                             error={formHook.formState.errors.hobbies?.message}
                             customPills={{
                                 allow: true,
