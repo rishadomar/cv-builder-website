@@ -70,6 +70,12 @@ export type FieldValuesState = {
     otherHobbies?: string;
     educationEntries?: EducationEntry[];
     workExperiences?: WorkExperienceEntry[];
+    socialLinks?: {
+        linkedIn?: string;
+        github?: string;
+        twitter?: string;
+        portfolio?: string;
+    };
     payment?: PaymentDetails;
     pdf_id?: string;
     pdf_generated_date?: string;
@@ -148,6 +154,7 @@ export type StepPath =
     | 'hobbies'
     | 'education'
     | 'work-experience'
+    | 'social-links'
     | 'paywall'
     | 'review'
     | 'generate-pdf';

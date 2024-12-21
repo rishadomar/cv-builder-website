@@ -6,6 +6,7 @@ import {
     Globe,
     GraduationCap,
     Heart,
+    Link,
     Mail,
     MapPinHouse,
     User
@@ -65,6 +66,16 @@ export const Steps: StepType[] = [
     },
     {
         id: 6,
+        title: 'Social Links',
+        icon: Link,
+        description: 'Links to your social media profiles',
+        completed: false,
+        path: 'social-links',
+        showInSections: true,
+        paymentRequired: false
+    },
+    {
+        id: 7,
         title: 'Paywall capture',
         icon: CreditCard,
         description: 'Pay please to continue',
@@ -74,7 +85,7 @@ export const Steps: StepType[] = [
         paymentRequired: false
     },
     {
-        id: 7,
+        id: 8,
         title: 'Hobbies',
         icon: Bike,
         description: 'What do you enjoy doing to accomplish a life/work balance',
@@ -84,7 +95,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 8,
+        id: 9,
         title: 'Education',
         icon: GraduationCap,
         description: 'Educational background',
@@ -94,7 +105,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 9,
+        id: 10,
         title: 'Work experience',
         icon: Briefcase,
         description: 'Professional experience',
@@ -104,7 +115,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 10,
+        id: 11,
         title: 'Review',
         description: 'Review your CV',
         completed: false,
@@ -113,7 +124,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 11,
+        id: 12,
         title: 'Generate & download CV',
         icon: Download,
         description: 'A PDF will be generated which you can download for keeps',

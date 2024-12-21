@@ -18,6 +18,7 @@ import { OverlaySpinner } from '@/components/OverlaySpinner';
 import EducationList from './education/EducationList';
 import { Review } from './review/Review';
 import { Steps } from '@/lib/utils/step';
+import SocialLinksForm from './social-links/SocialLinks';
 
 const NumberOfPages = Steps.length;
 
@@ -101,6 +102,7 @@ function FormContent() {
                 {currentPage === 'personality-details' && (
                     <PersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
+                {currentPage === 'social-links' && <SocialLinksForm onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'hobbies' && <HobbyDetailsForm onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'education' && <EducationList onNext={nextPage} onPrevious={previousPage} />}
                 {currentPage === 'work-experience' && (
