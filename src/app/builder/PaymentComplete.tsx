@@ -1,4 +1,4 @@
-import { Card, CardTitle, CardFooter, CardHeader, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardTitle, CardFooter, CardHeader, CardContent } from '@/components/ui/card';
 import { StepButtons } from './StepButtons';
 import { formatAmount, formatDate } from '@/lib/utils';
 import { PaymentDetails } from '@/lib/type';

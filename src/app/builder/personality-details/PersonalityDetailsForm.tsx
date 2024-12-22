@@ -74,7 +74,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                 personalityText: allFieldValues.personalityText || ''
             });
         }
-    }, [allFieldValues.personalityTraits, allFieldValues.personalityText, formHook]);
+    }, [allFieldValues, formHook]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         event?.preventDefault(); // Prevent form submission immediately

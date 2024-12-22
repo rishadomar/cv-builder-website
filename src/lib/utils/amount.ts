@@ -1,15 +1,6 @@
 import { Cost } from '@/constants';
 import { Currency } from 'react-paystack/dist/types';
 
-const CurrencyToSymbolMap: Record<Currency, string> = {
-    NGN: '₦',
-    USD: '$',
-    ZAR: 'R',
-    GHS: 'GH₵',
-    KES: 'KSh',
-    XOF: 'CFA'
-};
-
 export const formatProductCost = () => {
     return formatAmount(Cost.currency as Currency, Cost.amount, false);
 };
