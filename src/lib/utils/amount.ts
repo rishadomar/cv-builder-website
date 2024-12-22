@@ -15,10 +15,14 @@ export const formatProductCost = () => {
 };
 
 export const formatAmount = (currency: Currency, amount: number, showCents: boolean) => {
-    const symbol = CurrencyToSymbolMap[currency];
-    const amountToShow = showCents ? amount : Math.floor(amount / 100);
-    if (symbol.length === 1) {
-        return symbol + amountToShow;
-    }
-    return symbol + ' ' + amountToShow;
+    const amountToShow = amount / 100;
+
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: showCents ? 2 : 0,
+        maximumFractionDigits: showCents ? 2 : 0
+    });
+
+    return formatter.format(amountToShow);
 };

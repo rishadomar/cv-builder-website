@@ -85,7 +85,6 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                             onSuccess={async (response) => {
                                 console.log(response);
                                 await onSuccess(response);
-                                onNext();
                             }}
                             onClose={() => {
                                 console.log('closed');

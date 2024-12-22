@@ -1,12 +1,17 @@
 import { WalletIcon, CalendarIcon } from 'lucide-react';
 import { formatAmount, formatDate } from '@/lib/utils';
-import { PaymentDetails } from '@/lib/type';
+import { useAppSelector } from '@/lib/store/hooks';
+import { selectHasPromoCode, selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 
-interface PaymentInformationProps {
-    paymentValues: PaymentDetails;
-}
+function PaymentInformation() {
+    const fieldValues = useAppSelector((state) => state.fieldValues);
+    const isPaymentValid = useAppSelector(selectIsPaymentValid);
+    const hasPromoCode = useAppSelector(selectHasPromoCode);
 
-function PaymentInformation({ paymentValues }: PaymentInformationProps) {
+    if (!isPaymentValid || hasPromoCode || !fieldValues.payment) {
+        return;
+    }
+
     return (
         <div className='w-full max-w-md bg-white shadow-md rounded-lg p-6 space-y-6'>
             <div className='text-center'>
@@ -15,31 +20,22 @@ function PaymentInformation({ paymentValues }: PaymentInformationProps) {
             </div>
 
             <div className='space-y-4'>
-                {paymentValues.promoCode ? (
-                    <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
-                        <div className='flex items-center space-x-3'>
-                            <WalletIcon className='w-6 h-6 text-primary' />
-                            <span className='font-medium text-gray-700'>Promotion applied</span>
-                        </div>
+                <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
+                    <div className='flex items-center space-x-3'>
+                        <WalletIcon className='w-6 h-6 text-primary' />
+                        <span className='font-medium text-gray-700'>Payment Amount</span>
                     </div>
-                ) : (
-                    <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
-                        <div className='flex items-center space-x-3'>
-                            <WalletIcon className='w-6 h-6 text-primary' />
-                            <span className='font-medium text-gray-700'>Payment Amount</span>
-                        </div>
-                        <span className='font-bold text-gray-900'>
-                            {formatAmount(paymentValues.currency, paymentValues.amount, true)}
-                        </span>
-                    </div>
-                )}
+                    <span className='font-bold text-gray-900'>
+                        {formatAmount(fieldValues.payment.currency, fieldValues.payment.amount, true)}
+                    </span>
+                </div>
 
                 <div className='flex items-center justify-between bg-gray-100 p-4 rounded-lg'>
                     <div className='flex items-center space-x-3'>
                         <CalendarIcon className='w-6 h-6 text-primary' />
                         <span className='font-medium text-gray-700'>Payment Date</span>
                     </div>
-                    <span className='font-bold text-gray-900'>{formatDate(new Date(paymentValues.date))}</span>
+                    <span className='font-bold text-gray-900'>{formatDate(new Date(fieldValues.payment.date))}</span>
                 </div>
             </div>
 
