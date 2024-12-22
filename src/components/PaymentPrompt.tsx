@@ -9,6 +9,7 @@ import { PromoCodeForm, PromoFormValues } from './PromoCodeForm';
 import { StepButtons } from '@/app/builder/StepButtons';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
+import { selectHasPromoCode } from '@/lib/store/fieldValues/fieldValuesSlice';
 
 const features = [
     'Full CV creation and management',
@@ -28,6 +29,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     const authentication = useAppSelector((state) => state.authentication);
     const [paymentComplete, setPaymentComplete] = React.useState(false);
     const router = useRouter();
+    const hasPromoCode = useAppSelector(selectHasPromoCode);
 
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
@@ -92,9 +94,15 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                     )}
                 </div>
 
-                <div className='border border-gray-300 p-4 rounded-lg'>
-                    <PromoCodeForm onSubmit={handlePromoSubmit} />
-                </div>
+                {hasPromoCode ? (
+                    <div className='flex text-center text-sm text-gray-600'>
+                        Promo code applied. Paying will allow you to access full features.
+                    </div>
+                ) : (
+                    <div className='border border-gray-300 p-4 rounded-lg'>
+                        <PromoCodeForm onSubmit={handlePromoSubmit} />
+                    </div>
+                )}
 
                 <div className='text-center text-sm text-gray-500'>
                     <p>

@@ -141,4 +141,14 @@ export const selectIsPaymentValid = (state: RootState) => {
     return paymentDateObj <= oneYearFromToday;
 };
 
+export const selectHasPromoCode = (state: RootState) => {
+    if (!selectIsPaymentValid(state)) {
+        return false;
+    }
+    if (state.fieldValues.payment?.promoCode && state.fieldValues.payment?.promoCode.length > 0) {
+        return true;
+    }
+    return false;
+};
+
 export default fieldvalueSlice.reducer;

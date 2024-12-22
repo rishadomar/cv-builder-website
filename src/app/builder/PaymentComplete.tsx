@@ -11,13 +11,12 @@ type PaymentCompleteProps = {
 
 export function PaymentComplete({ paymentDetails, onNext, onPrevious }: PaymentCompleteProps) {
     return (
-        <Card className='w-[350px]'>
+        <Card>
             <CardHeader>
-                <CardTitle>Congratulations</CardTitle>
-                <CardDescription>You&apos;re on your way</CardDescription>
+                <CardTitle>Thank you for your payment</CardTitle>
             </CardHeader>
             <CardContent>
-                <small>Thanks for your payment on: </small>
+                <small>Your payment was made on: </small>
                 <div>
                     <small>{paymentDetails.date ? formatDate(new Date(paymentDetails.date)) : 'unknown'}</small>
                 </div>
