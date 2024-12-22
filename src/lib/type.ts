@@ -73,6 +73,7 @@ export type FieldValuesState = {
     otherHobbies?: string;
     educationEntries?: EducationEntry[];
     workExperiences?: WorkExperienceEntry[];
+    topSkills?: string;
     socialLinks?: {
         linkedIn?: string;
         github?: string;
