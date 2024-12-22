@@ -127,10 +127,13 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                             }}
                             error={formHook.formState.errors.personalityTraits?.message}
                         />
-                        <small className='text-gray-500'>
-                            Select the personality traits that best describe the person you are. You can also add custom
-                            traits. The AI will generate text based on these traits.
-                        </small>
+                        {!watchedPersonalityTraits ||
+                            (watchedPersonalityTraits.length === 0 && (
+                                <small className='text-gray-500'>
+                                    Select the personality traits that best describe the person you are. You can also
+                                    add custom traits. The AI will generate text based on these traits.
+                                </small>
+                            ))}
                         {watchedPersonalityText?.length === 0 && (
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button

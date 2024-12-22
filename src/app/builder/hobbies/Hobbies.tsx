@@ -125,10 +125,13 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 placeholder: 'Add custom hobby'
                             }}
                         />
-                        <small className='text-gray-500'>
-                            Select the hobbies you enjoy. You can also add custom hobbies. The AI will generate a text
-                            based on your hobbies.
-                        </small>
+                        {!watchedHobbies ||
+                            (watchedHobbies.length === 0 && (
+                                <small className='text-gray-500'>
+                                    Select the hobbies you enjoy. You can also add custom hobbies. The AI will generate
+                                    a text based on your hobbies.
+                                </small>
+                            ))}
                         {watchedHobbiesText?.length === 0 && (
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
