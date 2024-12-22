@@ -16,7 +16,7 @@ import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
-import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
+import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -153,6 +153,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                             <ImproveWithAIButton
                                 isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}
                                 disabled={!watchedPersonalityText || watchedPersonalityText.length === 0}
+                                isDirty={isDirty}
                                 onClick={async () => {
                                     const newDescription = await improvePersonalityText({
                                         traits: watchedPersonalityTraits,

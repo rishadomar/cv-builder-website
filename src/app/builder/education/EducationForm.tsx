@@ -13,7 +13,7 @@ import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { toast } from 'react-toastify';
-import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
+import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useImproveEducationCommentMutation } from '@/lib/store/api/aiApiSlice';
 
@@ -166,6 +166,7 @@ export default function EducationForm({
                             />
                             <ImproveWithAIButton
                                 isBusyImproving={isImprovingEducationComment}
+                                isDirty={isDirty}
                                 disabled={
                                     watchedDescription?.length === 0 ||
                                     watchedInstitution?.length === 0 ||

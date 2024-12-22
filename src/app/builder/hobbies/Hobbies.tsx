@@ -16,7 +16,7 @@ import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
 import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
-import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
+import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -151,6 +151,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                             <ImproveWithAIButton
                                 isBusyImproving={isGeneratingHobbiesText || isImprovingHobbiesText}
                                 disabled={!watchedHobbiesText || watchedHobbiesText.length === 0}
+                                isDirty={isDirty}
                                 onClick={async () => {
                                     const newText = await improveHobbiesText({
                                         hobbies: watchedHobbies,

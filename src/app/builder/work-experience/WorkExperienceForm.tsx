@@ -10,7 +10,7 @@ import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
 import { toast } from 'react-toastify';
-import { ImproveWithAIButton } from '@/components/ImproveWithAIButton';
+import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useState } from 'react';
@@ -165,6 +165,7 @@ export default function WorkExperienceForm({
                             <ImproveWithAIButton
                                 isBusyImproving={isImprovingWorkDescriptionText}
                                 disabled={!watchedDescription || watchedDescription.length === 0}
+                                isDirty={isDirty}
                                 onClick={async () => {
                                     const newDescription = await improveWorkDescriptionText({
                                         workDetails: { company: watchedCompany },
