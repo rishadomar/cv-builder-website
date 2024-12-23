@@ -138,6 +138,7 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
                             <TextareaFormField
                                 formHook={formHook}
                                 fieldName='topSkills'
+                                label='Top skills'
                                 placeholder='AI generated text will appear here'
                                 rows={watchedTopSkills?.length > 0 ? 10 : 3}
                             />
