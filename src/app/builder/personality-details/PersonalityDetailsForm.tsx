@@ -12,7 +12,6 @@ import { StepButtons } from '../StepButtons';
 import PillSelectFormField from '../PillSelectFormField';
 import { Sparkles } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
-import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
@@ -108,7 +107,6 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
             shouldValidate: true,
             shouldDirty: true
         });
-        dispatch(setFieldValue({ field: 'personalityText', value: newText }));
     };
 
     return (

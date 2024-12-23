@@ -34,7 +34,7 @@ const ImproveWithAIButton: React.FC<ImproveWithAIButtonProps> = ({
             onClick={onClick}
             disabled={disabled || isBusyImproving}
             style={{
-                ['--tw-animate-vibrate' as string]: isDirty ? 'running' : 'paused'
+                ['--tw-animate-vibrate' as string]: isDirty && !disabled && !isBusyImproving ? 'running' : 'paused'
             }}
         >
             <Sparkles className='h-4 w-4' />

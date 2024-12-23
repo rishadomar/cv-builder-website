@@ -11,7 +11,6 @@ import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { Sparkles } from 'lucide-react';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
-import { setFieldValue } from '@/lib/store/fieldValues/fieldValuesSlice';
 import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
 import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
@@ -106,7 +105,6 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
             shouldValidate: true,
             shouldDirty: true
         });
-        dispatch(setFieldValue({ field: 'hobbiesText', value: newText }));
     };
 
     return (
@@ -125,13 +123,12 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 placeholder: 'Add custom hobby'
                             }}
                         />
-                        {!watchedHobbies ||
-                            (watchedHobbies.length === 0 && (
-                                <small className='text-gray-500'>
-                                    Select the hobbies you enjoy. You can also add custom hobbies. The AI will generate
-                                    a text based on your hobbies.
-                                </small>
-                            ))}
+                        {watchedHobbies?.length === 0 && (
+                            <small className='text-gray-500'>
+                                Select the hobbies you enjoy. You can also add custom hobbies. AI will generate a text
+                                based on your hobbies.
+                            </small>
+                        )}
                         {watchedHobbiesText?.length === 0 && (
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
@@ -153,7 +150,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                             />
                             <ImproveWithAIButton
                                 isBusyImproving={isGeneratingHobbiesText || isImprovingHobbiesText}
-                                disabled={!watchedHobbiesText || watchedHobbiesText.length === 0}
+                                disabled={watchedHobbiesText?.length === 0}
                                 isDirty={isDirty}
                                 onClick={async () => {
                                     const newText = await improveHobbiesText({
