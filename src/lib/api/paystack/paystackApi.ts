@@ -1,5 +1,7 @@
 import { Currency } from 'react-paystack/dist/types';
-import axiosInstance from '../axios/axiosInstance';
+import axiosInstance from '@/lib/api/axios/axiosInstance';
+import { apiClient } from '@/lib/api/axios/apiClient';
+import { ApiError } from '@/lib/api/axios/ApiError';
 
 // Define the service function to fetch data from a given URL
 export async function paymentComplete(
@@ -49,13 +51,16 @@ export async function validatePromoCode(sub: string, promoCode: string) {
 
 export async function applyPromoCode(sub: string, promoCode: string) {
     try {
-        const response = await axiosInstance.post('/applyPromoCode', {
-            sub,
-            promoCode
+        const payment = await apiClient.request({
+            method: 'POST',
+            url: '/applyPromoCode',
+            data: { sub, promoCode }
         });
-        return response.data.payment;
+        return payment;
     } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
+        if (error instanceof ApiError) {
+            throw error;
+        }
+        throw ApiError.fromAxiosError(error);
     }
 }

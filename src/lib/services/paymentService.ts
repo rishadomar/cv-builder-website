@@ -2,10 +2,11 @@ import { Dispatch } from 'redux';
 import { RootState } from '@/lib/store/store';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
 import * as api from '@/lib/api';
-import { addAxiosError } from '@/lib/store/alert/alertSlice';
 import { setFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
-import type { Error } from '@/lib/type';
 import { Currency } from 'react-paystack/dist/types';
+import { toast } from 'react-toastify';
+import { CustomError } from '@/lib/utils/customError';
+import { ApiError } from '../api/axios/ApiError';
 
 export const paymentComplete = (currency: Currency, amount: number, reference: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
@@ -18,7 +19,7 @@ export const paymentComplete = (currency: Currency, amount: number, reference: s
             dispatch(setFieldValues([{ field: 'payment', value: response }]));
         } catch (error) {
             console.error('Payment error:', error);
-            dispatch(addAxiosError({ title: 'Payment ', error: error as Error }));
+            toast.error((error as CustomError).message);
             throw error;
         } finally {
             dispatch(setLoading(false));
@@ -37,7 +38,7 @@ export const validatePromoCodeInService = (promoCode: string) => {
             dispatch(setFieldValues([{ field: 'payment', value: response }]));
         } catch (error) {
             console.error('Promo code validation error:', error);
-            dispatch(addAxiosError({ title: 'Promo code validation', error: error as Error }));
+            toast.error((error as CustomError).message);
             throw error;
         } finally {
             dispatch(setLoading(false));
@@ -47,17 +48,42 @@ export const validatePromoCodeInService = (promoCode: string) => {
 
 export const applyPromoCode = (promoCode: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
-        if (!getState().authentication.sub) {
-            throw new Error('No sub found');
+        const sub = getState().authentication.sub;
+        if (!sub) {
+            toast.error('Please log in to apply a promo code.');
+            // toast({
+            //     variant: 'destructive',
+            //     title: 'Authentication Error',
+            //     description: 'Please log in to apply a promo code.'
+            // });
+            return;
         }
+
         dispatch(setLoading(true));
         try {
-            const response = await api.applyPromoCode(getState().authentication.sub!, promoCode);
-            dispatch(setFieldValues([{ field: 'payment', value: response }]));
+            const payment = await api.applyPromoCode(sub, promoCode);
+            dispatch(setFieldValues([{ field: 'payment', value: payment }]));
+            toast.success('Promo code applied successfully!');
+            // toast({
+            //     title: "Success",
+            //     description: "Promo code applied successfully!",
+            // });
         } catch (error) {
-            console.error('Promo code application error:', error);
-            dispatch(addAxiosError({ title: 'Promo code application', error: error as Error }));
-            throw error;
+            if (error instanceof ApiError) {
+                toast.error(error.userMessage);
+                // toast({
+                //     variant: "destructive",
+                //     title: "Error",
+                //     description: error.userMessage,
+                // });
+            } else {
+                toast.error('An unexpected error occurred. Please try again.');
+                // toast({
+                //     variant: "destructive",
+                //     title: "Error",
+                //     description: "An unexpected error occurred. Please try again.",
+                // });
+            }
         } finally {
             dispatch(setLoading(false));
         }
