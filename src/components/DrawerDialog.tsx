@@ -34,17 +34,21 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
         return (
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
                 {trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
-                <DrawerContent className='px-3 h-4/5'>
-                    <DrawerHeader>
-                        <DrawerTitle>{title}</DrawerTitle>
-                        {description && <DrawerDescription>{description}</DrawerDescription>}
-                    </DrawerHeader>
-                    {content}
-                    {closeText && (
-                        <Button className='m-4' variant='outline' onClick={() => setIsOpen(!isOpen)}>
-                            {closeText}
-                        </Button>
-                    )}
+                <DrawerContent className='max-h-[90vh]'>
+                    <div className='max-h-full overflow-y-auto'>
+                        <DrawerHeader className='px-4'>
+                            <DrawerTitle>{title}</DrawerTitle>
+                            {description && <DrawerDescription>{description}</DrawerDescription>}
+                        </DrawerHeader>
+                        <div className='px-4'>
+                            {content}
+                            {closeText && (
+                                <Button className='mt-6 w-full' variant='outline' onClick={() => setIsOpen(!isOpen)}>
+                                    {closeText}
+                                </Button>
+                            )}
+                        </div>
+                    </div>
                 </DrawerContent>
             </Drawer>
         );
@@ -53,10 +57,10 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-            <DialogContent>
+            <DialogContent className='max-h-[90vh] overflow-y-auto'>
                 <DialogTitle>{title}</DialogTitle>
                 {description && <DialogDescription>{description}</DialogDescription>}
-                {content}
+                <div>{content}</div>
             </DialogContent>
         </Dialog>
     );

@@ -214,7 +214,7 @@ export default function EducationForm({
                             />
                         </div>
                     </div>
-                    <div className='m-4 flex justify-end'>
+                    <div className='pt-4 m-4 flex justify-end'>
                         <Button
                             className='mr-3'
                             type='button'
