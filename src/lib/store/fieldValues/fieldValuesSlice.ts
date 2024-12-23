@@ -130,6 +130,10 @@ export const selectIsReviewPersonalityDetailsPopulated = (state: RootState) => {
     return state.fieldValues.personalityTraits !== undefined;
 };
 
+export const selectSocialLinksPopulated = (state: RootState) => {
+    return state.fieldValues.socialLinks !== undefined;
+};
+
 export const selectIsPaymentValid = (state: RootState) => {
     const paymentDate = state.fieldValues.payment?.date;
     if (!paymentDate) {
