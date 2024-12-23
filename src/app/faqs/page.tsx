@@ -61,7 +61,7 @@ const FAQPage = () => {
         {
             id: 'templates',
             question: 'How many CV templates are available?',
-            answer: 'We currently offer multiple professional templates to choose from, with new designs added regularly.'
+            answer: 'Currently only a very simple template is offered - over the coming weeks more templates will be added. You will have access to any new templates.'
         },
         {
             id: 'download',
