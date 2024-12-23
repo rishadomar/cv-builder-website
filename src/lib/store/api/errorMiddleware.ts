@@ -1,11 +1,15 @@
 import { Middleware } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 
 const errorMiddleware: Middleware = () => (next) => (action) => {
     if (isRejectedWithValue(action)) {
-        const errorPayload = action.payload as { data: { error: string } };
-        toast.error(errorPayload.data.error || 'An unknown error occurred');
+        const errorPayload = action.payload as { data: { message: string } };
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: errorPayload.data.message || 'An unknown error occurred'
+        });
     }
     return next(action);
 };

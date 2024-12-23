@@ -13,8 +13,8 @@ import { DrawerDialog } from '@/components/DrawerDialog';
 import WorkExperienceForm from './WorkExperienceForm';
 import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
 import { deleteWorkExperience } from '@/lib/services';
-import { toast } from 'react-toastify';
 import { useAppDispatch } from '@/lib/store/hooks';
+import { toast } from '@/hooks/use-toast';
 
 type WorkExperienceEntryActionsDropdownProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -83,7 +83,11 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                 onDelete={async () => {
                     setBusyUpdatingList(true);
                     await dispatch(deleteWorkExperience(workExperienceEntry));
-                    toast.success('Successfully deleted');
+                    toast({
+                        variant: 'default',
+                        title: 'Success',
+                        description: 'Successfully deleted the work experience'
+                    });
                     setBusyUpdatingList(false);
                     setShowDeleteDialog(false);
                 }}

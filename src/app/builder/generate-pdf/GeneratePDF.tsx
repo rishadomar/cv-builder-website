@@ -8,7 +8,8 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { formatDateTime } from '@/lib/utils';
-import { toast } from 'react-toastify';
+import { toast } from '@/hooks/use-toast';
+import { CustomError } from '@/lib/utils/customError';
 
 type GeneratePDFProps = {
     onNext?: () => void;
@@ -46,9 +47,25 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
     const handleGeneratePDF = async () => {
         try {
             await dispatch(services.generatePDF());
-            toast.success('PDF generated successfully. Ready to be downloaded.');
+            toast({
+                variant: 'default',
+                title: 'Success',
+                description: 'PDF generated successfully. Ready to be downloaded.'
+            });
         } catch (error) {
-            console.error('Generate PDF error:', error);
+            if (error instanceof CustomError) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: error.message
+                });
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: 'An unexpected error occurred. Please try again.'
+                });
+            }
         } finally {
         }
     };

@@ -34,12 +34,12 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
         await dispatch(services.paymentComplete(Cost.currency as Currency, Cost.amount, response.reference));
+        setPaymentComplete(true);
     };
 
     const handlePromoSubmit = async (data: PromoFormValues) => {
         console.log('Submitting promo code:', data.promoCode);
         await dispatch(services.applyPromoCode(data.promoCode));
-        setPaymentComplete(true);
     };
 
     return (

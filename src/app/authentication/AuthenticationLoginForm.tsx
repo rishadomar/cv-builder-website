@@ -11,8 +11,8 @@ import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
 import LinkButton from '@/components/core/LinkButton';
 import { Loader } from 'lucide-react';
-import { toast } from 'react-toastify';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
+import { toast } from '@/hooks/use-toast';
 
 interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;
@@ -62,8 +62,20 @@ export function AuthenticationLoginForm({
             try {
                 await dispatch(services.login(email, password));
                 router.replace('/builder');
-            } catch (error: unknown) {
-                toast.error((error as CustomError).message);
+            } catch (error) {
+                if (error instanceof CustomError) {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: error.message
+                    });
+                } else {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: 'An unexpected error occurred. Please try again.'
+                    });
+                }
             } finally {
                 setIsLoading(false);
             }

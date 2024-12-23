@@ -8,8 +8,8 @@ import { useAppDispatch } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
 import { Loader } from 'lucide-react';
-import { toast } from 'react-toastify';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
+import { toast } from '@/hooks/use-toast';
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onSuccess: () => void;
@@ -40,10 +40,27 @@ export function ForgotPasswordForm({ onSuccess, className, ...props }: ForgotPas
         if (email) {
             try {
                 await dispatch(services.forgotPassword(email));
-                toast.success('Password reset code sent to your email');
+                toast({
+                    variant: 'default',
+                    title: 'Success',
+                    description: 'Password reset code sent to your email'
+                });
+
                 onSuccess();
             } catch (error: unknown) {
-                toast.error((error as CustomError).message);
+                if (error instanceof CustomError) {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: error.message
+                    });
+                } else {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: 'An unexpected error occurred. Please try again.'
+                    });
+                }
             } finally {
                 setIsLoading(false);
             }

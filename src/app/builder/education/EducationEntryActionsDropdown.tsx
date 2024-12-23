@@ -13,8 +13,8 @@ import EducationForm from './EducationForm';
 import { DrawerDialog } from '@/components/DrawerDialog';
 import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
 import { useAppDispatch } from '@/lib/store/hooks';
-import { toast } from 'react-toastify';
 import { deleteEducation } from '@/lib/services';
+import { toast } from '@/hooks/use-toast';
 
 type EducationEntryActionsDropdownProps = {
     educationEntry: EducationEntry;
@@ -82,7 +82,11 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
                 onDelete={async () => {
                     setBusyUpdatingList(true);
                     await dispatch(deleteEducation(educationEntry));
-                    toast.success('Successfully deleted');
+                    toast({
+                        variant: 'default',
+                        title: 'Success',
+                        description: 'Successfully deleted'
+                    });
                     setBusyUpdatingList(false);
                     setShowDeleteDialog(false);
                 }}

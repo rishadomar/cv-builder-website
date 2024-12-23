@@ -10,9 +10,9 @@ import { useAppDispatch } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
 import { Loader } from 'lucide-react';
-import { toast } from 'react-toastify';
 import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
+import { toast } from '@/hooks/use-toast';
 
 interface ConfirmForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onSuccess: () => void;
@@ -48,10 +48,26 @@ export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: Co
 
         try {
             await dispatch(services.confirmForgotPassword(email, password, code));
-            toast.success('Password successfully reset');
+            toast({
+                variant: 'default',
+                title: 'Success',
+                description: 'Password successfully reset'
+            });
             onSuccess();
         } catch (error: unknown) {
-            toast.error((error as CustomError).message);
+            if (error instanceof CustomError) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: error.message
+                });
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: 'An unexpected error occurred. Please try again.'
+                });
+            }
         } finally {
             setIsLoading(false);
         }

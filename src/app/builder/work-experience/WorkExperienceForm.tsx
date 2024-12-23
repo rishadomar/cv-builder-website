@@ -9,13 +9,14 @@ import { WorkExperienceEntry } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
-import { toast } from 'react-toastify';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
+import { toast } from '@/hooks/use-toast';
+import { CustomError } from '@/lib/utils/customError';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z
@@ -105,10 +106,25 @@ export default function WorkExperienceForm({
                     await dispatch(addWorkExperience(data as WorkExperienceEntry));
                 }
                 onClose();
-                toast.success('Successfully saved');
+                toast({
+                    variant: 'default',
+                    title: 'Success',
+                    description: 'Successfully saved'
+                });
             } catch (error) {
-                console.error('Error saving work experience', error);
-                toast.error('Failed to save');
+                if (error instanceof CustomError) {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: error.message
+                    });
+                } else {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: 'An unexpected error occurred. Please try again.'
+                    });
+                }
             } finally {
                 console.log('Set busy adding to false');
                 setBusyUpdating(false);

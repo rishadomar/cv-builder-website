@@ -10,8 +10,8 @@ import * as services from '@/lib/services';
 import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import { Loader } from 'lucide-react';
 import { CustomError } from '@/lib/utils/customError';
-import { toast } from 'react-toastify';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
+import { toast } from '@/hooks/use-toast';
 
 interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {
@@ -54,8 +54,19 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
                 await dispatch(services.registerNewUser(email, password));
                 router.push('/builder');
             } catch (error) {
-                console.error('Login error:', error);
-                toast.error((error as CustomError).message);
+                if (error instanceof CustomError) {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: error.message
+                    });
+                } else {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: 'An unexpected error occurred. Please try again.'
+                    });
+                }
             } finally {
                 setIsLoading(false);
             }

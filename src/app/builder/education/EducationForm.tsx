@@ -12,10 +12,11 @@ import TextareaFormField from '@/app/builder/TextareaFormField';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
-import { toast } from 'react-toastify';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useImproveEducationCommentMutation } from '@/lib/store/api/aiApiSlice';
+import { toast } from '@/hooks/use-toast';
+import { CustomError } from '@/lib/utils/customError';
 
 const educationDetailsFormSchema = z.object({
     description: z
@@ -103,10 +104,25 @@ export default function EducationForm({
                     await dispatch(addEducation(data as EducationEntry));
                 }
                 onClose();
-                toast.success('Successfully saved');
+                toast({
+                    variant: 'default',
+                    title: 'Success',
+                    description: 'Successfully saved'
+                });
             } catch (error) {
-                console.error('Error saving work experience', error);
-                toast.error('Some error occurred saving work experience');
+                if (error instanceof CustomError) {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: error.message
+                    });
+                } else {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: 'An unexpected error occurred. Please try again.'
+                    });
+                }
             } finally {
                 setBusyUpdating(false);
             }

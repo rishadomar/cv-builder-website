@@ -4,23 +4,38 @@ import { setLoading } from '@/lib/store/loading/loadingSlice';
 import * as api from '@/lib/api';
 import { setFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { Currency } from 'react-paystack/dist/types';
-import { toast } from 'react-toastify';
-import { CustomError } from '@/lib/utils/customError';
 import { ApiError } from '../api/axios/ApiError';
+import { toast } from '@/hooks/use-toast';
 
 export const paymentComplete = (currency: Currency, amount: number, reference: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
-        if (!getState().authentication.sub) {
-            throw new Error('No sub found');
+        const sub = getState().authentication.sub;
+        if (!sub) {
+            toast({
+                variant: 'destructive',
+                title: 'Authentication Error',
+                description: 'Please log in to apply a promo code.'
+            });
+            return;
         }
         dispatch(setLoading(true));
         try {
             const response = await api.paymentComplete(getState().authentication.sub!, currency, amount, reference);
-            dispatch(setFieldValues([{ field: 'payment', value: response }]));
+            dispatch(setFieldValues([{ field: 'payment', value: response.payment }]));
         } catch (error) {
-            console.error('Payment error:', error);
-            toast.error((error as CustomError).message);
-            throw error;
+            if (error instanceof ApiError) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: error.userMessage
+                });
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: 'An unexpected error occurred. Please try again.'
+                });
+            }
         } finally {
             dispatch(setLoading(false));
         }
@@ -29,16 +44,33 @@ export const paymentComplete = (currency: Currency, amount: number, reference: s
 
 export const validatePromoCodeInService = (promoCode: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
-        if (!getState().authentication.sub) {
-            throw new Error('No sub found');
+        const sub = getState().authentication.sub;
+        if (!sub) {
+            toast({
+                variant: 'destructive',
+                title: 'Authentication Error',
+                description: 'Please log in to apply a promo code.'
+            });
+            return;
         }
         dispatch(setLoading(true));
         try {
             const response = await api.validatePromoCode(getState().authentication.sub!, promoCode);
             dispatch(setFieldValues([{ field: 'payment', value: response }]));
         } catch (error) {
-            console.error('Promo code validation error:', error);
-            toast.error((error as CustomError).message);
+            if (error instanceof ApiError) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: error.userMessage
+                });
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: 'An unexpected error occurred. Please try again.'
+                });
+            }
             throw error;
         } finally {
             dispatch(setLoading(false));
@@ -50,39 +82,35 @@ export const applyPromoCode = (promoCode: string) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
         const sub = getState().authentication.sub;
         if (!sub) {
-            toast.error('Please log in to apply a promo code.');
-            // toast({
-            //     variant: 'destructive',
-            //     title: 'Authentication Error',
-            //     description: 'Please log in to apply a promo code.'
-            // });
+            toast({
+                variant: 'destructive',
+                title: 'Authentication Error',
+                description: 'Please log in to apply a promo code.'
+            });
             return;
         }
 
         dispatch(setLoading(true));
         try {
-            const payment = await api.applyPromoCode(sub, promoCode);
-            dispatch(setFieldValues([{ field: 'payment', value: payment }]));
-            toast.success('Promo code applied successfully!');
-            // toast({
-            //     title: "Success",
-            //     description: "Promo code applied successfully!",
-            // });
+            const response = await api.applyPromoCode(sub, promoCode);
+            dispatch(setFieldValues([{ field: 'payment', value: response }]));
+            toast({
+                title: 'Success',
+                description: 'Promo code applied successfully!'
+            });
         } catch (error) {
             if (error instanceof ApiError) {
-                toast.error(error.userMessage);
-                // toast({
-                //     variant: "destructive",
-                //     title: "Error",
-                //     description: error.userMessage,
-                // });
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: error.userMessage
+                });
             } else {
-                toast.error('An unexpected error occurred. Please try again.');
-                // toast({
-                //     variant: "destructive",
-                //     title: "Error",
-                //     description: "An unexpected error occurred. Please try again.",
-                // });
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: 'An unexpected error occurred. Please try again.'
+                });
             }
         } finally {
             dispatch(setLoading(false));
