@@ -11,13 +11,15 @@ type FieldValueReviewProps = {
     value?: string;
     withCheck?: boolean;
     collapseOptions?: CollapseOptions;
+    showAsBold?: boolean;
 };
 
 export const FieldValueReview: React.FC<FieldValueReviewProps> = ({
     field,
     value = '--no value--',
     withCheck = false,
-    collapseOptions
+    collapseOptions,
+    showAsBold = false
 }) => {
     if (field) {
         return (
@@ -33,6 +35,6 @@ export const FieldValueReview: React.FC<FieldValueReviewProps> = ({
     } else if (collapseOptions?.collapsable) {
         return <CollapsibleDescription text={value} parentRef={collapseOptions.parentRef}></CollapsibleDescription>;
     } else {
-        return <div className='text-sm whitespace-pre-wrap'>{value}</div>;
+        return <div className={`text-sm whitespace-pre-wrap  ${showAsBold ? 'font-bold' : ''}`}>{value}</div>;
     }
 };

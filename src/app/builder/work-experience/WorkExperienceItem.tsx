@@ -27,9 +27,9 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
         if (
             !workExperienceEntry.startDate ||
             !workExperienceEntry.startDate.year ||
-            !workExperienceEntry.startDate.month
+            workExperienceEntry.startDate.month === undefined
         ) {
-            return '';
+            return '-';
         }
         const startDateString = `${getMonth(workExperienceEntry.startDate.month)} ${
             workExperienceEntry.startDate.year
@@ -48,7 +48,7 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
         <div ref={parentRef} className='grid grid-cols-[1fr_auto] gap-4 text-sm relative'>
             <div className='pl-9 grid gap-1'>
                 <div className='aspect-square w-3 bg-gray-900 rounded-full absolute left-6 translate-x-[-12.5px] z-10 top-1 dark:bg-gray-50' />
-                <FieldValueReview value={workExperienceEntry.company} />
+                <FieldValueReview value={workExperienceEntry.company} showAsBold />
                 {workExperienceEntry.startDate &&
                     workExperienceEntry.startDate.year &&
                     workExperienceEntry.startDate.month >= 0 && <IconValueReview icon={Calendar} value={getPeriod()} />}
