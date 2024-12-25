@@ -15,7 +15,10 @@ const BillingPage = () => {
     return (
         <div className='min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4'>
             {isPaymentValid && !hasPromoCode ? (
-                <PaymentInformation />
+                <>
+                    <PaymentInformation />
+                    <BackButton />
+                </>
             ) : (
                 <Paywall
                     onNext={() => {
@@ -26,7 +29,6 @@ const BillingPage = () => {
                     }}
                 />
             )}
-            <BackButton />
         </div>
     );
 };
