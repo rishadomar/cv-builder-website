@@ -11,6 +11,7 @@ interface PasswordFieldProps {
     autoComplete?: 'off' | 'on';
     autoHide?: boolean;
     match?: string;
+    showValidity?: boolean;
 }
 
 export interface PasswordFieldRef {
@@ -43,7 +44,7 @@ const validatePassword = (password: string, match?: string) => {
 };
 
 const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
-    ({ value, onChange, isLoading, withHelp, autoComplete = 'on', autoHide = true, match }, ref) => {
+    ({ value, onChange, isLoading, withHelp, autoComplete = 'on', autoHide = true, match, showValidity }, ref) => {
         const [showPassword, setShowPassword] = React.useState<boolean>(false);
         const inputRef = useRef<HTMLInputElement>(null);
         const validation = validatePassword(value, match);
@@ -91,7 +92,7 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
                         autoComplete={autoComplete}
                     />
                     <div className='absolute right-2 top-2 flex gap-2'>
-                        {value && (
+                        {showValidity && value && (
                             <>
                                 {validation.isValid ? (
                                     <Check className='h-4 w-4 text-green-500' />

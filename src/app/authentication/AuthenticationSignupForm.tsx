@@ -87,13 +87,20 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
                 <div className={cn('grid gap-6', className)} {...props}>
                     <form onSubmit={onSubmit}>
                         <div className='grid gap-2'>
-                            <EmailField value={email} onChange={setEmail} isLoading={isLoading} ref={emailRef} />
+                            <EmailField
+                                value={email}
+                                onChange={setEmail}
+                                isLoading={isLoading}
+                                ref={emailRef}
+                                showValidity
+                            />
                             <PasswordField
                                 value={password}
                                 onChange={setPassword}
                                 isLoading={isLoading}
                                 withHelp={true}
                                 ref={passwordRef}
+                                showValidity
                             />
                             <Button disabled={isLoading || !emailIsValid || !passwordIsValid} name='sign-in'>
                                 {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
@@ -116,7 +123,13 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
             <div className={cn('grid gap-6', className)} {...props}>
                 <form onSubmit={onSubmit}>
                     <div className='grid gap-2'>
-                        <EmailField isLoading={isLoading} value={email} onChange={setEmail} ref={emailRef} />
+                        <EmailField
+                            isLoading={isLoading}
+                            value={email}
+                            onChange={setEmail}
+                            ref={emailRef}
+                            showValidity
+                        />
                         <Button disabled={isLoading || !emailIsValid} name='sign-up'>
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
                             Create account with Email

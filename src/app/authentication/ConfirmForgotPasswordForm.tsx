@@ -83,7 +83,13 @@ export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: Co
             <div className={cn('grid gap-6', className)} {...props}>
                 <form onSubmit={onSubmit}>
                     <div className='grid gap-2'>
-                        <EmailField value={email} onChange={setEmail} isLoading={isLoading} ref={emailRef} />
+                        <EmailField
+                            value={email}
+                            onChange={setEmail}
+                            isLoading={isLoading}
+                            ref={emailRef}
+                            showValidity
+                        />
                         <PasswordField
                             value={password}
                             onChange={setPassword}
@@ -92,6 +98,7 @@ export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: Co
                             ref={passwordRef}
                             autoComplete='off'
                             autoHide={false}
+                            showValidity
                         />
                         <PasswordField
                             value={confirmPassword}
@@ -102,6 +109,7 @@ export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: Co
                             autoComplete='off'
                             autoHide={false}
                             match={password}
+                            showValidity
                         />
                         <Label className='sr-only' htmlFor='code'>
                             Code via email
