@@ -34,7 +34,7 @@ export default function YearFormField({ formHook, label, fieldName, description,
                                 value={field.value?.toString()}
                                 onValueChange={(value) => field.onChange(Number(value))}
                             >
-                                <SelectTrigger className='w-[120px]'>
+                                <SelectTrigger className='w-[100px]'>
                                     <SelectValue placeholder={label} />
                                 </SelectTrigger>
                                 <SelectContent>
