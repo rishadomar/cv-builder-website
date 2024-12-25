@@ -43,6 +43,7 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
     const { isDirty } = formHook.formState;
     const step = getStep('top-skills');
     const [extractTopSkills] = useExtractTopSkillsMutation();
+    const [busyGeneratingTopSkills, setBusyGeneratingTopSkills] = useState(false);
 
     useEffect(() => {
         if (allFieldValues) {
@@ -87,15 +88,20 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
                                     variant='outline'
-                                    disabled={workExperienceEntries?.length === 0}
+                                    disabled={workExperienceEntries?.length === 0 || busyGeneratingTopSkills}
                                     onClick={async () => {
-                                        const topSkills = await extractTopSkills({
-                                            previousText: watchedTopSkills ?? ''
-                                        }).unwrap();
-                                        formHook.setValue('topSkills', topSkills, {
-                                            shouldValidate: true,
-                                            shouldDirty: true
-                                        });
+                                        try {
+                                            setBusyGeneratingTopSkills(true);
+                                            const topSkills = await extractTopSkills({
+                                                previousText: watchedTopSkills ?? ''
+                                            }).unwrap();
+                                            formHook.setValue('topSkills', topSkills, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            });
+                                        } finally {
+                                            setBusyGeneratingTopSkills(false);
+                                        }
                                     }}
                                 >
                                     <Sparkles className='mr-2 h-5 w-5' />
@@ -112,27 +118,32 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                                 rows={watchedTopSkills?.length > 0 ? 20 : 3}
                             />
                             <ImproveWithAIButton
-                                isBusyImproving={false}
+                                isBusyImproving={busyGeneratingTopSkills}
                                 disabled={!watchedTopSkills || watchedTopSkills.length === 0}
                                 isDirty={isDirty}
                                 onClick={async () => {
-                                    const newDescription = await extractTopSkills({
-                                        previousText: watchedTopSkills
-                                    }).unwrap();
-                                    setCompareText({
-                                        previousText: watchedTopSkills,
-                                        newText: newDescription,
-                                        onAccept: (acceptedText: string) => {
-                                            formHook.setValue('topSkills', acceptedText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            setCompareText(undefined);
-                                        },
-                                        onReject: () => {
-                                            setCompareText(undefined);
-                                        }
-                                    });
+                                    try {
+                                        setBusyGeneratingTopSkills(true);
+                                        const newDescription = await extractTopSkills({
+                                            previousText: watchedTopSkills
+                                        }).unwrap();
+                                        setCompareText({
+                                            previousText: watchedTopSkills,
+                                            newText: newDescription,
+                                            onAccept: (acceptedText: string) => {
+                                                formHook.setValue('topSkills', acceptedText, {
+                                                    shouldValidate: true,
+                                                    shouldDirty: true
+                                                });
+                                                setCompareText(undefined);
+                                            },
+                                            onReject: () => {
+                                                setCompareText(undefined);
+                                            }
+                                        });
+                                    } finally {
+                                        setBusyGeneratingTopSkills(false);
+                                    }
                                 }}
                             />
                         </div>

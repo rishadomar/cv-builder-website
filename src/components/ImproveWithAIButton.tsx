@@ -28,7 +28,7 @@ const ImproveWithAIButton: React.FC<ImproveWithAIButtonProps> = ({
             size='icon'
             variant='ghost'
             className={cn(
-                'absolute bottom-1 right-1 h-8 w-8 text-violet-600',
+                'absolute bottom-1 right-3 h-8 w-8 text-violet-600',
                 isDirty && 'animate-[vibrate-burst_4s_ease-in-out_infinite]'
             )}
             onClick={onClick}
