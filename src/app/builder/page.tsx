@@ -19,6 +19,7 @@ import EducationList from './education/EducationList';
 import { Review } from './review/Review';
 import { Steps } from '@/lib/utils/step';
 import SocialLinksForm from './social-links/SocialLinks';
+import TopSkillsForm from './top-skills/TopSkillsForm';
 
 const NumberOfPages = Steps.length;
 
@@ -117,6 +118,8 @@ function FormContent() {
                 {currentPage === 'work-experience' && (
                     <WorkExperienceList onNext={nextPage} onPrevious={previousPage} />
                 )}
+
+                {currentPage === 'top-skills' && <TopSkillsForm onNext={nextPage} onPrevious={previousPage} />}
 
                 {currentPage === 'review' && <Review onNext={nextPage} onPrevious={previousPage} />}
 

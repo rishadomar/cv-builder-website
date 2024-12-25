@@ -12,7 +12,8 @@ import {
     selectIsRemoteWorkPopulated,
     selectIsReviewPersonalityDetailsPopulated,
     selectIsWorkExperiencePopulated,
-    selectSocialLinksPopulated
+    selectSocialLinksPopulated,
+    selectTopSkillsPopulated
 } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { useAppSelector } from '@/lib/store/hooks';
 import { Button } from './ui/button';
@@ -35,6 +36,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
     const isReviewPersonalityDetailsPopulated = useAppSelector(selectIsReviewPersonalityDetailsPopulated);
     const isPaymentValid = useAppSelector(selectIsPaymentValid);
     const isSocialLinksPopulated = useAppSelector(selectSocialLinksPopulated);
+    const isTopSkillsPopulated = useAppSelector(selectTopSkillsPopulated);
 
     const getStatus = (step: (typeof Steps)[0]) => {
         switch (step.path) {
@@ -54,6 +56,8 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                 return isEducationPopulated ? 'complete' : 'incomplete';
             case 'work-experience':
                 return isWorkExperiencePopulated ? 'complete' : 'incomplete';
+            case 'top-skills':
+                return isTopSkillsPopulated ? 'complete' : 'incomplete';
             case 'social-links':
                 return isSocialLinksPopulated ? 'complete' : 'incomplete';
             default:

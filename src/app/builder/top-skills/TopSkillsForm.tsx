@@ -1,0 +1,146 @@
+import React, { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form } from '@/components/ui/form';
+import { StepButtons } from '../StepButtons';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { save } from '@/lib/services';
+import { KeyValuePairArray } from '@/lib/type';
+import { getStep } from '@/lib/utils/step';
+import { StepContainer } from '../StepContainer';
+import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
+import { useExtractTopSkillsMutation } from '@/lib/store/api/aiApiSlice';
+import { Button } from '@/components/ui/button';
+import { Sparkles } from 'lucide-react';
+import TextareaFormField from '../TextareaFormField';
+import ImproveWithAIButton from '@/components/ImproveWithAIButton';
+
+const topSkillsFormSchema = z.object({
+    topSkills: z.string().default('')
+});
+
+type TopSkillsFormValues = z.infer<typeof topSkillsFormSchema>;
+
+type TopSkillsFormProps = {
+    onNext?: () => void;
+    onPrevious: () => void;
+};
+
+export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps) {
+    const dispatch = useAppDispatch();
+    const allFieldValues = useAppSelector((state) => state.fieldValues);
+    const workExperienceEntries = useAppSelector((state) => state.fieldValues.workExperiences);
+    const [compareText, setCompareText] = useState<CompareTextState>();
+    const defaultValues: Partial<TopSkillsFormValues> = {
+        topSkills: ''
+    };
+    const formHook = useForm<TopSkillsFormValues>({
+        resolver: zodResolver(topSkillsFormSchema),
+        defaultValues
+    });
+    const watchedTopSkills = formHook.watch('topSkills');
+    const { isDirty } = formHook.formState;
+    const step = getStep('top-skills');
+    const [extractTopSkills] = useExtractTopSkillsMutation();
+
+    useEffect(() => {
+        if (allFieldValues) {
+            formHook.reset({
+                topSkills: allFieldValues.topSkills || ''
+            });
+        }
+    }, [allFieldValues, formHook]);
+
+    async function onSubmit(event?: React.BaseSyntheticEvent) {
+        event?.preventDefault(); // Prevent form submission immediately
+
+        const submitter = (event?.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
+        const submitterName = submitter?.name;
+
+        const saveValues = async (data: unknown) => {
+            if (isDirty) {
+                await dispatch(save(data as KeyValuePairArray));
+            }
+        };
+
+        if (onNext && submitterName === 'next') {
+            formHook.handleSubmit(async (data: TopSkillsFormValues) => {
+                await saveValues(data);
+                onNext();
+            })();
+        } else if (onPrevious && submitterName === 'previous') {
+            const data = formHook.getValues();
+            await saveValues(data);
+            onPrevious();
+        }
+
+        event?.preventDefault();
+    }
+
+    return (
+        <>
+            <Form {...formHook}>
+                <form onSubmit={onSubmit}>
+                    <StepContainer step={step}>
+                        {watchedTopSkills?.length === 0 && (
+                            <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
+                                <Button
+                                    variant='outline'
+                                    disabled={workExperienceEntries?.length === 0}
+                                    onClick={async () => {
+                                        const topSkills = await extractTopSkills({
+                                            previousText: watchedTopSkills ?? ''
+                                        }).unwrap();
+                                        formHook.setValue('topSkills', topSkills, {
+                                            shouldValidate: true,
+                                            shouldDirty: true
+                                        });
+                                    }}
+                                >
+                                    <Sparkles className='mr-2 h-5 w-5' />
+                                    Generate your Top skills using AI
+                                </Button>
+                            </div>
+                        )}
+
+                        <div className='relative'>
+                            <TextareaFormField
+                                formHook={formHook}
+                                fieldName='topSkills'
+                                placeholder='AI generated text will appear here'
+                                rows={watchedTopSkills?.length > 0 ? 20 : 3}
+                            />
+                            <ImproveWithAIButton
+                                isBusyImproving={false}
+                                disabled={!watchedTopSkills || watchedTopSkills.length === 0}
+                                isDirty={isDirty}
+                                onClick={async () => {
+                                    const newDescription = await extractTopSkills({
+                                        previousText: watchedTopSkills
+                                    }).unwrap();
+                                    setCompareText({
+                                        previousText: watchedTopSkills,
+                                        newText: newDescription,
+                                        onAccept: (acceptedText: string) => {
+                                            formHook.setValue('topSkills', acceptedText, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            });
+                                            setCompareText(undefined);
+                                        },
+                                        onReject: () => {
+                                            setCompareText(undefined);
+                                        }
+                                    });
+                                }}
+                            />
+                        </div>
+                    </StepContainer>
+                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                </form>
+            </Form>
+            {compareText && <CompareText isOpen={true} setIsOpen={() => setCompareText(undefined)} {...compareText} />}
+        </>
+    );
+}

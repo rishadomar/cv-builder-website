@@ -9,6 +9,7 @@ import {
     Link,
     Mail,
     MapPinHouse,
+    Trophy,
     User
 } from 'lucide-react';
 import { StepPath, StepType } from '../type';
@@ -116,6 +117,16 @@ export const Steps: StepType[] = [
     },
     {
         id: 11,
+        title: 'Top Skills',
+        icon: Trophy,
+        description: 'Top skills acquired during your work experience',
+        completed: false,
+        path: 'top-skills',
+        showInSections: true,
+        paymentRequired: true
+    },
+    {
+        id: 12,
         title: 'Review',
         description: 'Review your CV',
         completed: false,
@@ -124,7 +135,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 12,
+        id: 13,
         title: 'Generate & download CV',
         icon: Download,
         description: 'A PDF will be generated which you can download for keeps',

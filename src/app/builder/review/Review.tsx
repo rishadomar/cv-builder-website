@@ -10,6 +10,7 @@ import { EducationReview } from '../education/EducationReview';
 import { WorkExperienceReview } from '../work-experience/WorkExperienceReview';
 import { StepContainer } from '../StepContainer';
 import { SocialLinksReview } from '../social-links/SocialLinksReview';
+import { TopSkillsReview } from '../top-skills/TopSkillsReview';
 
 type ReviewProps = {
     onNext?: () => void;
@@ -37,6 +38,8 @@ export const Review: React.FC<ReviewProps> = ({ onNext, onPrevious }) => {
                 <SocialLinksReview />
                 <hr />
                 <EducationReview />
+                <hr />
+                <TopSkillsReview />
                 <hr />
                 <WorkExperienceReview />
             </StepContainer>

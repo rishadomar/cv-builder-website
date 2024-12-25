@@ -159,6 +159,7 @@ export type StepPath =
     | 'hobbies'
     | 'education'
     | 'work-experience'
+    | 'top-skills'
     | 'social-links'
     | 'paywall'
     | 'review'

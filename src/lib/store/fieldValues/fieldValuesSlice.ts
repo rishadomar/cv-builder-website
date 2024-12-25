@@ -134,6 +134,10 @@ export const selectSocialLinksPopulated = (state: RootState) => {
     return state.fieldValues.socialLinks !== undefined;
 };
 
+export const selectTopSkillsPopulated = (state: RootState) => {
+    return state.fieldValues.topSkills !== undefined;
+};
+
 export const selectIsPaymentValid = (state: RootState) => {
     const paymentDate = state.fieldValues.payment?.date;
     if (!paymentDate) {
