@@ -8,7 +8,17 @@ import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
     title: 'CV Builder using AI!',
-    description: 'Create your professional CV easily with our AI-powered CV builder.',
+    description:
+        'Create your professional CV easily with our AI-powered CV builder. Transform your basic information into a polished resume that stands out to employers.',
+    keywords: 'CV builder, resume creator, AI resume, professional CV, South African CV builder',
+    openGraph: {
+        title: 'AI CV Builder | Professional Resume Creator',
+        description: 'Create your professional CV with AI assistance',
+        url: 'https://cvbuilder.co.za',
+        siteName: 'CV Builder',
+        locale: 'en_ZA',
+        type: 'website'
+    },
     robots: 'noindex, nofollow',
     icons: {
         icon: [
