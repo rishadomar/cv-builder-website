@@ -2,5 +2,3 @@ User-agent: *
 Disallow: /
 ### Allow: /
 Sitemap: https://cvbuilder.co.za/sitemap.xml
-
-
