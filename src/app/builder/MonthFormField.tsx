@@ -44,14 +44,11 @@ export default function MonthFormField({ formHook, label, fieldName, description
                     <div className='flex items-center'>
                         <FormLabel className='sr-only'>{label}</FormLabel>
                         <FormControl>
-                            <Select
-                                value={field.value?.toString()}
-                                onValueChange={(value) => field.onChange(Number(value))}
-                            >
-                                <SelectTrigger className='w-[100px]'>
+                            <Select value={field.value} onValueChange={field.onChange}>
+                                <SelectTrigger className='w-[120px]'>
                                     <SelectValue placeholder={label} />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className='max-h-[300px] overflow-y-auto'>
                                     <SelectGroup>
                                         <SelectLabel>Month</SelectLabel>
                                         {months.map((month, index) => (
@@ -65,9 +62,7 @@ export default function MonthFormField({ formHook, label, fieldName, description
                         </FormControl>
                     </div>
                     {description && <FormDescription>{description}</FormDescription>}
-                    {error && (
-                        <FormMessage className='text-xs text-red-500'>{error.message as React.ReactNode}</FormMessage>
-                    )}
+                    {error && <FormMessage className='text-xs text-red-500'>{error.message}</FormMessage>}
                 </FormItem>
             )}
         />

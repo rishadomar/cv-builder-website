@@ -81,6 +81,7 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                 onOpenChange={setShowDeleteDialog}
                 onCancel={() => setShowDeleteDialog(false)}
                 onDelete={async () => {
+                    setShowDeleteDialog(false);
                     setBusyUpdatingList(true);
                     await dispatch(deleteWorkExperience(workExperienceEntry));
                     toast({
@@ -89,7 +90,6 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                         description: 'Successfully deleted the work experience'
                     });
                     setBusyUpdatingList(false);
-                    setShowDeleteDialog(false);
                 }}
             />
         </div>
