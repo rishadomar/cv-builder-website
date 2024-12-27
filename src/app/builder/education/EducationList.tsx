@@ -3,7 +3,6 @@ import AddEducationDialog from './AddEducationDialog';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
-import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { EducationItem } from './EducationItem';
 import { StepContainer } from '../StepContainer';
 
@@ -35,7 +34,6 @@ export default function EducationList({ onNext, onPrevious }: EducationListProps
 
     return (
         <StepContainer step={step}>
-            {busyUpdatingList && <OverlaySpinner />}
             {educationEntries &&
                 educationEntries.map((educationEntry, index) => (
                     <EducationItem
