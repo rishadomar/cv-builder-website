@@ -5,12 +5,12 @@ import { Form } from '@/components/ui/form';
 import TextFormField from '@/app/builder/TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { addEducation, updateEducation } from '@/lib/services';
-import { EducationEntry } from '@/lib/type';
+import { EducationEntry, YearMonth } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
@@ -33,10 +33,10 @@ const educationDetailsFormSchema = z.object({
         .default(''),
     graduationDate: z
         .object({
-            year: z.number().optional(),
-            month: z.number().optional()
+            year: z.string().optional(),
+            month: z.string().optional()
         })
-        .optional(),
+        .default({ year: '', month: '' }),
     location: z
         .string()
         .min(2, {
@@ -73,17 +73,24 @@ export default function EducationForm({
     onClose
 }: EducationFormProps) {
     const dispatch = useAppDispatch();
-    const defaultValues: Partial<EducationDetailsFormValues> = {
-        description: educationEntryToEdit?.description || '',
-        subjects: educationEntryToEdit?.subjects || '',
-        institution: educationEntryToEdit?.institution || '',
-        graduationDate: educationEntryToEdit?.graduationDate || undefined,
-        location: educationEntryToEdit?.location || '',
-        comment: educationEntryToEdit?.comment || ''
-    };
+    // const defaultValues: Partial<EducationDetailsFormValues> = {
+    //     description: educationEntryToEdit?.description || '',
+    //     subjects: educationEntryToEdit?.subjects || '',
+    //     institution: educationEntryToEdit?.institution || '',
+    //     graduationDate: educationEntryToEdit?.graduationDate || undefined,
+    //     location: educationEntryToEdit?.location || '',
+    //     comment: educationEntryToEdit?.comment || ''
+    // };
     const formHook = useForm<EducationDetailsFormValues>({
         resolver: zodResolver(educationDetailsFormSchema),
-        defaultValues
+        defaultValues: {
+            description: '',
+            institution: '',
+            graduationDate: { year: '', month: '' },
+            location: '',
+            subjects: '',
+            comment: ''
+        }
     });
     const { isDirty } = formHook.formState;
     const watchedDescription = formHook.watch('description');
@@ -94,15 +101,60 @@ export default function EducationForm({
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const [improveEducationComment, { isLoading: isImprovingEducationComment }] = useImproveEducationCommentMutation();
 
+    useEffect(() => {
+        if (!educationEntryToEdit) return;
+        const graduationDateValue = {
+            year: educationEntryToEdit.graduationDate?.year.toString() || '',
+            month: educationEntryToEdit.graduationDate?.month.toString() || ''
+        };
+        const setupData = () => {
+            formHook.reset({
+                description: educationEntryToEdit.description,
+                institution: educationEntryToEdit.institution,
+                graduationDate: graduationDateValue,
+                location: educationEntryToEdit.location,
+                subjects: educationEntryToEdit.subjects,
+                comment: educationEntryToEdit.comment
+            });
+        };
+
+        setTimeout(() => setupData(), 0);
+    }, [educationEntryToEdit]);
+
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: EducationDetailsFormValues) => {
             try {
                 setBusyUpdating(true);
-                if (educationEntryToEdit) {
-                    await dispatch(updateEducation({ ...(data as EducationEntry), id: educationEntryToEdit.id }));
-                } else {
-                    await dispatch(addEducation(data as EducationEntry));
+                let graduationDateValue: YearMonth | undefined = undefined;
+                if (
+                    data.graduationDate?.year &&
+                    Number(data.graduationDate?.year) > 0 &&
+                    data.graduationDate?.month &&
+                    Number(data.graduationDate?.month) >= 0
+                ) {
+                    graduationDateValue = {
+                        year: 0,
+                        month: 0
+                    };
+                    graduationDateValue.year = Number(data.graduationDate.year);
+                    graduationDateValue.month = Number(data.graduationDate.month);
                 }
+
+                const newEducationEntry = {
+                    description: data.description,
+                    institution: data.institution,
+                    graduationDate: graduationDateValue,
+                    location: data.location,
+                    subjects: data.subjects,
+                    comment: data.comment
+                };
+
+                if (educationEntryToEdit) {
+                    await dispatch(updateEducation({ ...newEducationEntry, id: educationEntryToEdit.id }));
+                } else {
+                    await dispatch(addEducation({ ...newEducationEntry, id: 0 }));
+                }
+                setBusyUpdating(false);
                 onClose();
                 toast({
                     variant: 'default',
@@ -123,8 +175,6 @@ export default function EducationForm({
                         description: 'An unexpected error occurred. Please try again.'
                     });
                 }
-            } finally {
-                setBusyUpdating(false);
             }
         };
 
@@ -158,13 +208,14 @@ export default function EducationForm({
                             formHook={formHook}
                             label='Graduation date'
                             fieldName='graduationDate'
-                            fieldLayout='compact'
+                            allowReset
+                            description='Leave empty if still studying'
                         />
                         <TextFormField
                             formHook={formHook}
                             label='Location'
                             fieldName='location'
-                            placeholder='Eg. Lagos, Nigeria'
+                            placeholder='Eg. Cape Town, South Africa'
                             fieldLayout='compact'
                         />
                         <TextareaFormField

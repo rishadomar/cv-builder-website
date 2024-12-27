@@ -5,14 +5,14 @@ import { Form } from '@/components/ui/form';
 import TextFormField from '@/app/builder/TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { addWorkExperience, updateWorkExperience } from '@/lib/services';
-import { WorkExperienceEntry } from '@/lib/type';
+import { WorkExperienceEntry, YearMonth } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { toast } from '@/hooks/use-toast';
@@ -27,16 +27,16 @@ const workExperienceDetailsFormSchema = z.object({
         .default(''),
     startDate: z
         .object({
-            year: z.number(),
-            month: z.number()
+            year: z.string(),
+            month: z.string()
         })
-        .default({ year: 2000, month: 1 }),
+        .default({ year: '2000', month: '1' }),
     endDate: z
         .object({
-            year: z.number().optional(),
-            month: z.number().optional()
+            year: z.string().default('').optional(),
+            month: z.string().default('').optional()
         })
-        .optional(),
+        .default({ year: '', month: '' }),
     location: z
         .string()
         .min(2, {
@@ -73,17 +73,16 @@ export default function WorkExperienceForm({
     onClose
 }: WorkExperienceFormProps) {
     const dispatch = useAppDispatch();
-    const defaultValues: Partial<WorkExperienceDetailsFormValues> = {
-        company: workExperienceEntryToEdit?.company || '',
-        startDate: workExperienceEntryToEdit?.startDate,
-        endDate: workExperienceEntryToEdit?.endDate || undefined,
-        location: workExperienceEntryToEdit?.location || '',
-        role: workExperienceEntryToEdit?.role || '',
-        description: workExperienceEntryToEdit?.description || ''
-    };
     const formHook = useForm<WorkExperienceDetailsFormValues>({
         resolver: zodResolver(workExperienceDetailsFormSchema),
-        defaultValues
+        defaultValues: {
+            company: '',
+            startDate: { year: '2000', month: '1' },
+            endDate: { year: '', month: '' },
+            location: '',
+            role: '',
+            description: ''
+        }
     });
     const { isDirty } = formHook.formState;
     const [confirmClose, setConfirmClose] = useState(false);
@@ -94,17 +93,97 @@ export default function WorkExperienceForm({
     const [improveWorkDescriptionText, { isLoading: isImprovingWorkDescriptionText }] =
         useImproveWorkDescriptionTextMutation();
 
+    useEffect(() => {
+        if (!workExperienceEntryToEdit) {
+            return;
+        }
+        const setupData = () => {
+            const startDateValue = {
+                year: workExperienceEntryToEdit.startDate?.year?.toString() || '2000',
+                month: workExperienceEntryToEdit.startDate?.month?.toString() || '1'
+            };
+
+            const endDateValue = {
+                year: workExperienceEntryToEdit.endDate?.year?.toString() || '',
+                month: workExperienceEntryToEdit.endDate?.month?.toString() || ''
+            };
+
+            formHook.reset({
+                company: workExperienceEntryToEdit.company,
+                startDate: startDateValue,
+                endDate: endDateValue,
+                location: workExperienceEntryToEdit.location,
+                role: workExperienceEntryToEdit.role,
+                description: workExperienceEntryToEdit.description
+            });
+
+            formHook.trigger();
+        };
+
+        setTimeout(() => {
+            setupData();
+        }, 0);
+    }, [workExperienceEntryToEdit]);
+
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: WorkExperienceDetailsFormValues) => {
             try {
                 setBusyUpdating(true);
-                if (workExperienceEntryToEdit) {
-                    await dispatch(
-                        updateWorkExperience({ ...(data as WorkExperienceEntry), id: workExperienceEntryToEdit.id })
-                    );
-                } else {
-                    await dispatch(addWorkExperience(data as WorkExperienceEntry));
+                const startDateValue = {
+                    year: 2000,
+                    month: 1
+                };
+                if (
+                    data.startDate?.year &&
+                    Number(data.startDate?.year) > 0 &&
+                    data.startDate?.month &&
+                    Number(data.startDate?.month) >= 0
+                ) {
+                    startDateValue.year = Number(data.startDate.year);
+                    startDateValue.month = Number(data.startDate.month);
                 }
+
+                let endDateValue: YearMonth | undefined = undefined;
+                if (
+                    data.endDate?.year &&
+                    Number(data.endDate?.year) > 0 &&
+                    data.endDate?.month &&
+                    Number(data.endDate?.month) >= 0
+                ) {
+                    endDateValue = {
+                        year: 2000,
+                        month: 1
+                    };
+                    endDateValue.year = Number(data.endDate.year);
+                    endDateValue.month = Number(data.endDate.month);
+                }
+
+                if (workExperienceEntryToEdit) {
+                    const newWorkExperienceEntry: WorkExperienceEntry = {
+                        company: data.company,
+                        location: data.location,
+                        role: data.role,
+                        description: data.description,
+                        startDate: startDateValue,
+                        endDate: endDateValue,
+                        id: workExperienceEntryToEdit.id
+                    };
+
+                    await dispatch(updateWorkExperience(newWorkExperienceEntry));
+                } else {
+                    const newWorkExperienceEntry: WorkExperienceEntry = {
+                        company: data.company,
+                        location: data.location,
+                        role: data.role,
+                        description: data.description,
+                        startDate: startDateValue,
+                        endDate: endDateValue,
+                        id: 0
+                    };
+
+                    await dispatch(addWorkExperience(newWorkExperienceEntry));
+                }
+                setBusyUpdating(false);
                 onClose();
                 toast({
                     variant: 'default',
@@ -125,8 +204,6 @@ export default function WorkExperienceForm({
                         description: 'An unexpected error occurred. Please try again.'
                     });
                 }
-            } finally {
-                console.log('Set busy adding to false');
                 setBusyUpdating(false);
             }
         };
@@ -156,7 +233,14 @@ export default function WorkExperienceForm({
                             fieldName='startDate'
                             fieldLayout='compact'
                         />
-                        <YearMonthFormField formHook={formHook} label='End' fieldName='endDate' fieldLayout='compact' />
+                        <YearMonthFormField
+                            formHook={formHook}
+                            label='End'
+                            fieldName='endDate'
+                            fieldLayout='compact'
+                            allowReset
+                            description='Leave blank if still working here. Reset it if you want to clear the end date.'
+                        />
                         <TextFormField
                             formHook={formHook}
                             label='Role'
@@ -168,7 +252,7 @@ export default function WorkExperienceForm({
                             formHook={formHook}
                             label='Location'
                             fieldName='location'
-                            placeholder='Eg. Lagos, Nigeria'
+                            placeholder='Eg. Cape Town, South Africa'
                             fieldLayout='compact'
                         />
                         <div className='relative'>
