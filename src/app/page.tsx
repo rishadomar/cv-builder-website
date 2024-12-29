@@ -32,9 +32,12 @@ export default function Home() {
                     </p>
 
                     {/* Pricing Highlighted */}
-                    <div className='bg-gray-200 inline-block px-4 py-2 rounded-lg'>
-                        <span className='text-gray-900 font-bold text-xl'>Only {formatProductCost()}</span>
-                        <span className='text-gray-600 ml-2 text-sm'>One-time payment</span>
+                    <div>
+                        <div className='bg-gray-200 inline-block px-4 py-2 rounded-lg'>
+                            <span className='text-gray-900 font-bold text-xl'>Only {formatProductCost()}</span>
+                            <span className='text-gray-600 ml-2 text-sm'>One-time payment</span>
+                        </div>
+                        <div className='text-gray-600 text-sm'>No hidden fees or subscriptions</div>
                     </div>
 
                     <div className='flex justify-center lg:justify-start space-x-4'>
