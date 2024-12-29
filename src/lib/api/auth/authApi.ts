@@ -52,7 +52,7 @@ export async function login(email: string, password: string): Promise<LoginRespo
         if (error instanceof AxiosError) {
             console.log('Error fetching data:', error.response?.data);
             throw new CustomError(
-                error.response?.data?.error || 'An error occurred while logging in',
+                error.response?.data?.message || 'An error occurred while logging in',
                 error.response?.status || 500,
                 error.response?.data
             );
@@ -82,7 +82,7 @@ export async function registerNewUser(email: string, password: string): Promise<
         if (error instanceof AxiosError) {
             console.log('Error fetching data:', error.response?.data);
             throw new CustomError(
-                error.response?.data?.error || 'An error occurred while logging in',
+                error.response?.data?.message || 'An error occurred while logging in',
                 error.response?.status || 500,
                 error.response?.data
             );
@@ -117,7 +117,7 @@ export async function forgotPassword(email: string) {
         if (error instanceof AxiosError) {
             console.log('Error fetching data:', error.response?.data);
             throw new CustomError(
-                error.response?.data?.error || 'An error occurred during forgotten password',
+                error.response?.data?.message || 'An error occurred during forgotten password',
                 error.response?.status || 500,
                 error.response?.data
             );
@@ -138,7 +138,7 @@ export async function confirmForgotPassword(email: string, newPassword: string, 
         if (error instanceof AxiosError) {
             console.log('Error fetching data:', error.response?.data);
             throw new CustomError(
-                error.response?.data?.error || 'An error occurred resetting password',
+                error.response?.data?.message || 'An error occurred resetting password',
                 error.response?.status || 500,
                 error.response?.data
             );
