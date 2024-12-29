@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-    title: 'CV Builder using AI!',
+    title: 'CV Builder',
     description:
         'Create your professional CV easily with our AI-powered CV builder. Transform your basic information into a polished resume that stands out to employers.',
     keywords: 'CV builder, resume creator, AI resume, professional CV, South African CV builder',
