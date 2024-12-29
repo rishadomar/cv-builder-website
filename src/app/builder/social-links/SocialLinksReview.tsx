@@ -3,10 +3,18 @@ import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
 import { FieldValueReview } from '../FieldValueReview';
 import Link from 'next/link';
+import { render } from 'react-dom';
 
 export const SocialLinksReview: React.FC = () => {
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const step = getStep('social-links');
+
+    const renderFieldValue = (field: string, value: string) => (
+        <div>
+            <div className='col-span-2 text-sm font-medium text-gray-500'>{field}:</div>
+            <div className='text-sm whitespace-pre-wrap'>{value}</div>
+        </div>
+    );
 
     return (
         <div>
@@ -15,19 +23,16 @@ export const SocialLinksReview: React.FC = () => {
                     <StepHeader icon={step.icon} title={step.title} />
                 </Link>
             </div>
-            <div className='p-1'>
-                {allFieldValues.socialLinks?.linkedIn && (
-                    <FieldValueReview field='LinkedIn' value={allFieldValues.socialLinks?.linkedIn} />
-                )}
-                {allFieldValues.socialLinks?.github && (
-                    <FieldValueReview field='github' value={allFieldValues.socialLinks?.github} />
-                )}
-                {allFieldValues.socialLinks?.twitter && (
-                    <FieldValueReview field='Twitter' value={allFieldValues.socialLinks?.twitter} />
-                )}
-                {allFieldValues.socialLinks?.portfolio && (
-                    <FieldValueReview field='Portfolio' value={allFieldValues.socialLinks?.portfolio} />
-                )}
+            <div className='flex flex-col gap-2'>
+                {allFieldValues.socialLinks?.linkedIn &&
+                    renderFieldValue('LinkedIn', allFieldValues.socialLinks?.linkedIn)}
+                {allFieldValues.socialLinks?.github && renderFieldValue('Github', allFieldValues.socialLinks?.github)}
+
+                {allFieldValues.socialLinks?.twitter &&
+                    renderFieldValue('Twitter', allFieldValues.socialLinks?.twitter)}
+
+                {allFieldValues.socialLinks?.portfolio &&
+                    renderFieldValue('Portfolio', allFieldValues.socialLinks?.portfolio)}
             </div>
         </div>
     );
