@@ -1,9 +1,7 @@
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
 import StepHeader from '../StepHeader';
-import { FieldValueReview } from '../FieldValueReview';
 import Link from 'next/link';
-import { render } from 'react-dom';
 
 export const SocialLinksReview: React.FC = () => {
     const allFieldValues = useAppSelector((state) => state.fieldValues);
