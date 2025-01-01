@@ -3,6 +3,7 @@ import alertReducer from './alert/alertSlice';
 import loadingReducer from './loading/loadingSlice';
 import fieldValuesReducer from './fieldValues/fieldValuesSlice';
 import authenticationReducer from './authentication/authenticationSlice';
+import templateSelectionReducer from './templateSelection/templateSelectionSlice';
 import { aiApiSlice } from './api/aiApiSlice';
 import errorMiddleware from './api/errorMiddleware';
 
@@ -13,6 +14,7 @@ export const makeStore = () => {
             loading: loadingReducer,
             authentication: authenticationReducer,
             fieldValues: fieldValuesReducer,
+            templateSelection: templateSelectionReducer,
             [aiApiSlice.reducerPath]: aiApiSlice.reducer
         },
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(aiApiSlice.middleware, errorMiddleware)
