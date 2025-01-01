@@ -1,29 +1,22 @@
 import React from 'react';
-import { FileText, FileDown, AlertCircle } from 'lucide-react';
+import { FileDown, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
-import { OverlaySpinner } from '@/components/OverlaySpinner';
-import { formatDateTime } from '@/lib/utils';
-import { toast } from '@/hooks/use-toast';
-import { CustomError } from '@/lib/utils/customError';
 
-type GeneratePDFProps = {
+type DownloadPDFProps = {
     onNext?: () => void;
     onPrevious: () => void;
 };
 
-export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
+export default function DownloadPDF({ onNext, onPrevious }: DownloadPDFProps) {
     const dispatch = useAppDispatch();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const allFieldValues = useAppSelector((state) => state.fieldValues);
-    const { isLoading: busyGenerating } = useAppSelector((state) => state.loading);
     const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
-
-    console.log('allFieldValues', allFieldValues);
 
     React.useEffect(() => {
         if (pdfUrl) {
@@ -44,32 +37,6 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
         }
     }, [pdfUrl]);
 
-    const handleGeneratePDF = async () => {
-        try {
-            await dispatch(services.generatePDF());
-            toast({
-                variant: 'default',
-                title: 'Success',
-                description: 'PDF generated successfully. Ready to be downloaded.'
-            });
-        } catch (error) {
-            if (error instanceof CustomError) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: error.message
-                });
-            } else {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: 'An unexpected error occurred. Please try again.'
-                });
-            }
-        } finally {
-        }
-    };
-
     const handleDownloadPDF = async () => {
         try {
             const pdf_url = await dispatch(services.downloadPDF());
@@ -88,41 +55,13 @@ export default function GeneratePDF({ onNext, onPrevious }: GeneratePDFProps) {
                 </Alert>
 
                 <div className='grid gap-6 md:grid-cols-2'>
-                    {busyGenerating && <OverlaySpinner />}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className='flex items-center space-x-2'>
-                                <FileText className='h-5 w-5' />
-                                <span>Generate PDF</span>
-                            </CardTitle>
-                            <CardDescription>Create a new PDF version of your CV</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className='text-sm text-muted-foreground'>
-                                This will create a professionally formatted PDF version of your CV using the information
-                                you&apos;ve provided.
-                            </p>
-                        </CardContent>
-                        <CardFooter className='flex flex-col items-start space-y-2'>
-                            <Button className='w-full' onClick={handleGeneratePDF} disabled={isLoading}>
-                                <FileText className='mr-2 h-4 w-4' />
-                                Generate New PDF
-                            </Button>
-                            {allFieldValues.pdf_generated_date && (
-                                <p className='text-xs text-muted-foreground'>
-                                    Last generated: {formatDateTime(new Date(allFieldValues.pdf_generated_date))}
-                                </p>
-                            )}
-                        </CardFooter>
-                    </Card>
-
                     <Card>
                         <CardHeader>
                             <CardTitle className='flex items-center space-x-2'>
                                 <FileDown className='h-5 w-5' />
                                 <span>Download PDF</span>
                             </CardTitle>
-                            <CardDescription>Download your generated CV</CardDescription>
+                            <CardDescription>Download your CV</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <p className='text-sm text-muted-foreground'>

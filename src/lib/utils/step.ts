@@ -9,6 +9,7 @@ import {
     Link,
     Mail,
     MapPinHouse,
+    TextSelect,
     Trophy,
     User
 } from 'lucide-react';
@@ -136,11 +137,21 @@ export const Steps: StepType[] = [
     },
     {
         id: 13,
-        title: 'Generate & download CV',
-        icon: Download,
-        description: 'A PDF will be generated which you can download for keeps',
+        title: 'Select template',
+        icon: TextSelect,
+        description: 'Select a template for your CV',
         completed: false,
-        path: 'generate-pdf',
+        path: 'select-template',
+        showInSections: false,
+        paymentRequired: true
+    },
+    {
+        id: 14,
+        title: 'Download PDF',
+        icon: Download,
+        description: 'Download your PDF for keeps',
+        completed: false,
+        path: 'download-pdf',
         showInSections: false,
         paymentRequired: true
     }

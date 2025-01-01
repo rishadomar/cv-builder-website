@@ -163,7 +163,8 @@ export type StepPath =
     | 'social-links'
     | 'paywall'
     | 'review'
-    | 'generate-pdf';
+    | 'select-template'
+    | 'download-pdf';
 
 export type StepType = {
     id: number;

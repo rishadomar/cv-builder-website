@@ -9,7 +9,7 @@ import HobbyDetailsForm from '@/app/builder/hobbies/Hobbies';
 import WorkExperienceList from '@/app/builder/work-experience/WorkExperienceList';
 import Paywall from '@/app/builder/paywall/Paywall';
 import PersonalityDetailsForm from '@/app/builder/personality-details/PersonalityDetailsForm';
-import GeneratePDF from '@/app/builder/generate-pdf/GeneratePDF';
+import DownloadPDF from '@/app/builder/generate-pdf/DownloadPDF';
 import { ProgressBar } from '@/components/ProgressBar';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppSelector } from '@/lib/store/hooks';
@@ -20,6 +20,7 @@ import { Review } from './review/Review';
 import { Steps } from '@/lib/utils/step';
 import SocialLinksForm from './social-links/SocialLinks';
 import TopSkillsForm from './top-skills/TopSkillsForm';
+import SelectTemplate from './generate-pdf/SelectTemplate';
 
 const NumberOfPages = Steps.length;
 
@@ -125,7 +126,9 @@ function FormContent() {
 
                 {currentPage === 'paywall' && <Paywall onNext={nextPage} onPrevious={previousPage} />}
 
-                {currentPage === 'generate-pdf' && <GeneratePDF onPrevious={previousPage} />}
+                {currentPage === 'select-template' && <SelectTemplate onNext={nextPage} onPrevious={previousPage} />}
+
+                {currentPage === 'download-pdf' && <DownloadPDF onNext={nextPage} onPrevious={previousPage} />}
             </div>
         </>
     );
