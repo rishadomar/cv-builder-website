@@ -208,11 +208,11 @@ export default function WorkExperienceForm({
             }
         };
 
+        event?.preventDefault();
+
         formHook.handleSubmit((data: WorkExperienceDetailsFormValues) => {
             saveValues(data);
         })();
-
-        event?.preventDefault();
     }
 
     return (

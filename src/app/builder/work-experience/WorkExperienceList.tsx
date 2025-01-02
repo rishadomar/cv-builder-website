@@ -17,6 +17,7 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
     const step = getStep('work-experience');
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
+        event?.preventDefault();
         const submitter = (event?.nativeEvent as SubmitEvent).submitter;
         const submitterName =
             submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement
@@ -28,8 +29,6 @@ export default function WorkExperienceList({ onNext, onPrevious }: WorkExperienc
         } else if (onPrevious && submitterName === 'previous') {
             onPrevious();
         }
-
-        event?.preventDefault();
     }
 
     return (
