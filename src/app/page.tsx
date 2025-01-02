@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { Check } from 'lucide-react';
 import CallToAction from '@/components/CallToAction';
 import { formatProductCost } from '@/lib/utils';
+import Gallery from '@/components/Gallery';
+import Footer from '../components/Footer';
 
 export default function Home() {
     return (
@@ -125,7 +127,7 @@ export default function Home() {
                                 <h3 className='text-lg font-semibold'>Professional Formatting</h3>
                             </div>
                             <p className='text-gray-600 text-sm'>
-                                Sleek, modern design that catches recruiters&quote; attention
+                                Sleek, modern design that catches recruiter&apos;s attention
                             </p>
                         </div>
                     </div>
@@ -142,22 +144,54 @@ export default function Home() {
                 <CallToAction label='Get Started Now' color='gray' withArrow={false} />
             </div>
 
+            <div className='container mx-auto px-4 mt-10'>
+                <h2 className='text-2xl md:text-3xl font-bold text-center mb-8'>Read what our users have to say</h2>
+
+                <Gallery
+                    testimonials={[
+                        {
+                            content: 'Thank you CV Builder for helping me land my dream job as a UI/UX Designer',
+                            author: 'Imaginary Person 1',
+                            role: 'UI/UX Designer',
+                            image: '/images/testimonials/young-person-at-new-job.jpeg'
+                        },
+                        {
+                            content: 'CV Builder helped me find an amazing job as a construction foreman',
+                            author: 'Imaginary Person 2',
+                            role: 'Construction foreman',
+                            image: '/images/testimonials/construction-foreman.jpeg'
+                        },
+                        {
+                            content: 'CV Builder helped me find my first job as an intern',
+                            author: 'Imaginary Person 3',
+                            role: 'Young Graduate',
+                            image: '/images/testimonials/young-graduate.jpeg'
+                        }
+                    ]}
+                />
+            </div>
+
             {/* Footer */}
-            <footer className='bg-gray-100 py-8'>
-                <div className='container mx-auto px-4'>
-                    <div className='flex justify-center space-x-8'>
-                        <a href='/faqs' className='text-gray-600 hover:text-gray-900'>
-                            FAQs
-                        </a>
-                        <a href='/terms' className='text-gray-600 hover:text-gray-900'>
-                            Terms & Conditions
-                        </a>
-                        <a href='/privacy' className='text-gray-600 hover:text-gray-900'>
-                            Privacy Policy
-                        </a>
+            <Footer />
+            {/* <div className='container mx-auto px-4 mt-10'>
+                <h2 className='text-2xl md:text-3xl font-bold text-center mb-8'>Some useful links</h2>
+
+                <footer className='bg-gray-100 py-8'>
+                    <div className='container mx-auto px-4'>
+                        <div className='flex justify-center space-x-8'>
+                            <a href='/faqs' className='text-gray-600 hover:text-gray-900'>
+                                FAQs
+                            </a>
+                            <a href='/terms' className='text-gray-600 hover:text-gray-900'>
+                                Terms & Conditions
+                            </a>
+                            <a href='/privacy' className='text-gray-600 hover:text-gray-900'>
+                                Privacy Policy
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </footer>
+                </footer>
+            </div> */}
         </div>
     );
 }
