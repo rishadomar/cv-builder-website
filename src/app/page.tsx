@@ -86,13 +86,13 @@ export default function Home() {
 
                 <div className='grid md:grid-cols-3 gap-6'>
                     {[
-                        { src: 'young-graduate.jpeg', width: 400, height: 300, alt: 'Professional CV Extract' },
-                        { src: 'young-person-at-new-job.jpeg', width: 400, height: 300, alt: 'Creative CV Design' },
-                        { src: 'construction-foreman.jpeg', width: 400, height: 300, alt: 'Modern CV Layout' }
+                        { src: 'default-template.png', width: 400, height: 300, alt: 'Modern CV Extract' },
+                        { src: 'professional-template.png', width: 400, height: 300, alt: 'Professional CV Design' },
+                        { src: 'creative-template.png', width: 400, height: 300, alt: 'Creative CV Layout' }
                     ].map((img, index) => (
                         <div key={index} className='rounded-xl overflow-hidden shadow-lg'>
                             <Image
-                                src={`/images/${img.src}`}
+                                src={`/images/examples/${img.src}`}
                                 alt={img.alt}
                                 width={img.width}
                                 height={img.height}

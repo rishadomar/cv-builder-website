@@ -16,19 +16,22 @@ const templates = [
         id: 'default',
         name: 'Modern',
         description: 'Clean and contemporary design with a focus on readability',
-        image: '/api/placeholder/200/282' // Using placeholder for example, replace with actual template preview
+        image: '/images/examples/default-template.png',
+        available: true
     },
     {
         id: 'professional',
         name: 'Professional',
         description: 'Traditional layout ideal for corporate positions',
-        image: '/api/placeholder/200/282'
+        image: '/images/examples/professional-template.png',
+        available: true
     },
     {
         id: 'creative',
         name: 'Creative',
         description: 'Unique design perfect for creative industries',
-        image: '/api/placeholder/200/282'
+        image: '/images/examples/creative-template.png',
+        available: false
     }
 ];
 
@@ -40,7 +43,6 @@ type SelectTemplateProps = {
 export default function SelectTemplate({ onNext, onPrevious }: SelectTemplateProps) {
     const dispatch = useAppDispatch();
     const [selectedTemplate, setSelectedTemplate] = React.useState<AvailablePDFTemplates>();
-    // const selectedTemplate = useAppSelector((state) => state.templateSelection.selected);
     const step = getStep('select-template');
 
     const handleTemplateSelect = (templateId: string) => {
@@ -99,7 +101,6 @@ export default function SelectTemplate({ onNext, onPrevious }: SelectTemplatePro
                             className={`cursor-pointer transition-all ${
                                 selectedTemplate === template.id ? 'ring-2 ring-primary' : ''
                             }`}
-                            onClick={() => handleTemplateSelect(template.id)}
                         >
                             <CardHeader className='space-y-1'>
                                 <CardTitle className='flex items-center justify-between'>
@@ -120,6 +121,7 @@ export default function SelectTemplate({ onNext, onPrevious }: SelectTemplatePro
                             <CardFooter>
                                 <Button
                                     variant={selectedTemplate === template.id ? 'default' : 'outline'}
+                                    disabled={!template.available}
                                     className='w-full'
                                     onClick={() => handleTemplateSelect(template.id)}
                                 >
