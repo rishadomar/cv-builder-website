@@ -10,11 +10,10 @@ import { StepContainer } from '../StepContainer';
 import { getStep } from '@/lib/utils/step';
 
 type DownloadPDFProps = {
-    onNext?: () => void;
     onPrevious: () => void;
 };
 
-export default function DownloadPDF({ onNext, onPrevious }: DownloadPDFProps) {
+export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
     const dispatch = useAppDispatch();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const allFieldValues = useAppSelector((state) => state.fieldValues);

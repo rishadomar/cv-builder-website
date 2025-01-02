@@ -128,7 +128,7 @@ function FormContent() {
 
                 {currentPage === 'select-template' && <SelectTemplate onNext={nextPage} onPrevious={previousPage} />}
 
-                {currentPage === 'download-pdf' && <DownloadPDF onNext={nextPage} onPrevious={previousPage} />}
+                {currentPage === 'download-pdf' && <DownloadPDF onPrevious={previousPage} />}
             </div>
         </>
     );
