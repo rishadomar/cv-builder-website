@@ -141,6 +141,23 @@ export default function Home() {
                 </p>
                 <CallToAction label='Get Started Now' color='gray' withArrow={false} />
             </div>
+
+            {/* Footer */}
+            <footer className='bg-gray-100 py-8'>
+                <div className='container mx-auto px-4'>
+                    <div className='flex justify-center space-x-8'>
+                        <a href='/faqs' className='text-gray-600 hover:text-gray-900'>
+                            FAQs
+                        </a>
+                        <a href='/terms' className='text-gray-600 hover:text-gray-900'>
+                            Terms & Conditions
+                        </a>
+                        <a href='/privacy' className='text-gray-600 hover:text-gray-900'>
+                            Privacy Policy
+                        </a>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }
