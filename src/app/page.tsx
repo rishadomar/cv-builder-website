@@ -90,7 +90,7 @@ export default function Home() {
                         { src: 'professional-template.png', width: 400, height: 300, alt: 'Professional CV Design' },
                         { src: 'creative-template.png', width: 400, height: 300, alt: 'Creative CV Layout' }
                     ].map((img, index) => (
-                        <div key={index} className='rounded-xl overflow-hidden shadow-lg'>
+                        <div key={index} className='rounded-xl overflow-hidden shadow-lg border'>
                             <Image
                                 src={`/images/examples/${img.src}`}
                                 alt={img.alt}

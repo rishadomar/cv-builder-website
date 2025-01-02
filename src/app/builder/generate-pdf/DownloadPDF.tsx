@@ -59,10 +59,6 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
                 <div className='grid gap-6 md:grid-cols-2'>
                     <Card>
                         <CardHeader>
-                            <CardTitle className='flex items-center space-x-2'>
-                                <FileDown className='h-5 w-5' />
-                                <span>Download PDF</span>
-                            </CardTitle>
                             <CardDescription>Download your CV</CardDescription>
                         </CardHeader>
                         <CardContent>

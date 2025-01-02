@@ -10,6 +10,7 @@ import * as services from '@/lib/services';
 import { toast } from '@/hooks/use-toast';
 import { CustomError } from '@/lib/utils/customError';
 import { AvailablePDFTemplates } from '@/lib/type';
+import Image from 'next/image';
 
 const templates = [
     {
@@ -111,11 +112,15 @@ export default function SelectTemplate({ onNext, onPrevious }: SelectTemplatePro
                             </CardHeader>
                             <CardContent>
                                 <div className='aspect-[1/1.414] relative rounded-md overflow-hidden border'>
-                                    <img
-                                        src={template.image}
-                                        alt={`${template.name} template preview`}
-                                        className='object-cover w-full h-full'
-                                    />
+                                    <div className='aspect-[1/1.414] relative rounded-md overflow-hidden border'>
+                                        <Image
+                                            src={template.image}
+                                            alt={`${template.name} template preview`}
+                                            fill
+                                            className='object-cover'
+                                            sizes='(max-width: 768px) 100vw, 33vw'
+                                        />
+                                    </div>
                                 </div>
                             </CardContent>
                             <CardFooter>
