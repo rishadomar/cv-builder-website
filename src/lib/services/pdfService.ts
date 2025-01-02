@@ -4,16 +4,16 @@ import { setLoading } from '@/lib/store/loading/loadingSlice';
 import * as api from '@/lib/api';
 import { addAxiosError } from '@/lib/store/alert/alertSlice';
 import { setFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
-import type { Error } from '../type';
+import type { AvailablePDFTemplates, Error } from '../type';
 
-export const generatePDF = () => {
+export const generatePDF = (selectedTemplate: AvailablePDFTemplates) => {
     return async (dispatch: Dispatch, getState: () => RootState) => {
         if (!getState().authentication.sub) {
             throw new Error('No sub found');
         }
         dispatch(setLoading(true));
         try {
-            const pdfId = await api.generatePDF(getState().authentication.sub!);
+            const pdfId = await api.generatePDF(getState().authentication.sub!, selectedTemplate);
             dispatch(
                 setFieldValues([
                     { field: 'pdf_id', value: pdfId },

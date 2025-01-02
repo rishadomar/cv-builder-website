@@ -1,11 +1,13 @@
+import { AvailablePDFTemplates } from '@/lib/type';
 import axiosInstance from '../axios/axiosInstance';
 
 // Define the service function to fetch data from a given URL
-export async function generatePDF(sub: string): Promise<string> {
+export async function generatePDF(sub: string, template: AvailablePDFTemplates): Promise<string> {
     try {
         // Make the GET request using Axios
         const response = await axiosInstance.post('/generatePDF', {
-            sub
+            sub,
+            template
         });
         return response.data.pdf_id;
     } catch (error) {

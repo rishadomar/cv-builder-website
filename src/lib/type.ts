@@ -150,6 +150,8 @@ export type Error = {
     };
 };
 
+export type AvailablePDFTemplates = 'default' | 'professional';
+
 export type StepPath =
     | 'contact-details'
     | 'personal-details'

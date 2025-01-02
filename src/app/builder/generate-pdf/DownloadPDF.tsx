@@ -6,6 +6,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import * as services from '@/lib/services';
+import { StepContainer } from '../StepContainer';
+import { getStep } from '@/lib/utils/step';
 
 type DownloadPDFProps = {
     onNext?: () => void;
@@ -17,6 +19,7 @@ export default function DownloadPDF({ onNext, onPrevious }: DownloadPDFProps) {
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
+    const step = getStep('download-pdf');
 
     React.useEffect(() => {
         if (pdfUrl) {
@@ -47,8 +50,8 @@ export default function DownloadPDF({ onNext, onPrevious }: DownloadPDFProps) {
     };
 
     return (
-        <div className='min-h-[calc(100vh-theme(spacing.16)-theme(spacing.20))] flex flex-col'>
-            <div className='flex-1 max-w-3xl mx-auto w-full px-4 py-6 space-y-6'>
+        <>
+            <StepContainer step={step}>
                 <Alert>
                     <AlertCircle className='h-4 w-4' />
                     <AlertDescription>You can review the PDF and return here to make any changes</AlertDescription>
@@ -72,7 +75,7 @@ export default function DownloadPDF({ onNext, onPrevious }: DownloadPDFProps) {
                         <CardFooter>
                             <Button
                                 className='w-full'
-                                variant='secondary'
+                                variant='default'
                                 onClick={handleDownloadPDF}
                                 disabled={isLoading || !allFieldValues.pdf_id}
                             >
@@ -82,11 +85,9 @@ export default function DownloadPDF({ onNext, onPrevious }: DownloadPDFProps) {
                         </CardFooter>
                     </Card>
                 </div>
-            </div>
+            </StepContainer>
 
-            <div className='mt-auto'>
-                <StepButtons asSubmit={false} onNext={onNext} onPrevious={onPrevious} />
-            </div>
-        </div>
+            <StepButtons asSubmit={false} onPrevious={onPrevious} />
+        </>
     );
 }
