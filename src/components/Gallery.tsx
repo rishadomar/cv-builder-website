@@ -35,7 +35,7 @@ export default function Gallery({ testimonials }: GalleryProps) {
     }, [api]);
 
     return (
-        <div className='w-full max-w-4xl mx-auto'>
+        <div className='w-full max-w-4xl mx-auto relative'>
             <Carousel className='w-full' setApi={setApi}>
                 <CarouselContent>
                     {testimonials.map((testimonial, index) => (
@@ -47,9 +47,9 @@ export default function Gallery({ testimonials }: GalleryProps) {
                                     fill
                                     className='object-cover'
                                 />
-                                <CardContent className='absolute bottom-0 left-0 right-0 flex flex-col items-center p-6 text-center bg-black/60'>
+                                <CardContent className='absolute bottom-0 left-0 right-0 flex flex-col items-center p-2 text-center bg-black/60'>
                                     <p className='text-lg text-white mb-4'>{testimonial.content}</p>
-                                    <div>
+                                    <div className='hidden md:block'>
                                         <p className='font-semibold text-white'>{testimonial.author}</p>
                                         <p className='text-gray-200 text-sm'>{testimonial.role}</p>
                                     </div>
@@ -58,8 +58,10 @@ export default function Gallery({ testimonials }: GalleryProps) {
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <div className='hidden md:block'>
+                    <CarouselPrevious className='absolute left-4 top-1/2 -translate-y-1/2' />
+                    <CarouselNext className='absolute right-4 top-1/2 -translate-y-1/2' />
+                </div>
             </Carousel>
             <div className='flex justify-center gap-2 mt-4'>
                 {testimonials.map((_, index) => (

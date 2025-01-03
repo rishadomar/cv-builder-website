@@ -51,7 +51,12 @@ const FAQPage = () => {
         {
             id: 'payment',
             question: 'How much does the CV builder cost?',
-            answer: 'We offer a one-time payment of R59 for a full year of access to our CV management platform.'
+            answer: 'We offer a one-time payment of R59 for a full year of access to our CV management platform. No hidden costs. No monthly subscriptions.'
+        },
+        {
+            id: 'draft',
+            question: 'Why do I see a DRAFT watermark in my PDF?',
+            answer: "If you've used a testing promocode then you will see this watermark. Pay to remove the watermark and download your final CV."
         },
         {
             id: 'editing',
@@ -61,7 +66,7 @@ const FAQPage = () => {
         {
             id: 'templates',
             question: 'How many CV templates are available?',
-            answer: 'Currently only a very simple template is offered - over the coming weeks more templates will be added. You will have access to any new templates.'
+            answer: 'Currently only a very simple template is offered - over the coming weeks more templates will be added. You will have access to any new templates and any new features added to CV Builder.'
         },
         {
             id: 'download',
@@ -71,7 +76,7 @@ const FAQPage = () => {
         {
             id: 'support',
             question: 'Do you offer customer support?',
-            answer: 'Yes, we provide customer support via email. Our team is dedicated to helping you create the perfect CV. Send an email to: techsolns4+support@gmail.com'
+            answer: 'Yes, we provide limited customer support via email. Our team is dedicated to helping you create the perfect CV. Send an email to: techsolns4+support@gmail.com'
         }
     ];
 

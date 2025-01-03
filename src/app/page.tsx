@@ -84,7 +84,8 @@ export default function Home() {
 
             {/* CV Extracts Section - Mobile Responsive */}
             <div className='container mx-auto px-4 py-12'>
-                <h2 className='text-2xl md:text-3xl font-bold text-center mb-10'>See the Magic of AI-Generated CVs</h2>
+                <h2 className='text-2xl md:text-3xl font-bold text-center'>See the Magic of AI-Generated CVs</h2>
+                <div className='text-xs text-center text-gray-600 mb-8'>More improved templates coming soon!</div>
 
                 <div className='grid md:grid-cols-3 gap-6'>
                     {[
@@ -95,6 +96,7 @@ export default function Home() {
                         <div key={index} className='rounded-xl overflow-hidden shadow-lg border'>
                             <Image
                                 src={`/images/examples/${img.src}`}
+                                priority
                                 alt={img.alt}
                                 width={img.width}
                                 height={img.height}
@@ -145,7 +147,10 @@ export default function Home() {
             </div>
 
             <div className='container mx-auto px-4 mt-10'>
-                <h2 className='text-2xl md:text-3xl font-bold text-center mb-8'>Read what our users have to say</h2>
+                <h2 className='text-2xl md:text-3xl font-bold text-center'>Read what our users have to say</h2>
+                <div className='text-xs text-center text-gray-600 mb-8'>
+                    These are not true testimonials - they are just placeholders
+                </div>
 
                 <Gallery
                     testimonials={[
@@ -171,27 +176,7 @@ export default function Home() {
                 />
             </div>
 
-            {/* Footer */}
             <Footer />
-            {/* <div className='container mx-auto px-4 mt-10'>
-                <h2 className='text-2xl md:text-3xl font-bold text-center mb-8'>Some useful links</h2>
-
-                <footer className='bg-gray-100 py-8'>
-                    <div className='container mx-auto px-4'>
-                        <div className='flex justify-center space-x-8'>
-                            <a href='/faqs' className='text-gray-600 hover:text-gray-900'>
-                                FAQs
-                            </a>
-                            <a href='/terms' className='text-gray-600 hover:text-gray-900'>
-                                Terms & Conditions
-                            </a>
-                            <a href='/privacy' className='text-gray-600 hover:text-gray-900'>
-                                Privacy Policy
-                            </a>
-                        </div>
-                    </div>
-                </footer>
-            </div> */}
         </div>
     );
 }
