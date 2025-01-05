@@ -11,18 +11,19 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
-interface Testimonial {
-    content: string;
-    author: string;
-    role: string;
+interface galleryEntry {
+    content?: string;
+    title?: string;
+    subTitle?: string;
+    description: string;
     image: string;
 }
 
 interface GalleryProps {
-    testimonials: Testimonial[];
+    galleryEntries: galleryEntry[];
 }
 
-export default function Gallery({ testimonials }: GalleryProps) {
+export default function Gallery({ galleryEntries }: GalleryProps) {
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
 
@@ -38,20 +39,26 @@ export default function Gallery({ testimonials }: GalleryProps) {
         <div className='w-full max-w-4xl mx-auto relative'>
             <Carousel className='w-full' setApi={setApi}>
                 <CarouselContent>
-                    {testimonials.map((testimonial, index) => (
+                    {galleryEntries.map((galleryEntry, index) => (
                         <CarouselItem key={index}>
                             <Card className='relative h-96 md:h-[600px] overflow-hidden'>
                                 <Image
-                                    src={testimonial.image}
-                                    alt={`${testimonial.author}'s testimonial`}
+                                    src={galleryEntry.image}
+                                    alt={`${galleryEntry.description} gallery entry`}
                                     fill
                                     className='object-cover'
                                 />
                                 <CardContent className='absolute bottom-0 left-0 right-0 flex flex-col items-center p-2 text-center bg-black/60'>
-                                    <p className='text-lg text-white mb-4'>{testimonial.content}</p>
+                                    {galleryEntry.content && (
+                                        <p className='text-lg text-white mb-4'>{galleryEntry.content}</p>
+                                    )}
                                     <div className='hidden md:block'>
-                                        <p className='font-semibold text-white'>{testimonial.author}</p>
-                                        <p className='text-gray-200 text-sm'>{testimonial.role}</p>
+                                        {galleryEntry.title && (
+                                            <p className='font-semibold text-white'>{galleryEntry.title}</p>
+                                        )}
+                                        {galleryEntry.subTitle && (
+                                            <p className='text-gray-200 text-sm'>{galleryEntry.subTitle}</p>
+                                        )}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -64,7 +71,7 @@ export default function Gallery({ testimonials }: GalleryProps) {
                 </div>
             </Carousel>
             <div className='flex justify-center gap-2 mt-4'>
-                {testimonials.map((_, index) => (
+                {galleryEntries.map((_, index) => (
                     <button
                         key={index}
                         className={`w-2 h-2 rounded-full transition-colors ${

@@ -153,23 +153,26 @@ export default function Home() {
                 </div>
 
                 <Gallery
-                    testimonials={[
+                    galleryEntries={[
                         {
                             content: 'Thank you CV Builder for helping me land my dream job as a UI/UX Designer',
-                            author: 'Imaginary Person 1',
-                            role: 'UI/UX Designer',
+                            title: 'Imaginary Person 1',
+                            subTitle: 'UI/UX Designer',
+                            description: 'UI/UX Designer',
                             image: '/images/testimonials/young-person-at-new-job.jpeg'
                         },
                         {
                             content: 'CV Builder helped me find an amazing job as a construction foreman',
-                            author: 'Imaginary Person 2',
-                            role: 'Construction foreman',
+                            title: 'Imaginary Person 2',
+                            subTitle: 'Construction foreman',
+                            description: 'Construction foreman',
                             image: '/images/testimonials/construction-foreman.jpeg'
                         },
                         {
                             content: 'CV Builder helped me find my first job as an intern',
-                            author: 'Imaginary Person 3',
-                            role: 'Young Graduate',
+                            title: 'Imaginary Person 3',
+                            subTitle: 'Young Graduate',
+                            description: 'Young Graduate',
                             image: '/images/testimonials/young-graduate.jpeg'
                         }
                     ]}
