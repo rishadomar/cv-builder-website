@@ -81,7 +81,7 @@ const TermsAndConditions: React.FC = () => (
 
         <TermsSection
             title='11. Contact Information'
-            description='For questions or concerns about these Terms, please contact us at techsolns4+support@gmail.com'
+            description='For questions or concerns about these Terms, please contact us at support@cvbuilder.com'
         />
     </div>
 );

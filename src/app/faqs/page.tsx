@@ -76,7 +76,7 @@ const FAQPage = () => {
         {
             id: 'support',
             question: 'Do you offer customer support?',
-            answer: 'Yes, we provide limited customer support via email. Our team is dedicated to helping you create the perfect CV. Send an email to: techsolns4+support@gmail.com'
+            answer: 'Yes, we provide limited customer support via email. Our team is dedicated to helping you create the perfect CV. Send an email to: support@cvbuilder.com'
         }
     ];
 
