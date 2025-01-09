@@ -74,10 +74,7 @@ const TermsAndConditions: React.FC = () => (
             description='We may update these Terms at any time. Continued use of the Service after such updates constitutes acceptance of the new Terms.'
         />
 
-        <TermsSection
-            title='10. Governing Law'
-            lines={['These Terms are governed by the laws of [Your Country/Region].']}
-        />
+        <TermsSection title='10. Governing Law' lines={['These Terms are governed by the laws of South Africa.']} />
 
         <TermsSection
             title='11. Contact Information'
