@@ -5,6 +5,7 @@ import fieldValuesReducer from './fieldValues/fieldValuesSlice';
 import authenticationReducer from './authentication/authenticationSlice';
 import { aiApiSlice } from './api/aiApiSlice';
 import { databaseApiSlice } from './api/databaseApiSlice';
+import { educationApiSlice } from './api/educationApiSlice';
 import errorMiddleware from './api/errorMiddleware';
 
 export const makeStore = () => {
@@ -15,10 +16,15 @@ export const makeStore = () => {
             authentication: authenticationReducer,
             fieldValues: fieldValuesReducer,
             [aiApiSlice.reducerPath]: aiApiSlice.reducer,
-            [databaseApiSlice.reducerPath]: databaseApiSlice.reducer
+            [databaseApiSlice.reducerPath]: databaseApiSlice.reducer,
+            [educationApiSlice.reducerPath]: educationApiSlice.reducer
         },
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(aiApiSlice.middleware, databaseApiSlice.middleware, errorMiddleware)
+            getDefaultMiddleware()
+                .concat(aiApiSlice.middleware)
+                .concat(databaseApiSlice.middleware)
+                .concat(educationApiSlice.middleware)
+                .concat(errorMiddleware)
     });
 };
 

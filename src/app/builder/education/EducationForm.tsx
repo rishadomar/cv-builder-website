@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import TextFormField from '@/app/builder/TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { addEducation, updateEducation } from '@/lib/services';
+import { useUpdateEducationMutation, useAddEducationMutation } from '@/lib/store/api/educationApiSlice';
 import { EducationEntry, YearMonth } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
@@ -100,6 +100,8 @@ export default function EducationForm({
     const [compareText, setCompareText] = useState<CompareTextState>();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const [improveEducationComment, { isLoading: isImprovingEducationComment }] = useImproveEducationCommentMutation();
+    const [updateEducation] = useUpdateEducationMutation();
+    const [addEducation] = useAddEducationMutation();
 
     useEffect(() => {
         if (!educationEntryToEdit) return;
@@ -140,7 +142,8 @@ export default function EducationForm({
                     graduationDateValue.month = Number(data.graduationDate.month);
                 }
 
-                const newEducationEntry = {
+                const newEducationEntry: EducationEntry = {
+                    id: educationEntryToEdit?.id || 0,
                     description: data.description,
                     institution: data.institution,
                     graduationDate: graduationDateValue,
@@ -150,11 +153,10 @@ export default function EducationForm({
                 };
 
                 if (educationEntryToEdit) {
-                    await dispatch(updateEducation({ ...newEducationEntry, id: educationEntryToEdit.id }));
+                    await updateEducation({ educationEntry: newEducationEntry }).unwrap();
                 } else {
-                    await dispatch(addEducation({ ...newEducationEntry, id: 0 }));
+                    await addEducation({ educationEntry: newEducationEntry }).unwrap();
                 }
-                setBusyUpdating(false);
                 onClose();
                 toast({
                     variant: 'default',
@@ -162,19 +164,8 @@ export default function EducationForm({
                     description: 'Successfully saved'
                 });
             } catch (error) {
-                if (error instanceof CustomError) {
-                    toast({
-                        variant: 'destructive',
-                        title: 'Error',
-                        description: error.message
-                    });
-                } else {
-                    toast({
-                        variant: 'destructive',
-                        title: 'Error',
-                        description: 'An unexpected error occurred. Please try again.'
-                    });
-                }
+            } finally {
+                setBusyUpdating(false);
             }
         };
 

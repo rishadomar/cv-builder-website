@@ -17,14 +17,36 @@ const customBaseQuery = fetchBaseQuery({
 const injectSub = async (args: any, api: any, extraOptions: any, baseQuery: any) => {
     const state = api.getState() as RootState;
     const sub = state.authentication.sub;
-    if (sub) {
-        if (args.body) {
-            args.body.sub = sub;
-        } else {
-            args.body = { sub };
-        }
+
+    if (!sub) return baseQuery(args, api, extraOptions);
+
+    // Clone args to avoid mutating the original
+    const modifiedArgs = { ...args };
+
+    // Handle based on HTTP method
+    switch (args.method?.toUpperCase()) {
+        case 'GET':
+            // Add sub as query parameter
+            modifiedArgs.url = `${args.url}${args.url.includes('?') ? '&' : '?'}sub=${sub}`;
+            break;
+
+        case 'DELETE':
+            // Add sub as query parameter for DELETE
+            modifiedArgs.url = `${args.url}${args.url.includes('?') ? '&' : '?'}sub=${sub}`;
+            break;
+
+        case 'POST':
+        case 'PUT':
+        case 'PATCH':
+            // Add sub to body for these methods
+            modifiedArgs.body = {
+                ...(args.body || {}),
+                sub
+            };
+            break;
     }
-    return baseQuery(args, api, extraOptions);
+
+    return baseQuery(modifiedArgs, api, extraOptions);
 };
 
 export { customBaseQuery, injectSub };

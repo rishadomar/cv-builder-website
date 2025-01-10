@@ -12,9 +12,8 @@ import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
 import EducationForm from './EducationForm';
 import { DrawerDialog } from '@/components/DrawerDialog';
 import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { deleteEducation } from '@/lib/services';
 import { toast } from '@/hooks/use-toast';
+import { useDeleteEducationMutation } from '@/lib/store/api/educationApiSlice';
 
 type EducationEntryActionsDropdownProps = {
     educationEntry: EducationEntry;
@@ -29,7 +28,7 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
 }) => {
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const dispatch = useAppDispatch();
+    const [deleteEducation] = useDeleteEducationMutation();
 
     return (
         <div className='relative'>
@@ -80,15 +79,21 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
                 onOpenChange={setShowDeleteDialog}
                 onCancel={() => setShowDeleteDialog(false)}
                 onDelete={async () => {
-                    setShowDeleteDialog(false);
-                    setBusyUpdatingList(true);
-                    await dispatch(deleteEducation(educationEntry));
-                    toast({
-                        variant: 'default',
-                        title: 'Success',
-                        description: 'Successfully deleted'
-                    });
-                    setBusyUpdatingList(false);
+                    try {
+                        setShowDeleteDialog(false);
+                        setBusyUpdatingList(true);
+                        const result = await deleteEducation({ educationEntry }).unwrap();
+                        console.log('Delete operation result:', result);
+                        toast({
+                            variant: 'default',
+                            title: 'Success',
+                            description: 'Successfully deleted'
+                        });
+                    } catch (error) {
+                        console.error('Error deleting education in dialog:', error);
+                    } finally {
+                        setBusyUpdatingList(false);
+                    }
                 }}
             />
         </div>

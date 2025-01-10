@@ -81,12 +81,10 @@ export const fieldvalueSlice = createSlice({
             });
         },
         setEducationEntries: (state, action: PayloadAction<EducationEntry[]>) => {
-            state.educationEntries = action.payload;
-            state.educationEntries?.sort(compareEducationEntries);
+            state.educationEntries = [...action.payload].sort(compareEducationEntries);
         },
         setWorkExperiences: (state, action: PayloadAction<WorkExperienceEntry[]>) => {
-            state.workExperiences = action.payload;
-            state.workExperiences?.sort(compareWorkExperienceEntries);
+            state.workExperiences = [...action.payload].sort(compareWorkExperienceEntries);
         }
     }
 });

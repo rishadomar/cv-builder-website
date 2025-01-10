@@ -178,3 +178,12 @@ export type StepType = {
     showInSections: boolean;
     paymentRequired: boolean;
 };
+
+export interface ApiError {
+    status?: number;
+    data?: {
+        message?: string;
+        code?: string;
+        errors?: Record<string, string[]>;
+    };
+}
