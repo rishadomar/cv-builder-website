@@ -4,7 +4,7 @@ import { compareEducationEntries, compareWorkExperienceEntries } from '@/lib/uti
 import { customBaseQuery, injectSub } from './customBaseQuery';
 import { setFieldValues } from '../fieldValues/fieldValuesSlice';
 
-export const databaseApi = createApi({
+export const databaseApiSlice = createApi({
     reducerPath: 'databaseApi',
     baseQuery: async (args, api, extraOptions) => injectSub(args, api, extraOptions, customBaseQuery),
     endpoints: (builder) => ({
@@ -95,7 +95,7 @@ function isValidFieldValue(field: keyof FieldValuesState, value: unknown): value
 }
 
 // Export hooks for usage in components
-export const { useCreateRecordMutation, useReadRecordQuery, useSaveDataMutation } = databaseApi;
+export const { useCreateRecordMutation, useReadRecordQuery, useSaveDataMutation } = databaseApiSlice;
 
 // Export the reducer and middleware for store setup
-export const { reducer: databaseApiReducer, middleware: databaseApiMiddleware } = databaseApi;
+export const { reducer: databaseApiReducer, middleware: databaseApiMiddleware } = databaseApiSlice;

@@ -4,6 +4,7 @@ import loadingReducer from './loading/loadingSlice';
 import fieldValuesReducer from './fieldValues/fieldValuesSlice';
 import authenticationReducer from './authentication/authenticationSlice';
 import { aiApiSlice } from './api/aiApiSlice';
+import { databaseApiSlice } from './api/databaseApiSlice';
 import errorMiddleware from './api/errorMiddleware';
 
 export const makeStore = () => {
@@ -13,9 +14,11 @@ export const makeStore = () => {
             loading: loadingReducer,
             authentication: authenticationReducer,
             fieldValues: fieldValuesReducer,
-            [aiApiSlice.reducerPath]: aiApiSlice.reducer
+            [aiApiSlice.reducerPath]: aiApiSlice.reducer,
+            [databaseApiSlice.reducerPath]: databaseApiSlice.reducer
         },
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(aiApiSlice.middleware, errorMiddleware)
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(aiApiSlice.middleware, databaseApiSlice.middleware, errorMiddleware)
     });
 };
 
