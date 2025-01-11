@@ -12,13 +12,13 @@ const Footer = () => {
                         <h3 className='text-lg font-semibold text-gray-900'>Company</h3>
                         <ul className='space-y-2'>
                             <li>
-                                <a href='/#' className='text-gray-600 hover:text-gray-900'>
-                                    About Us (coming soon)
+                                <a href='/about-us' className='text-gray-600 hover:text-gray-900'>
+                                    About Us
                                 </a>
                             </li>
                             <li>
-                                <a href='/#' className='text-gray-600 hover:text-gray-900'>
-                                    Contact (coming soon)
+                                <a href='/contact-us' className='text-gray-600 hover:text-gray-900'>
+                                    Contact Us
                                 </a>
                             </li>
                             <li>
