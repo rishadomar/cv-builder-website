@@ -17,7 +17,7 @@ const StepDrawer: React.FC<DrawerProps> = () => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             trigger={
-                <div className='flex flex-row items-center text-center'>
+                <div className='flex flex-row items-center text-center cursor-pointer'>
                     <TableOfContents className='h-5 w-5 text-gray-400 mr-1' aria-hidden='true' />
                     <span className='text-gray-400 text-xs'>Contents</span>
                 </div>
