@@ -7,6 +7,7 @@ import { aiApiSlice } from './api/aiApiSlice';
 import { databaseApiSlice } from './api/databaseApiSlice';
 import { educationApiSlice } from './api/educationApiSlice';
 import errorMiddleware from './api/errorMiddleware';
+import { workExperienceApiSlice } from './api/workExperienceApiSlice';
 
 export const makeStore = () => {
     return configureStore({
@@ -17,13 +18,15 @@ export const makeStore = () => {
             fieldValues: fieldValuesReducer,
             [aiApiSlice.reducerPath]: aiApiSlice.reducer,
             [databaseApiSlice.reducerPath]: databaseApiSlice.reducer,
-            [educationApiSlice.reducerPath]: educationApiSlice.reducer
+            [educationApiSlice.reducerPath]: educationApiSlice.reducer,
+            [workExperienceApiSlice.reducerPath]: workExperienceApiSlice.reducer
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware()
                 .concat(aiApiSlice.middleware)
                 .concat(databaseApiSlice.middleware)
                 .concat(educationApiSlice.middleware)
+                .concat(workExperienceApiSlice.middleware)
                 .concat(errorMiddleware)
     });
 };

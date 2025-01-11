@@ -12,9 +12,8 @@ import { EllipsisVertical, PencilLine, Trash2 } from 'lucide-react';
 import { DrawerDialog } from '@/components/DrawerDialog';
 import WorkExperienceForm from './WorkExperienceForm';
 import { ConfirmDeleteDialog } from '@/components/ConfirmDeleteDialog';
-import { deleteWorkExperience } from '@/lib/services';
-import { useAppDispatch } from '@/lib/store/hooks';
 import { toast } from '@/hooks/use-toast';
+import { useDeleteWorkExperienceMutation } from '@/lib/store/api/workExperienceApiSlice';
 
 type WorkExperienceEntryActionsDropdownProps = {
     workExperienceEntry: WorkExperienceEntry;
@@ -29,7 +28,7 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
 }) => {
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const dispatch = useAppDispatch();
+    const [deleteWorkExperience] = useDeleteWorkExperienceMutation();
 
     return (
         <div className='relative'>
@@ -81,15 +80,19 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                 onOpenChange={setShowDeleteDialog}
                 onCancel={() => setShowDeleteDialog(false)}
                 onDelete={async () => {
-                    setShowDeleteDialog(false);
-                    setBusyUpdatingList(true);
-                    await dispatch(deleteWorkExperience(workExperienceEntry));
-                    toast({
-                        variant: 'default',
-                        title: 'Success',
-                        description: 'Successfully deleted the work experience'
-                    });
-                    setBusyUpdatingList(false);
+                    try {
+                        setShowDeleteDialog(false);
+                        setBusyUpdatingList(true);
+                        await deleteWorkExperience({ workExperienceEntry }).unwrap();
+                        toast({
+                            variant: 'default',
+                            title: 'Success',
+                            description: 'Successfully deleted the work experience'
+                        });
+                    } catch (error) {
+                    } finally {
+                        setBusyUpdatingList(false);
+                    }
                 }}
             />
         </div>

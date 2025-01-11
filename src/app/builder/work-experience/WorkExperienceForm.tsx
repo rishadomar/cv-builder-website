@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import TextFormField from '@/app/builder/TextFormField';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { addWorkExperience, updateWorkExperience } from '@/lib/services';
 import { WorkExperienceEntry, YearMonth } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { toast } from '@/hooks/use-toast';
-import { CustomError } from '@/lib/utils/customError';
+import { useUpdateWorkExperienceMutation, useAddWorkExperienceMutation } from '@/lib/store/api/workExperienceApiSlice';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z
@@ -92,6 +91,8 @@ export default function WorkExperienceForm({
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const [improveWorkDescriptionText, { isLoading: isImprovingWorkDescriptionText }] =
         useImproveWorkDescriptionTextMutation();
+    const [addWorkExperience] = useAddWorkExperienceMutation();
+    const [updateWorkExperience] = useUpdateWorkExperienceMutation();
 
     useEffect(() => {
         if (!workExperienceEntryToEdit) {
@@ -169,7 +170,7 @@ export default function WorkExperienceForm({
                         id: workExperienceEntryToEdit.id
                     };
 
-                    await dispatch(updateWorkExperience(newWorkExperienceEntry));
+                    await updateWorkExperience({ workExperienceEntry: newWorkExperienceEntry }).unwrap();
                 } else {
                     const newWorkExperienceEntry: WorkExperienceEntry = {
                         company: data.company,
@@ -181,7 +182,7 @@ export default function WorkExperienceForm({
                         id: 0
                     };
 
-                    await dispatch(addWorkExperience(newWorkExperienceEntry));
+                    await addWorkExperience({ workExperienceEntry: newWorkExperienceEntry }).unwrap();
                 }
                 setBusyUpdating(false);
                 onClose();
@@ -191,19 +192,7 @@ export default function WorkExperienceForm({
                     description: 'Successfully saved'
                 });
             } catch (error) {
-                if (error instanceof CustomError) {
-                    toast({
-                        variant: 'destructive',
-                        title: 'Error',
-                        description: error.message
-                    });
-                } else {
-                    toast({
-                        variant: 'destructive',
-                        title: 'Error',
-                        description: 'An unexpected error occurred. Please try again.'
-                    });
-                }
+            } finally {
                 setBusyUpdating(false);
             }
         };
