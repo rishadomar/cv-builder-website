@@ -1,5 +1,4 @@
 import { Middleware, isRejectedWithValue } from '@reduxjs/toolkit';
-import type { MiddlewareAPI } from '@reduxjs/toolkit';
 import { toast } from '@/hooks/use-toast';
 import { ApiError } from '@/lib/type';
 import { formatErrorMessage } from '@/lib/utils/errorUtils';
@@ -14,7 +13,7 @@ interface RejectedAction {
     };
 }
 
-const errorMiddleware: Middleware = (api: MiddlewareAPI) => (next) => (action: unknown) => {
+const errorMiddleware: Middleware = () => (next) => (action: unknown) => {
     if (isRejectedWithValue(action)) {
         const errorMessage = formatErrorMessage(action.payload);
         const rejectedAction = action as RejectedAction;

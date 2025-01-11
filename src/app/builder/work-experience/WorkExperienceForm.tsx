@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import TextFormField from '@/app/builder/TextFormField';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { useAppSelector } from '@/lib/store/hooks';
 import { WorkExperienceEntry, YearMonth } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
@@ -71,7 +71,6 @@ export default function WorkExperienceForm({
     setBusyUpdating,
     onClose
 }: WorkExperienceFormProps) {
-    const dispatch = useAppDispatch();
     const formHook = useForm<WorkExperienceDetailsFormValues>({
         resolver: zodResolver(workExperienceDetailsFormSchema),
         defaultValues: {
@@ -128,73 +127,68 @@ export default function WorkExperienceForm({
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: WorkExperienceDetailsFormValues) => {
-            try {
-                setBusyUpdating(true);
-                const startDateValue = {
+            setBusyUpdating(true);
+            const startDateValue = {
+                year: 2000,
+                month: 1
+            };
+            if (
+                data.startDate?.year &&
+                Number(data.startDate?.year) > 0 &&
+                data.startDate?.month &&
+                Number(data.startDate?.month) >= 0
+            ) {
+                startDateValue.year = Number(data.startDate.year);
+                startDateValue.month = Number(data.startDate.month);
+            }
+
+            let endDateValue: YearMonth | undefined = undefined;
+            if (
+                data.endDate?.year &&
+                Number(data.endDate?.year) > 0 &&
+                data.endDate?.month &&
+                Number(data.endDate?.month) >= 0
+            ) {
+                endDateValue = {
                     year: 2000,
                     month: 1
                 };
-                if (
-                    data.startDate?.year &&
-                    Number(data.startDate?.year) > 0 &&
-                    data.startDate?.month &&
-                    Number(data.startDate?.month) >= 0
-                ) {
-                    startDateValue.year = Number(data.startDate.year);
-                    startDateValue.month = Number(data.startDate.month);
-                }
-
-                let endDateValue: YearMonth | undefined = undefined;
-                if (
-                    data.endDate?.year &&
-                    Number(data.endDate?.year) > 0 &&
-                    data.endDate?.month &&
-                    Number(data.endDate?.month) >= 0
-                ) {
-                    endDateValue = {
-                        year: 2000,
-                        month: 1
-                    };
-                    endDateValue.year = Number(data.endDate.year);
-                    endDateValue.month = Number(data.endDate.month);
-                }
-
-                if (workExperienceEntryToEdit) {
-                    const newWorkExperienceEntry: WorkExperienceEntry = {
-                        company: data.company,
-                        location: data.location,
-                        role: data.role,
-                        description: data.description,
-                        startDate: startDateValue,
-                        endDate: endDateValue,
-                        id: workExperienceEntryToEdit.id
-                    };
-
-                    await updateWorkExperience({ workExperienceEntry: newWorkExperienceEntry }).unwrap();
-                } else {
-                    const newWorkExperienceEntry: WorkExperienceEntry = {
-                        company: data.company,
-                        location: data.location,
-                        role: data.role,
-                        description: data.description,
-                        startDate: startDateValue,
-                        endDate: endDateValue,
-                        id: 0
-                    };
-
-                    await addWorkExperience({ workExperienceEntry: newWorkExperienceEntry }).unwrap();
-                }
-                setBusyUpdating(false);
-                onClose();
-                toast({
-                    variant: 'default',
-                    title: 'Success',
-                    description: 'Successfully saved'
-                });
-            } catch (error) {
-            } finally {
-                setBusyUpdating(false);
+                endDateValue.year = Number(data.endDate.year);
+                endDateValue.month = Number(data.endDate.month);
             }
+
+            if (workExperienceEntryToEdit) {
+                const newWorkExperienceEntry: WorkExperienceEntry = {
+                    company: data.company,
+                    location: data.location,
+                    role: data.role,
+                    description: data.description,
+                    startDate: startDateValue,
+                    endDate: endDateValue,
+                    id: workExperienceEntryToEdit.id
+                };
+
+                await updateWorkExperience({ workExperienceEntry: newWorkExperienceEntry }).unwrap();
+            } else {
+                const newWorkExperienceEntry: WorkExperienceEntry = {
+                    company: data.company,
+                    location: data.location,
+                    role: data.role,
+                    description: data.description,
+                    startDate: startDateValue,
+                    endDate: endDateValue,
+                    id: 0
+                };
+
+                await addWorkExperience({ workExperienceEntry: newWorkExperienceEntry }).unwrap();
+            }
+            setBusyUpdating(false);
+            onClose();
+            toast({
+                variant: 'default',
+                title: 'Success',
+                description: 'Successfully saved'
+            });
         };
 
         event?.preventDefault();

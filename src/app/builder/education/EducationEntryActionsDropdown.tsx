@@ -79,19 +79,15 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
                 onOpenChange={setShowDeleteDialog}
                 onCancel={() => setShowDeleteDialog(false)}
                 onDelete={async () => {
-                    try {
-                        setShowDeleteDialog(false);
-                        setBusyUpdatingList(true);
-                        await deleteEducation({ educationEntry }).unwrap();
-                        toast({
-                            variant: 'default',
-                            title: 'Success',
-                            description: 'Successfully deleted'
-                        });
-                    } catch (error) {
-                    } finally {
-                        setBusyUpdatingList(false);
-                    }
+                    setShowDeleteDialog(false);
+                    setBusyUpdatingList(true);
+                    await deleteEducation({ educationEntry }).unwrap();
+                    toast({
+                        variant: 'default',
+                        title: 'Success',
+                        description: 'Successfully deleted'
+                    });
+                    setBusyUpdatingList(false);
                 }}
             />
         </div>

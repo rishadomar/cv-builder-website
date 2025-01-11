@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import TextFormField from '@/app/builder/TextFormField';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { useAppSelector } from '@/lib/store/hooks';
 import { useUpdateEducationMutation, useAddEducationMutation } from '@/lib/store/api/educationApiSlice';
 import { EducationEntry, YearMonth } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
@@ -71,15 +71,6 @@ export default function EducationForm({
     setBusyUpdating,
     onClose
 }: EducationFormProps) {
-    const dispatch = useAppDispatch();
-    // const defaultValues: Partial<EducationDetailsFormValues> = {
-    //     description: educationEntryToEdit?.description || '',
-    //     subjects: educationEntryToEdit?.subjects || '',
-    //     institution: educationEntryToEdit?.institution || '',
-    //     graduationDate: educationEntryToEdit?.graduationDate || undefined,
-    //     location: educationEntryToEdit?.location || '',
-    //     comment: educationEntryToEdit?.comment || ''
-    // };
     const formHook = useForm<EducationDetailsFormValues>({
         resolver: zodResolver(educationDetailsFormSchema),
         defaultValues: {
@@ -124,48 +115,44 @@ export default function EducationForm({
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: EducationDetailsFormValues) => {
-            try {
-                setBusyUpdating(true);
-                let graduationDateValue: YearMonth | undefined = undefined;
-                if (
-                    data.graduationDate?.year &&
-                    Number(data.graduationDate?.year) > 0 &&
-                    data.graduationDate?.month &&
-                    Number(data.graduationDate?.month) >= 0
-                ) {
-                    graduationDateValue = {
-                        year: 0,
-                        month: 0
-                    };
-                    graduationDateValue.year = Number(data.graduationDate.year);
-                    graduationDateValue.month = Number(data.graduationDate.month);
-                }
-
-                const newEducationEntry: EducationEntry = {
-                    id: educationEntryToEdit?.id || 0,
-                    description: data.description,
-                    institution: data.institution,
-                    graduationDate: graduationDateValue,
-                    location: data.location,
-                    subjects: data.subjects,
-                    comment: data.comment
+            setBusyUpdating(true);
+            let graduationDateValue: YearMonth | undefined = undefined;
+            if (
+                data.graduationDate?.year &&
+                Number(data.graduationDate?.year) > 0 &&
+                data.graduationDate?.month &&
+                Number(data.graduationDate?.month) >= 0
+            ) {
+                graduationDateValue = {
+                    year: 0,
+                    month: 0
                 };
-
-                if (educationEntryToEdit) {
-                    await updateEducation({ educationEntry: newEducationEntry }).unwrap();
-                } else {
-                    await addEducation({ educationEntry: newEducationEntry }).unwrap();
-                }
-                onClose();
-                toast({
-                    variant: 'default',
-                    title: 'Success',
-                    description: 'Successfully saved'
-                });
-            } catch (error) {
-            } finally {
-                setBusyUpdating(false);
+                graduationDateValue.year = Number(data.graduationDate.year);
+                graduationDateValue.month = Number(data.graduationDate.month);
             }
+
+            const newEducationEntry: EducationEntry = {
+                id: educationEntryToEdit?.id || 0,
+                description: data.description,
+                institution: data.institution,
+                graduationDate: graduationDateValue,
+                location: data.location,
+                subjects: data.subjects,
+                comment: data.comment
+            };
+
+            if (educationEntryToEdit) {
+                await updateEducation({ educationEntry: newEducationEntry }).unwrap();
+            } else {
+                await addEducation({ educationEntry: newEducationEntry }).unwrap();
+            }
+            setBusyUpdating(false);
+            onClose();
+            toast({
+                variant: 'default',
+                title: 'Success',
+                description: 'Successfully saved'
+            });
         };
 
         formHook.handleSubmit((data: EducationDetailsFormValues) => {
