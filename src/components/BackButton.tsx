@@ -6,7 +6,7 @@ export const BackButton = () => {
     const router = useRouter();
     return (
         <div className='flex justify-center items-center h-full'>
-            <Button onClick={() => router.back()} className='m-4'>
+            <Button variant='outline' onClick={() => router.back()} className='m-4'>
                 Go Back
             </Button>
         </div>
