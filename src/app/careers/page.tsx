@@ -5,12 +5,12 @@ import { BackButton } from '@/components/BackButton';
 
 // For server components in Next.js 13+
 async function getContent() {
-    const filePath = path.join(process.cwd(), 'content/pages/privacy.md');
+    const filePath = path.join(process.cwd(), 'content/pages/careers.md');
     const content = await fs.readFile(filePath, 'utf8');
     return content;
 }
 
-export default async function PrivacyPage() {
+export default async function CareersPage() {
     const content = await getContent();
 
     return (

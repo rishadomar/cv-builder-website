@@ -22,8 +22,8 @@ const Footer = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href='/#' className='text-gray-600 hover:text-gray-900'>
-                                    Careers (coming soon)
+                                <a href='/careers' className='text-gray-600 hover:text-gray-900'>
+                                    Careers
                                 </a>
                             </li>
                         </ul>
@@ -34,8 +34,8 @@ const Footer = () => {
                         <h3 className='text-lg font-semibold text-gray-900'>Resources</h3>
                         <ul className='space-y-2'>
                             <li>
-                                <a href='/#' className='text-gray-600 hover:text-gray-900'>
-                                    Blog (coming soon)
+                                <a href='/blog' className='text-gray-600 hover:text-gray-900'>
+                                    Blog
                                 </a>
                             </li>
                             <li>
@@ -44,8 +44,8 @@ const Footer = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href='/#' className='text-gray-600 hover:text-gray-900'>
-                                    Support (coming soon)
+                                <a href='/support' className='text-gray-600 hover:text-gray-900'>
+                                    Support
                                 </a>
                             </li>
                         </ul>
@@ -66,8 +66,8 @@ const Footer = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href='/#' className='text-gray-600 hover:text-gray-900'>
-                                    Cookie Policy (coming soon)
+                                <a href='/cookie-policy' className='text-gray-600 hover:text-gray-900'>
+                                    Cookie Policy
                                 </a>
                             </li>
                         </ul>
@@ -77,13 +77,18 @@ const Footer = () => {
                     <div className='space-y-4'>
                         <h3 className='text-lg font-semibold text-gray-900'>Connect</h3>
                         <div className='flex space-x-4'>
-                            <a href='#' className='text-gray-600 hover:text-gray-900'>
+                            {/* <a href='#' className='text-gray-600 hover:text-gray-900'>
                                 <Github className='w-6 h-6' />
                             </a>
                             <a href='#' className='text-gray-600 hover:text-gray-900'>
                                 <Twitter className='w-6 h-6' />
-                            </a>
-                            <a href='#' className='text-gray-600 hover:text-gray-900'>
+                            </a> */}
+                            <a
+                                href='https://www.linkedin.com/in/rishad-omar/'
+                                className='text-gray-600 hover:text-gray-900'
+                                target='_blank'
+                                rel='noopener noreferrer'
+                            >
                                 <Linkedin className='w-6 h-6' />
                             </a>
                         </div>
