@@ -1,8 +1,7 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { useAppSelector } from '@/lib/store/hooks';
 import { CheckIcon, ClockIcon } from 'lucide-react';
 import PaystackButton from '@/components/PaystackButton';
-import * as services from '@/lib/services';
 import { Cost } from '@/constants';
 import { Currency } from 'react-paystack/dist/types';
 import { PromoCodeForm, PromoFormValues } from './PromoCodeForm';
@@ -10,6 +9,8 @@ import { StepButtons } from '@/app/builder/StepButtons';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import { selectHasPromoCode } from '@/lib/store/fieldValues/fieldValuesSlice';
+import { usePaymentCompleteMutation } from '@/lib/store/api/paymentApiSlice';
+import { useApplyPromoCodeMutation } from '@/lib/store/api/paymentApiSlice';
 
 const features = [
     'Full CV creation and management',
@@ -25,21 +26,25 @@ type PaymentPromptProps = {
 };
 
 export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
-    const dispatch = useAppDispatch();
     const authentication = useAppSelector((state) => state.authentication);
-    const [paymentComplete, setPaymentComplete] = React.useState(false);
+    const [paymentModalComplete, setPaymentModalComplete] = React.useState(false);
     const router = useRouter();
     const hasPromoCode = useAppSelector(selectHasPromoCode);
+    const [paymentComplete] = usePaymentCompleteMutation();
+    const [applyPromoCode] = useApplyPromoCodeMutation();
 
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
-        await dispatch(services.paymentComplete(Cost.currency as Currency, Cost.amount, response.reference));
-        setPaymentComplete(true);
+        await paymentComplete({
+            currency: Cost.currency as Currency,
+            amount: Cost.amount,
+            reference: response.reference
+        }).unwrap();
+        setPaymentModalComplete(true);
     };
 
     const handlePromoSubmit = async (data: PromoFormValues) => {
-        console.log('Submitting promo code:', data.promoCode);
-        await dispatch(services.applyPromoCode(data.promoCode));
+        await applyPromoCode({ promoCode: data.promoCode }).unwrap();
     };
 
     return (
@@ -65,7 +70,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                 </div>
 
                 <div className='flex space-x-4'>
-                    {paymentComplete ? (
+                    {paymentModalComplete ? (
                         <Button
                             onClick={onNext}
                             variant='outline'
@@ -121,7 +126,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
             </div>
             <StepButtons
                 asSubmit={false}
-                onNext={paymentComplete || hasPromoCode ? onNext : undefined}
+                onNext={paymentModalComplete || hasPromoCode ? onNext : undefined}
                 onPrevious={onPrevious}
             />
         </>

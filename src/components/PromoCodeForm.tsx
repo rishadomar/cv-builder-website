@@ -32,11 +32,6 @@ export function PromoCodeForm({ onSubmit }: PromoCodeFormProps) {
         try {
             setBusySubmitting(true);
             await onSubmit(data);
-        } catch (error) {
-            form.setError('promoCode', {
-                type: 'manual',
-                message: (error as Error).message
-            });
         } finally {
             setBusySubmitting(false);
         }
