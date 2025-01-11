@@ -82,15 +82,13 @@ const EducationEntryActionsDropdown: React.FC<EducationEntryActionsDropdownProps
                     try {
                         setShowDeleteDialog(false);
                         setBusyUpdatingList(true);
-                        const result = await deleteEducation({ educationEntry }).unwrap();
-                        console.log('Delete operation result:', result);
+                        await deleteEducation({ educationEntry }).unwrap();
                         toast({
                             variant: 'default',
                             title: 'Success',
                             description: 'Successfully deleted'
                         });
                     } catch (error) {
-                        console.error('Error deleting education in dialog:', error);
                     } finally {
                         setBusyUpdatingList(false);
                     }

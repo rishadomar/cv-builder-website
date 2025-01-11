@@ -16,7 +16,6 @@ import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useImproveEducationCommentMutation } from '@/lib/store/api/aiApiSlice';
 import { toast } from '@/hooks/use-toast';
-import { CustomError } from '@/lib/utils/customError';
 
 const educationDetailsFormSchema = z.object({
     description: z
