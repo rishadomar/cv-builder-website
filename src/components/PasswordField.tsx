@@ -8,7 +8,6 @@ interface PasswordFieldProps {
     onChange: (value: string) => void;
     isLoading: boolean;
     withHelp: boolean;
-    autoHide?: boolean;
     match?: string;
     showValidity?: boolean;
 }
@@ -43,7 +42,7 @@ const validatePassword = (password: string, match?: string) => {
 };
 
 const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
-    ({ value, onChange, isLoading, withHelp, autoHide = true, match, showValidity }, ref) => {
+    ({ value, onChange, isLoading, withHelp, match, showValidity }, ref) => {
         const [showPassword, setShowPassword] = React.useState<boolean>(false);
         const inputRef = useRef<HTMLInputElement>(null);
         const validation = validatePassword(value, match);
