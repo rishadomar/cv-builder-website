@@ -99,6 +99,7 @@ export function AuthenticationLoginForm({
                             withHelp={false}
                             isLoading={false}
                             ref={passwordRef}
+                            match={undefined}
                         />
                         <Button disabled={isLoading || !emailIsValid || !passwordIsValid} name='sign-in'>
                             {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}

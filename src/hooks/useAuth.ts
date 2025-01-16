@@ -23,11 +23,11 @@ export function useAuth() {
             setIsAuthenticated(allCookiesAvailable);
 
             if (!allCookiesAvailable) {
-                router.replace('/authentication');
+                router.replace('/authentication/login');
             }
         } catch (error) {
             console.error('Authentication check failed:', error);
-            router.replace('/authentication');
+            router.replace('/authentication/login');
         } finally {
             setIsLoading(false);
         }

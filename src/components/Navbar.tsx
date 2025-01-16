@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
                 <div className='flex items-center justify-between h-16'>
                     <div className='w-24 flex items-center'>{isLoggedIn && <StepDrawer />}</div>
                     <div className='flex-grow flex justify-center'>
-                        <span className='text-white cursor-pointer' onClick={() => router.push('/')}>
+                        <span className='text-white cursor-pointer select-none' onClick={() => router.push('/')}>
                             {isLoggedIn ? 'CV Builder' : <Logo width={200} height={60} />}
                         </span>
                     </div>

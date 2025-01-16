@@ -8,7 +8,6 @@ interface PasswordFieldProps {
     onChange: (value: string) => void;
     isLoading: boolean;
     withHelp: boolean;
-    autoComplete?: 'off' | 'on';
     autoHide?: boolean;
     match?: string;
     showValidity?: boolean;
@@ -44,10 +43,12 @@ const validatePassword = (password: string, match?: string) => {
 };
 
 const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
-    ({ value, onChange, isLoading, withHelp, autoComplete = 'on', autoHide = true, match, showValidity }, ref) => {
+    ({ value, onChange, isLoading, withHelp, autoHide = true, match, showValidity }, ref) => {
         const [showPassword, setShowPassword] = React.useState<boolean>(false);
         const inputRef = useRef<HTMLInputElement>(null);
         const validation = validatePassword(value, match);
+        const fieldId = `password${match ? '-confirm' : ''}`;
+        const helpId = `${fieldId}-help`;
 
         useImperativeHandle(ref, () => ({
             isValid: () => validatePassword(value, match).isValid,
@@ -69,19 +70,12 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
 
         return (
             <div className='grid gap-1 mb-2'>
-                <Label className='sr-only' htmlFor='password'>
-                    Password
+                <Label className='sr-only' htmlFor={fieldId}>
+                    {match ? 'Confirm Password' : 'Password'}
                 </Label>
-                <div
-                    className='relative'
-                    onBlur={() => {
-                        if (autoHide) {
-                            setShowPassword(false);
-                        }
-                    }}
-                >
+                <div className='relative'>
                     <Input
-                        id={`password${match ? '-confirm' : ''}`}
+                        id={fieldId}
                         type={showPassword ? 'text' : 'password'}
                         placeholder={match ? 'Confirm password' : 'Password'}
                         autoCapitalize='none'
@@ -89,7 +83,9 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
                         value={value}
                         onChange={(event) => onChange(event.target.value)}
                         ref={inputRef}
-                        autoComplete={autoComplete}
+                        autoComplete={match ? 'new-password' : 'current-password'}
+                        aria-invalid={!validation.isValid}
+                        aria-describedby={withHelp ? helpId : undefined}
                     />
                     <div className='absolute right-2 top-2 flex gap-2'>
                         {showValidity && value && (
@@ -115,7 +111,7 @@ const PasswordField = forwardRef<PasswordFieldRef, PasswordFieldProps>(
                     </div>
                 </div>
                 {withHelp && (
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col' id={helpId} role='alert'>
                         {match === undefined && (
                             <>
                                 <span

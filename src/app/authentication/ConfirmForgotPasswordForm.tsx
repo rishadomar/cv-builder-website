@@ -96,7 +96,6 @@ export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: Co
                             isLoading={isLoading}
                             withHelp={true}
                             ref={passwordRef}
-                            autoComplete='off'
                             autoHide={false}
                             showValidity
                         />
@@ -106,7 +105,6 @@ export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: Co
                             isLoading={isLoading}
                             withHelp={true}
                             ref={confirmPasswordRef}
-                            autoComplete='off'
                             autoHide={false}
                             match={password}
                             showValidity

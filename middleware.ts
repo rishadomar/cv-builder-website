@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     const isPathProtected = protectedPaths.some((path) => request.nextUrl.pathname.startsWith(path));
 
     if (isPathProtected && !authCookie) {
-        return NextResponse.redirect(new URL('/authentication', request.url));
+        return NextResponse.redirect(new URL('/authentication/login', request.url));
     }
 
     return NextResponse.next();
