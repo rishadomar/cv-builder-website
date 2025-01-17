@@ -10,8 +10,7 @@ import {
     Mail,
     MapPinHouse,
     TextSelect,
-    Trophy,
-    User
+    Trophy
 } from 'lucide-react';
 import { StepPath, StepType } from '../type';
 

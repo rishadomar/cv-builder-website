@@ -8,7 +8,6 @@ import {
     selectIsHobbiesPopulated,
     selectIsLocationDetailsPopulated,
     selectIsPaymentValid,
-    selectIsPersonalDetailsPopulated,
     selectIsRemoteWorkPopulated,
     selectIsReviewPersonalityDetailsPopulated,
     selectIsWorkExperiencePopulated,
@@ -28,7 +27,6 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
     const router = useRouter();
     const isRemoteWorkPopulated = useAppSelector(selectIsRemoteWorkPopulated);
     const isContactDetailsPopulated = useAppSelector(selectIsContactDetailsPopulated);
-    const isPersonalDetailsPopulated = useAppSelector(selectIsPersonalDetailsPopulated);
     const isLocationDetailsPopulated = useAppSelector(selectIsLocationDetailsPopulated);
     const isHobbiesPopulated = useAppSelector(selectIsHobbiesPopulated);
     const isEducationPopulated = useAppSelector(selectIsEducationPopulated);
