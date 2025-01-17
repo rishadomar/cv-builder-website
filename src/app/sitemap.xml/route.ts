@@ -16,7 +16,7 @@ function generateSiteMap(pages: string[]) {
      `
          )
          .join('')}
-   </urlSet>`;
+   </urlset>`;
 }
 
 export async function GET() {
