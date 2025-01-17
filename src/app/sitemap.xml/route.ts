@@ -20,7 +20,17 @@ function generateSiteMap(pages: string[]) {
 }
 
 export async function GET() {
-    const pages = ['/faqs', '/privacy', '/terms'];
+    const pages = [
+        '/about-us',
+        '/blog',
+        '/careers',
+        '/contact-us',
+        '/cookie-policy',
+        '/faqs',
+        '/privacy',
+        '/support',
+        '/terms'
+    ];
 
     const sitemap = generateSiteMap(pages);
 
