@@ -13,7 +13,7 @@ const CallToAction = ({ label, color, withArrow }: CallToActionProps) => {
     const router = useRouter();
 
     const callToAction = () => {
-        router.push('/authentication/signup');
+        router.push('/authentication');
     };
 
     return (
