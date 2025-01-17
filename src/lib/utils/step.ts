@@ -28,16 +28,6 @@ export const Steps: StepType[] = [
     },
     {
         id: 2,
-        title: 'Personal',
-        icon: User,
-        description: 'Enter details about yourself',
-        completed: true,
-        path: 'personal-details',
-        showInSections: true,
-        paymentRequired: false
-    },
-    {
-        id: 3,
         title: 'Your location',
         icon: MapPinHouse,
         description: 'Provide your current location',
@@ -47,7 +37,7 @@ export const Steps: StepType[] = [
         paymentRequired: false
     },
     {
-        id: 4,
+        id: 3,
         title: 'Remote work preferences',
         icon: Globe,
         description: 'Select remote work preferences',
@@ -57,7 +47,7 @@ export const Steps: StepType[] = [
         paymentRequired: false
     },
     {
-        id: 5,
+        id: 4,
         title: 'Personality',
         icon: Heart,
         description: 'Dive deeper into your personality',
@@ -67,7 +57,7 @@ export const Steps: StepType[] = [
         paymentRequired: false
     },
     {
-        id: 6,
+        id: 5,
         title: 'Social Links',
         icon: Link,
         description: 'Links to your social media profiles',
@@ -77,7 +67,7 @@ export const Steps: StepType[] = [
         paymentRequired: false
     },
     {
-        id: 7,
+        id: 6,
         title: 'Paywall capture',
         icon: CreditCard,
         description: 'Pay please to continue',
@@ -87,7 +77,7 @@ export const Steps: StepType[] = [
         paymentRequired: false
     },
     {
-        id: 8,
+        id: 7,
         title: 'Hobbies',
         icon: Bike,
         description: 'What do you enjoy doing to accomplish a life/work balance',
@@ -97,7 +87,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 9,
+        id: 8,
         title: 'Education',
         icon: GraduationCap,
         description: 'Educational background',
@@ -107,7 +97,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 10,
+        id: 9,
         title: 'Work experience',
         icon: Briefcase,
         description: 'Professional experience',
@@ -117,7 +107,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 11,
+        id: 10,
         title: 'Top Skills',
         icon: Trophy,
         description: 'Top skills acquired during your work experience',
@@ -127,7 +117,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 12,
+        id: 11,
         title: 'Review',
         description: 'Review your CV',
         completed: false,
@@ -136,7 +126,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 13,
+        id: 12,
         title: 'Select template',
         icon: TextSelect,
         description: 'Select a template for your CV',
@@ -146,7 +136,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 14,
+        id: 13,
         title: 'Download PDF',
         icon: Download,
         description: 'Download your PDF for keeps',

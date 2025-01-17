@@ -154,7 +154,6 @@ export type AvailablePDFTemplates = 'default' | 'professional';
 
 export type StepPath =
     | 'contact-details'
-    | 'personal-details'
     | 'location-details'
     | 'remote-work-details'
     | 'personality-details'

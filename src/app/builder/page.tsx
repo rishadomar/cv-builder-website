@@ -2,7 +2,6 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ContactDetailsForm from '@/app/builder/contact-details/ContactDetails';
-import PersonalDetailsForm from './personal-details/PersonalDetails';
 import { LocationDetailsForm } from './location-details/LocationDetailsForm';
 import RemoteWorkDetailsForm from '@/app/builder/remote-work-details/RemoteWorkDetails';
 import HobbyDetailsForm from '@/app/builder/hobbies/Hobbies';
@@ -93,10 +92,6 @@ function FormContent() {
             <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
             <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <ContactDetailsForm onNext={nextPage} />}
-
-                {currentPage === 'personal-details' && (
-                    <PersonalDetailsForm onNext={nextPage} onPrevious={previousPage} />
-                )}
 
                 {currentPage === 'location-details' && (
                     <LocationDetailsForm onNext={nextPage} onPrevious={previousPage} />

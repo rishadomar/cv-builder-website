@@ -42,8 +42,6 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
         switch (step.path) {
             case 'contact-details':
                 return isContactDetailsPopulated ? 'complete' : 'incomplete';
-            case 'personal-details':
-                return isPersonalDetailsPopulated ? 'complete' : 'incomplete';
             case 'remote-work-details':
                 return isRemoteWorkPopulated ? 'complete' : 'incomplete';
             case 'location-details':

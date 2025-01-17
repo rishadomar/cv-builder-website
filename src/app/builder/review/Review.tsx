@@ -1,7 +1,6 @@
 import { getStep } from '@/lib/utils/step';
 import { StepButtons } from '../StepButtons';
 import { ContactDetailsReview } from '../contact-details/ContactDetailsReview';
-import { PersonalDetailsReview } from '../personal-details/PersonalDetailsReview';
 import { LocationDetailsReview } from '../location-details/LocationDetailsReview';
 import { RemoteWorkDetailsReview } from '../remote-work-details/RemoteWorkDetailsReview';
 import { PersonalityDetailsReview } from '../personality-details/PersonalityDetailsReview';
@@ -24,8 +23,6 @@ export const Review: React.FC<ReviewProps> = ({ onNext, onPrevious }) => {
         <>
             <StepContainer step={step}>
                 <ContactDetailsReview />
-                <hr />
-                <PersonalDetailsReview />
                 <hr />
                 <LocationDetailsReview />
                 <hr />
