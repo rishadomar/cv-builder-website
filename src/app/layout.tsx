@@ -19,7 +19,6 @@ export const metadata: Metadata = {
         locale: 'en_ZA',
         type: 'website'
     },
-    robots: 'noindex, nofollow',
     icons: {
         icon: [
             {
