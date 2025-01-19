@@ -11,7 +11,7 @@ type ConfirmCloseDialogProps = {
 export const ConfirmCloseDialog: React.FC<ConfirmCloseDialogProps> = ({ isOpen, onOpenChange, onCancel, onClose }) => {
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className='px-4 max-w-[95%] sm:max-w-lg'>
+            <DialogContent className='px-4 max-w-[95%] sm:max-w-lg rounded-lg'>
                 <DialogTitle>Are you sure you want to close this entry?</DialogTitle>
                 <DialogDescription>You may lose any unsaved changes</DialogDescription>
                 <div className='flex justify-end mt-4'>

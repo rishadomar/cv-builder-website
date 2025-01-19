@@ -57,7 +57,7 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-            <DialogContent className='max-h-[90vh] overflow-y-auto'>
+            <DialogContent className='max-h-[90vh] overflow-y-auto rounded-lg'>
                 <DialogTitle>{title}</DialogTitle>
                 {description && <DialogDescription>{description}</DialogDescription>}
                 <div>{content}</div>
