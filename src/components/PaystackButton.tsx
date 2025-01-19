@@ -16,6 +16,7 @@ interface PaystackButtonProps {
         amount: number;
         reference: string;
         channels?: string[];
+        metadata?: Record<string, unknown>;
     };
     onClose: () => void;
     onClick?: () => void;
@@ -39,6 +40,7 @@ export default function PaystackButton({ label, cancelLabel, options, onSuccess,
             <Button
                 className='w-full'
                 onClick={() => {
+                    localStorage.setItem('payment-initiated', 'true');
                     initializePayment({ onSuccess, onClose });
                 }}
             >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { CheckIcon, ClockIcon } from 'lucide-react';
 import PaystackButton from '@/components/PaystackButton';
@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { selectHasPromoCode } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { usePaymentCompleteMutation } from '@/lib/store/api/paymentApiSlice';
 import { useApplyPromoCodeMutation } from '@/lib/store/api/paymentApiSlice';
+import { PaymentInitiatedDialog } from './PaymentInitiatedDialog';
 
 const features = [
     'Full CV creation and management',
@@ -32,6 +33,13 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     const hasPromoCode = useAppSelector(selectHasPromoCode);
     const [paymentComplete] = usePaymentCompleteMutation();
     const [applyPromoCode] = useApplyPromoCodeMutation();
+    const [paymentInitiated, setPaymentInitiated] = React.useState(false);
+
+    useEffect(() => {
+        if (localStorage.getItem('payment-initiated')) {
+            setPaymentInitiated(true);
+        }
+    }, []);
 
     const onSuccess = async (response: any) => {
         console.log('Paystack payment modal response', response);
@@ -40,6 +48,7 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
             amount: Cost.amount,
             reference: response.reference
         }).unwrap();
+        localStorage.removeItem('payment-initiated');
         setPaymentModalComplete(true);
     };
 
@@ -79,22 +88,36 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                             Thank you for your support.
                         </Button>
                     ) : (
-                        <PaystackButton
-                            label='Pay now'
-                            options={{
-                                email: authentication.email!,
-                                currency: Cost.currency as Currency,
-                                amount: Cost.amount,
-                                reference: `payment_${new Date().getTime().toString()}`
-                            }}
-                            onSuccess={async (response) => {
-                                console.log(response);
-                                await onSuccess(response);
-                            }}
-                            onClose={() => {
-                                console.log('closed');
-                            }}
-                        />
+                        <>
+                            <PaystackButton
+                                label='Pay now'
+                                options={{
+                                    email: authentication.email!,
+                                    currency: Cost.currency as Currency,
+                                    amount: Cost.amount,
+                                    reference: `payment_${new Date().getTime().toString()}`,
+                                    metadata: {
+                                        sub: authentication.sub
+                                    }
+                                }}
+                                onSuccess={async (response) => {
+                                    console.log(response);
+                                    await onSuccess(response);
+                                }}
+                                onClose={() => {
+                                    console.log('closed');
+                                }}
+                            />
+                            {paymentInitiated && (
+                                <PaymentInitiatedDialog
+                                    isOpen={paymentInitiated}
+                                    onOpenChange={(isOpen: boolean) => {
+                                        setPaymentInitiated(isOpen);
+                                        localStorage.removeItem('payment-initiated');
+                                    }}
+                                />
+                            )}
+                        </>
                     )}
                 </div>
 
