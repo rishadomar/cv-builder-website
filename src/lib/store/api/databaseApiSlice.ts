@@ -16,67 +16,78 @@ export const databaseApiSlice = createApi({
             })
         }),
 
-        readRecord: builder.query<FieldValuesState, { sub: string; email: string }>({
-            query: ({ sub, email }) => `/readRecord?sub=${sub}&email=${email}`,
+        readRecord: builder.query<FieldValue[], { sub: string; email: string }>({
+            query: ({ sub, email }) => ({
+                url: '/readRecord',
+                params: { sub, email }
+            }),
             transformResponse: (response: { details: Record<string, unknown> }) => {
-                const mappedArray = Object.entries(response.details).map(([field, value]) => {
-                    switch (field) {
-                        case 'payment':
-                            const paymentValue = value as PaymentDetails;
-                            let dateValue: Date | undefined = new Date(paymentValue.date);
-                            if (isNaN(dateValue.getTime())) {
-                                dateValue = undefined;
-                            }
-                            return {
-                                field: field as keyof FieldValuesState,
-                                value: {
-                                    currency: paymentValue.currency,
-                                    amount: paymentValue.amount,
-                                    date: dateValue ? dateValue.toISOString() : undefined,
-                                    promoCode: paymentValue.promoCode
+                // Transform directly to FieldValue array format
+                return Object.entries(response.details)
+                    .map(([field, value]) => {
+                        switch (field) {
+                            case 'payment':
+                                const paymentValue = value as PaymentDetails;
+                                let dateValue: Date | undefined = new Date(paymentValue.date);
+                                if (isNaN(dateValue.getTime())) {
+                                    dateValue = undefined;
                                 }
-                            };
-                        case 'workExperiences':
-                            return {
-                                field: field as keyof FieldValuesState,
-                                value: Array.isArray(value) ? [...value].sort(compareWorkExperienceEntries) : []
-                            };
-                        case 'educationEntries':
-                            return {
-                                field: field as keyof FieldValuesState,
-                                value: Array.isArray(value) ? [...value].sort(compareEducationEntries) : []
-                            };
-                        default:
-                            return {
-                                field: field as keyof FieldValuesState,
-                                value
-                            };
-                    }
-                });
-
-                return mappedArray.reduce<FieldValuesState>((acc, { field, value }) => {
-                    // Type guard to ensure value matches the expected type for each field
-                    if (isValidFieldValue(field, value)) {
-                        acc[field] = value as any;
-                    }
-                    return acc;
-                }, {} as FieldValuesState);
+                                return {
+                                    field: field as keyof FieldValuesState,
+                                    value: {
+                                        currency: paymentValue.currency,
+                                        amount: paymentValue.amount,
+                                        date: dateValue ? dateValue.toISOString() : undefined,
+                                        promoCode: paymentValue.promoCode
+                                    }
+                                };
+                            case 'workExperiences':
+                                return {
+                                    field: field as keyof FieldValuesState,
+                                    value: Array.isArray(value) ? [...value].sort(compareWorkExperienceEntries) : []
+                                };
+                            case 'educationEntries':
+                                return {
+                                    field: field as keyof FieldValuesState,
+                                    value: Array.isArray(value) ? [...value].sort(compareEducationEntries) : []
+                                };
+                            default:
+                                return {
+                                    field: field as keyof FieldValuesState,
+                                    value
+                                };
+                        }
+                    })
+                    .filter((item) => isValidFieldValue(item.field, item.value));
             },
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    dispatch(setFieldValues(data as FieldValue[]));
+                    dispatch(setFieldValues(data));
                 } catch (error) {
                     console.error('Error saving data to Redux:', error);
                 }
             }
         }),
-        saveData: builder.mutation<void, { sub: string; data: KeyValuePairArray }>({
-            query: ({ sub, data }) => ({
+
+        saveData: builder.mutation<void, { data: KeyValuePairArray }>({
+            query: ({ data }) => ({
                 url: '/saveData',
                 method: 'POST',
-                body: { sub, data }
-            })
+                body: { data }
+            }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    const mappedArray = Object.entries(arg.data).map(([field, value]) => ({
+                        field: field as keyof FieldValuesState,
+                        value
+                    }));
+                    dispatch(setFieldValues(mappedArray));
+                } catch (error) {
+                    console.error('Error saving data to Redux:', error);
+                }
+            }
         })
     })
 });

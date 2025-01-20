@@ -4,10 +4,10 @@ import * as authApi from '@/lib/api';
 
 import { resetAuthenticationDetails, setAuthenticationDetails } from '@/lib/store/authentication/authenticationSlice';
 import { resetFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
-import { RootState } from '@/lib/store/store';
+import { getStore, RootState } from '@/lib/store/store';
 import { deleteCookie, getCookie, setCookie } from '@/lib/utils/cookies';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
-import { readRecord } from './databaseService';
+import { databaseApiSlice } from '../store/api/databaseApiSlice';
 
 export const loadOnRefresh = () => {
     return async (dispatch: Dispatch) => {
@@ -36,7 +36,8 @@ export const loadOnRefresh = () => {
             }
             dispatch(setAuthenticationDetails({ idToken, accessToken, refreshToken, sub, email }));
 
-            await readRecord(sub, email)(dispatch);
+            const state = getStore();
+            return await state.dispatch(databaseApiSlice.endpoints.readRecord.initiate({ sub, email }));
         } catch (error) {
             throw error;
         } finally {
@@ -67,7 +68,10 @@ export const googleLogin = (code: string) => {
                     email: response.email
                 })
             );
-            await readRecord(response.sub, response.email)(dispatch);
+            const state = getStore();
+            return await state.dispatch(
+                databaseApiSlice.endpoints.readRecord.initiate({ sub: response.sub, email: response.email })
+            );
         } catch (error) {
             console.error('Google login error:', error);
             throw error;
@@ -115,7 +119,8 @@ export const login = (email: string, password: string) => {
                 })
             );
 
-            await readRecord(response.Sub, email)(dispatch);
+            const state = getStore();
+            return await state.dispatch(databaseApiSlice.endpoints.readRecord.initiate({ sub: response.Sub, email }));
         } catch (error: unknown) {
             throw error;
         } finally {

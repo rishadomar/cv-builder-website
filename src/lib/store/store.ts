@@ -10,7 +10,11 @@ import errorMiddleware from './api/errorMiddleware';
 import { workExperienceApiSlice } from './api/workExperienceApiSlice';
 import { paymentApiSlice } from './api/paymentApiSlice';
 
-export const makeStore = () => {
+export type AppStore = ReturnType<typeof makeConfiguredStore>;
+export type RootState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];
+
+const makeConfiguredStore = () => {
     return configureStore({
         reducer: {
             alert: alertReducer,
@@ -34,8 +38,21 @@ export const makeStore = () => {
     });
 };
 
-// Infer the type of makeStore
-export type AppStore = ReturnType<typeof makeStore>;
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+// Store instance
+let storeInstance: AppStore | undefined;
+
+// Create store function
+export function makeStore() {
+    if (!storeInstance) {
+        storeInstance = makeConfiguredStore();
+    }
+    return storeInstance;
+}
+
+// Getter for non-React usage
+export function getStore() {
+    if (!storeInstance) {
+        storeInstance = makeConfiguredStore();
+    }
+    return storeInstance;
+}
