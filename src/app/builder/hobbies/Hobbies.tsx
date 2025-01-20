@@ -2,9 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { save } from '@/lib/services';
 import { StepButtons } from '../StepButtons';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { useAppSelector } from '@/lib/store/hooks';
 import { useEffect, useState } from 'react';
 import PillSelectFormField from '../PillSelectFormField';
 import { KeyValuePairArray } from '@/lib/type';
@@ -16,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
+import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -51,7 +51,6 @@ const Hobbies = [
 ];
 
 export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFormProps) {
-    const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<HobbyDetailsFormValues>({
         resolver: zodResolver(hobbyDetailsFormSchema)
@@ -63,6 +62,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generateHobbiesText, { isLoading: isGeneratingHobbiesText }] = useGenerateHobbiesTextMutation();
     const [improveHobbiesText, { isLoading: isImprovingHobbiesText }] = useImproveHobbiesTextMutation();
+    const [saveData] = useSaveDataMutation();
 
     useEffect(() => {
         if (allFieldValues) {
@@ -81,7 +81,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
 
         const saveValues = async (data: unknown) => {
             if (isDirty) {
-                await dispatch(save(data as KeyValuePairArray));
+                await saveData({ data: data as KeyValuePairArray }).unwrap();
             }
         };
 

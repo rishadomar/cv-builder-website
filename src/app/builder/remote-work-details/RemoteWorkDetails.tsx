@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { StepButtons } from '@/app/builder/StepButtons';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { save } from '@/lib/services';
+import { useAppSelector } from '@/lib/store/hooks';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import YesNoFormField from '../YesNoFormField';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '../StepContainer';
+import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const remoteworkDetailsFormSchema = z.object({
     remoteWork: z.enum(['yes', 'no'], {
@@ -31,11 +31,11 @@ type RemoteWorkDetailsFormProps = {
 };
 
 export default function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWorkDetailsFormProps) {
-    const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<RemoteWorkDetailsFormValues>({
         resolver: zodResolver(remoteworkDetailsFormSchema)
     });
+    const [saveData] = useSaveDataMutation();
     const { isDirty } = formHook.formState;
     const step = getStep('remote-work-details');
 
@@ -60,7 +60,7 @@ export default function RemoteWorkDetailsForm({ onNext, onPrevious }: RemoteWork
 
         const saveValues = async (data: unknown) => {
             if (isDirty) {
-                await dispatch(save(data as KeyValuePairArray));
+                await saveData({ data: data as KeyValuePairArray }).unwrap();
             }
         };
 

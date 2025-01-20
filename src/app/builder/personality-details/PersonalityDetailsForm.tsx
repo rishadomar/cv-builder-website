@@ -3,8 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { save } from '@/lib/services';
+import { useAppSelector } from '@/lib/store/hooks';
 import { Button } from '@/components/ui/button';
 import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
@@ -16,6 +15,7 @@ import { CompareText, CompareTextState } from '@/components/compareText/CompareT
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '../StepContainer';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
+import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -48,12 +48,12 @@ const Traits = [
 ];
 
 export default function PersonalityDetailsForm({ onNext, onPrevious }: PersonalityDetailsFormProps) {
-    const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const defaultValues: Partial<PersonalityDetailsFormValues> = {
         personalityTraits: [],
         personalityText: ''
     };
+    const [saveData] = useSaveDataMutation();
     const formHook = useForm<PersonalityDetailsFormValues>({
         resolver: zodResolver(personalityDetailsFormSchema),
         defaultValues
@@ -83,7 +83,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
 
         const saveValues = async (data: unknown) => {
             if (isDirty) {
-                await dispatch(save(data as KeyValuePairArray));
+                await saveData({ data: data as KeyValuePairArray }).unwrap();
             }
         };
 

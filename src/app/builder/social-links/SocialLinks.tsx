@@ -5,12 +5,12 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { StepButtons } from '../StepButtons';
 import TextFormField from '../TextFormField';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { save } from '@/lib/services';
+import { useAppSelector } from '@/lib/store/hooks';
 import { KeyValuePairArray, SocialLinkTypes } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '../StepContainer';
 import RadioFormField from '../RadioFormField';
+import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const socialLinksFormSchema = z.object({
     linkedIn: z.string().default('').optional(),
@@ -28,11 +28,11 @@ type SocialLinksFormProps = {
 };
 
 export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormProps) {
-    const dispatch = useAppDispatch();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<SocialLinksFormValues>({
         resolver: zodResolver(socialLinksFormSchema)
     });
+    const [saveData] = useSaveDataMutation();
     const isValidLink = (value?: SocialLinkTypes) => {
         return ['linkedIn', 'github', 'twitter', 'portfolio'].includes(value as string);
     };
@@ -85,7 +85,7 @@ export default function SocialLinksForm({ onNext, onPrevious }: SocialLinksFormP
 
         const saveValues = async (data: unknown) => {
             if (isDirty) {
-                await dispatch(save(data as KeyValuePairArray));
+                await saveData({ data: data as KeyValuePairArray }).unwrap();
             }
         };
 

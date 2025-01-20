@@ -6,12 +6,12 @@ import { Form } from '@/components/ui/form';
 import { z } from 'zod';
 import { StepButtons } from '@/app/builder/StepButtons';
 import TextFormField from '@/app/builder/TextFormField';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { save } from '@/lib/services';
+import { useAppSelector } from '@/lib/store/hooks';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '../StepContainer';
+import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const PhoneNumberRegex = /^(\+?\d{1,3})?[\s-]?(\(?\d{1,4}\)?)?[\s-]?\d{1,4}[\s-]?\d{1,4}[\s-]?\d{1,9}$/;
 
@@ -53,7 +53,7 @@ type ContactDetailsFormProps = {
 };
 
 export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetailsFormProps) {
-    const dispatch = useAppDispatch();
+    const [saveData] = useSaveDataMutation();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<ContactDetailsFormValues>({
         resolver: zodResolver(contactDetailsFormSchema)
@@ -82,7 +82,7 @@ export default function ContactDetailsForm({ onNext, onPrevious }: ContactDetail
 
         const saveValues = async (data: unknown) => {
             if (isDirty) {
-                await dispatch(save(data as KeyValuePairArray));
+                await saveData({ data: data as KeyValuePairArray }).unwrap();
             }
         };
 

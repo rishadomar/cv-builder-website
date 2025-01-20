@@ -4,13 +4,13 @@ import { Form } from '@/components/ui/form';
 import { z } from 'zod';
 import { StepButtons } from '../StepButtons';
 import TextFormField from '../TextFormField';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { save } from '@/lib/services';
+import { useAppSelector } from '@/lib/store/hooks';
 import YesNoFormField from '../YesNoFormField';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '../StepContainer';
+import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const locationDetailsFormSchema = z.object({
     country: z
@@ -53,7 +53,7 @@ type LocationDetailsFormProps = {
 };
 
 export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormProps) {
-    const dispatch = useAppDispatch();
+    const [saveData] = useSaveDataMutation();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const formHook = useForm<LocationDetailsFormValues>({
         resolver: zodResolver(locationDetailsFormSchema)
@@ -83,7 +83,7 @@ export function LocationDetailsForm({ onNext, onPrevious }: LocationDetailsFormP
 
         const saveValues = async (data: unknown) => {
             if (isDirty) {
-                await dispatch(save(data as KeyValuePairArray));
+                await saveData({ data: data as KeyValuePairArray });
             }
         };
 

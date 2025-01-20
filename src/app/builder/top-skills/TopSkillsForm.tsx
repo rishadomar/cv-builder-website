@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { StepButtons } from '../StepButtons';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { save } from '@/lib/services';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '../StepContainer';
@@ -15,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import TextareaFormField from '../TextareaFormField';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
+import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -28,7 +28,7 @@ type TopSkillsFormProps = {
 };
 
 export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps) {
-    const dispatch = useAppDispatch();
+    const [saveData] = useSaveDataMutation();
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const workExperienceEntries = useAppSelector((state) => state.fieldValues.workExperiences);
     const [compareText, setCompareText] = useState<CompareTextState>();
@@ -61,7 +61,7 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
 
         const saveValues = async (data: unknown) => {
             if (isDirty) {
-                await dispatch(save(data as KeyValuePairArray));
+                await saveData({ data: data as KeyValuePairArray }).unwrap();
             }
         };
 
