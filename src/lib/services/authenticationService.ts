@@ -4,10 +4,10 @@ import * as authApi from '@/lib/api';
 
 import { resetAuthenticationDetails, setAuthenticationDetails } from '@/lib/store/authentication/authenticationSlice';
 import { resetFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
-import { getStore, RootState } from '@/lib/store/store';
+import { RootState } from '@/lib/store/store';
 import { deleteCookie, getCookie, setCookie } from '@/lib/utils/cookies';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
-import { databaseApiSlice } from '../store/api/databaseApiSlice';
+import { readRecordFromStore } from '../store/api/databaseApiUtils';
 
 export const loadOnRefresh = () => {
     return async (dispatch: Dispatch) => {
@@ -36,8 +36,7 @@ export const loadOnRefresh = () => {
             }
             dispatch(setAuthenticationDetails({ idToken, accessToken, refreshToken, sub, email }));
 
-            const state = getStore();
-            return await state.dispatch(databaseApiSlice.endpoints.readRecord.initiate({ sub, email }));
+            return await readRecordFromStore(sub, email);
         } catch (error) {
             throw error;
         } finally {
@@ -68,10 +67,8 @@ export const googleLogin = (code: string) => {
                     email: response.email
                 })
             );
-            const state = getStore();
-            return await state.dispatch(
-                databaseApiSlice.endpoints.readRecord.initiate({ sub: response.sub, email: response.email })
-            );
+
+            return await readRecordFromStore(response.sub, response.email);
         } catch (error) {
             console.error('Google login error:', error);
             throw error;
@@ -119,8 +116,7 @@ export const login = (email: string, password: string) => {
                 })
             );
 
-            const state = getStore();
-            return await state.dispatch(databaseApiSlice.endpoints.readRecord.initiate({ sub: response.Sub, email }));
+            return await readRecordFromStore(response.Sub, email);
         } catch (error: unknown) {
             throw error;
         } finally {
