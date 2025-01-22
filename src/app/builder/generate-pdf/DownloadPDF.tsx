@@ -51,11 +51,6 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
     return (
         <>
             <StepContainer step={step}>
-                <Alert>
-                    <AlertCircle className='h-4 w-4' />
-                    <AlertDescription>You can review the PDF and return here to make any changes</AlertDescription>
-                </Alert>
-
                 <div className='grid gap-6 md:grid-cols-2'>
                     <Card>
                         <CardHeader>
@@ -66,6 +61,13 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
                                 Download the latest version of your CV to your device. You can then share it with
                                 potential employers.
                             </p>
+                            <Alert variant='default' className='mt-4'>
+                                <AlertCircle className='h-4 w-4' />
+                                <AlertDescription>
+                                    Your browser's pop-up blocker may prevent the download. Please allow pop-ups for
+                                    this.
+                                </AlertDescription>
+                            </Alert>
                         </CardContent>
                         <CardFooter>
                             <Button
