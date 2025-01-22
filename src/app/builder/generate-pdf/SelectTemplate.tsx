@@ -3,14 +3,13 @@ import { Check } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StepButtons } from '../StepButtons';
-import { useAppDispatch } from '@/lib/store/hooks';
 import { StepContainer } from '../StepContainer';
 import { getStep } from '@/lib/utils/step';
-import * as services from '@/lib/services';
 import { toast } from '@/hooks/use-toast';
 import { CustomError } from '@/lib/utils/customError';
 import { AvailablePDFTemplates } from '@/lib/type';
 import Image from 'next/image';
+import { useGeneratePDFMutation } from '@/lib/store/api/pdfApiSlice';
 
 const templates = [
     {
@@ -42,9 +41,9 @@ type SelectTemplateProps = {
 };
 
 export default function SelectTemplate({ onNext, onPrevious }: SelectTemplateProps) {
-    const dispatch = useAppDispatch();
     const [selectedTemplate, setSelectedTemplate] = React.useState<AvailablePDFTemplates>();
     const step = getStep('select-template');
+    const [generatePDF] = useGeneratePDFMutation();
 
     const handleTemplateSelect = (templateId: string) => {
         setSelectedTemplate(templateId as AvailablePDFTemplates);
@@ -61,7 +60,7 @@ export default function SelectTemplate({ onNext, onPrevious }: SelectTemplatePro
 
         if (onNext && submitterName === 'next' && selectedTemplate) {
             try {
-                await dispatch(services.generatePDF(selectedTemplate));
+                await generatePDF({ selectedTemplate });
                 onNext();
             } catch (error) {
                 if (error instanceof CustomError) {

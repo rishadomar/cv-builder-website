@@ -4,21 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StepButtons } from '../StepButtons';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import * as services from '@/lib/services';
+import { useAppSelector } from '@/lib/store/hooks';
 import { StepContainer } from '../StepContainer';
 import { getStep } from '@/lib/utils/step';
+import { useDownloadPDFMutation } from '@/lib/store/api/pdfApiSlice';
 
 type DownloadPDFProps = {
     onPrevious: () => void;
 };
 
 export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
-    const dispatch = useAppDispatch();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const allFieldValues = useAppSelector((state) => state.fieldValues);
     const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
     const step = getStep('download-pdf');
+    const [downloadPDF] = useDownloadPDFMutation();
 
     React.useEffect(() => {
         if (pdfUrl) {
@@ -41,8 +41,8 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
 
     const handleDownloadPDF = async () => {
         try {
-            const pdf_url = await dispatch(services.downloadPDF());
-            setPdfUrl(pdf_url);
+            const { url } = await downloadPDF().unwrap();
+            setPdfUrl(url);
         } catch (error) {
             console.error('Download PDF error:', error);
         }
