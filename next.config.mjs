@@ -9,6 +9,19 @@ const nextConfig = {
                 pathname: '/**'
             }
         ]
+    },
+    async headers() {
+        return [
+            {
+                source: '/:path*',
+                headers: [
+                    {
+                        key: 'X-Frame-Options',
+                        value: 'SAMEORIGIN'
+                    }
+                ]
+            }
+        ];
     }
 };
 
