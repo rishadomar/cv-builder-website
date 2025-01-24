@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQuery, injectSub } from './customBaseQuery';
 import { setFieldValues } from '@/lib/store/fieldValues/fieldValuesSlice';
-import { Currency } from 'react-paystack/dist/types';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
 import { AvailablePDFTemplates } from '@/lib/type';
 

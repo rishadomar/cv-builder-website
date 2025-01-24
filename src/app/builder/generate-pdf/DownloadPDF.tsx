@@ -64,7 +64,7 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
                             <Alert variant='default' className='mt-4'>
                                 <AlertCircle className='h-4 w-4' />
                                 <AlertDescription>
-                                    Your browser's pop-up blocker may prevent the download. Please allow pop-ups for
+                                    Your browser&amp;s pop-up blocker may prevent the download. Please allow pop-ups for
                                     this.
                                 </AlertDescription>
                             </Alert>
