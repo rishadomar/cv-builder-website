@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExternalLink, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardFooter } from '@/components/ui/card';
 import { StepButtons } from '../StepButtons';
 import { useAppSelector } from '@/lib/store/hooks';
 import { StepContainer } from '../StepContainer';
