@@ -22,7 +22,7 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
 
     const handlePDF = async (action: 'download' | 'open') => {
         try {
-            const blob = await downloadPDFTrigger({ download: true }).unwrap();
+            const blob = await downloadPDFTrigger({ download: action === 'download' }).unwrap();
 
             if (await verifyPDF(blob)) {
                 // Create object URL
