@@ -1,8 +1,7 @@
 import React from 'react';
-import { FileDown, AlertCircle } from 'lucide-react';
+import { ExternalLink, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { StepButtons } from '../StepButtons';
 import { useAppSelector } from '@/lib/store/hooks';
 import { StepContainer } from '../StepContainer';
@@ -87,16 +86,7 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
         <>
             <StepContainer step={step}>
                 <div className='flex items-center justify-center min-h-[50vh]'>
-                    <Card className='w-full max-w-md'>
-                        <CardHeader>
-                            <CardDescription>Download your CV</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className='text-sm text-muted-foreground'>
-                                Download the latest version of your CV to your device. You can then share it with
-                                potential employers.
-                            </p>
-                        </CardContent>
+                    <Card className='w-full max-w-md p-5'>
                         <CardFooter className='flex flex-col'>
                             <Button
                                 className='w-full mt-2'
@@ -104,7 +94,7 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
                                 onClick={() => handlePDF('open')}
                                 disabled={isLoading || !allFieldValues.pdf_id}
                             >
-                                <FileDown className='mr-2 h-4 w-4' />
+                                <ExternalLink className='mr-2 h-4 w-4' />
                                 Open PDF in New Tab
                             </Button>
                             <span className='text-xs text-muted-foreground mt-2 mb-5'>
