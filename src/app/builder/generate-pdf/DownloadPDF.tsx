@@ -40,15 +40,47 @@ export default function DownloadPDF({ onPrevious }: DownloadPDFProps) {
         }
     }, [pdfUrl]);
 
+    const verifyPDF = async (blob: Blob): Promise<boolean> => {
+        // Read just the first 5 bytes of the blob
+        const slice = blob.slice(0, 5);
+        const decoder = new TextDecoder();
+        const magicNumber = decoder.decode(await slice.arrayBuffer());
+
+        if (magicNumber !== '%PDF-') {
+            throw new Error('Invalid PDF format: Missing PDF header');
+        }
+
+        return true;
+    };
+
     const handleDownloadPDF = async () => {
         try {
-            await downloadPDFTrigger({ download: true }).unwrap();
+            const blob = await downloadPDFTrigger({ download: true }).unwrap();
 
-            toast({
-                variant: 'default',
-                title: 'Success',
-                description: 'PDF downloaded successfully'
-            });
+            if (await verifyPDF(blob)) {
+                // Create object URL
+                const url = window.URL.createObjectURL(blob);
+
+                // Create temporary link
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'cv.pdf'; // Set desired filename
+
+                // Append to document, click, and cleanup
+                document.body.appendChild(link);
+                link.click();
+
+                // Cleanup
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(link);
+                toast({
+                    variant: 'default',
+                    title: 'Success',
+                    description: 'PDF downloaded successfully'
+                });
+            } else {
+                new Error('Invalid PDF format');
+            }
         } catch (error) {
             toast({
                 variant: 'destructive',
