@@ -72,7 +72,19 @@ export const pdfApiSlice = createApi({
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     dispatch(setLoading(true));
-                    await queryFulfilled;
+                    const { data: blob } = await queryFulfilled;
+
+                    // Handle the blob directly here instead of storing in Redux
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'cv.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+
+                    // Cleanup
+                    link.parentNode?.removeChild(link);
+                    window.URL.revokeObjectURL(url);
                 } finally {
                     dispatch(setLoading(false));
                 }
