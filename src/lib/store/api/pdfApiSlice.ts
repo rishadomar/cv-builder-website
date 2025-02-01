@@ -30,11 +30,44 @@ export const pdfApiSlice = createApi({
             }
         }),
 
-        downloadPDF: builder.mutation<{ url: string }, void>({
-            query: () => ({
+        downloadPDF: builder.query<Blob, { download?: boolean }>({
+            query: (args) => ({
                 url: '/downloadPDF',
-                method: 'POST',
-                body: {}
+                method: 'GET',
+                params: { download: args?.download ?? false },
+                cache: 'no-cache',
+                responseHandler: async (response: Response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to download PDF');
+                    }
+
+                    const contentType = response.headers.get('content-type');
+                    if (
+                        !contentType?.includes('application/pdf') &&
+                        !contentType?.includes('application/octet-stream')
+                    ) {
+                        throw new Error(`Invalid content type: ${contentType}`);
+                    }
+
+                    const base64Data = await response.text();
+                    console.log('Raw response:', base64Data.substring(0, 50));
+
+                    // Convert base64 to binary
+                    const binaryString = atob(base64Data);
+                    console.log('First few chars after atob:', binaryString.substring(0, 20));
+
+                    // Convert binary string to Uint8Array
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+
+                    console.log('First bytes:', bytes.slice(0, 20));
+                    console.log('As text:', new TextDecoder().decode(bytes.slice(0, 20)));
+
+                    // Create blob from the binary data
+                    return new Blob([bytes], { type: 'application/pdf' });
+                }
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
@@ -48,4 +81,4 @@ export const pdfApiSlice = createApi({
     })
 });
 
-export const { useGeneratePDFMutation, useDownloadPDFMutation } = pdfApiSlice;
+export const { useGeneratePDFMutation, useLazyDownloadPDFQuery } = pdfApiSlice;
