@@ -6,12 +6,12 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
-import * as services from '@/lib/services';
 import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import { Loader } from 'lucide-react';
 import { CustomError } from '@/lib/utils/customError';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
 import { toast } from '@/hooks/use-toast';
+import { useRegisterNewUserMutation } from '@/lib/store/api/authenticationApiSlice';
 
 interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {
@@ -25,6 +25,7 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
     const [emailIsValid, setEmailIsValid] = React.useState<boolean>(false);
     const [passwordIsValid, setPasswordIsValid] = React.useState<boolean>(false);
     const router = useRouter();
+    const [registerNewUser] = useRegisterNewUserMutation();
 
     React.useEffect(() => {
         emailRef.current?.focus();
@@ -51,7 +52,7 @@ export function AuthenticationSignupForm({ className, ...props }: Authentication
         setIsLoading(true);
         if (email && password) {
             try {
-                await dispatch(services.registerNewUser(email, password));
+                await registerNewUser({ email, password }).unwrap();
                 router.push('/builder');
             } catch (error) {
                 if (error instanceof CustomError) {

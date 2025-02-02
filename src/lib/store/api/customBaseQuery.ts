@@ -1,6 +1,6 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '@/lib/store/store';
-import { getIdToken } from '@/lib/api/auth/authApi';
+import { getIdToken } from './authenticationApiUtils';
 
 const customBaseQuery = fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_GATEWAY_URL,

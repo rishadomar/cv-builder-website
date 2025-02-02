@@ -1,16 +1,14 @@
 'use client';
 
 import React from 'react';
-import * as services from '@/lib/services';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAppDispatch } from '@/lib/store/hooks';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
+import { validateGoogleLogin } from '@/lib/store/api/authenticationApiUtils';
 
 export default function GoogleLoginSuccess() {
     const [loading] = React.useState<boolean>(true);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const hasFetchedData = React.useRef(false);
-    const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -32,8 +30,7 @@ export default function GoogleLoginSuccess() {
                     throw new Error('No code found in URL parameters');
                 }
 
-                const response = await dispatch(services.googleLogin(code));
-                console.log('Response:', response);
+                await validateGoogleLogin(code);
                 router.replace('/builder');
             } catch (error) {
                 if (error instanceof Error) {

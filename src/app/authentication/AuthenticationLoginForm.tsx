@@ -4,15 +4,14 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
-import * as services from '@/lib/services';
 import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import { CustomError } from '@/lib/utils/customError';
 import LinkButton from '@/components/core/LinkButton';
 import { Loader } from 'lucide-react';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
 import { toast } from '@/hooks/use-toast';
+import { useLoginMutation } from '@/lib/store/api/authenticationApiSlice';
 
 interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;
@@ -25,7 +24,7 @@ export function AuthenticationLoginForm({
     className,
     ...props
 }: AuthenticationLoginFormProps) {
-    const dispatch = useAppDispatch();
+    const [login] = useLoginMutation();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<EmailFieldRef>(null);
     const [email, setEmail] = React.useState<string>('');
@@ -60,7 +59,7 @@ export function AuthenticationLoginForm({
         setIsLoading(true);
         if (email && password) {
             try {
-                await dispatch(services.login(email, password));
+                await login({ email, password }).unwrap();
                 router.replace('/builder');
             } catch (error) {
                 if (error instanceof CustomError) {

@@ -2,14 +2,14 @@
 
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/lib/store/hooks';
-import { loadOnRefresh } from '@/lib/services';
+import { loadOnRefresh } from '@/lib/store/api/authenticationApiUtils';
 
 const CookieLoader: React.FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         setTimeout(() => {
-            dispatch(loadOnRefresh());
+            loadOnRefresh();
         }, 0);
     }, [dispatch]);
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
-import { selectUserEmail } from '@/lib/store/authentication/authenticationSlice';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,28 +11,29 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/lib/utils';
-import { CircleUserRound, Cog, CreditCard, LogOut, SquareArrowOutUpRight } from 'lucide-react';
+import { CircleUserRound, Cog, CreditCard, LogOut, LogOutIcon, SquareArrowOutUpRight } from 'lucide-react';
 import { DrawerDialog } from '../DrawerDialog';
 import { QuickLinks } from './QuickLinks';
+import { resetAuthenticationFields } from '@/lib/store/api/authenticationApiUtils';
 
 const ProfileDropdown: React.FC = () => {
-    const email = useAppSelector(selectUserEmail);
+    const authentication = useAppSelector((state) => state.authentication);
     const router = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isQuickLinksDialogOpen, setIsQuickLinksDialogOpen] = useState(false);
 
     const handleLogout = async () => {
-        console.log('Logout clicked');
-        if (getCookie('Google')) {
+        if (getCookie('Google') && getCookie('Google') === 'true') {
+            await resetAuthenticationFields();
             window.location.href =
                 `${process.env.NEXT_PUBLIC_COGNITO_DOMAIN}/logout?` +
                 new URLSearchParams({
                     client_id: process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID as string,
                     logout_uri: `${origin}/authentication/logout`
                 });
-        } else {
-            router.push('/authentication/logout');
+            return;
         }
+        router.push('/authentication/logout');
     };
 
     const handleBilling = () => {
@@ -55,7 +55,7 @@ const ProfileDropdown: React.FC = () => {
                 <DropdownMenuContent className='w-56'>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuItem disabled>
-                        <span>{email}</span>
+                        <span>{authentication.email ?? 'None'}</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
@@ -74,7 +74,7 @@ const ProfileDropdown: React.FC = () => {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => handleLogout()}>
-                        <LogOut />
+                        <LogOutIcon />
                         Logout
                     </DropdownMenuItem>
                 </DropdownMenuContent>

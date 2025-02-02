@@ -1,18 +1,22 @@
 'use client';
 import * as React from 'react';
-import * as services from '@/lib/services';
-import { useAppDispatch } from '@/lib/store/hooks';
+import { useAppSelector } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
+import { useLogoutMutation } from '@/lib/store/api/authenticationApiSlice';
 
 export default function LogoutPage() {
-    const dispatch = useAppDispatch();
     const router = useRouter();
+    const authentication = useAppSelector((state) => state.authentication);
+    const [logoutMutation] = useLogoutMutation();
 
     // const [isLoading, setIsLoading] = React.useState<boolean>(false);
     React.useEffect(() => {
         const logout = async () => {
             try {
-                await dispatch(services.logout());
+                await logoutMutation({
+                    email: authentication.email!,
+                    accessToken: authentication.accessToken!
+                }).unwrap();
                 router.push('/authentication/login');
             } catch (error) {
                 console.error('Logout error:', error);
@@ -21,7 +25,11 @@ export default function LogoutPage() {
             }
         };
 
-        logout();
+        if (authentication.email && authentication.accessToken) {
+            logout();
+        } else {
+            router.push('/authentication/login');
+        }
     }, []);
 
     return <div>Busy logging you out...</div>;

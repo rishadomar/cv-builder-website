@@ -10,6 +10,7 @@ import errorMiddleware from './api/errorMiddleware';
 import { workExperienceApiSlice } from './api/workExperienceApiSlice';
 import { paymentApiSlice } from './api/paymentApiSlice';
 import { pdfApiSlice } from './api/pdfApiSlice';
+import { authenticationApiSlice } from './api/authenticationApiSlice';
 
 export type AppStore = ReturnType<typeof makeConfiguredStore>;
 export type RootState = ReturnType<AppStore['getState']>;
@@ -20,14 +21,15 @@ const makeConfiguredStore = () => {
         reducer: {
             alert: alertReducer,
             loading: loadingReducer,
-            authentication: authenticationReducer,
             fieldValues: fieldValuesReducer,
+            authentication: authenticationReducer,
             [aiApiSlice.reducerPath]: aiApiSlice.reducer,
             [databaseApiSlice.reducerPath]: databaseApiSlice.reducer,
             [educationApiSlice.reducerPath]: educationApiSlice.reducer,
             [workExperienceApiSlice.reducerPath]: workExperienceApiSlice.reducer,
             [paymentApiSlice.reducerPath]: paymentApiSlice.reducer,
-            [pdfApiSlice.reducerPath]: pdfApiSlice.reducer
+            [pdfApiSlice.reducerPath]: pdfApiSlice.reducer,
+            [authenticationApiSlice.reducerPath]: authenticationApiSlice.reducer
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware()
@@ -37,6 +39,7 @@ const makeConfiguredStore = () => {
                 .concat(workExperienceApiSlice.middleware)
                 .concat(paymentApiSlice.middleware)
                 .concat(pdfApiSlice.middleware)
+                .concat(authenticationApiSlice.middleware)
                 .concat(errorMiddleware)
     });
 };
