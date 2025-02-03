@@ -11,10 +11,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/lib/utils';
-import { CircleUserRound, Cog, CreditCard, LogOut, LogOutIcon, SquareArrowOutUpRight } from 'lucide-react';
+import { CircleUserRound, Cog, CreditCard, LogOut, LogOutIcon, Mail, SquareArrowOutUpRight } from 'lucide-react';
 import { DrawerDialog } from '../DrawerDialog';
 import { QuickLinks } from './QuickLinks';
 import { resetAuthenticationFields } from '@/lib/store/api/authenticationApiUtils';
+import { Chrome } from 'lucide-react';
 
 const ProfileDropdown: React.FC = () => {
     const authentication = useAppSelector((state) => state.authentication);
@@ -55,7 +56,14 @@ const ProfileDropdown: React.FC = () => {
                 <DropdownMenuContent className='w-56'>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuItem disabled>
-                        <span>{authentication.email ?? 'None'}</span>
+                        <div className='flex items-center gap-1'>
+                            {getCookie('Google') && getCookie('Google') === 'true' ? (
+                                <Chrome className='w-4 h-4' />
+                            ) : (
+                                <Mail className='w-4 h-4' />
+                            )}
+                            <span className='ml-2'>{authentication.email ?? 'None'}</span>
+                        </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
