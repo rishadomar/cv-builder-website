@@ -19,6 +19,7 @@ export default function Home() {
                         width={500}
                         height={400}
                         className='rounded-xl shadow-lg w-full max-w-md'
+                        priority
                     />
                 </div>
 
