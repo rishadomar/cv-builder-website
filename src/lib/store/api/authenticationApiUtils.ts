@@ -3,11 +3,7 @@ import { GoogleLoginResponse, LoginResponse } from '@/lib/api';
 import { authenticationApiSlice } from './authenticationApiSlice';
 import { jwtDecode } from 'jwt-decode';
 import { deleteCookie, getCookie, setCookie } from '@/lib/utils';
-import {
-    authenticationSlice,
-    resetAuthenticationDetails,
-    setAuthenticationDetails
-} from '../authentication/authenticationSlice';
+import { resetAuthenticationDetails, setAuthenticationDetails } from '../authentication/authenticationSlice';
 import { readRecordFromStore } from './databaseApiUtils';
 import { resetFieldValues } from '../fieldValues/fieldValuesSlice';
 

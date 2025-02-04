@@ -2,11 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQuery, injectSub } from './customBaseQuery';
 import { LoginResponse, LogoutResponse, RegisterNewUserResponse } from '@/lib/api';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
-import { deleteCookie, setCookie } from '@/lib/utils';
-import { resetAuthenticationDetails, setAuthenticationDetails } from '@/lib/store/authentication/authenticationSlice';
+import { setCookie } from '@/lib/utils';
+import { setAuthenticationDetails } from '@/lib/store/authentication/authenticationSlice';
 import { readRecordFromStore } from './databaseApiUtils';
-import { resetFieldValues } from '../fieldValues/fieldValuesSlice';
-import { loginFromStore, resetAuthenticationFields, validateGoogleLogin } from './authenticationApiUtils';
+import { loginFromStore, resetAuthenticationFields } from './authenticationApiUtils';
 
 export const authenticationApiSlice = createApi({
     reducerPath: 'authenticationApi',
@@ -80,7 +79,7 @@ export const authenticationApiSlice = createApi({
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     dispatch(setLoading(true));
-                    const { data } = await queryFulfilled;
+                    await queryFulfilled;
                     await loginFromStore(arg.email, arg.password);
                 } finally {
                     dispatch(setLoading(false));

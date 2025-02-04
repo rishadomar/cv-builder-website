@@ -4,23 +4,22 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useAppDispatch } from '@/lib/store/hooks';
-import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
 import { Loader } from 'lucide-react';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
 import { toast } from '@/hooks/use-toast';
+import { useForgotPasswordMutation } from '@/lib/store/api/authenticationApiSlice';
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onSuccess: () => void;
 }
 
 export function ForgotPasswordForm({ onSuccess, className, ...props }: ForgotPasswordFormProps) {
-    const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const emailRef = React.useRef<EmailFieldRef>(null);
     const [email, setEmail] = React.useState<string>('');
     const [emailIsValid, setEmailIsValid] = React.useState<boolean>(false);
+    const [forgotPassword] = useForgotPasswordMutation();
 
     React.useEffect(() => {
         emailRef.current?.focus();
@@ -39,7 +38,7 @@ export function ForgotPasswordForm({ onSuccess, className, ...props }: ForgotPas
         setIsLoading(true);
         if (email) {
             try {
-                await dispatch(services.forgotPassword(email));
+                await forgotPassword({ email }).unwrap();
                 toast({
                     variant: 'default',
                     title: 'Success',

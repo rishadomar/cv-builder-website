@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useAppDispatch } from '@/lib/store/hooks';
 import { useRouter } from 'next/navigation';
 import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import { Loader } from 'lucide-react';
@@ -15,7 +14,6 @@ import { useRegisterNewUserMutation } from '@/lib/store/api/authenticationApiSli
 
 interface AuthenticationSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function AuthenticationSignupForm({ className, ...props }: AuthenticationSignupFormProps) {
-    const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>('');
     const emailRef = React.useRef<EmailFieldRef>(null);

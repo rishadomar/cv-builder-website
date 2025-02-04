@@ -6,21 +6,20 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAppDispatch } from '@/lib/store/hooks';
-import * as services from '@/lib/services';
 import { CustomError } from '@/lib/utils/customError';
 import { Loader } from 'lucide-react';
 import PasswordField, { PasswordFieldRef } from '@/components/PasswordField';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
 import { toast } from '@/hooks/use-toast';
+import { useConfirmForgotPasswordMutation } from '@/lib/store/api/authenticationApiSlice';
 
 interface ConfirmForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onSuccess: () => void;
 }
 
 export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: ConfirmForgotPasswordFormProps) {
-    const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [confirmForgotPassword] = useConfirmForgotPasswordMutation();
     const emailRef = React.useRef<EmailFieldRef>(null);
     const passwordRef = React.useRef<PasswordFieldRef>(null);
     const [email, setEmail] = React.useState<string>('');
@@ -47,7 +46,7 @@ export function ConfirmForgotPasswordForm({ onSuccess, className, ...props }: Co
         setIsLoading(true);
 
         try {
-            await dispatch(services.confirmForgotPassword(email, password, code));
+            await confirmForgotPassword({ email, newPassword: password, verificationCode: code }).unwrap();
             toast({
                 variant: 'default',
                 title: 'Success',

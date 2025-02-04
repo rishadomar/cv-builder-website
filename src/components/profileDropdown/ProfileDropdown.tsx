@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/lib/utils';
-import { CircleUserRound, Cog, CreditCard, LogOut, LogOutIcon, Mail, SquareArrowOutUpRight } from 'lucide-react';
+import { CircleUserRound, Cog, CreditCard, LogOutIcon, Mail, SquareArrowOutUpRight } from 'lucide-react';
 import { DrawerDialog } from '../DrawerDialog';
 import { QuickLinks } from './QuickLinks';
 import { resetAuthenticationFields } from '@/lib/store/api/authenticationApiUtils';
