@@ -97,31 +97,31 @@ export const selectIsRemoteWorkPopulated = (state: RootState) => {
 };
 
 export const selectIsContactDetailsPopulated = (state: RootState) => {
-    return state.fieldValues.sub !== undefined;
+    return state.fieldValues.sub?.length !== 0 && state.fieldValues.email?.length !== 0;
 };
 
 export const selectIsPersonalDetailsPopulated = (state: RootState) => {
-    return state.fieldValues.name !== undefined;
+    return state.fieldValues.name?.length !== 0;
 };
 
 export const selectIsLocationDetailsPopulated = (state: RootState) => {
-    return state.fieldValues.city !== undefined;
+    return state.fieldValues.city?.length !== 0;
 };
 
 export const selectIsPersonalityDetailsPopulated = (state: RootState) => {
-    return state.fieldValues.personalityText !== undefined;
+    return state.fieldValues.personalityText?.length !== 0;
 };
 
 export const selectIsHobbiesPopulated = (state: RootState) => {
-    return state.fieldValues.hobbiesText !== undefined;
+    return state.fieldValues.hobbiesText?.length !== 0;
 };
 
 export const selectIsEducationPopulated = (state: RootState) => {
-    return state.fieldValues.educationEntries !== undefined;
+    return state.fieldValues.educationEntries?.length !== 0;
 };
 
 export const selectIsWorkExperiencePopulated = (state: RootState) => {
-    return state.fieldValues.workExperiences !== undefined;
+    return state.fieldValues.workExperiences?.length !== 0;
 };
 
 export const selectIsReviewPersonalityDetailsPopulated = (state: RootState) => {
