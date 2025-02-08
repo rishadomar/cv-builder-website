@@ -122,8 +122,10 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                 </div>
 
                 {hasPromoCode ? (
-                    <div className='flex text-center text-sm text-gray-600'>
-                        Promo code applied. Paying will allow you to access full features.
+                    <div className='border border-gray-300 p-4 rounded-lg'>
+                        <div className='flex text-center text-sm text-gray-600'>
+                            Promo code applied. Paying will allow you to access full features.
+                        </div>
                     </div>
                 ) : (
                     <div className='border border-gray-300 p-4 rounded-lg'>

@@ -186,3 +186,28 @@ export interface ApiError {
         errors?: Record<string, string[]>;
     };
 }
+
+export type GoogleLoginResponse = {
+    access_token: string;
+    id_token: string;
+    refresh_token: string;
+    sub: string;
+    email: string;
+};
+
+export type LoginResponse = {
+    AccessToken: string;
+    IdToken: string;
+    RefreshToken: string;
+    Sub: string;
+};
+
+export type RegisterNewUserResponse = {
+    sub: string;
+    email: string;
+};
+
+export type LogoutResponse = {
+    message: string;
+};
+
