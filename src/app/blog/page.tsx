@@ -3,6 +3,7 @@
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { BackButton } from '@/components/BackButton';
 import { useGetRecentPostsQuery } from '@/lib/store/api/blogApiSlice';
+import { Button } from '@/components/ui/button';
 
 export default function BlogPage() {
     const { data: posts, isError, isLoading } = useGetRecentPostsQuery({ limit: 3 });
@@ -28,6 +29,23 @@ export default function BlogPage() {
                     </div>
                 ))}
             <BackButton />
+            <Button
+                onClick={() => {
+                    window.location.href = 'blog/welcome';
+                }}
+            >
+                Goto welcome content
+            </Button>
+            <Button
+                onClick={async () => {
+                    const response = await fetch('https://blog-dev.cvbuilder.co.za/welcome/content.md');
+                    //const response = await fetch('https://d30b3w73zi1e3t.cloudfront.net/welcome');
+                    console.log('>>>> RESPONSE: ', response);
+                }}
+                className='mt-4 px-4 py-2 bg-blue-500 text-white rounded'
+            >
+                Fetch content
+            </Button>
         </div>
     );
 }
