@@ -6,17 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import { BlogPostImage } from '../BlogPostImage';
 import { BackButton } from '@/components/BackButton';
 
-// Types
-interface BlogPost {
-    slug: string;
-    content: string;
-    metadata?: {
-        title: string;
-        description: string;
-        date: string;
-    };
-}
-
 // Generate metadata for the page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const post = await getBlogPost(params.slug);
