@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQuery, injectSub } from './customBaseQuery';
-import { LoginResponse, LogoutResponse, RegisterNewUserResponse } from '@/lib/api';
+import { LoginResponse, LogoutResponse, RegisterNewUserResponse } from '@/lib/type';
 import { setLoading } from '@/lib/store/loading/loadingSlice';
 import { setCookie } from '@/lib/utils';
 import { setAuthenticationDetails } from '@/lib/store/authentication/authenticationSlice';

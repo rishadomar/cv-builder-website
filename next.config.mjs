@@ -5,7 +5,7 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'cvbuilder.co.za',
+                hostname: '*.cvbuilder.co.za',
                 pathname: '/**'
             }
         ]
