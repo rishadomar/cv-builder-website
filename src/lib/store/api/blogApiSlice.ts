@@ -7,8 +7,11 @@ export const blogApiSlice = createApi({
     endpoints: (builder) => ({
         getRecentPosts: builder.query<any, { limit: number }>({
             query: ({ limit = 10 }) => `getRecentPosts?limit=${limit}`
+        }),
+        getBlogPost: builder.query<any, { id: string, slug: string }>({
+            query: ({ id, slug }) => `getBlogPost?id=${id}&slug=${slug}`
         })
     })
 });
 
-export const { useGetRecentPostsQuery } = blogApiSlice;
+export const { useGetRecentPostsQuery, useLazyGetBlogPostQuery } = blogApiSlice;
