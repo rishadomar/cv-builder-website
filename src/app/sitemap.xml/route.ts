@@ -1,4 +1,11 @@
-// app/sitemap.xml/route.ts
+import { blogApiSlice } from '@/lib/store/api/blogApiSlice';
+import { getStore } from '@/lib/store/store';
+
+const fetchBlogPosts = async () => {
+    const store = getStore();
+    return await store.dispatch(blogApiSlice.endpoints.getRecentPosts.initiate({ limit: 100 })).unwrap();
+};
+
 const EXTERNAL_DATA_URL = 'https://cvbuilder.co.za';
 
 function generateSiteMap(pages: string[]) {
@@ -12,6 +19,8 @@ function generateSiteMap(pages: string[]) {
              (page) => `
        <url>
            <loc>${`${EXTERNAL_DATA_URL}${page}`}</loc>
+           <changefreq>weekly</changefreq>
+           <priority>${page.startsWith('/blog/') ? '0.8' : '0.5'}</priority>
        </url>
      `
          )
@@ -32,11 +41,36 @@ export async function GET() {
         '/terms'
     ];
 
-    const sitemap = generateSiteMap(pages);
+    try {
+        const blogPosts = await fetchBlogPosts();
 
-    return new Response(sitemap, {
-        headers: {
-            'Content-Type': 'text/xml'
+        let blogPostUrls: string[] = [];
+
+        if ('items' in blogPosts) {
+            // Generate blog post URLs from the fetched data
+            blogPostUrls = blogPosts.items.map((post) => `/blog/${post.slug}`);
         }
-    });
+
+        // Combine static pages and blog post URLs
+        const allPages = [...pages, ...blogPostUrls];
+
+        const sitemap = generateSiteMap(allPages);
+
+        return new Response(sitemap, {
+            headers: {
+                'Content-Type': 'text/xml',
+                'Cache-Control': 'public, max-age=86400, stale-while-revalidate'
+            }
+        });
+    } catch (error) {
+        console.error('Error generating sitemap:', error);
+
+        // If blog posts can't be fetched, generate sitemap with just static pages
+        const sitemap = generateSiteMap(pages);
+        return new Response(sitemap, {
+            headers: {
+                'Content-Type': 'text/xml'
+            }
+        });
+    }
 }
