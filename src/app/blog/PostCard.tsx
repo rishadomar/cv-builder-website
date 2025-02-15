@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatDate } from '@/lib/utils';
 import { BlogPost } from '@/lib/type';
 

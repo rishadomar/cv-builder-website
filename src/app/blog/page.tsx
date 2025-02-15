@@ -1,39 +1,23 @@
 'use client';
 
-import MarkdownRenderer from '@/components/MarkdownRenderer';
-import { BackButton } from '@/components/BackButton';
-import { useGetRecentPostsQuery, useLazyGetBlogPostQuery } from '@/lib/store/api/blogApiSlice';
+import { useGetRecentPostsQuery } from '@/lib/store/api/blogApiSlice';
 import { PostCard } from './PostCard';
-import { PostDetail } from './PostDetail';
 import { BookOpen } from 'lucide-react';
-import { useState } from 'react';
 import { BlogPost } from '@/lib/type';
+import { useRouter } from 'next/navigation';
+import { OverlaySpinner } from '@/components/OverlaySpinner';
 
 export default function BlogPage() {
-    const [getBlogPost, { data: post, isError: isErrorGettingPost, isLoading: isLoadingPost }] =
-        useLazyGetBlogPostQuery();
+    const router = useRouter();
     const { data: posts, isError, isLoading } = useGetRecentPostsQuery({ limit: 3 });
-    const [selectedPost, setSelectedPost] = useState<BlogPost>();
-    const [isPostOpen, setIsPostOpen] = useState(false);
 
     if (isError) {
         return <div>Error loading posts.</div>;
     }
 
-    if (isLoading) {
-        return <div>Loading...</div>;
+    if (isLoading || !posts) {
+        return <OverlaySpinner />;
     }
-
-    if (isErrorGettingPost) {
-        return <div>Error loading the welcome post.</div>;
-    }
-
-    if (isLoadingPost) {
-        return <div>Loading welcome post...</div>;
-    }
-
-    console.log('>>>> POSTS: ', posts.items);
-    console.log('>>>> WELCOME POST: ', post);
 
     return (
         <div className='min-h-screen bg-background'>
@@ -50,18 +34,15 @@ export default function BlogPage() {
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                     {posts.items.map((post: BlogPost) => (
                         <PostCard
-                            key={post.id}
+                            key={post.slug}
                             post={post}
                             onClick={() => {
-                                setSelectedPost(post);
-                                setIsPostOpen(true);
+                                router.push(`/blog/${post.slug}`);
                             }}
                         />
                     ))}
                 </div>
             </main>
-
-            {selectedPost && <PostDetail post={selectedPost} open={isPostOpen} onOpenChange={setIsPostOpen} />}
         </div>
     );
 }
