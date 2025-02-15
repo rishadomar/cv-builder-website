@@ -2,6 +2,7 @@ import { blogApiSlice } from '@/lib/store/api/blogApiSlice';
 import { getStore } from '@/lib/store/store';
 
 const fetchBlogPosts = async () => {
+    // Cannot use hooks in a non-React function, so we need to get the store and dispatch the action manually
     const store = getStore();
     return await store.dispatch(blogApiSlice.endpoints.getRecentPosts.initiate({ limit: 100 })).unwrap();
 };
