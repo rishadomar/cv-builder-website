@@ -211,3 +211,14 @@ export type LogoutResponse = {
     message: string;
 };
 
+export type BlogPostStatus = 'draft' | 'published';
+
+export type BlogPost = {
+    id: string;
+    slug: string;
+    title: string;
+    excerpt: string;
+    author: string;
+    timestamp: string;
+    status: BlogPostStatus;
+};

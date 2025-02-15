@@ -3,12 +3,18 @@
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { BackButton } from '@/components/BackButton';
 import { useGetRecentPostsQuery, useLazyGetBlogPostQuery } from '@/lib/store/api/blogApiSlice';
-import { Button } from '@/components/ui/button';
+import { PostCard } from './PostCard';
+import { PostDetail } from './PostDetail';
+import { BookOpen } from 'lucide-react';
+import { useState } from 'react';
+import { BlogPost } from '@/lib/type';
 
 export default function BlogPage() {
     const [getBlogPost, { data: post, isError: isErrorGettingPost, isLoading: isLoadingPost }] =
         useLazyGetBlogPostQuery();
     const { data: posts, isError, isLoading } = useGetRecentPostsQuery({ limit: 3 });
+    const [selectedPost, setSelectedPost] = useState<BlogPost>();
+    const [isPostOpen, setIsPostOpen] = useState(false);
 
     if (isError) {
         return <div>Error loading posts.</div>;
@@ -26,35 +32,36 @@ export default function BlogPage() {
         return <div>Loading welcome post...</div>;
     }
 
-    console.log('>>>> POSTS: ', posts);
+    console.log('>>>> POSTS: ', posts.items);
     console.log('>>>> WELCOME POST: ', post);
 
     return (
-        <div className='container mx-auto px-4 py-8 mt-20'>
-            <h1 className='text-4xl font-bold'>Blog</h1>
-            {posts &&
-                posts.items &&
-                posts.items.map((post: any) => (
-                    <div key={post.id} className='mt-8'>
-                        <h2 className='text-2xl font-bold'>{post.title}</h2>
-                        <Button
-                            onClick={async () => {
-                                await getBlogPost({ id: post.id, slug: post.slug }).unwrap();
-                            }}
-                            className='mt-4 px-4 py-2 bg-blue-500 text-white rounded'
-                        >
-                            Fetch content
-                        </Button>
+        <div className='min-h-screen bg-background'>
+            <header className='border-b'>
+                <div className='container mx-auto px-4 py-8 mt-20'>
+                    <div className='flex items-center space-x-2'>
+                        <BookOpen className='h-6 w-6' />
+                        <h1 className='text-2xl font-bold'>Blog</h1>
                     </div>
-                ))}
-            <BackButton />
-            <Button
-                onClick={() => {
-                    window.location.href = 'blog/welcome';
-                }}
-            >
-                Goto welcome content
-            </Button>
+                </div>
+            </header>
+
+            <main className='container mx-auto px-4 py-12'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                    {posts.items.map((post: BlogPost) => (
+                        <PostCard
+                            key={post.id}
+                            post={post}
+                            onClick={() => {
+                                setSelectedPost(post);
+                                setIsPostOpen(true);
+                            }}
+                        />
+                    ))}
+                </div>
+            </main>
+
+            {selectedPost && <PostDetail post={selectedPost} open={isPostOpen} onOpenChange={setIsPostOpen} />}
         </div>
     );
 }

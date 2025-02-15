@@ -1,5 +1,5 @@
 import { getStore } from '../store';
-import { GoogleLoginResponse, LoginResponse } from '@/lib/api';
+import { GoogleLoginResponse, LoginResponse } from '@/lib/type';
 import { authenticationApiSlice } from './authenticationApiSlice';
 import { jwtDecode } from 'jwt-decode';
 import { deleteCookie, getCookie, setCookie } from '@/lib/utils';
