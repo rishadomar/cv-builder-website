@@ -9,7 +9,7 @@ type BlogPostImageProps = {
 export const BlogPostImage = ({ post, hoverEffect }: BlogPostImageProps) => {
     return (
         <Image
-            src={`https://blog-dev.cvbuilder.co.za/${post.slug}/header.jpg`}
+            src={`${process.env.NEXT_PUBLIC_BLOG_URL}/${post.slug}/header.jpg`}
             alt={post.title}
             layout='responsive'
             width={1920}
