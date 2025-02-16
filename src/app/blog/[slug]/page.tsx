@@ -1,10 +1,22 @@
-import { getBlogPost, getBlogPostContent } from '@/lib/store/api/blogContentApiUtils';
+import { getBlogPost, getBlogPostContent, getBlogPosts } from '@/lib/store/api/blogApiUtils';
 import { formatDate } from '@/lib/utils';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { Metadata } from 'next';
 import ReactMarkdown from 'react-markdown';
 import { BlogPostImage } from '../BlogPostImage';
 import { BackButton } from '@/components/BackButton';
+
+// Set revalidation time for ISR
+export const revalidate = 3600; // Revalidate every hour
+
+// Generate static params for all blog posts
+export async function generateStaticParams() {
+    const posts = await getBlogPosts(100);
+
+    return posts.map((post) => ({
+        slug: post.slug
+    }));
+}
 
 // Generate metadata for the page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

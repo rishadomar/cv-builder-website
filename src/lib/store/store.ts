@@ -9,7 +9,6 @@ import { educationApiSlice } from './api/educationApiSlice';
 import errorMiddleware from './api/errorMiddleware';
 import { workExperienceApiSlice } from './api/workExperienceApiSlice';
 import { paymentApiSlice } from './api/paymentApiSlice';
-import { blogApiSlice } from './api/blogApiSlice';
 import { pdfApiSlice } from './api/pdfApiSlice';
 import { authenticationApiSlice } from './api/authenticationApiSlice';
 
@@ -30,8 +29,7 @@ const makeConfiguredStore = () => {
             [workExperienceApiSlice.reducerPath]: workExperienceApiSlice.reducer,
             [paymentApiSlice.reducerPath]: paymentApiSlice.reducer,
             [pdfApiSlice.reducerPath]: pdfApiSlice.reducer,
-            [authenticationApiSlice.reducerPath]: authenticationApiSlice.reducer,
-            [blogApiSlice.reducerPath]: blogApiSlice.reducer
+            [authenticationApiSlice.reducerPath]: authenticationApiSlice.reducer
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware()
@@ -42,7 +40,6 @@ const makeConfiguredStore = () => {
                 .concat(paymentApiSlice.middleware)
                 .concat(pdfApiSlice.middleware)
                 .concat(authenticationApiSlice.middleware)
-                .concat(blogApiSlice.middleware)
                 .concat(errorMiddleware)
     });
 };
