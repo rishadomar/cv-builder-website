@@ -11,7 +11,7 @@ import { StepContainer } from '../StepContainer';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useExtractTopSkillsMutation } from '@/lib/store/api/aiApiSlice';
 import { Button } from '@/components/ui/button';
-import { Sparkles } from 'lucide-react';
+import { MicVocal, Sparkles } from 'lucide-react';
 import TextareaFormField from '../TextareaFormField';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
@@ -146,6 +146,19 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                                     }
                                 }}
                             />
+                        </div>
+                        <div className='flex flex-col items-center justify-center mt-4'>
+                            <Button
+                                className='w-full'
+                                variant='outline'
+                                onClick={() => console.log('Listen to your topskills')}
+                            >
+                                Listen
+                                <MicVocal className='ml-2 h-5 w-5' />
+                            </Button>
+                            <div className='text-xs text-center mt-2'>
+                                Listen to human resource discuss your TopSkills
+                            </div>
                         </div>
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
