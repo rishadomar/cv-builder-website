@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useGetJobStatusQuery } from '@/lib/store/api/audioApiSlice';
-import { PreSignedAudioPlayer } from '@/components/core/PresignedAudioPlayer';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { AlertCircle } from 'lucide-react';
@@ -10,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { useDispatch } from 'react-redux';
 import { databaseApiSlice } from '@/lib/store/api/databaseApiSlice';
+import { toast } from '@/hooks/use-toast';
 
 // Update interface to receive jobId
 interface TriggerGenerateConversationProps {
@@ -18,7 +18,7 @@ interface TriggerGenerateConversationProps {
     onComplete?: () => void;
 }
 
-export const TriggerGenerateConversation: React.FC<TriggerGenerateConversationProps> = ({
+export const PollConversationGeneration: React.FC<TriggerGenerateConversationProps> = ({
     jobId,
     onBack,
     onComplete
@@ -48,6 +48,11 @@ export const TriggerGenerateConversation: React.FC<TriggerGenerateConversationPr
         if (jobStatus.status === 'COMPLETED' && jobStatus.result) {
             setAudioKey(jobStatus.result);
             setPollingEnabled(false);
+            toast({
+                variant: 'default',
+                title: 'Success',
+                description: 'Conversation audio has been generated successfully.'
+            });
 
             // Invalidate readRecord query to trigger a refetch
             dispatch(databaseApiSlice.util.invalidateTags(['FieldValues']));
@@ -110,13 +115,6 @@ export const TriggerGenerateConversation: React.FC<TriggerGenerateConversationPr
                             <p className='font-medium'>Error</p>
                             <p className='text-sm'>{errorMessage}</p>
                         </div>
-                    </div>
-                )}
-
-                {/* Audio Player */}
-                {audioKey && (
-                    <div className='py-2'>
-                        <PreSignedAudioPlayer />
                     </div>
                 )}
             </CardContent>

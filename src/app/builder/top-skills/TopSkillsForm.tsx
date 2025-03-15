@@ -150,9 +150,15 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                             />
                         </div>
                         {allFieldValues?.topSkillsAudio?.status === 'complete' ? (
-                            <ListenTopSkills dateGenerated={allFieldValues.topSkillsAudio.lastUpdated} />
+                            <>
+                                <ListenTopSkills dateGenerated={allFieldValues.topSkillsAudio.lastUpdated} />
+                                <LearnMoreAboutConversation
+                                    title='Regenerate your conversation'
+                                    countGenerations={allFieldValues.topSkillsAudio.count}
+                                />
+                            </>
                         ) : (
-                            <LearnMoreAboutConversation />
+                            <LearnMoreAboutConversation title='Learn more about the Top Skills' countGenerations={0} />
                         )}
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />

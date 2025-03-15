@@ -3,11 +3,16 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { MicVocal } from 'lucide-react';
 import { useState } from 'react';
-import { TriggerGenerateConversation } from './TriggerGenerateConversation';
+import { PollConversationGeneration } from './PollConversationgeneration';
 import { useStartTopSkillsConversationMutation } from '@/lib/store/api/audioApiSlice';
 import { toast } from '@/hooks/use-toast';
 
-export const LearnMoreAboutConversation = () => {
+type LearnMoreAboutConversationProps = {
+    title: string;
+    countGenerations: number;
+};
+
+export const LearnMoreAboutConversation = ({ title, countGenerations }: LearnMoreAboutConversationProps) => {
     const [showLearnMoreModal, setShowLearnMoreModal] = useState(false);
     const [showGenerator, setShowGenerator] = useState(false);
     const [jobId, setJobId] = useState<string>();
@@ -41,7 +46,7 @@ export const LearnMoreAboutConversation = () => {
                 </div>
                 <div className='text-xs text-center mt-2'>Listen to Human Resources discuss your TopSkills</div>
                 <Button className='w-full max-w-md mt-2' variant='outline' onClick={() => setShowLearnMoreModal(true)}>
-                    Learn more
+                    {title}
                 </Button>
             </div>
             <Dialog open={showLearnMoreModal} onOpenChange={setShowLearnMoreModal}>
@@ -62,17 +67,27 @@ export const LearnMoreAboutConversation = () => {
                                     more relevant to the job you are applying for.
                                 </div>
                                 <div className='text-xs mt-2'>
-                                    You are limited to 3 generations per day but you can listen as many times as you
-                                    like.
+                                    You are limited to 3 generations but you can listen as many times as you like.
                                 </div>
+                                {countGenerations > 0 && (
+                                    <div className='text-xs mt-2'>
+                                        <span>
+                                            You have {3 - countGenerations} generation(s) left. Re-generate if you have
+                                            made changes to your top skills text otherwise listen to the existing
+                                            conversation.
+                                        </span>
+                                    </div>
+                                )}
                             </DialogDescription>
 
-                            <div className='border border-gray-200 rounded-lg p-4 mt-4'>
-                                <div className='text-xs'>
-                                    Listen to a sample conversation to get an idea of what to expect
+                            {countGenerations === 0 && (
+                                <div className='border border-gray-200 rounded-lg p-4 mt-4'>
+                                    <div className='text-xs'>
+                                        Listen to a sample conversation to get an idea of what to expect
+                                    </div>
+                                    <AudioPlayer src='/audio/sample-topskills-discussion.mp3' className='mt-4' />
                                 </div>
-                                <AudioPlayer src='/audio/sample-topskills-discussion.mp3' className='mt-4' />
-                            </div>
+                            )}
 
                             <div className='flex justify-end mt-4'>
                                 <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-full'>
@@ -82,7 +97,9 @@ export const LearnMoreAboutConversation = () => {
                                                 Close
                                             </Button>
                                             <Button onClick={handleStartGeneration} disabled={isGenerating}>
-                                                {isGenerating ? 'Starting...' : 'Generate'}
+                                                {isGenerating
+                                                    ? 'Starting...'
+                                                    : `${countGenerations > 0 ? 'Re-generate' : 'Generate'}`}
                                                 <MicVocal className='ml-2 h-5 w-5' />
                                             </Button>
                                         </div>
@@ -98,7 +115,7 @@ export const LearnMoreAboutConversation = () => {
 
                     {showGenerator && jobId && (
                         <div className='mt-2'>
-                            <TriggerGenerateConversation
+                            <PollConversationGeneration
                                 jobId={jobId}
                                 onBack={() => setShowGenerator(false)}
                                 onComplete={() => setShowLearnMoreModal(false)}
