@@ -26,29 +26,23 @@ export const TriggerConversionButton = () => {
                 <DialogContent className='px-4 max-w-[95%] sm:max-w-lg rounded-lg'>
                     <DialogTitle>Learn more about TopSkills</DialogTitle>
                     <DialogDescription>
-                        <p className='text-xs'>
+                        <div className='text-xs'>
                             TopSkills are the skills that are most relevant to the job you are applying for. They are
                             extracted from your work experience and are used to generate a conversation that you can use
                             to prepare for interviews.
-                        </p>
-                        <p className='text-xs mt-2'>
+                        </div>
+                        <div className='text-xs mt-2'>
                             You can listen to the conversation to get a feel for how others feel about your skills. This
                             can help you identify areas where you can improve and make your skills more relevant to the
                             job you are applying for.
-                        </p>
-                        <p className='text-xs mt-2'>
+                        </div>
+                        <div className='text-xs mt-2'>
                             You are limited to 3 generations per day but you can listen as many times as you like.
-                        </p>
-                        <p className='text-xs mt-2'>
-                            Listen to a sample conversation below to get an idea of what to expect.
-                        </p>
-                        <p className='text-xs mt-2'>
-                            <strong>Note:</strong> The conversation is generated using AI and may not be 100% accurate.
-                        </p>
+                        </div>
                     </DialogDescription>
 
                     <div className='border border-gray-200 rounded-lg p-4 mt-4'>
-                        <div className='text-xs'>Sample TopSkills discussion</div>
+                        <div className='text-xs'>Listen to a sample conversation to get an idea of what to expect</div>
                         <AudioPlayer
                             src='/audio/sample-topskills-discussion.mp3'
                             // src='https://api.cvbuilder.co.za/cvbuilder/getUserAudioUrl?fileName=topSkills-audio.mp3&action=get'
@@ -58,19 +52,25 @@ export const TriggerConversionButton = () => {
 
                     <div className='flex justify-end mt-4'>
                         <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-full'>
-                            <div className='flex items-center justify-end h-full space-x-4'>
-                                <Button variant='outline' onClick={() => setShowLearnMoreModal(false)}>
-                                    Close
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        setShowLearnMoreModal(false);
-                                        setShowBusyGeneratingTopSkillsDiscussion(true);
-                                    }}
-                                >
-                                    Generate
-                                    <MicVocal className='ml-2 h-5 w-5' />
-                                </Button>
+                            <div className='flex flex-col items-center justify-center'>
+                                <div className='flex items-center justify-end h-full space-x-4'>
+                                    <Button variant='outline' onClick={() => setShowLearnMoreModal(false)}>
+                                        Close
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            setShowLearnMoreModal(false);
+                                            setShowBusyGeneratingTopSkillsDiscussion(true);
+                                        }}
+                                    >
+                                        Generate
+                                        <MicVocal className='ml-2 h-5 w-5' />
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className='text-xs my-3 text-center'>
+                                <strong>Note:</strong> The conversation is generated using AI and may not be 100%
+                                accurate.
                             </div>
                         </div>
                     </div>
