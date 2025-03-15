@@ -11,6 +11,7 @@ import { workExperienceApiSlice } from './api/workExperienceApiSlice';
 import { paymentApiSlice } from './api/paymentApiSlice';
 import { pdfApiSlice } from './api/pdfApiSlice';
 import { authenticationApiSlice } from './api/authenticationApiSlice';
+import { audioApiSlice } from './api/audioApiSlice';
 
 export type AppStore = ReturnType<typeof makeConfiguredStore>;
 export type RootState = ReturnType<AppStore['getState']>;
@@ -29,7 +30,8 @@ const makeConfiguredStore = () => {
             [workExperienceApiSlice.reducerPath]: workExperienceApiSlice.reducer,
             [paymentApiSlice.reducerPath]: paymentApiSlice.reducer,
             [pdfApiSlice.reducerPath]: pdfApiSlice.reducer,
-            [authenticationApiSlice.reducerPath]: authenticationApiSlice.reducer
+            [authenticationApiSlice.reducerPath]: authenticationApiSlice.reducer,
+            [audioApiSlice.reducerPath]: audioApiSlice.reducer
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware()
@@ -40,6 +42,7 @@ const makeConfiguredStore = () => {
                 .concat(paymentApiSlice.middleware)
                 .concat(pdfApiSlice.middleware)
                 .concat(authenticationApiSlice.middleware)
+                .concat(audioApiSlice.middleware)
                 .concat(errorMiddleware)
     });
 };
