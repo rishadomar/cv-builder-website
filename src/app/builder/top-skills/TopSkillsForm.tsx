@@ -15,7 +15,7 @@ import { Sparkles } from 'lucide-react';
 import TextareaFormField from '../TextareaFormField';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
-import { LearnMoreAboutConversation } from './LearnMoreAboutConversion';
+import { LearnMoreAboutConversation } from './LearnMoreAboutConversation';
 import { ListenTopSkills } from './ListenTopSkills';
 
 const topSkillsFormSchema = z.object({

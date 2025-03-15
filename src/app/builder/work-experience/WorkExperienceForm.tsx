@@ -123,7 +123,7 @@ export default function WorkExperienceForm({
         setTimeout(() => {
             setupData();
         }, 0);
-    }, [workExperienceEntryToEdit]);
+    }, [formHook, workExperienceEntryToEdit]);
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: WorkExperienceDetailsFormValues) => {

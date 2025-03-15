@@ -29,11 +29,7 @@ export const PollConversationGeneration: React.FC<TriggerGenerateConversationPro
     const [pollingEnabled, setPollingEnabled] = useState(true); // Start polling immediately
 
     // Query hook for polling job status (skip if no jobId)
-    const {
-        data: jobStatus,
-        isLoading: isStatusLoading,
-        isError: isStatusError
-    } = useGetJobStatusQuery(
+    const { data: jobStatus } = useGetJobStatusQuery(
         { jobId },
         {
             skip: !pollingEnabled || !jobId,

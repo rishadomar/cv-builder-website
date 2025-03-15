@@ -30,6 +30,7 @@ export default function LogoutPage() {
         } else {
             router.push('/authentication/login');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <div>Busy logging you out...</div>;
