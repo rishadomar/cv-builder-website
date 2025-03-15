@@ -16,6 +16,7 @@ import TextareaFormField from '../TextareaFormField';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { LearnMoreAboutConversation } from './LearnMoreAboutConversion';
+import { ListenTopSkills } from './ListenTopSkills';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -148,7 +149,11 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                                 }}
                             />
                         </div>
-                        <LearnMoreAboutConversation />
+                        {allFieldValues?.topSkillsAudio?.status === 'complete' ? (
+                            <ListenTopSkills dateGenerated={allFieldValues.topSkillsAudio.lastUpdated} />
+                        ) : (
+                            <LearnMoreAboutConversation />
+                        )}
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>

@@ -48,6 +48,12 @@ export type PaymentDetails = {
     promoCode?: string;
 };
 
+export type TopSkillsAudio = {
+    count: number;
+    lastUpdated: string;
+    status: 'queued' | 'processing' | 'complete' | 'error';
+};
+
 export type SocialLinkTypes = 'linkedIn' | 'github' | 'twitter' | 'portfolio';
 
 export type FieldValuesState = {
@@ -74,6 +80,7 @@ export type FieldValuesState = {
     educationEntries?: EducationEntry[];
     workExperiences?: WorkExperienceEntry[];
     topSkills?: string;
+    topSkillsAudio?: TopSkillsAudio;
     socialLinks?: {
         linkedIn?: string;
         github?: string;

@@ -29,6 +29,7 @@ const initialState: FieldValuesState = {
     educationEntries: undefined,
     workExperiences: undefined,
     topSkills: undefined,
+    topSkillsAudio: undefined,
     socialLinks: undefined,
     payment: undefined,
     pdf_id: undefined,
@@ -67,6 +68,7 @@ export const fieldvalueSlice = createSlice({
             state.educationEntries = undefined;
             state.workExperiences = undefined;
             state.topSkills = undefined;
+            state.topSkillsAudio = undefined;
             state.socialLinks = undefined;
             state.payment = undefined;
             state.pdf_id = undefined;
