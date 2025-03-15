@@ -111,7 +111,7 @@ export default function EducationForm({
         };
 
         setTimeout(() => setupData(), 0);
-    }, [educationEntryToEdit]);
+    }, [formHook, educationEntryToEdit]);
 
     function onSubmit(event?: React.BaseSyntheticEvent) {
         const saveValues = async (data: EducationDetailsFormValues) => {

@@ -20,6 +20,27 @@ export async function getBlogPostContent(slug: string): Promise<string> {
     }
 }
 
+export async function getBlogPosts(limit: number): Promise<BlogPost[]> {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/getRecentPosts?limit=${limit}`, {
+            next: { revalidate: 3600 }, // Cache for 1 hour
+            headers: {
+                Accept: 'text/markdown'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch blog posts: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.items;
+    } catch (error) {
+        console.error(`Error fetching blog posts:`, error);
+        throw error;
+    }
+}
+
 export async function getBlogPost(slug: string): Promise<BlogPost> {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/getBlogPost/${slug}`, {

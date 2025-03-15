@@ -27,6 +27,10 @@ export const getIdToken = async () => {
     if (!idToken) {
         return null;
     }
+    const refreshTokenCookie = getCookie('RefreshToken');
+    if (!refreshTokenCookie) {
+        return null;
+    }
     if (isTokenExpired(idToken)) {
         await refreshToken();
         idToken = getCookie('IdToken');
