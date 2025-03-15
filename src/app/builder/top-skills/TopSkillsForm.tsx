@@ -15,7 +15,7 @@ import { Sparkles } from 'lucide-react';
 import TextareaFormField from '../TextareaFormField';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
-import { TriggerConversionButton } from './TriggerConversionButton';
+import { LearnMoreAboutConversation } from './LearnMoreAboutConversion';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -148,7 +148,7 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                                 }}
                             />
                         </div>
-                        <TriggerConversionButton />
+                        <LearnMoreAboutConversation />
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>

@@ -7,13 +7,15 @@ import { setFieldValues } from '../fieldValues/fieldValuesSlice';
 export const databaseApiSlice = createApi({
     reducerPath: 'databaseApi',
     baseQuery: async (args, api, extraOptions) => injectSub(args, api, extraOptions, customBaseQuery),
+    tagTypes: ['FieldValues'],
     endpoints: (builder) => ({
         createRecord: builder.mutation<void, CvData>({
             query: (details) => ({
                 url: '/createRecord',
                 method: 'POST',
                 body: details
-            })
+            }),
+            invalidatesTags: ['FieldValues']
         }),
 
         readRecord: builder.query<FieldValue[], { sub: string; email: string }>({
@@ -21,6 +23,7 @@ export const databaseApiSlice = createApi({
                 url: '/readRecord',
                 params: { sub, email }
             }),
+            providesTags: ['FieldValues'],
             transformResponse: (response: { details: Record<string, unknown> }) => {
                 // Transform directly to FieldValue array format
                 return Object.entries(response.details)
@@ -76,6 +79,7 @@ export const databaseApiSlice = createApi({
                 method: 'POST',
                 body: { data }
             }),
+            invalidatesTags: ['FieldValues'],
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;

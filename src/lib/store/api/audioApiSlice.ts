@@ -11,15 +11,31 @@ export const audioApiSlice = createApi({
                 method: 'POST'
             })
         }),
-        startTopSkillsConversation: builder.mutation<{ url: string; key: string }, { text: string }>({
-            query: ({ text }) => ({
+        startTopSkillsConversation: builder.mutation<{ jobId: string }, void>({
+            query: () => ({
                 url: '/startTopSkillsConversation',
-                method: 'POST',
-                body: { text }
+                method: 'POST'
+            })
+        }),
+        getJobStatus: builder.query<
+            {
+                jobId: string;
+                status: string;
+                createdAt: string;
+                progress: number;
+                updatedAt: string;
+                result: string;
+                error: string;
+            },
+            { jobId: string }
+        >({
+            query: ({ jobId }) => ({
+                url: `/getJobStatus/${jobId}`,
+                method: 'GET'
             })
         })
     })
 });
 
 // Export hooks for usage in components
-export const { useGetUserAudioUrlQuery } = audioApiSlice;
+export const { useGetUserAudioUrlQuery, useStartTopSkillsConversationMutation, useGetJobStatusQuery } = audioApiSlice;
