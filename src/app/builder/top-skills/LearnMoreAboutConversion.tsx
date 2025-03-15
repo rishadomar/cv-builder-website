@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { MicVocal } from 'lucide-react';
 import { useState } from 'react';
-import { PollConversationGeneration } from './PollConversationgeneration';
+import { PollConversationGeneration } from './PollConversationGeneration';
 import { useStartTopSkillsConversationMutation } from '@/lib/store/api/audioApiSlice';
 import { toast } from '@/hooks/use-toast';
 
