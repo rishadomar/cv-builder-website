@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Play, Pause, Volume2, VolumeX, RotateCcw } from 'lucide-react';
+import { Play, Pause, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
@@ -14,8 +14,6 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
     const [playing, setPlaying] = React.useState(false);
     const [currentTime, setCurrentTime] = React.useState(0);
     const [duration, setDuration] = React.useState(0);
-    const [volume, setVolume] = React.useState(1);
-    const [muted, setMuted] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
 
@@ -25,35 +23,23 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
         const audio = audioRef.current;
         if (!audio) return;
 
-        const handleTimeUpdate = () => {
-            setCurrentTime(audio.currentTime);
-        };
-
-        const handleLoadedMetadata = () => {
+        // Event handlers
+        audio.addEventListener('timeupdate', () => setCurrentTime(audio.currentTime));
+        audio.addEventListener('loadedmetadata', () => {
             setDuration(audio.duration);
             setLoading(false);
-        };
-
-        const handleEnded = () => {
+        });
+        audio.addEventListener('ended', () => {
             setPlaying(false);
             setCurrentTime(0);
-        };
-
-        const handleError = () => {
+        });
+        audio.addEventListener('error', () => {
             setError(true);
             setLoading(false);
-        };
-
-        audio.addEventListener('timeupdate', handleTimeUpdate);
-        audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-        audio.addEventListener('ended', handleEnded);
-        audio.addEventListener('error', handleError);
+        });
 
         return () => {
-            audio.removeEventListener('timeupdate', handleTimeUpdate);
-            audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-            audio.removeEventListener('ended', handleEnded);
-            audio.removeEventListener('error', handleError);
+            // Cleanup event listeners
         };
     }, []);
 
@@ -67,34 +53,6 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
             audio.play();
         }
         setPlaying(!playing);
-    };
-
-    const handleVolumeChange = (value: number[]) => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        const newVolume = value[0];
-        audio.volume = newVolume;
-        setVolume(newVolume);
-
-        if (newVolume === 0) {
-            setMuted(true);
-        } else {
-            setMuted(false);
-        }
-    };
-
-    const toggleMute = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        if (muted) {
-            audio.volume = volume;
-            setMuted(false);
-        } else {
-            audio.volume = 0;
-            setMuted(true);
-        }
     };
 
     const handleSeek = (value: number[]) => {
@@ -128,15 +86,10 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
             <audio ref={audioRef} src={src} preload='metadata' />
 
             {error ? (
-                <div className='flex items-center justify-center py-3 text-sm text-red-500'>Error loading audio</div>
+                <div className='text-sm text-red-500'>Error loading audio</div>
             ) : loading ? (
-                <div className='flex items-center justify-center py-3'>
-                    <svg
-                        className='animate-spin h-5 w-5 text-primary'
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                    >
+                <div className='flex justify-center py-2'>
+                    <svg className='animate-spin h-5 w-5 text-primary' viewBox='0 0 24 24'>
                         <circle
                             className='opacity-25'
                             cx='12'
@@ -154,18 +107,17 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
                 </div>
             ) : (
                 <>
-                    <div className='flex items-center space-x-4'>
-                        <div className='w-8'>
-                            <Button
-                                type='button'
-                                variant='ghost'
-                                size='icon'
-                                onClick={togglePlayPause}
-                                aria-label={playing ? 'Pause' : 'Play'}
-                            >
-                                {playing ? <Pause className='h-4 w-4' /> : <Play className='h-4 w-4' />}
-                            </Button>
-                        </div>
+                    <div className='flex items-center space-x-2'>
+                        <Button
+                            type='button'
+                            variant='ghost'
+                            size='sm'
+                            onClick={togglePlayPause}
+                            className='h-8 w-8 p-0'
+                            aria-label={playing ? 'Pause' : 'Play'}
+                        >
+                            {playing ? <Pause className='h-4 w-4' /> : <Play className='h-4 w-4' />}
+                        </Button>
 
                         <Slider
                             value={[currentTime]}
@@ -176,30 +128,16 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
                             className='flex-1'
                         />
 
-                        <div className='flex items-center space-x-2 min-w-[120px]'>
-                            <Button
-                                type='button'
-                                variant='ghost'
-                                size='icon'
-                                onClick={toggleMute}
-                                aria-label={muted ? 'Unmute' : 'Mute'}
-                            >
-                                {muted ? <VolumeX className='h-4 w-4' /> : <Volume2 className='h-4 w-4' />}
-                            </Button>
-
-                            <Slider
-                                value={[muted ? 0 : volume]}
-                                min={0}
-                                max={1}
-                                step={0.1}
-                                onValueChange={handleVolumeChange}
-                                className='w-16'
-                            />
-
-                            <Button type='button' variant='ghost' size='icon' onClick={resetPlayer} aria-label='Reset'>
-                                <RotateCcw className='h-4 w-4' />
-                            </Button>
-                        </div>
+                        <Button
+                            type='button'
+                            variant='ghost'
+                            size='sm'
+                            onClick={resetPlayer}
+                            className='h-8 w-8 p-0'
+                            aria-label='Reset'
+                        >
+                            <RotateCcw className='h-4 w-4' />
+                        </Button>
                     </div>
 
                     <div className='flex justify-between text-xs text-muted-foreground'>
