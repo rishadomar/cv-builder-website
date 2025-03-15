@@ -38,17 +38,29 @@ export const LearnMoreAboutConversation = ({ title, countGenerations }: LearnMor
 
     return (
         <>
-            <div className='flex flex-col items-center justify-center mt-4 relative border rounded-lg p-4'>
-                <div className='absolute -top-3 right-3 md:right-1/4'>
-                    <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-200 text-blue-800 animate-pulse'>
-                        New
-                    </span>
+            {countGenerations === 0 ? (
+                <div className='flex flex-col items-center justify-center mt-4 relative border rounded-lg p-4'>
+                    <div className='absolute -top-3 right-3 md:right-1/4'>
+                        <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-200 text-blue-800 animate-pulse'>
+                            New
+                        </span>
+                    </div>
+                    <div className='text-xs text-center mt-2'>Listen to Human Resources discuss your TopSkills</div>
+
+                    <Button
+                        className='w-full max-w-md mt-2'
+                        variant='outline'
+                        onClick={() => setShowLearnMoreModal(true)}
+                    >
+                        {title}
+                    </Button>
                 </div>
-                <div className='text-xs text-center mt-2'>Listen to Human Resources discuss your TopSkills</div>
+            ) : (
                 <Button className='w-full max-w-md mt-2' variant='outline' onClick={() => setShowLearnMoreModal(true)}>
                     {title}
                 </Button>
-            </div>
+            )}
+
             <Dialog open={showLearnMoreModal} onOpenChange={setShowLearnMoreModal}>
                 <DialogContent className='px-4 max-w-[95%] sm:max-w-lg rounded-lg'>
                     <DialogTitle>Learn more about TopSkills</DialogTitle>

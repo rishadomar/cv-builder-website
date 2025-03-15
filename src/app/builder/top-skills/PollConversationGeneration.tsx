@@ -100,6 +100,9 @@ export const PollConversationGeneration: React.FC<TriggerGenerateConversationPro
                             </div>
                         </div>
                         <p className='text-xs text-muted-foreground'>This may take up to 2 minutes to complete.</p>
+                        <p className='text-xs text-muted-foreground'>
+                            You may safely close this dialog and return to check the status.
+                        </p>
                     </div>
                 )}
 
@@ -118,7 +121,7 @@ export const PollConversationGeneration: React.FC<TriggerGenerateConversationPro
             <CardFooter className='flex justify-between space-x-2'>
                 {/* Back button always available until audio is ready */}
                 {onBack && !audioKey && (
-                    <Button variant='ghost' onClick={onBack}>
+                    <Button variant='outline' onClick={onBack}>
                         Back
                     </Button>
                 )}
