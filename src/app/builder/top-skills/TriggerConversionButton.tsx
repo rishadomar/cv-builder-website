@@ -1,4 +1,5 @@
 import { AudioPlayer } from '@/components/core/AudioPlayer';
+import { PreSignedAudioPlayer } from '@/components/core/PresignedAudioPlayer';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { MicVocal } from 'lucide-react';
@@ -43,11 +44,7 @@ export const TriggerConversionButton = () => {
 
                     <div className='border border-gray-200 rounded-lg p-4 mt-4'>
                         <div className='text-xs'>Listen to a sample conversation to get an idea of what to expect</div>
-                        <AudioPlayer
-                            src='/audio/sample-topskills-discussion.mp3'
-                            // src='https://api.cvbuilder.co.za/cvbuilder/getUserAudioUrl?fileName=topSkills-audio.mp3&action=get'
-                            className='mt-4'
-                        />
+                        <AudioPlayer src='/audio/sample-topskills-discussion.mp3' className='mt-4' />
                     </div>
 
                     <div className='flex justify-end mt-4'>

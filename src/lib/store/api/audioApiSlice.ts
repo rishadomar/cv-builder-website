@@ -5,10 +5,17 @@ export const audioApiSlice = createApi({
     reducerPath: 'audioApi',
     baseQuery: async (args, api, extraOptions) => injectSub(args, api, extraOptions, customBaseQuery),
     endpoints: (builder) => ({
-        getUserAudioUrl: builder.query<{ url: string; key: string }, {}>({
-            query: ({}) => ({
+        getUserAudioUrl: builder.query<{ url: string; key: string }, void>({
+            query: () => ({
                 url: '/getUserAudioUrl',
                 method: 'POST'
+            })
+        }),
+        startTopSkillsConversation: builder.mutation<{ url: string; key: string }, { text: string }>({
+            query: ({ text }) => ({
+                url: '/startTopSkillsConversation',
+                method: 'POST',
+                body: { text }
             })
         })
     })
