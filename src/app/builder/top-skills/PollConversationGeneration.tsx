@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGetJobStatusQuery } from '@/lib/store/api/audioApiSlice';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -27,6 +27,7 @@ export const PollConversationGeneration: React.FC<TriggerGenerateConversationPro
     const [audioKey, setAudioKey] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [pollingEnabled, setPollingEnabled] = useState(true); // Start polling immediately
+    const completionHandledRef = useRef(false);
 
     // Query hook for polling job status (skip if no jobId)
     const { data: jobStatus } = useGetJobStatusQuery(
@@ -39,9 +40,12 @@ export const PollConversationGeneration: React.FC<TriggerGenerateConversationPro
 
     // Monitor job status changes
     useEffect(() => {
-        if (!jobStatus) return;
+        if (!jobStatus || completionHandledRef.current) return;
 
         if (jobStatus.status === 'COMPLETED' && jobStatus.result) {
+            // Mark as handled immediately to prevent duplicate processing
+            completionHandledRef.current = true;
+
             setAudioKey(jobStatus.result);
             setPollingEnabled(false);
             toast({
@@ -56,6 +60,9 @@ export const PollConversationGeneration: React.FC<TriggerGenerateConversationPro
             // If you have an onComplete callback, trigger it
             if (onComplete) onComplete();
         } else if (jobStatus.status === 'FAILED') {
+            // Mark as handled immediately to prevent duplicate processing
+            completionHandledRef.current = true;
+
             setErrorMessage(jobStatus.error || 'Generation failed. Please try again.');
             setPollingEnabled(false);
 
