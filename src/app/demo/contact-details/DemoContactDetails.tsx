@@ -68,7 +68,6 @@ export default function DemoContactDetailsForm({ onNext, onPrevious }: ContactDe
 
         event?.preventDefault();
     };
-    console.log('typing', typing, 'Completed', completed);
 
     return (
         <Form {...formHook}>
