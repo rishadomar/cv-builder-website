@@ -7,13 +7,14 @@ interface CallToActionProps {
     label: string;
     color: 'gray' | 'white';
     withArrow: boolean;
+    to: string;
 }
 
-const CallToAction = ({ label, color, withArrow }: CallToActionProps) => {
+const CallToAction = ({ label, color, withArrow, to }: CallToActionProps) => {
     const router = useRouter();
 
     const callToAction = () => {
-        router.push('/authentication');
+        router.push(to);
     };
 
     return (

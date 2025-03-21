@@ -44,7 +44,11 @@ export default function Home() {
                     </div>
 
                     <div className='flex justify-center lg:justify-start space-x-4'>
-                        <CallToAction label='Start Building Your CV' color='white' withArrow />
+                        <CallToAction label='Start Building Your CV' color='white' withArrow to='/authentication' />
+                    </div>
+
+                    <div className='flex justify-center lg:justify-start space-x-4'>
+                        <CallToAction label='Watch demo' color='gray' withArrow to='/demo' />
                     </div>
                 </div>
             </div>
@@ -154,7 +158,7 @@ export default function Home() {
                     Build a professional CV for just {formatProductCost()} and take the first step towards your dream
                     job
                 </p>
-                <CallToAction label='Get Started Now' color='gray' withArrow={false} />
+                <CallToAction label='Get Started Now' color='gray' withArrow={false} to='/authentication' />
             </div>
 
             <div className='container mx-auto px-4 mt-10'>
