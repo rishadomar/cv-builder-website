@@ -2,12 +2,12 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ProgressBar } from '@/components/ProgressBar';
-import { useAuth } from '@/hooks/useAuth';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectHasPromoCode, selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
-import { Steps } from '@/lib/utils/step';
+import { Steps } from '@/lib/utils/demoStep';
 import DemoContactDetailsForm from './contact-details/DemoContactDetails';
+import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
 
 const NumberOfPages = Steps.length;
 
@@ -81,11 +81,11 @@ function FormContent() {
             <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <DemoContactDetailsForm onNext={nextPage} />}
 
-                {/* {currentPage === 'personality-details' && (
+                {currentPage === 'personality-details' && (
                     <DemoPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
 
-                {currentPage === 'work-experience' && (
+                {/* {currentPage === 'work-experience' && (
                     <DemoWorkExperienceList onNext={nextPage} onPrevious={previousPage} />
                 )}
 
