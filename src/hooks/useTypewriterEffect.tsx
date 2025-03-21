@@ -1,0 +1,111 @@
+import { useEffect, useState, useRef } from 'react';
+import { UseFormReturn } from 'react-hook-form';
+
+type TypewriterOptions = {
+    initialDelay?: number; // Delay before typing starts
+    typeDelay?: number; // Delay between characters
+    fieldDelay?: number; // Delay between fields
+    onComplete?: () => void; // Callback when typing completes
+};
+
+/**
+ * A hook that creates a typewriter effect for filling form fields
+ *
+ * @param formHook - The react-hook-form useForm hook return value
+ * @param data - Object containing the demo data to type (keys must match form field names)
+ * @param options - Configuration options for the typewriter effect
+ */
+export function useTypewriterEffect<
+    TFormValues extends Record<string, any>,
+    TDemoData extends Partial<Record<keyof TFormValues, string>>
+>(formHook: UseFormReturn<TFormValues>, data: TDemoData, options: TypewriterOptions = {}) {
+    const { initialDelay = 1000, typeDelay = 50, fieldDelay = 800, onComplete } = options;
+
+    const [typing, setTyping] = useState(false);
+    const [completed, setCompleted] = useState(false);
+
+    // Use refs to prevent duplicate executions
+    const hasStartedRef = useRef(false);
+    const isTypingRef = useRef(false);
+    const completedRef = useRef(false);
+
+    // Start typing after initial delay
+    useEffect(() => {
+        // Prevent duplicate execution
+        if (hasStartedRef.current) return;
+        hasStartedRef.current = true;
+
+        const timer = setTimeout(() => {
+            setTyping(true);
+        }, initialDelay);
+
+        return () => clearTimeout(timer);
+    }, [initialDelay]);
+
+    // Handle the typewriter effect
+    useEffect(() => {
+        if (!typing || isTypingRef.current || completedRef.current) return;
+
+        // Mark that we're now typing to prevent duplicate execution
+        isTypingRef.current = true;
+
+        const fields = Object.keys(data) as Array<keyof TDemoData>;
+
+        // Function to type one character at a time for a specific field
+        const typeField = (fieldIndex: number, charIndex: number) => {
+            // Guard against unmounted component
+            if (completedRef.current) return;
+
+            if (fieldIndex >= fields.length) {
+                // All fields completed
+                setTyping(false);
+                setCompleted(true);
+                completedRef.current = true;
+                if (onComplete) onComplete();
+                return;
+            }
+
+            const field = fields[fieldIndex];
+            const value = data[field];
+
+            if (typeof value === 'string' && charIndex <= value.length) {
+                // Set the partial value for this field
+                formHook.setValue(field as any, value.substring(0, charIndex) as any);
+
+                // Schedule the next character
+                setTimeout(() => {
+                    typeField(fieldIndex, charIndex + 1);
+                }, typeDelay);
+            } else {
+                // This field is complete, move to the next field
+                setTimeout(() => {
+                    typeField(fieldIndex + 1, 0);
+                }, fieldDelay);
+            }
+        };
+
+        // Start typing the first field
+        typeField(0, 0);
+
+        // Use a more reliable way of cleaning up timeouts
+        const timeouts: number[] = [];
+        const originalSetTimeout = window.setTimeout;
+        window.setTimeout = function (callback: () => void, delay: number) {
+            const id = originalSetTimeout(callback, delay);
+            timeouts.push(id);
+            return id;
+        } as typeof setTimeout;
+
+        // Cleanup function
+        return () => {
+            timeouts.forEach(clearTimeout);
+            isTypingRef.current = false;
+        };
+    }, [typing, formHook, data, typeDelay, fieldDelay, onComplete]);
+
+    return {
+        typing,
+        completed,
+        activeField: typing && !completed // You can expand this to track the active field name if needed
+    };
+}
