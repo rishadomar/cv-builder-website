@@ -101,25 +101,9 @@ function FormContent() {
 
 // Main component with proper Suspense boundary
 export default function BuilderPage() {
-    const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-    const { isLoading: isFieldValuesLoading } = useAppSelector((state) => state.loading);
-
-    if (isAuthLoading) {
-        return (
-            <div className='flex items-center justify-center h-screen'>
-                <OverlaySpinner />
-            </div>
-        );
-    }
-
-    if (!isAuthenticated) {
-        return null; // or loading state
-    }
-
     return (
         <Suspense fallback={<OverlaySpinner />}>
             <FormContent />
-            {isFieldValuesLoading && <OverlaySpinner />}
         </Suspense>
     );
 }
