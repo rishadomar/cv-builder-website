@@ -1,5 +1,5 @@
 import { StepType } from '@/lib/type';
-import StepHeader from './StepHeader';
+import StepHeader from '../app/builder/StepHeader';
 import { LucideIcon } from 'lucide-react';
 
 type StepContainerProps = {

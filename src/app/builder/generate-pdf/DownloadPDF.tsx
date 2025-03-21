@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardFooter } from '@/components/ui/card';
 import { StepButtons } from '../StepButtons';
 import { useAppSelector } from '@/lib/store/hooks';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import { getStep } from '@/lib/utils/step';
 import { useLazyDownloadPDFQuery } from '@/lib/store/api/pdfApiSlice';
 import { toast } from '@/hooks/use-toast';

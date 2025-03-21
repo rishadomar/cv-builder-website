@@ -13,7 +13,7 @@ import { CompareText, CompareTextState } from '@/components/compareText/CompareT
 import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
 import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 

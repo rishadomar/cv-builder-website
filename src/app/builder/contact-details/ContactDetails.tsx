@@ -10,7 +10,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const PhoneNumberRegex = /^(\+?\d{1,3})?[\s-]?(\(?\d{1,4}\)?)?[\s-]?\d{1,4}[\s-]?\d{1,4}[\s-]?\d{1,9}$/;

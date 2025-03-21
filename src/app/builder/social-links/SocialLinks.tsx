@@ -8,7 +8,7 @@ import TextFormField from '../TextFormField';
 import { useAppSelector } from '@/lib/store/hooks';
 import { KeyValuePairArray, SocialLinkTypes } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import RadioFormField from '../RadioFormField';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 

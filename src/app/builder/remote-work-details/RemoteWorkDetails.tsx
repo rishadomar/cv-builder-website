@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { KeyValuePairArray } from '@/lib/type';
 import YesNoFormField from '../YesNoFormField';
 import { getStep } from '@/lib/utils/step';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 
 const remoteworkDetailsFormSchema = z.object({

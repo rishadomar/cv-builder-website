@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
 import { EducationItem } from './EducationItem';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 
 type EducationListProps = {
     onNext: () => void;

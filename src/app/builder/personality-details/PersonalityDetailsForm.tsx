@@ -13,7 +13,7 @@ import { Sparkles } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 

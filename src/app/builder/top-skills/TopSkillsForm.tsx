@@ -7,7 +7,7 @@ import { StepButtons } from '../StepButtons';
 import { useAppSelector } from '@/lib/store/hooks';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useExtractTopSkillsMutation } from '@/lib/store/api/aiApiSlice';
 import { Button } from '@/components/ui/button';

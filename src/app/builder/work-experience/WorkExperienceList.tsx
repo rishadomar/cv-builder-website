@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { getStep } from '@/lib/utils/step';
 import { WorkExperienceItem } from './WorkExperienceItem';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 
 type WorkExperienceListProps = {
     onNext: () => void;

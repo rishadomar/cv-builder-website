@@ -3,7 +3,7 @@ import { Check } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StepButtons } from '../StepButtons';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import { getStep } from '@/lib/utils/step';
 import { toast } from '@/hooks/use-toast';
 import { CustomError } from '@/lib/utils/customError';

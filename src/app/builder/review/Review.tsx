@@ -7,7 +7,7 @@ import { PersonalityDetailsReview } from '../personality-details/PersonalityDeta
 import { HobbiesReview } from '../hobbies/HobbiesReview';
 import { EducationReview } from '../education/EducationReview';
 import { WorkExperienceReview } from '../work-experience/WorkExperienceReview';
-import { StepContainer } from '../StepContainer';
+import { StepContainer } from '@/components/StepContainer';
 import { SocialLinksReview } from '../social-links/SocialLinksReview';
 import { TopSkillsReview } from '../top-skills/TopSkillsReview';
 
