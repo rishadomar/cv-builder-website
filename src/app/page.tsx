@@ -84,28 +84,38 @@ export default function Home() {
             </div>
 
             {/* CV Extracts Section - Mobile Responsive */}
-            <div className='container mx-auto px-4 py-12'>
+            <div className='container mx-auto px-4 mt-10'>
                 <h2 className='text-2xl md:text-3xl font-bold text-center'>See the Magic of AI-Generated CVs</h2>
                 <div className='text-xs text-center text-gray-600 mb-8'>More improved templates coming soon!</div>
 
-                <div className='grid md:grid-cols-3 gap-6'>
-                    {[
-                        { src: 'default-template.png', width: 400, height: 300, alt: 'Modern CV Extract' },
-                        { src: 'professional-template.png', width: 400, height: 300, alt: 'Professional CV Design' },
-                        { src: 'creative-template.png', width: 400, height: 300, alt: 'Creative CV Layout' }
-                    ].map((img, index) => (
-                        <div key={index} className='rounded-xl overflow-hidden shadow-lg border'>
-                            <Image
-                                src={`/images/examples/${img.src}`}
-                                priority
-                                alt={img.alt}
-                                width={img.width}
-                                height={img.height}
-                                className='w-full object-cover'
-                            />
-                        </div>
-                    ))}
-                </div>
+                <Gallery
+                    galleryEntries={[
+                        {
+                            content: 'Modern basic design with a focus on content',
+                            title: 'Modern CV Extract',
+                            description: 'Modern CV Extract',
+                            image: '/images/examples/default-template.png',
+                            imageWidth: 'narrow',
+                            hasBorder: true
+                        },
+                        {
+                            content: 'Professional design with a focus on experience',
+                            title: 'Professional CV Design',
+                            description: 'Professional CV Design',
+                            image: '/images/examples/professional-template.png',
+                            imageWidth: 'narrow',
+                            hasBorder: true
+                        },
+                        {
+                            content: 'Creative layout with a focus on skills',
+                            title: 'Creative CV Design',
+                            description: 'Creative CV Design',
+                            image: '/images/examples/creative-template.png',
+                            imageWidth: 'narrow',
+                            hasBorder: true
+                        }
+                    ]}
+                />
             </div>
 
             {/* Mobile-Friendly Features Section */}
