@@ -8,6 +8,7 @@ import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { DemoSteps } from '@/lib/utils/demoStep';
 import DemoContactDetailsForm from './contact-details/DemoContactDetails';
 import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
+import DemoTopSkillsForm from './topskills/DemoTopSkillsForm';
 
 const NumberOfPages = DemoSteps.length;
 
@@ -99,7 +100,7 @@ function FormContent() {
                     <DemoPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
 
-                {/* Other pages */}
+                {currentPage === 'top-skills' && <DemoTopSkillsForm onNext={nextPage} onPrevious={previousPage} />}
             </div>
         </>
     );

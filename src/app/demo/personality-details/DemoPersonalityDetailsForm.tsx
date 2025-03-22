@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import TextareaFormField from '../../builder/TextareaFormField';
 import { StepButtons } from '@/app/demo/StepButtons';
 import PillSelectFormField from '../../builder/PillSelectFormField';
-import { Sparkles } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '@/components/StepContainer';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
+import { AIIcon } from '@/components/AIIcon';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -130,10 +130,6 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
                             fieldName='personalityTraits'
                             availablePills={Traits}
                             selectedPills={formHook.watch('personalityTraits') || []}
-                            customPills={{
-                                allow: true,
-                                placeholder: 'Add custom trait'
-                            }}
                             error={formHook.formState.errors.personalityTraits?.message}
                         />
 
@@ -146,7 +142,7 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
                                 onClick={() => setIsGeneratingText(true)}
                                 className={isGeneratingText && !completed ? 'relative' : ''}
                             >
-                                <Sparkles className='mr-2 h-5 w-5' />
+                                <AIIcon />
                                 {isGeneratingText && !completed ? (
                                     <>
                                         <span>Generating...</span>
@@ -163,11 +159,11 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
                                 formHook={formHook}
                                 fieldName='personalityText'
                                 placeholder='AI generated text will appear here'
-                                rows={10}
+                                rows={9}
                             />
                         </div>
                     </StepContainer>
-                    <StepButtons onNext={onNext} typing={typing} completed={completed} />
+                    <StepButtons onPrevious={onPrevious} onNext={onNext} typing={typing} completed={completed} />
                 </form>
             </Form>
         </>

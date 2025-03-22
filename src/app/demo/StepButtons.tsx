@@ -15,7 +15,7 @@ export function StepButtons({ onPrevious, onNext, asSubmit = true, typing, compl
             <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-full'>
                 <div className='flex items-center justify-end h-full space-x-4'>
                     <Button
-                        disabled={!onPrevious}
+                        disabled={!onPrevious || typing || !completed}
                         variant='outline'
                         name='previous'
                         type={asSubmit ? 'submit' : 'button'}

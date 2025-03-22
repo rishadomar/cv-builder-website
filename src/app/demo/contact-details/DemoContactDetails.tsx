@@ -10,8 +10,6 @@ import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '@/components/StepContainer';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
 
-const PhoneNumberRegex = /^(\+?\d{1,3})?[\s-]?(\(?\d{1,4}\)?)?[\s-]?\d{1,4}[\s-]?\d{1,4}[\s-]?\d{1,9}$/;
-
 const contactDetailsFormSchema = z.object({
     name: z.string().default(''),
     professionalTitle: z.string().default(''),

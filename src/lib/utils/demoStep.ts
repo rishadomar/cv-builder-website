@@ -24,16 +24,6 @@ export const DemoSteps: StepType[] = [
     },
     {
         id: 3,
-        title: 'Work experience',
-        icon: Briefcase,
-        description: 'Professional experience',
-        completed: false,
-        path: 'work-experience',
-        showInSections: true,
-        paymentRequired: true
-    },
-    {
-        id: 4,
         title: 'Top Skills',
         icon: Trophy,
         description: 'Top skills acquired during your work experience',
@@ -43,7 +33,7 @@ export const DemoSteps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 5,
+        id: 4,
         title: 'Download PDF',
         icon: Download,
         description: 'Download your PDF for keeps',
