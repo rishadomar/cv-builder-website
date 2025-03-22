@@ -14,8 +14,8 @@ const NumberOfPages = DemoSteps.length;
 function FormContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [currentPage, setCurrentPage] = useState<string>('contact-details'); // Set default value here
-    const [currentPageNumber, setCurrentPageNumber] = useState<number>(1); // Set default value here
+    const pageParam = searchParams.get('page');
+    const [currentPage, setCurrentPage] = useState<string>(pageParam ?? 'contact-details'); // Set default value here
     const isPaymentValid = useAppSelector(selectIsPaymentValid);
     const hasPromoCode = useAppSelector(selectHasPromoCode);
 
@@ -25,7 +25,6 @@ function FormContent() {
     // Combined effect to handle URL parameters, page validation, and URL updates
     useEffect(() => {
         // First, handle search params
-        const pageParam = searchParams.get('page');
 
         // Determine the current page based on URL or use default
         let newPage = pageParam || 'contact-details';
@@ -36,13 +35,8 @@ function FormContent() {
             newPage = 'contact-details';
         }
 
-        // Update the page number
-        const pageIndex = DemoSteps.findIndex((step) => step.path === newPage);
-        const newPageNumber = pageIndex !== -1 ? pageIndex + 1 : 1;
-
         // Update state with validated values
         setCurrentPage(newPage);
-        setCurrentPageNumber(newPageNumber);
 
         // Only update the URL if this isn't the initial load and if the page has changed
         if (!isInitialLoad && pageParam !== newPage) {

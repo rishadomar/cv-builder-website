@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '../../builder/TextareaFormField';
-import { StepButtons } from '../../builder/StepButtons';
+import { StepButtons } from '@/app/demo/StepButtons';
 import PillSelectFormField from '../../builder/PillSelectFormField';
 import { Sparkles } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
@@ -52,16 +52,8 @@ const demoData = {
 const preSelectedTraits = ['Creative', 'Outgoing', 'Independent', 'Team player'];
 
 export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: PersonalityDetailsFormProps) {
-    const defaultValues: Partial<PersonalityDetailsFormValues> = {
-        personalityTraits: [],
-        personalityText: ''
-    };
-    // const [typing, setTyping] = useState(false);
-    // const [completed, setCompleted] = useState(false);
-
     const formHook = useForm<PersonalityDetailsFormValues>({
-        resolver: zodResolver(personalityDetailsFormSchema),
-        defaultValues
+        resolver: zodResolver(personalityDetailsFormSchema)
     });
 
     const step = getStep('personality-details');
@@ -102,18 +94,13 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
 
     // Use the typewriter effect for the text area (only after pills are selected)
     // Modify this section to make it conditional
-    const { typing, completed } = useTypewriterEffect(
-        formHook,
-        // Only pass demo data when we're ready to type
-        isGeneratingText ? demoData : {},
-        {
-            initialDelay: 1000,
-            typeDelay: 20, // Faster typing for the longer text
-            onComplete: () => {
-                console.log('Personality text generation completed');
-            }
+    const { typing, completed } = useTypewriterEffect(formHook, isGeneratingText ? demoData : {}, {
+        initialDelay: 3000,
+        typeDelay: 20, // Faster typing for the longer text
+        onComplete: () => {
+            console.log('Personality text generation completed');
         }
-    );
+    });
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         event?.preventDefault();
@@ -138,13 +125,6 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
             <Form {...formHook}>
                 <form onSubmit={onSubmit}>
                     <StepContainer step={step}>
-                        {!hasSelectedPills && (
-                            <div className='p-2 mb-4 flex items-center text-sm text-muted-foreground bg-muted/30 rounded'>
-                                <span className='animate-pulse w-2 h-2 bg-primary rounded-full mr-2'></span>
-                                <span>Auto-selecting personality traits...</span>
-                            </div>
-                        )}
-
                         <PillSelectFormField
                             formHook={formHook}
                             fieldName='personalityTraits'
@@ -166,14 +146,15 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
                                 onClick={() => setIsGeneratingText(true)}
                                 className={isGeneratingText && !completed ? 'relative' : ''}
                             >
-                                {isGeneratingText && !completed && (
-                                    <span className='absolute inset-0 flex items-center justify-center bg-muted/50 rounded'>
-                                        <span className='animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full mr-2' />
-                                        Generating...
-                                    </span>
-                                )}
                                 <Sparkles className='mr-2 h-5 w-5' />
-                                Generate text with AI
+                                {isGeneratingText && !completed ? (
+                                    <>
+                                        <span>Generating...</span>
+                                        <span className='animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full ml-2' />
+                                    </>
+                                ) : (
+                                    'Generate text with AI'
+                                )}
                             </Button>
                         </div>
 
@@ -182,17 +163,11 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
                                 formHook={formHook}
                                 fieldName='personalityText'
                                 placeholder='AI generated text will appear here'
-                                rows={formHook.watch('personalityText')?.length > 0 ? 10 : 3}
+                                rows={10}
                             />
-                            {isGeneratingText && typing && !completed && (
-                                <div className='absolute bottom-2 right-2 flex items-center'>
-                                    <span className='animate-pulse w-2 h-2 bg-primary rounded-full mr-2'></span>
-                                    <span className='text-xs text-muted-foreground'>AI is writing...</span>
-                                </div>
-                            )}
                         </div>
                     </StepContainer>
-                    <StepButtons onNext={onNext} onPrevious={onPrevious} />
+                    <StepButtons onNext={onNext} typing={typing} completed={completed} />
                 </form>
             </Form>
         </>

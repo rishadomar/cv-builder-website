@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 type TypewriterOptions = {
@@ -28,6 +28,14 @@ export function useTypewriterEffect<
     const hasStartedRef = useRef(false);
     const isTypingRef = useRef(false);
     const completedRef = useRef(false);
+    // Use NodeJS.Timeout to accommodate both browser and Node environments
+    const timeoutsRef = useRef<(NodeJS.Timeout | number)[]>([]);
+
+    // Cleanup function to clear all timeouts
+    const clearAllTimeouts = useCallback(() => {
+        timeoutsRef.current.forEach((id) => clearTimeout(id as any));
+        timeoutsRef.current = [];
+    }, []);
 
     // Start typing after initial delay
     useEffect(() => {
@@ -39,8 +47,10 @@ export function useTypewriterEffect<
             setTyping(true);
         }, initialDelay);
 
-        return () => clearTimeout(timer);
-    }, [initialDelay]);
+        timeoutsRef.current.push(timer);
+
+        return () => clearAllTimeouts();
+    }, [initialDelay, clearAllTimeouts]);
 
     // Handle the typewriter effect
     useEffect(() => {
@@ -73,39 +83,43 @@ export function useTypewriterEffect<
                 formHook.setValue(field as any, value.substring(0, charIndex) as any);
 
                 // Schedule the next character
-                setTimeout(() => {
+                const charTimeout = setTimeout(() => {
                     typeField(fieldIndex, charIndex + 1);
                 }, typeDelay);
+
+                timeoutsRef.current.push(charTimeout);
             } else {
                 // This field is complete, move to the next field
-                setTimeout(() => {
+                const fieldTimeout = setTimeout(() => {
                     typeField(fieldIndex + 1, 0);
                 }, fieldDelay);
+
+                timeoutsRef.current.push(fieldTimeout);
             }
         };
 
         // Start typing the first field
         typeField(0, 0);
 
-        // Use a more reliable way of cleaning up timeouts
-        const timeouts: number[] = [];
-        const originalSetTimeout = window.setTimeout;
-        window.setTimeout = function (callback: () => void, delay: number) {
-            const id = originalSetTimeout(callback, delay);
-            timeouts.push(id);
-            return id;
-        } as typeof setTimeout;
-
         // Cleanup function
         return () => {
-            timeouts.forEach(clearTimeout);
+            clearAllTimeouts();
             isTypingRef.current = false;
         };
-    }, [typing, formHook, data, typeDelay, fieldDelay, onComplete]);
+    }, [typing, formHook, data, typeDelay, fieldDelay, onComplete, clearAllTimeouts]);
 
     return {
         typing,
         completed,
+        reset: useCallback(() => {
+            // Reset the hook state to allow restarting the animation
+            clearAllTimeouts();
+            setTyping(false);
+            setCompleted(false);
+            hasStartedRef.current = false;
+            isTypingRef.current = false;
+            completedRef.current = false;
+        }, [clearAllTimeouts]),
         activeField: typing && !completed // You can expand this to track the active field name if needed
     };
 }
