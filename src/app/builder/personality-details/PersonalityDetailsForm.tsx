@@ -9,13 +9,13 @@ import { KeyValuePairArray } from '@/lib/type';
 import TextareaFormField from '../TextareaFormField';
 import { StepButtons } from '../StepButtons';
 import PillSelectFormField from '../PillSelectFormField';
-import { Sparkles } from 'lucide-react';
 import { getStep } from '@/lib/utils/step';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '@/components/StepContainer';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
+import { AIIcon } from '@/components/AIIcon';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -139,7 +139,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                     disabled={watchedPersonalityTraits?.length === 0 || isGeneratingPersonalityText}
                                     onClick={() => generateAiText()}
                                 >
-                                    <Sparkles className='mr-2 h-5 w-5' />
+                                    <AIIcon />
                                     Generate text with AI
                                 </Button>
                             </div>

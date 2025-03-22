@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import PillSelectFormField from '../PillSelectFormField';
 import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
-import { Sparkles } from 'lucide-react';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,7 @@ import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@
 import { StepContainer } from '@/components/StepContainer';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
+import { AIIcon } from '@/components/AIIcon';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -136,7 +136,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                     disabled={watchedHobbies?.length === 0 || isGeneratingHobbiesText}
                                     onClick={() => generateAiText()}
                                 >
-                                    <Sparkles className='mr-2 h-5 w-5' />
+                                    <AIIcon />
                                     Generate text with AI
                                 </Button>
                             </div>

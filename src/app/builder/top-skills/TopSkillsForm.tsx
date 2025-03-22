@@ -11,12 +11,12 @@ import { StepContainer } from '@/components/StepContainer';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useExtractTopSkillsMutation } from '@/lib/store/api/aiApiSlice';
 import { Button } from '@/components/ui/button';
-import { Sparkles } from 'lucide-react';
 import TextareaFormField from '../TextareaFormField';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { LearnMoreAboutConversation } from './LearnMoreAboutConversation';
 import { ListenTopSkills } from './ListenTopSkills';
+import { AIIcon } from '@/components/AIIcon';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -106,7 +106,7 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                                         }
                                     }}
                                 >
-                                    <Sparkles className='mr-2 h-5 w-5' />
+                                    <AIIcon />
                                     Generate your Top skills using AI
                                 </Button>
                             </div>
