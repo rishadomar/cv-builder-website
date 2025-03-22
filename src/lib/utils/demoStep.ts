@@ -1,7 +1,7 @@
 import { Briefcase, Download, Heart, Mail, Trophy } from 'lucide-react';
 import { StepPath, StepType } from '../type';
 
-export const Steps: StepType[] = [
+export const DemoSteps: StepType[] = [
     {
         id: 1,
         title: 'Contact',
@@ -65,6 +65,6 @@ const UnfoundStep = {
 };
 
 export const getStep = (path: StepPath): StepType => {
-    const foundStep = Steps.find((step) => step.path === path);
+    const foundStep = DemoSteps.find((step) => step.path === path);
     return foundStep ?? UnfoundStep;
 };

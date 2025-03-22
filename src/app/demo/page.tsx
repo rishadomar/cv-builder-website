@@ -5,79 +5,99 @@ import { ProgressBar } from '@/components/ProgressBar';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectHasPromoCode, selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
-import { Steps } from '@/lib/utils/demoStep';
+import { DemoSteps } from '@/lib/utils/demoStep';
 import DemoContactDetailsForm from './contact-details/DemoContactDetails';
 import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
 
-const NumberOfPages = Steps.length;
+const NumberOfPages = DemoSteps.length;
 
 function FormContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [currentPage, setCurrentPage] = useState<string>('contact-details');
-    const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
+    const [currentPage, setCurrentPage] = useState<string>('contact-details'); // Set default value here
+    const [currentPageNumber, setCurrentPageNumber] = useState<number>(1); // Set default value here
     const isPaymentValid = useAppSelector(selectIsPaymentValid);
     const hasPromoCode = useAppSelector(selectHasPromoCode);
 
-    useEffect(() => {
-        const page = searchParams.get('page');
-        if (page) {
-            setCurrentPage(page);
-        } else {
-            setCurrentPage('contact-details');
-        }
-    }, [searchParams]);
+    // Track initial load to avoid URL updates during initialization
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+    // Combined effect to handle URL parameters, page validation, and URL updates
     useEffect(() => {
-        const p = Steps.find((step) => step.path === currentPage);
-        if (!p) {
-            setCurrentPageNumber(1);
-        } else {
-            setCurrentPageNumber(Steps.indexOf(p) + 1);
-        }
-    }, [currentPage]);
+        // First, handle search params
+        const pageParam = searchParams.get('page');
 
-    useEffect(() => {
-        router.push(`?page=${currentPage}`);
-    }, [currentPage, router]);
+        // Determine the current page based on URL or use default
+        let newPage = pageParam || 'contact-details';
+
+        // Validate that the page is valid
+        const pageStep = DemoSteps.find((step) => step.path === newPage);
+        if (!pageStep) {
+            newPage = 'contact-details';
+        }
+
+        // Update the page number
+        const pageIndex = DemoSteps.findIndex((step) => step.path === newPage);
+        const newPageNumber = pageIndex !== -1 ? pageIndex + 1 : 1;
+
+        // Update state with validated values
+        setCurrentPage(newPage);
+        setCurrentPageNumber(newPageNumber);
+
+        // Only update the URL if this isn't the initial load and if the page has changed
+        if (!isInitialLoad && pageParam !== newPage) {
+            router.push(`?page=${newPage}`);
+        }
+
+        // Mark initial load as completed
+        if (isInitialLoad) {
+            setIsInitialLoad(false);
+        }
+    }, [searchParams, router, isInitialLoad]);
 
     const nextPage = () => {
-        setCurrentPage((currentPage) => {
-            const p = Steps.find((step) => step.path === currentPage);
+        setCurrentPage((prevPage) => {
+            const p = DemoSteps.find((step) => step.path === prevPage);
             if (!p) {
                 return 'contact-details';
             }
-            const index = Steps.indexOf(p);
-            if (index + 1 >= Steps.length) {
+            const index = DemoSteps.indexOf(p);
+            if (index + 1 >= DemoSteps.length) {
                 return 'contact-details';
             }
-            if (Steps[index + 1].path === 'paywall' && isPaymentValid && !hasPromoCode) {
-                return Steps[index + 2].path;
+            if (DemoSteps[index + 1].path === 'paywall' && isPaymentValid && !hasPromoCode) {
+                return DemoSteps[index + 2].path;
             }
-            return Steps[index + 1].path;
+            return DemoSteps[index + 1].path;
         });
     };
 
     const previousPage = () => {
-        setCurrentPage((currentPage) => {
-            const p = Steps.find((step) => step.path === currentPage);
+        setCurrentPage((prevPage) => {
+            const p = DemoSteps.find((step) => step.path === prevPage);
             if (!p) {
                 return 'contact-details';
             }
-            const index = Steps.indexOf(p);
+            const index = DemoSteps.indexOf(p);
             if (index - 1 < 0) {
                 return 'contact-details';
             }
-            if (Steps[index - 1].path === 'paywall' && isPaymentValid && !hasPromoCode) {
-                return Steps[index - 2].path;
+            if (DemoSteps[index - 1].path === 'paywall' && isPaymentValid && !hasPromoCode) {
+                return DemoSteps[index - 2].path;
             }
-            return Steps[index - 1].path;
+            return DemoSteps[index - 1].path;
         });
     };
 
+    // Add an effect to update URL when currentPage changes from navigation
+    useEffect(() => {
+        if (!isInitialLoad) {
+            router.push(`?page=${currentPage}`);
+        }
+    }, [currentPage, router, isInitialLoad]);
+
     return (
         <>
-            <ProgressBar value={(currentPageNumber / NumberOfPages) * 100} />
             <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
                 {currentPage === 'contact-details' && <DemoContactDetailsForm onNext={nextPage} />}
 
@@ -85,15 +105,7 @@ function FormContent() {
                     <DemoPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
                 )}
 
-                {/* {currentPage === 'work-experience' && (
-                    <DemoWorkExperienceList onNext={nextPage} onPrevious={previousPage} />
-                )}
-
-                {currentPage === 'top-skills' && <DemoTopSkillsForm onNext={nextPage} onPrevious={previousPage} />}
-
-                {currentPage === 'select-template' && <DemoSelectTemplate onNext={nextPage} onPrevious={previousPage} />}
-
-                {currentPage === 'download-pdf' && <DemoDownloadPDF onPrevious={previousPage} />} */}
+                {/* Other pages */}
             </div>
         </>
     );
