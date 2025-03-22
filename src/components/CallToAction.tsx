@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 
 interface CallToActionProps {
     label: string;
-    color: 'gray' | 'white';
+    bgColor: string;
+    textColor: string;
+    hoverColor: string;
     withArrow: boolean;
     to: string;
 }
 
-const CallToAction = ({ label, color, withArrow, to }: CallToActionProps) => {
+const CallToAction = ({ label, bgColor, textColor, hoverColor, withArrow, to }: CallToActionProps) => {
     const router = useRouter();
 
     const callToAction = () => {
@@ -19,11 +21,7 @@ const CallToAction = ({ label, color, withArrow, to }: CallToActionProps) => {
 
     return (
         <button
-            className={`${
-                color === 'white'
-                    ? 'bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition flex items-center'
-                    : 'bg-white text-gray-900 px-6 md:px-8 py-3 md:py-4 rounded-lg hover:bg-gray-100 transition'
-            }`}
+            className={`${bgColor} ${textColor} hover:${hoverColor} px-6 py-3 rounded-lg transition flex items-center`}
             onClick={() => callToAction()}
         >
             {label}

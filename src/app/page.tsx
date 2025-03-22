@@ -44,11 +44,25 @@ export default function Home() {
                     </div>
 
                     <div className='flex justify-center lg:justify-start space-x-4'>
-                        <CallToAction label='Start Building Your CV' color='white' withArrow to='/authentication' />
+                        <CallToAction
+                            label='Start Building Your CV'
+                            bgColor='bg-gray-900'
+                            textColor='text-white'
+                            hoverColor='bg-gray-800'
+                            withArrow
+                            to='/authentication'
+                        />
                     </div>
 
                     <div className='flex justify-center lg:justify-start space-x-4'>
-                        <CallToAction label='Watch demo' color='gray' withArrow to='/demo' />
+                        <CallToAction
+                            label='Watch demo'
+                            bgColor='bg-gray-200'
+                            textColor='text-gray-900'
+                            hoverColor='bg-gray-100'
+                            withArrow
+                            to='/demo'
+                        />
                     </div>
                 </div>
             </div>
@@ -158,7 +172,16 @@ export default function Home() {
                     Build a professional CV for just {formatProductCost()} and take the first step towards your dream
                     job
                 </p>
-                <CallToAction label='Get Started Now' color='gray' withArrow={false} to='/authentication' />
+                <div className='flex justify-center space-x-4'>
+                    <CallToAction
+                        label='Get Started Now'
+                        bgColor='bg-white'
+                        textColor='text-gray-900'
+                        hoverColor='bg-gray-100'
+                        withArrow={false}
+                        to='/authentication'
+                    />
+                </div>
             </div>
 
             <div className='container mx-auto px-4 mt-10'>
