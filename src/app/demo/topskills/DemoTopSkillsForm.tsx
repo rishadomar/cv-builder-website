@@ -9,10 +9,10 @@ import { StepButtons } from '../StepButtons';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '@/components/StepContainer';
 import { Button } from '@/components/ui/button';
-import { ListenTopSkills } from './ListenTopSkills';
 import TextareaFormField from '@/app/builder/TextareaFormField';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
 import { AIIcon } from '@/components/AIIcon';
+import { AudioPlayer } from '@/components/core/AudioPlayer';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -97,9 +97,12 @@ export default function DemoTopSkillsForm({ onNext, onPrevious }: TopSkillsFormP
                             />
                         </div>
                         {completed && (
-                            <>
-                                <ListenTopSkills dateGenerated={new Date().toLocaleString()} />
-                            </>
+                            <div className='border border-gray-200 rounded-lg p-4 mt-4'>
+                                <div className='text-xs'>
+                                    Listen to a sample conversation of AI generated conversation
+                                </div>
+                                <AudioPlayer src='/audio/sample-topskills-discussion.mp3' className='mt-4' />
+                            </div>
                         )}
                     </StepContainer>
                     <StepButtons onPrevious={onPrevious} onNext={onNext} typing={typing} completed={completed} />

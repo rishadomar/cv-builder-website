@@ -45,7 +45,7 @@ const Traits = [
 // Demo data with pre-selected traits and personality text
 const demoData = {
     personalityText:
-        "As a creative and optimistic individual, I thrive in collaborative environments where I can contribute innovative ideas. I balance my outgoing nature with thoughtful consideration of others' perspectives, allowing me to build strong relationships with colleagues and clients alike. My independent work ethic ensures I can execute projects efficiently, while my team player mindset keeps me focused on collective goals."
+        'As a creative and optimistic individual, I thrive in collaborative environments where I can contribute innovative ideas. My independent work ethic ensures I can execute projects efficiently, while my team player mindset keeps me focused on collective goals.'
 };
 
 // Pre-selected traits for the demo
@@ -138,7 +138,7 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
                                 variant='outline'
                                 type='button'
                                 data-testid='generate-ai-text'
-                                disabled={formHook.watch('personalityTraits')?.length === 0}
+                                disabled={typing && !completed}
                                 onClick={() => setIsGeneratingText(true)}
                                 className={isGeneratingText && !completed ? 'relative' : ''}
                             >
