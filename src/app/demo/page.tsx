@@ -8,6 +8,7 @@ import { DemoSteps } from '@/lib/utils/demoStep';
 import DemoContactDetailsForm from './contact-details/DemoContactDetails';
 import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
 import DemoTopSkillsForm from './topskills/DemoTopSkillsForm';
+import DemoDownloadPDF from './generate-pdf/DemoDownloadPDF';
 
 function FormContent() {
     const router = useRouter();
@@ -79,6 +80,10 @@ function FormContent() {
         });
     };
 
+    const handleReturnToHome = () => {
+        router.push('/');
+    };
+
     // Add an effect to update URL when currentPage changes from navigation
     useEffect(() => {
         if (!isInitialLoad) {
@@ -89,13 +94,29 @@ function FormContent() {
     return (
         <>
             <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
-                {currentPage === 'contact-details' && <DemoContactDetailsForm onNext={nextPage} />}
-
-                {currentPage === 'personality-details' && (
-                    <DemoPersonalityDetailsForm onNext={nextPage} onPrevious={previousPage} />
+                {currentPage === 'contact-details' && (
+                    <DemoContactDetailsForm onNext={nextPage} onReturnToHome={handleReturnToHome} />
                 )}
 
-                {currentPage === 'top-skills' && <DemoTopSkillsForm onNext={nextPage} onPrevious={previousPage} />}
+                {currentPage === 'personality-details' && (
+                    <DemoPersonalityDetailsForm
+                        onNext={nextPage}
+                        onPrevious={previousPage}
+                        onReturnToHome={handleReturnToHome}
+                    />
+                )}
+
+                {currentPage === 'top-skills' && (
+                    <DemoTopSkillsForm
+                        onNext={nextPage}
+                        onPrevious={previousPage}
+                        onReturnToHome={handleReturnToHome}
+                    />
+                )}
+
+                {currentPage === 'download-pdf' && (
+                    <DemoDownloadPDF onRestartDemo={() => router.push('/demo')} onReturnToHome={handleReturnToHome} />
+                )}
             </div>
         </>
     );

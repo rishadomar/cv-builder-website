@@ -6,9 +6,9 @@ import { Form } from '@/components/ui/form';
 import { z } from 'zod';
 import { StepButtons } from '@/app/demo/StepButtons';
 import TextFormField from '@/app/builder/TextFormField';
-import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '@/components/StepContainer';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
+import { getStep } from '@/lib/utils/demoStep';
 
 const contactDetailsFormSchema = z.object({
     name: z.string().default(''),
@@ -19,11 +19,11 @@ const contactDetailsFormSchema = z.object({
 type ContactDetailsFormValues = z.infer<typeof contactDetailsFormSchema>;
 
 type ContactDetailsFormProps = {
-    onNext?: () => void;
-    onPrevious?: () => void;
+    onNext: () => void;
+    onReturnToHome: () => void;
 };
 
-export default function DemoContactDetailsForm({ onNext, onPrevious }: ContactDetailsFormProps) {
+export default function DemoContactDetailsForm({ onNext, onReturnToHome }: ContactDetailsFormProps) {
     const formHook = useForm<ContactDetailsFormValues>({
         resolver: zodResolver(contactDetailsFormSchema)
     });
@@ -32,7 +32,7 @@ export default function DemoContactDetailsForm({ onNext, onPrevious }: ContactDe
     // Define demo data
     const demoData = {
         name: 'Thabo Mokwena',
-        professionalTitle: 'Chef de Cuisine',
+        professionalTitle: 'Sous Chef',
         phoneNumber: '+27 82 123 4567'
     };
 
@@ -59,8 +59,6 @@ export default function DemoContactDetailsForm({ onNext, onPrevious }: ContactDe
             formHook.handleSubmit(async () => {
                 onNext();
             })();
-        } else if (onPrevious && submitterName === 'previous') {
-            onPrevious();
         }
 
         event?.preventDefault();
@@ -94,7 +92,7 @@ export default function DemoContactDetailsForm({ onNext, onPrevious }: ContactDe
                     />
                 </StepContainer>
 
-                <StepButtons onNext={onNext} typing={typing} completed={completed} />
+                <StepButtons onNext={onNext} typing={typing} completed={completed} onReturnToHome={onReturnToHome} />
             </form>
         </Form>
     );

@@ -23,9 +23,10 @@ type TopSkillsFormValues = z.infer<typeof topSkillsFormSchema>;
 type TopSkillsFormProps = {
     onNext?: () => void;
     onPrevious: () => void;
+    onReturnToHome: () => void;
 };
 
-export default function DemoTopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps) {
+export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }: TopSkillsFormProps) {
     const formHook = useForm<TopSkillsFormValues>({
         resolver: zodResolver(topSkillsFormSchema)
     });
@@ -104,7 +105,13 @@ export default function DemoTopSkillsForm({ onNext, onPrevious }: TopSkillsFormP
                             </div>
                         )}
                     </StepContainer>
-                    <StepButtons onPrevious={onPrevious} onNext={onNext} typing={typing} completed={completed} />
+                    <StepButtons
+                        onPrevious={onPrevious}
+                        onNext={onNext}
+                        typing={typing}
+                        completed={completed}
+                        onReturnToHome={onReturnToHome}
+                    />
                 </form>
             </Form>
         </>

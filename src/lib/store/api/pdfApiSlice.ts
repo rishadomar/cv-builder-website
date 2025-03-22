@@ -77,8 +77,52 @@ export const pdfApiSlice = createApi({
                     dispatch(setLoading(false));
                 }
             }
+        }),
+
+        downloadSamplePDF: builder.query<Blob, { download?: boolean }>({
+            query: (args) => ({
+                url: '/downloadSamplePDF',
+                method: 'GET',
+                params: { download: args?.download ?? false },
+                cache: 'no-cache',
+                responseHandler: async (response: Response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to download Sample PDF');
+                    }
+
+                    const contentType = response.headers.get('content-type');
+                    if (
+                        !contentType?.includes('application/pdf') &&
+                        !contentType?.includes('application/octet-stream')
+                    ) {
+                        throw new Error(`Invalid content type: ${contentType}`);
+                    }
+
+                    const base64Data = await response.text();
+
+                    // Convert base64 to binary
+                    const binaryString = atob(base64Data);
+
+                    // Convert binary string to Uint8Array
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+
+                    // Create blob from the binary data
+                    return new Blob([bytes], { type: 'application/pdf' });
+                }
+            }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    dispatch(setLoading(true));
+                    await queryFulfilled;
+                } finally {
+                    dispatch(setLoading(false));
+                }
+            }
         })
     })
 });
 
-export const { useGeneratePDFMutation, useLazyDownloadPDFQuery } = pdfApiSlice;
+export const { useGeneratePDFMutation, useLazyDownloadPDFQuery, useLazyDownloadSamplePDFQuery } = pdfApiSlice;

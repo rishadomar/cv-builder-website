@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import TextareaFormField from '../../builder/TextareaFormField';
 import { StepButtons } from '@/app/demo/StepButtons';
 import PillSelectFormField from '../../builder/PillSelectFormField';
-import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '@/components/StepContainer';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
 import { AIIcon } from '@/components/AIIcon';
+import { getStep } from '@/lib/utils/demoStep';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -22,6 +22,7 @@ type PersonalityDetailsFormValues = z.infer<typeof personalityDetailsFormSchema>
 type PersonalityDetailsFormProps = {
     onNext?: () => void;
     onPrevious: () => void;
+    onReturnToHome: () => void;
 };
 
 const Traits = [
@@ -51,7 +52,11 @@ const demoData = {
 // Pre-selected traits for the demo
 const preSelectedTraits = ['Creative', 'Outgoing', 'Independent', 'Team player'];
 
-export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: PersonalityDetailsFormProps) {
+export default function DemoPersonalityDetailsForm({
+    onNext,
+    onPrevious,
+    onReturnToHome
+}: PersonalityDetailsFormProps) {
     const formHook = useForm<PersonalityDetailsFormValues>({
         resolver: zodResolver(personalityDetailsFormSchema)
     });
@@ -162,7 +167,13 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
                             />
                         </div>
                     </StepContainer>
-                    <StepButtons onPrevious={onPrevious} onNext={onNext} typing={typing} completed={completed} />
+                    <StepButtons
+                        onPrevious={onPrevious}
+                        onNext={onNext}
+                        typing={typing}
+                        completed={completed}
+                        onReturnToHome={onReturnToHome}
+                    />
                 </form>
             </Form>
         </>
