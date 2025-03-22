@@ -56,11 +56,10 @@ export default function DemoContactDetailsForm({ onNext, onPrevious }: ContactDe
                 : undefined;
 
         if (onNext && submitterName === 'next') {
-            formHook.handleSubmit(async (data: ContactDetailsFormValues) => {
+            formHook.handleSubmit(async () => {
                 onNext();
             })();
         } else if (onPrevious && submitterName === 'previous') {
-            const data = formHook.getValues();
             onPrevious();
         }
 

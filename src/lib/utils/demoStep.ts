@@ -1,4 +1,4 @@
-import { Briefcase, Download, Heart, Mail, Trophy } from 'lucide-react';
+import { Download, Heart, Mail, Trophy } from 'lucide-react';
 import { StepPath, StepType } from '../type';
 
 export const DemoSteps: StepType[] = [

@@ -109,11 +109,10 @@ export default function DemoPersonalityDetailsForm({ onNext, onPrevious }: Perso
         const submitterName = submitter?.name;
 
         if (onNext && submitterName === 'next') {
-            formHook.handleSubmit(async (data: PersonalityDetailsFormValues) => {
+            formHook.handleSubmit(async () => {
                 onNext();
             })();
         } else if (onPrevious && submitterName === 'previous') {
-            const data = formHook.getValues();
             onPrevious();
         }
 

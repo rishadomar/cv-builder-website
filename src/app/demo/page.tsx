@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ProgressBar } from '@/components/ProgressBar';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectHasPromoCode, selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
@@ -9,8 +8,6 @@ import { DemoSteps } from '@/lib/utils/demoStep';
 import DemoContactDetailsForm from './contact-details/DemoContactDetails';
 import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
 import DemoTopSkillsForm from './topskills/DemoTopSkillsForm';
-
-const NumberOfPages = DemoSteps.length;
 
 function FormContent() {
     const router = useRouter();
@@ -25,8 +22,6 @@ function FormContent() {
 
     // Combined effect to handle URL parameters, page validation, and URL updates
     useEffect(() => {
-        // First, handle search params
-
         // Determine the current page based on URL or use default
         let newPage = pageParam || 'contact-details';
 
