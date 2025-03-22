@@ -72,6 +72,7 @@ export function StepButtons({
                             name='next'
                             type={asSubmit ? 'submit' : 'button'}
                             onClick={asSubmit || !onNext ? undefined : () => onNext()}
+                            className={!typing && completed && onNext ? 'animate-pulse shadow-md' : ''}
                         >
                             {typing ? (
                                 'Auto-filling...'
