@@ -39,7 +39,8 @@ export async function GET() {
         '/faqs',
         '/privacy',
         '/support',
-        '/terms'
+        '/terms',
+        '/demo'
     ];
 
     try {
