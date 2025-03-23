@@ -38,7 +38,13 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
     const step = getStep('top-skills');
 
     const demoData = {
-        topSkills: 'Your top skills are...'
+        topSkills:
+            '[PRIMARY SKILLS]\n' +
+            '- Culinary Expertise (Expert) - Demonstrated through spearheading traditional African cuisine preparations and assisting the head chef in preparing and executing complex dishes. Consistently received accolades for taste and presentation.\n' +
+            '\n' +
+            '- Time Management (Advanced) - Highlighted by playing a pivotal role during peak weekend and night shifts and managing kitchen operations efficiently.\n' +
+            '\n' +
+            'etc...'
     };
 
     const { typing, completed } = useTypewriterEffect(formHook, demoData, {
