@@ -71,7 +71,7 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                 );
             }, 500);
         }
-    }, [completed, typing]);
+    }, [completed, typing, showCoachMark]);
 
     // Clean up coach marks when component unmounts
     useEffect(() => {

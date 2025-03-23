@@ -46,8 +46,6 @@ export function useCoachMark() {
     // Function to show the coachmark
     const showCoachMark = useCallback(
         (elementId: string, content: React.ReactNode, customOptions?: CoachMarkOptions) => {
-            console.log(`[CoachMark] Showing coach mark for element "${elementId}"`);
-
             // Clear any existing timeout first
             clearCoachMarkTimeout();
 
@@ -58,7 +56,6 @@ export function useCoachMark() {
 
             // Set auto-close timeout if specified
             if (customOptions?.autoClose) {
-                console.log(`[CoachMark] Setting auto-close for ${customOptions.autoClose}ms`);
                 timeoutRef.current = setTimeout(() => {
                     hideCoachMark();
                 }, customOptions.autoClose);
@@ -67,18 +64,17 @@ export function useCoachMark() {
             // Verify element exists after state update
             setTimeout(() => {
                 const targetElement = document.getElementById(elementId);
-                console.log(`[CoachMark] Element check:`, targetElement ? 'Found' : 'Not found', elementId);
                 if (!targetElement) {
                     console.warn(`[CoachMark] Warning: Target element with ID "${elementId}" not found`);
                 }
             }, 0);
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [clearCoachMarkTimeout]
     );
 
     // Function to hide the coachmark
     const hideCoachMark = useCallback(() => {
-        console.log('[CoachMark] Hiding coach mark');
         clearCoachMarkTimeout();
         setActiveCoachMark(null);
     }, [clearCoachMarkTimeout]);
@@ -92,8 +88,6 @@ export function useCoachMark() {
 
     // The actual CoachMark component that will be rendered
     const CoachMark = useCallback(() => {
-        console.log('[CoachMark] Rendering CoachMark component, active:', activeCoachMark);
-
         if (!activeCoachMark) {
             return null;
         }
@@ -106,7 +100,7 @@ export function useCoachMark() {
 
         // Calculate position relative to the target element
         const targetRect = targetElement.getBoundingClientRect();
-        const { position, style, offset, showCloseButton, zIndex, arrow, maxWidth } = options;
+        const { position, offset, showCloseButton, zIndex, arrow, maxWidth } = options;
 
         // Get viewport dimensions
         const viewportWidth = window.innerWidth;
@@ -303,7 +297,6 @@ export function useCoachMark() {
         }
 
         // For speech bubble and tooltip styles
-        console.log(`[CoachMark] Creating portal for ${style} style coachmark, mobile: ${isMobile}`);
         return createPortal(
             <div
                 className={`fixed z-[1000] ${options.className || ''}`}

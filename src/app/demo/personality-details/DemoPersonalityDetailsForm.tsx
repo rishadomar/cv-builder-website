@@ -127,7 +127,7 @@ export default function DemoPersonalityDetailsForm({
                 );
             }, 500);
         }
-    }, [completed, typing]);
+    }, [completed, typing, showCoachMark]);
 
     // Clean up coach marks when component unmounts
     useEffect(() => {

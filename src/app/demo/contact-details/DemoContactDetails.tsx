@@ -57,7 +57,6 @@ export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToH
     useEffect(() => {
         if (completed && !typing && !coachMarkShownRef.current) {
             coachMarkShownRef.current = true; // Prevent showing multiple times
-            console.log('Form completed. Starting timeout for coach mark...');
 
             // Use a slight delay to ensure everything is rendered
             setTimeout(() => {
@@ -70,7 +69,7 @@ export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToH
                 );
             }, 500);
         }
-    }, [completed, typing]);
+    }, [completed, typing, showCoachMark]);
 
     // Clean up coach marks when component unmounts
     useEffect(() => {

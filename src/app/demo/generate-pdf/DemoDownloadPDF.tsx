@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { ExternalLink, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter } from '@/components/ui/card';
@@ -17,7 +17,6 @@ type DemoDownloadPDFProps = {
 
 export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoDownloadPDFProps) {
     const { showCoachMark, hideCoachMark } = useCoachMarkContext();
-    const coachMarkShownRef = useRef(false);
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('download-pdf');
     const [downloadSamplePDFTrigger] = useLazyDownloadSamplePDFQuery();
@@ -38,6 +37,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
             clearTimeout(timeoutId);
             hideCoachMark(); // Hide coach mark when navigating away
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handlePDF = async (action: 'download' | 'open') => {

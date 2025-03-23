@@ -29,6 +29,7 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
         return () => {
             clearTimeout(timeoutId);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Clean up coach marks when component unmounts
