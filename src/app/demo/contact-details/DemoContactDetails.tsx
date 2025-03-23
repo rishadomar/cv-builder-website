@@ -8,7 +8,9 @@ import { StepButtons } from '@/app/demo/StepButtons';
 import TextFormField from '@/app/builder/TextFormField';
 import { StepContainer } from '@/components/StepContainer';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
+import { useCoachMarkContext } from '@/contexts/CoachMarkContext';
 import { getStep } from '@/lib/utils/demoStep';
+import { useEffect, useRef } from 'react';
 
 const contactDetailsFormSchema = z.object({
     name: z.string().default(''),
@@ -24,9 +26,14 @@ type ContactDetailsFormProps = {
 };
 
 export default function DemoContactDetailsForm({ onNext, onReturnToHome }: ContactDetailsFormProps) {
+    // Use the context instead of direct hook
+    const { showCoachMark, hideCoachMark } = useCoachMarkContext();
+    const coachMarkShownRef = useRef(false);
+
     const formHook = useForm<ContactDetailsFormValues>({
         resolver: zodResolver(contactDetailsFormSchema)
     });
+
     const step = getStep('contact-details');
 
     // Define demo data
@@ -36,7 +43,7 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
         phoneNumber: '+27 82 123 4567'
     };
 
-    // Use the improved hook
+    // Use the typewriter effect hook
     const { typing, completed } = useTypewriterEffect(formHook, demoData, {
         initialDelay: 1000,
         typeDelay: 50,
@@ -45,6 +52,42 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
             console.log('All fields filled!');
         }
     });
+
+    useEffect(() => {
+        if (completed && !typing && !coachMarkShownRef.current) {
+            coachMarkShownRef.current = true; // Prevent showing multiple times
+            console.log('Form completed. Starting timeout for coach mark...');
+
+            // Use a slight delay to ensure everything is rendered
+            setTimeout(() => {
+                console.log('Showing coach mark for next button');
+                showNextButtonCoachMark();
+            }, 500);
+        }
+    }, [completed, typing]);
+
+    // Clean up coach marks when component unmounts
+    useEffect(() => {
+        return () => {
+            hideCoachMark(); // Hide coach mark when navigating away
+        };
+    }, [hideCoachMark]);
+
+    const showNextButtonCoachMark = () => {
+        showCoachMark(
+            'next-button', // ID of the element to highlight
+            <div>
+                <p className='font-medium'>Details are complete!</p>
+                <p className='text-sm mt-1'>Click next to continue the demo.</p>
+            </div>,
+            {
+                position: 'top',
+                style: 'speech',
+                autoClose: 8000,
+                zIndex: 2000
+            }
+        );
+    };
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         event?.preventDefault(); // Prevent form submission immediately
@@ -92,7 +135,13 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
                     />
                 </StepContainer>
 
-                <StepButtons onNext={onNext} typing={typing} completed={completed} onReturnToHome={onReturnToHome} />
+                <StepButtons
+                    onNext={onNext}
+                    typing={typing}
+                    completed={completed}
+                    onReturnToHome={onReturnToHome}
+                    nextButtonProps={{ id: 'next-button' }}
+                />
             </form>
         </Form>
     );

@@ -1,134 +1,80 @@
 'use client';
-import { useEffect, useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useAppSelector } from '@/lib/store/hooks';
-import { selectHasPromoCode, selectIsPaymentValid } from '@/lib/store/fieldValues/fieldValuesSlice';
-import { OverlaySpinner } from '@/components/OverlaySpinner';
-import { DemoSteps } from '@/lib/utils/demoStep';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import DemoIntroduction from './introduction/DemoIntroduction';
 import DemoContactDetailsForm from './contact-details/DemoContactDetails';
 import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
 import DemoTopSkillsForm from './topskills/DemoTopSkillsForm';
 import DemoDownloadPDF from './generate-pdf/DemoDownloadPDF';
-import DemoIntroduction from './introduction/DemoIntroduction';
+import { CoachMarkProvider } from '@/contexts/CoachMarkContext';
 
-function FormContent() {
+export default function DemoPage() {
+    const [currentStep, setCurrentStep] = useState('introduction');
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const pageParam = searchParams.get('page');
-    const [currentPage, setCurrentPage] = useState<string>(pageParam ?? 'introduction'); // Set default value here
-    const isPaymentValid = useAppSelector(selectIsPaymentValid);
-    const hasPromoCode = useAppSelector(selectHasPromoCode);
 
-    // Track initial load to avoid URL updates during initialization
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-    // Combined effect to handle URL parameters, page validation, and URL updates
-    useEffect(() => {
-        // Determine the current page based on URL or use default
-        let newPage = pageParam || 'introduction';
-
-        // Validate that the page is valid
-        const pageStep = DemoSteps.find((step) => step.path === newPage);
-        if (!pageStep) {
-            newPage = 'introduction';
-        }
-
-        // Update state with validated values
-        setCurrentPage(newPage);
-
-        // Only update the URL if this isn't the initial load and if the page has changed
-        if (!isInitialLoad && pageParam !== newPage) {
-            router.push(`?page=${newPage}`);
-        }
-
-        // Mark initial load as completed
-        if (isInitialLoad) {
-            setIsInitialLoad(false);
-        }
-    }, [searchParams, router, isInitialLoad]);
-
-    const nextPage = () => {
-        setCurrentPage((prevPage) => {
-            const p = DemoSteps.find((step) => step.path === prevPage);
-            if (!p) {
-                return 'introduction';
-            }
-            const index = DemoSteps.indexOf(p);
-            if (index + 1 >= DemoSteps.length) {
-                return 'introduction';
-            }
-            return DemoSteps[index + 1].path;
-        });
+    const goToStep = (step: string) => {
+        setCurrentStep(step);
     };
 
-    const previousPage = () => {
-        setCurrentPage((prevPage) => {
-            const p = DemoSteps.find((step) => step.path === prevPage);
-            if (!p) {
-                return 'introduction';
-            }
-            const index = DemoSteps.indexOf(p);
-            if (index - 1 < 0) {
-                return 'introduction';
-            }
-            return DemoSteps[index - 1].path;
-        });
+    const goToNextStep = () => {
+        switch (currentStep) {
+            case 'introduction':
+                setCurrentStep('contact-details');
+                break;
+            case 'contact-details':
+                setCurrentStep('personality-details');
+                break;
+            case 'personality-details':
+                setCurrentStep('top-skills');
+                break;
+            case 'top-skills':
+                setCurrentStep('download-pdf');
+                break;
+            case 'download-pdf':
+                router.push('/demo?page=contact-details');
+                break;
+            default:
+                router.push('/');
+                break;
+        }
     };
 
-    const handleReturnToHome = () => {
+    const returnToHome = () => {
         router.push('/');
     };
 
-    // Add an effect to update URL when currentPage changes from navigation
-    useEffect(() => {
-        if (!isInitialLoad) {
-            router.push(`?page=${currentPage}`);
-        }
-    }, [currentPage, router, isInitialLoad]);
-
     return (
-        <>
-            <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
-                {currentPage === 'introduction' && (
-                    <DemoIntroduction onNext={nextPage} onReturnToHome={handleReturnToHome} />
+        <CoachMarkProvider>
+            <div className='min-h-screen bg-background'>
+                {currentStep === 'introduction' && (
+                    <DemoIntroduction onNext={goToNextStep} onReturnToHome={returnToHome} />
                 )}
 
-                {currentPage === 'contact-details' && (
-                    <DemoContactDetailsForm onNext={nextPage} onReturnToHome={handleReturnToHome} />
+                {currentStep === 'contact-details' && (
+                    <DemoContactDetailsForm onNext={goToNextStep} onReturnToHome={returnToHome} />
                 )}
 
-                {currentPage === 'personality-details' && (
+                {currentStep === 'personality-details' && (
                     <DemoPersonalityDetailsForm
-                        onNext={nextPage}
-                        onPrevious={previousPage}
-                        onReturnToHome={handleReturnToHome}
+                        onNext={goToNextStep}
+                        onPrevious={() => goToStep('contact-details')}
+                        onReturnToHome={returnToHome}
                     />
                 )}
 
-                {currentPage === 'top-skills' && (
+                {currentStep === 'top-skills' && (
                     <DemoTopSkillsForm
-                        onNext={nextPage}
-                        onPrevious={previousPage}
-                        onReturnToHome={handleReturnToHome}
+                        onNext={goToNextStep}
+                        onPrevious={() => goToStep('personality-details')}
+                        onReturnToHome={returnToHome}
                     />
                 )}
 
-                {currentPage === 'download-pdf' && (
-                    <DemoDownloadPDF
-                        onRestartDemo={() => router.push('/demo?page=contact-details')}
-                        onReturnToHome={handleReturnToHome}
-                    />
+                {currentStep === 'download-pdf' && (
+                    <DemoDownloadPDF onRestartDemo={() => goToStep('contact-details')} onReturnToHome={returnToHome} />
                 )}
             </div>
-        </>
-    );
-}
-
-// Main component with proper Suspense boundary
-export default function BuilderPage() {
-    return (
-        <Suspense fallback={<OverlaySpinner />}>
-            <FormContent />
-        </Suspense>
+        </CoachMarkProvider>
     );
 }
