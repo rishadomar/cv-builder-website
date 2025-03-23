@@ -52,7 +52,11 @@ export default function DemoPage() {
                 )}
 
                 {currentStep === 'contact-details' && (
-                    <DemoContactDetailsForm onNext={goToNextStep} onReturnToHome={returnToHome} />
+                    <DemoContactDetailsForm
+                        onPrevious={() => goToStep('introduction')}
+                        onNext={goToNextStep}
+                        onReturnToHome={returnToHome}
+                    />
                 )}
 
                 {currentStep === 'personality-details' && (

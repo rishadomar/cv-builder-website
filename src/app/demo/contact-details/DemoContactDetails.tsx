@@ -22,10 +22,11 @@ type ContactDetailsFormValues = z.infer<typeof contactDetailsFormSchema>;
 
 type ContactDetailsFormProps = {
     onNext: () => void;
+    onPrevious: () => void;
     onReturnToHome: () => void;
 };
 
-export default function DemoContactDetailsForm({ onNext, onReturnToHome }: ContactDetailsFormProps) {
+export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToHome }: ContactDetailsFormProps) {
     // Use the context instead of direct hook
     const { showCoachMark, hideCoachMark } = useCoachMarkContext();
     const coachMarkShownRef = useRef(false);
@@ -78,8 +79,6 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
         };
     }, [hideCoachMark]);
 
-    const showNextButtonCoachMark = () => {};
-
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         event?.preventDefault(); // Prevent form submission immediately
 
@@ -93,6 +92,8 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
             formHook.handleSubmit(async () => {
                 onNext();
             })();
+        } else if (onPrevious && submitterName === 'previous') {
+            onPrevious();
         }
 
         event?.preventDefault();
@@ -128,6 +129,7 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
 
                 <StepButtons
                     onNext={onNext}
+                    onPrevious={onPrevious}
                     typing={typing}
                     completed={completed}
                     onReturnToHome={onReturnToHome}
