@@ -223,16 +223,80 @@ export function useCoachMark() {
                 };
                 break;
             }
-
-            // Left and Right cases follow similar logic...
             case 'left': {
-                // Similar changes for left position...
-                // ...existing code with mobile adjustments
+                // Calculate vertical center alignment
+                let topPos = targetRect.top + targetRect.height / 2;
+
+                // Handle potential overflow on small screens
+                if (isMobile) {
+                    // Calculate coach mark height (approximation)
+                    const estimatedHeight = 80; // Minimal approximation
+                    const coachMarkHalfHeight = estimatedHeight / 2;
+
+                    // Adjust when close to top or bottom edges
+                    if (topPos - coachMarkHalfHeight < edgePadding) {
+                        topPos = edgePadding + coachMarkHalfHeight;
+                    } else if (topPos + coachMarkHalfHeight > viewportHeight - edgePadding) {
+                        topPos = viewportHeight - edgePadding - coachMarkHalfHeight;
+                    }
+                }
+
+                positionStyle = {
+                    top: topPos,
+                    right: viewportWidth - targetRect.left + (offset || 0),
+                    transform: 'translateY(-50%)',
+                    maxWidth: `${effectiveMaxWidth}px`
+                };
+
+                // Arrow positioning
+                const arrowTopOffset = ((targetRect.top + targetRect.height / 2 - topPos) / coachMarkWidth) * 100;
+                // Clamp the arrow offset to make sure it stays within the coach mark
+                const clampedArrowOffset = Math.max(-40, Math.min(40, arrowTopOffset));
+
+                arrowStyle = {
+                    right: -8,
+                    top: `calc(50% + ${clampedArrowOffset}%)`,
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    backgroundColor: 'var(--coachmark-bg, hsl(var(--primary)))'
+                };
                 break;
             }
             case 'right': {
-                // Similar changes for right position...
-                // ...existing code with mobile adjustments
+                // Calculate vertical center alignment
+                let topPos = targetRect.top + targetRect.height / 2;
+
+                // Handle potential overflow on small screens
+                if (isMobile) {
+                    // Calculate coach mark height (approximation)
+                    const estimatedHeight = 80; // Minimal approximation
+                    const coachMarkHalfHeight = estimatedHeight / 2;
+
+                    // Adjust when close to top or bottom edges
+                    if (topPos - coachMarkHalfHeight < edgePadding) {
+                        topPos = edgePadding + coachMarkHalfHeight;
+                    } else if (topPos + coachMarkHalfHeight > viewportHeight - edgePadding) {
+                        topPos = viewportHeight - edgePadding - coachMarkHalfHeight;
+                    }
+                }
+
+                positionStyle = {
+                    top: topPos,
+                    left: targetRect.right + (offset || 0),
+                    transform: 'translateY(-50%)',
+                    maxWidth: `${effectiveMaxWidth}px`
+                };
+
+                // Arrow positioning
+                const arrowTopOffset = ((targetRect.top + targetRect.height / 2 - topPos) / coachMarkWidth) * 100;
+                // Clamp the arrow offset to make sure it stays within the coach mark
+                const clampedArrowOffset = Math.max(-40, Math.min(40, arrowTopOffset));
+
+                arrowStyle = {
+                    left: -8,
+                    top: `calc(50% + ${clampedArrowOffset}%)`,
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    backgroundColor: 'var(--coachmark-bg, hsl(var(--primary)))'
+                };
                 break;
             }
         }
