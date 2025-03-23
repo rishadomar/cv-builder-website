@@ -1,9 +1,6 @@
 import { databaseApiSlice } from './databaseApiSlice';
 import { getStore } from '../store';
 
-// Export the auto-generated hooks from the slice for use in components
-export const { useReadRecordQuery, useLazyReadRecordQuery } = databaseApiSlice;
-
 // Function to invalidate cache and trigger a refetch through RTK Query
 export const refreshRecordData = async (sub: string, email: string) => {
     const store = getStore();
