@@ -55,34 +55,39 @@ export function StepButtons({
                         >
                             <Home className='h-4 w-4' />
                         </Button>
-                        <Button
-                            disabled={!onPrevious || typing || !completed}
-                            variant='outline'
-                            name='previous'
-                            type={asSubmit ? 'submit' : 'button'}
-                            onClick={asSubmit || !onPrevious ? undefined : () => onPrevious()}
-                        >
-                            <ChevronLeft className='mr-2 h-4 w-4' />
-                            Previous
-                        </Button>
+                        <div className='flex items-center justify-end h-full space-x-4'>
+                            <Button
+                                disabled={!onPrevious || typing || !completed}
+                                variant='outline'
+                                name='previous'
+                                type={asSubmit ? 'submit' : 'button'}
+                                onClick={asSubmit || !onPrevious ? undefined : () => onPrevious()}
+                                className='mr-4'
+                            >
+                                <ChevronLeft className='mr-2 h-4 w-4' />
+                                Previous
+                            </Button>
 
-                        <Button
-                            disabled={!onNext || typing || !completed}
-                            variant={onNext ? 'default' : 'outline'}
-                            name='next'
-                            type={asSubmit ? 'submit' : 'button'}
-                            onClick={asSubmit || !onNext ? undefined : () => onNext()}
-                            className={!typing && completed && onNext ? 'animate-pulse shadow-md' : ''}
-                        >
-                            {typing ? (
-                                'Auto-filling...'
-                            ) : (
-                                <>
-                                    Next
-                                    <ChevronRight className={`ml-2 h-4 w-4 ${onNext ? 'text-white' : 'text-black'}`} />
-                                </>
-                            )}
-                        </Button>
+                            <Button
+                                disabled={!onNext || typing || !completed}
+                                variant={onNext ? 'default' : 'outline'}
+                                name='next'
+                                type={asSubmit ? 'submit' : 'button'}
+                                onClick={asSubmit || !onNext ? undefined : () => onNext()}
+                                className={!typing && completed && onNext ? 'animate-pulse shadow-md' : ''}
+                            >
+                                {typing ? (
+                                    'Auto-filling...'
+                                ) : (
+                                    <>
+                                        Next
+                                        <ChevronRight
+                                            className={`ml-2 h-4 w-4 ${onNext ? 'text-white' : 'text-black'}`}
+                                        />
+                                    </>
+                                )}
+                            </Button>
+                        </div>
                     </div>
                 )}
             </div>
