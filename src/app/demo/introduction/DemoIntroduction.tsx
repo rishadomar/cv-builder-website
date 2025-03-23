@@ -20,11 +20,11 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
     const step = getStep('introduction');
 
     useEffect(() => {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
             showCoachMark(
                 'next-button', // ID of the element to highlight
                 <div>
-                    <p className='text-sm mt-1'>Click next to start the demo.</p>
+                    <p className='text-xs'>Click next to start the demo.</p>
                 </div>,
                 {
                     position: 'top',
@@ -34,6 +34,9 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
                 }
             );
         }, 5000);
+        return () => {
+            clearTimeout(timeoutId);
+        };
     }, []);
 
     // Clean up coach marks when component unmounts

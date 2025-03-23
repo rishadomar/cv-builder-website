@@ -77,8 +77,8 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
         showCoachMark(
             'next-button', // ID of the element to highlight
             <div>
-                <p className='font-medium'>Details are complete!</p>
-                <p className='text-sm mt-1'>Click next to continue the demo.</p>
+                <p className='text-sm'>Details are complete!</p>
+                <p className='text-xs mt-1'>Click next to continue the demo.</p>
             </div>,
             {
                 position: 'top',
