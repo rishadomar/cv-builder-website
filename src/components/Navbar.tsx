@@ -5,6 +5,7 @@ import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice
 import StepDrawer from './StepDrawer';
 import ProfileDropdown from './profileDropdown/ProfileDropdown';
 import { useRouter } from 'next/navigation';
+import { Button } from './ui/button';
 
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -20,7 +21,15 @@ const Navbar: React.FC = () => {
                             CV Builder
                         </span>
                     </div>
-                    <div className='w-24 flex items-center justify-end'>{isLoggedIn && <ProfileDropdown />}</div>
+                    <div className='w-24 flex items-center justify-end'>
+                        {isLoggedIn ? (
+                            <ProfileDropdown />
+                        ) : (
+                            <Button onClick={() => router.push('/authentication/login')} variant='outline'>
+                                Login
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
         </nav>
