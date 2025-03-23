@@ -4,7 +4,7 @@ import { LoginResponse, LogoutResponse, RegisterNewUserResponse } from '@/lib/ty
 import { setLoading } from '@/lib/store/loading/loadingSlice';
 import { setCookie } from '@/lib/utils';
 import { setAuthenticationDetails } from '@/lib/store/authentication/authenticationSlice';
-import { readRecordFromStore } from './databaseApiUtils';
+import { refreshRecordData } from './databaseApiUtils';
 import { loginFromStore, resetAuthenticationFields } from './authenticationApiUtils';
 
 export const authenticationApiSlice = createApi({
@@ -40,7 +40,7 @@ export const authenticationApiSlice = createApi({
                             email: arg.email
                         })
                     );
-                    await readRecordFromStore(data.Sub, arg.email);
+                    await refreshRecordData(data.Sub, arg.email);
                 } finally {
                     dispatch(setLoading(false));
                 }

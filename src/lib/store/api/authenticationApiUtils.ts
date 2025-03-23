@@ -4,7 +4,7 @@ import { authenticationApiSlice } from './authenticationApiSlice';
 import { jwtDecode } from 'jwt-decode';
 import { deleteCookie, getCookie, setCookie } from '@/lib/utils';
 import { resetAuthenticationDetails, setAuthenticationDetails } from '../authentication/authenticationSlice';
-import { readRecordFromStore } from './databaseApiUtils';
+import { refreshRecordData } from './databaseApiUtils';
 import { resetFieldValues } from '../fieldValues/fieldValuesSlice';
 
 export async function loginFromStore(email: string, password: string): Promise<LoginResponse> {
@@ -100,7 +100,7 @@ export async function validateGoogleLogin(code: string): Promise<GoogleLoginResp
             })
         );
 
-        await readRecordFromStore(data.sub, data.email);
+        await refreshRecordData(data.sub, data.email);
         return data;
     } catch (error) {
         // Handle any errors
@@ -145,5 +145,5 @@ export const loadOnRefresh = async () => {
 
     const store = getStore();
     store.dispatch(setAuthenticationDetails({ idToken, accessToken, refreshToken, sub, email }));
-    return await readRecordFromStore(sub, email);
+    return await refreshRecordData(sub, email);
 };
