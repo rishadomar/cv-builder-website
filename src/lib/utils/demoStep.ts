@@ -1,46 +1,56 @@
-import { Download, Heart, Mail, Trophy } from 'lucide-react';
+import { Download, Heart, Mail, Squirrel, Trophy } from 'lucide-react';
 import { StepPath, StepType } from '../type';
 
 export const DemoSteps: StepType[] = [
     {
         id: 1,
+        title: 'Introduction',
+        icon: Squirrel,
+        description: 'Welcome to the demo',
+        completed: true,
+        path: 'introduction',
+        showInSections: false,
+        paymentRequired: false
+    },
+    {
+        id: 2,
         title: 'Contact',
         icon: Mail,
         description: 'Provide contact details',
         completed: true,
         path: 'contact-details',
-        showInSections: true,
+        showInSections: false,
         paymentRequired: false
     },
     {
-        id: 2,
+        id: 3,
         title: 'Personality',
         icon: Heart,
         description: 'Dive deeper into your personality',
         completed: false,
         path: 'personality-details',
-        showInSections: true,
+        showInSections: false,
         paymentRequired: false
     },
     {
-        id: 3,
+        id: 4,
         title: 'Top Skills',
         icon: Trophy,
         description: 'Top skills acquired during your work experience',
         completed: false,
         path: 'top-skills',
-        showInSections: true,
-        paymentRequired: true
+        showInSections: false,
+        paymentRequired: false
     },
     {
-        id: 4,
+        id: 5,
         title: 'Download PDF',
         icon: Download,
         description: 'Download your PDF for keeps',
         completed: false,
         path: 'download-pdf',
         showInSections: false,
-        paymentRequired: true
+        paymentRequired: false
     }
 ];
 

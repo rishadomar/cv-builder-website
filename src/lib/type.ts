@@ -160,6 +160,7 @@ export type Error = {
 export type AvailablePDFTemplates = 'default' | 'professional';
 
 export type StepPath =
+    | 'introduction'
     | 'contact-details'
     | 'location-details'
     | 'remote-work-details'

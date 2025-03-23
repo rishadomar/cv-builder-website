@@ -9,12 +9,13 @@ import DemoContactDetailsForm from './contact-details/DemoContactDetails';
 import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
 import DemoTopSkillsForm from './topskills/DemoTopSkillsForm';
 import DemoDownloadPDF from './generate-pdf/DemoDownloadPDF';
+import DemoIntroduction from './introduction/DemoIntroduction';
 
 function FormContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pageParam = searchParams.get('page');
-    const [currentPage, setCurrentPage] = useState<string>(pageParam ?? 'contact-details'); // Set default value here
+    const [currentPage, setCurrentPage] = useState<string>(pageParam ?? 'introduction'); // Set default value here
     const isPaymentValid = useAppSelector(selectIsPaymentValid);
     const hasPromoCode = useAppSelector(selectHasPromoCode);
 
@@ -24,12 +25,12 @@ function FormContent() {
     // Combined effect to handle URL parameters, page validation, and URL updates
     useEffect(() => {
         // Determine the current page based on URL or use default
-        let newPage = pageParam || 'contact-details';
+        let newPage = pageParam || 'introduction';
 
         // Validate that the page is valid
         const pageStep = DemoSteps.find((step) => step.path === newPage);
         if (!pageStep) {
-            newPage = 'contact-details';
+            newPage = 'introduction';
         }
 
         // Update state with validated values
@@ -50,14 +51,11 @@ function FormContent() {
         setCurrentPage((prevPage) => {
             const p = DemoSteps.find((step) => step.path === prevPage);
             if (!p) {
-                return 'contact-details';
+                return 'introduction';
             }
             const index = DemoSteps.indexOf(p);
             if (index + 1 >= DemoSteps.length) {
-                return 'contact-details';
-            }
-            if (DemoSteps[index + 1].path === 'paywall' && isPaymentValid && !hasPromoCode) {
-                return DemoSteps[index + 2].path;
+                return 'introduction';
             }
             return DemoSteps[index + 1].path;
         });
@@ -67,14 +65,11 @@ function FormContent() {
         setCurrentPage((prevPage) => {
             const p = DemoSteps.find((step) => step.path === prevPage);
             if (!p) {
-                return 'contact-details';
+                return 'introduction';
             }
             const index = DemoSteps.indexOf(p);
             if (index - 1 < 0) {
-                return 'contact-details';
-            }
-            if (DemoSteps[index - 1].path === 'paywall' && isPaymentValid && !hasPromoCode) {
-                return DemoSteps[index - 2].path;
+                return 'introduction';
             }
             return DemoSteps[index - 1].path;
         });
@@ -94,6 +89,10 @@ function FormContent() {
     return (
         <>
             <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
+                {currentPage === 'introduction' && (
+                    <DemoIntroduction onNext={nextPage} onReturnToHome={handleReturnToHome} />
+                )}
+
                 {currentPage === 'contact-details' && (
                     <DemoContactDetailsForm onNext={nextPage} onReturnToHome={handleReturnToHome} />
                 )}
@@ -115,7 +114,10 @@ function FormContent() {
                 )}
 
                 {currentPage === 'download-pdf' && (
-                    <DemoDownloadPDF onRestartDemo={() => router.push('/demo')} onReturnToHome={handleReturnToHome} />
+                    <DemoDownloadPDF
+                        onRestartDemo={() => router.push('/demo?page=contact-details')}
+                        onReturnToHome={handleReturnToHome}
+                    />
                 )}
             </div>
         </>
