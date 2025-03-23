@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { StepButtons } from '@/app/demo/StepButtons';
 import { StepContainer } from '@/components/StepContainer';
 import { getStep } from '@/lib/utils/demoStep';
@@ -15,8 +15,6 @@ type DemoIntroductionProps = {
 
 export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntroductionProps) {
     const { showCoachMark, hideCoachMark } = useCoachMarkContext();
-    const coachMarkShownRef = useRef(false);
-
     const step = getStep('introduction');
 
     useEffect(() => {
@@ -80,8 +78,8 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
                                     <div>
                                         <h3 className='font-medium'>Guided Walkthrough</h3>
                                         <p className='text-sm text-muted-foreground'>
-                                            We'll guide you through several carefully selected steps that demonstrate
-                                            the core functionality of our CV builder.
+                                            We&apos;ll guide you through several carefully selected steps that
+                                            demonstrate the core functionality of our CV builder.
                                         </p>
                                     </div>
                                 </div>
@@ -102,7 +100,7 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
                                     <div>
                                         <h3 className='font-medium'>Interactive Elements</h3>
                                         <p className='text-sm text-muted-foreground'>
-                                            At certain points, you'll be prompted to interact with the form. Clear
+                                            At certain points, you&apos;ll be prompted to interact with the form. Clear
                                             instructions will guide you on what to do next.
                                         </p>
                                     </div>
@@ -123,8 +121,8 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
                             <div className='bg-muted p-4 rounded-md border border-muted-foreground/20'>
                                 <p className='text-sm font-medium'>Ready to begin?</p>
                                 <p className='text-sm text-muted-foreground'>
-                                    Click the "Next" button below to start the demo and see how effortlessly you can
-                                    create a professional CV with our tool.
+                                    Click the &lsquo;Next&rsquo; button below to start the demo and see how effortlessly
+                                    you can create a professional CV with our tool.
                                 </p>
                             </div>
                         </CardContent>

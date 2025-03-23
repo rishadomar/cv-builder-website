@@ -99,7 +99,7 @@ export default function DemoPersonalityDetailsForm({
         return () => {
             traitTimers.forEach(clearTimeout);
         };
-    }, [formHook]);
+    }, [hasSelectedPills, formHook]);
 
     // Use the typewriter effect for the text area (only after pills are selected)
     // Modify this section to make it conditional
@@ -114,7 +114,6 @@ export default function DemoPersonalityDetailsForm({
     useEffect(() => {
         if (completed && !typing && !coachMarkShownRef.current) {
             coachMarkShownRef.current = true; // Prevent showing multiple times
-            console.log('Form completed. Starting timeout for coach mark...');
 
             // Use a slight delay to ensure everything is rendered
             setTimeout(() => {
