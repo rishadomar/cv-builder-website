@@ -19,11 +19,12 @@ interface CoachMarkOptions {
 }
 
 const defaultOptions: CoachMarkOptions = {
-    position: 'bottom',
+    position: 'top',
     style: 'speech',
     offset: 12,
     showCloseButton: true,
-    zIndex: 1000,
+    autoClose: 8000,
+    zIndex: 2000,
     arrow: true,
     maxWidth: '280px' // Default max width
 };

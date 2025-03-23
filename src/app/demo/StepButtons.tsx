@@ -67,14 +67,13 @@ export function StepButtons({
                         >
                             <Home className='h-4 w-4' />
                         </Button>
-                        <div className='flex items-center justify-end h-full space-x-4'>
+                        <div className='flex items-center justify-end h-full space-x-3'>
                             <Button
                                 disabled={!onPrevious || typing || !completed}
                                 variant='outline'
                                 name='previous'
                                 type={asSubmit ? 'submit' : 'button'}
                                 onClick={asSubmit || !onPrevious ? undefined : () => onPrevious()}
-                                className='mr-4'
                                 {...prevButtonProps}
                             >
                                 <ChevronLeft className='mr-2 h-4 w-4' />

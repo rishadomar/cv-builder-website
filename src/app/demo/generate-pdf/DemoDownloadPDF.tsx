@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ExternalLink, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter } from '@/components/ui/card';
@@ -8,6 +8,7 @@ import { useLazyDownloadSamplePDFQuery } from '@/lib/store/api/pdfApiSlice';
 import { toast } from '@/hooks/use-toast';
 import { getStep } from '@/lib/utils/demoStep';
 import { StepButtons } from '../StepButtons';
+import { useCoachMarkContext } from '@/contexts/CoachMarkContext';
 
 type DemoDownloadPDFProps = {
     onRestartDemo: () => void;
@@ -15,9 +16,29 @@ type DemoDownloadPDFProps = {
 };
 
 export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoDownloadPDFProps) {
+    const { showCoachMark, hideCoachMark } = useCoachMarkContext();
+    const coachMarkShownRef = useRef(false);
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('download-pdf');
     const [downloadSamplePDFTrigger] = useLazyDownloadSamplePDFQuery();
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            showCoachMark(
+                'download-pdf-button', // ID of the element to highlight
+                <div>
+                    <p className='text-xs'>Download a sample PDF</p>
+                </div>,
+                {
+                    position: 'bottom'
+                }
+            );
+        }, 1000);
+        return () => {
+            clearTimeout(timeoutId);
+            hideCoachMark(); // Hide coach mark when navigating away
+        };
+    }, []);
 
     const handlePDF = async (action: 'download' | 'open') => {
         try {
@@ -83,7 +104,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
     };
 
     return (
-        <>
+        <div className='mt-14'>
             <StepContainer step={step}>
                 <div className='flex items-center justify-center min-h-[50vh]'>
                     <Card className='w-full max-w-md p-2'>
@@ -101,6 +122,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                                 If opening in a new tab doesn&apos;t work, try downloading the PDF instead.
                             </span>
                             <Button
+                                id='download-pdf-button'
                                 className='w-full'
                                 variant='secondary'
                                 onClick={() => handlePDF('download')}
@@ -115,6 +137,6 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
             </StepContainer>
 
             <StepButtons asSubmit={false} onRestartDemo={onRestartDemo} onReturnToHome={onReturnToHome} />
-        </>
+        </div>
     );
 }

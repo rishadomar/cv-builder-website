@@ -25,13 +25,7 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
                 'next-button', // ID of the element to highlight
                 <div>
                     <p className='text-xs'>Click next to start the demo.</p>
-                </div>,
-                {
-                    position: 'top',
-                    style: 'speech',
-                    autoClose: 8000,
-                    zIndex: 2000
-                }
+                </div>
             );
         }, 5000);
         return () => {

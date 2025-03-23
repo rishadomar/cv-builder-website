@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -13,6 +13,7 @@ import TextareaFormField from '@/app/builder/TextareaFormField';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
 import { AIIcon } from '@/components/AIIcon';
 import { AudioPlayer } from '@/components/core/AudioPlayer';
+import { useCoachMarkContext } from '@/contexts/CoachMarkContext';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -27,6 +28,9 @@ type TopSkillsFormProps = {
 };
 
 export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }: TopSkillsFormProps) {
+    const { showCoachMark, hideCoachMark } = useCoachMarkContext();
+    const coachMarkShownRef = useRef(false);
+
     const formHook = useForm<TopSkillsFormValues>({
         resolver: zodResolver(topSkillsFormSchema)
     });
@@ -51,6 +55,30 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
             setIsGeneratingText(true);
         }, 500);
     }, []);
+
+    useEffect(() => {
+        if (completed && !typing && !coachMarkShownRef.current) {
+            coachMarkShownRef.current = true; // Prevent showing multiple times
+            console.log('Form completed. Starting timeout for coach mark...');
+
+            // Use a slight delay to ensure everything is rendered
+            setTimeout(() => {
+                showCoachMark(
+                    'audio-player-toggle-play', // ID of the element to highlight
+                    <div>
+                        <p className='text-sm'>Listen to a sample AI generated conversation</p>
+                    </div>
+                );
+            }, 500);
+        }
+    }, [completed, typing]);
+
+    // Clean up coach marks when component unmounts
+    useEffect(() => {
+        return () => {
+            hideCoachMark(); // Hide coach mark when navigating away
+        };
+    }, [hideCoachMark]);
 
     async function onSubmit(event?: React.BaseSyntheticEvent) {
         event?.preventDefault(); // Prevent form submission immediately
@@ -98,9 +126,7 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                         </div>
                         {completed && (
                             <div className='border border-gray-200 rounded-lg p-4 mt-4'>
-                                <div className='text-xs'>
-                                    Listen to a sample conversation of AI generated conversation
-                                </div>
+                                <div className='text-xs'>A sample conversation of AI generated conversation</div>
                                 <AudioPlayer src='/audio/sample-topskills-discussion.mp3' className='mt-4' />
                             </div>
                         )}

@@ -60,8 +60,13 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
 
             // Use a slight delay to ensure everything is rendered
             setTimeout(() => {
-                console.log('Showing coach mark for next button');
-                showNextButtonCoachMark();
+                showCoachMark(
+                    'next-button', // ID of the element to highlight
+                    <div>
+                        <p className='text-sm'>Details are complete!</p>
+                        <p className='text-xs mt-1'>Click next to continue the demo.</p>
+                    </div>
+                );
             }, 500);
         }
     }, [completed, typing]);
@@ -73,21 +78,7 @@ export default function DemoContactDetailsForm({ onNext, onReturnToHome }: Conta
         };
     }, [hideCoachMark]);
 
-    const showNextButtonCoachMark = () => {
-        showCoachMark(
-            'next-button', // ID of the element to highlight
-            <div>
-                <p className='text-sm'>Details are complete!</p>
-                <p className='text-xs mt-1'>Click next to continue the demo.</p>
-            </div>,
-            {
-                position: 'top',
-                style: 'speech',
-                autoClose: 8000,
-                zIndex: 2000
-            }
-        );
-    };
+    const showNextButtonCoachMark = () => {};
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         event?.preventDefault(); // Prevent form submission immediately

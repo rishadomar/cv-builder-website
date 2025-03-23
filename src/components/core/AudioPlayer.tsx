@@ -109,6 +109,7 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
                 <>
                     <div className='flex items-center space-x-2'>
                         <Button
+                            id='audio-player-toggle-play'
                             type='button'
                             variant='ghost'
                             size='sm'
