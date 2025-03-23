@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StepButtons } from '@/app/demo/StepButtons';
 import { StepContainer } from '@/components/StepContainer';
 import { getStep } from '@/lib/utils/demoStep';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, PlayCircle, MousePointer, Sparkles } from 'lucide-react';
+import { useCoachMarkContext } from '@/contexts/CoachMarkContext';
 
 type DemoIntroductionProps = {
     onNext: () => void;
@@ -13,7 +14,34 @@ type DemoIntroductionProps = {
 };
 
 export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntroductionProps) {
+    const { showCoachMark, hideCoachMark } = useCoachMarkContext();
+    const coachMarkShownRef = useRef(false);
+
     const step = getStep('introduction');
+
+    useEffect(() => {
+        setTimeout(() => {
+            showCoachMark(
+                'next-button', // ID of the element to highlight
+                <div>
+                    <p className='text-sm mt-1'>Click next to start the demo.</p>
+                </div>,
+                {
+                    position: 'top',
+                    style: 'speech',
+                    autoClose: 8000,
+                    zIndex: 2000
+                }
+            );
+        }, 5000);
+    }, []);
+
+    // Clean up coach marks when component unmounts
+    useEffect(() => {
+        return () => {
+            hideCoachMark(); // Hide coach mark when navigating away
+        };
+    }, [hideCoachMark]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         event?.preventDefault(); // Prevent form submission immediately
