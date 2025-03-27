@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DemoIntroduction from './introduction/DemoIntroduction';
+import DemoTopSkillsForm from './topskills/DemoTopSkillsForm';
 import DemoContactDetailsForm from './contact-details/DemoContactDetails';
 import DemoPersonalityDetailsForm from './personality-details/DemoPersonalityDetailsForm';
-import DemoTopSkillsForm from './topskills/DemoTopSkillsForm';
 import DemoDownloadPDF from './generate-pdf/DemoDownloadPDF';
-import { CoachMarkProvider } from '@/contexts/CoachMarkContext';
 
 export default function DemoPage() {
     const [currentStep, setCurrentStep] = useState('introduction');
@@ -28,7 +27,7 @@ export default function DemoPage() {
             case 'personality-details':
                 setCurrentStep('top-skills');
                 break;
-            case 'top-skills':
+             case 'top-skills':
                 setCurrentStep('download-pdf');
                 break;
             case 'download-pdf':
@@ -45,40 +44,36 @@ export default function DemoPage() {
     };
 
     return (
-        <CoachMarkProvider>
-            <div className='min-h-screen bg-background'>
-                {currentStep === 'introduction' && (
-                    <DemoIntroduction onNext={goToNextStep} onReturnToHome={returnToHome} />
-                )}
+        <div className='min-h-screen bg-background'>
+            {currentStep === 'introduction' && <DemoIntroduction onNext={goToNextStep} onReturnToHome={returnToHome} />}
 
-                {currentStep === 'contact-details' && (
-                    <DemoContactDetailsForm
-                        onPrevious={() => goToStep('introduction')}
-                        onNext={goToNextStep}
-                        onReturnToHome={returnToHome}
-                    />
-                )}
+            {currentStep === 'contact-details' && (
+                <DemoContactDetailsForm
+                    onPrevious={() => goToStep('introduction')}
+                    onNext={goToNextStep}
+                    onReturnToHome={returnToHome}
+                />
+            )}
 
-                {currentStep === 'personality-details' && (
-                    <DemoPersonalityDetailsForm
-                        onNext={goToNextStep}
-                        onPrevious={() => goToStep('contact-details')}
-                        onReturnToHome={returnToHome}
-                    />
-                )}
+            {currentStep === 'personality-details' && (
+                <DemoPersonalityDetailsForm
+                    onNext={goToNextStep}
+                    onPrevious={() => goToStep('contact-details')}
+                    onReturnToHome={returnToHome}
+                />
+            )}
 
-                {currentStep === 'top-skills' && (
-                    <DemoTopSkillsForm
-                        onNext={goToNextStep}
-                        onPrevious={() => goToStep('personality-details')}
-                        onReturnToHome={returnToHome}
-                    />
-                )}
+            {currentStep === 'top-skills' && (
+                <DemoTopSkillsForm
+                    onNext={goToNextStep}
+                    onPrevious={() => goToStep('personality-details')}
+                    onReturnToHome={returnToHome}
+                />
+            )}
 
-                {currentStep === 'download-pdf' && (
-                    <DemoDownloadPDF onRestartDemo={() => goToStep('contact-details')} onReturnToHome={returnToHome} />
-                )}
-            </div>
-        </CoachMarkProvider>
+            {currentStep === 'download-pdf' && (
+                <DemoDownloadPDF onRestartDemo={() => goToStep('contact-details')} onReturnToHome={returnToHome} />
+            )}
+        </div>
     );
 }

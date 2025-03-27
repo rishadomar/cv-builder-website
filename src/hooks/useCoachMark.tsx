@@ -29,8 +29,9 @@ const defaultOptions: CoachMarkOptions = {
     maxWidth: '280px' // Default max width
 };
 
-export function useCoachMark() {
-    const [activeCoachMark, setActiveCoachMark] = useState<string | null>(null);
+export function useCoachMark(initialVisible = false) {
+    const [isVisible, setIsVisible] = useState(initialVisible);
+    const [targetElementId, setTargetElementId] = useState<string | null>(null);
     const [message, setMessage] = useState<React.ReactNode>(null);
     const [options, setOptions] = useState<CoachMarkOptions>(defaultOptions);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -46,55 +47,48 @@ export function useCoachMark() {
     // Function to show the coachmark
     const showCoachMark = useCallback(
         (elementId: string, content: React.ReactNode, customOptions?: CoachMarkOptions) => {
-            // Clear any existing timeout first
             clearCoachMarkTimeout();
-
-            // Set the message and options
+            setTargetElementId(elementId);
             setMessage(content);
             setOptions((prev) => ({ ...prev, ...(customOptions || {}) }));
-            setActiveCoachMark(elementId);
-
-            // Set auto-close timeout if specified
-            if (customOptions?.autoClose) {
+            setIsVisible(true);
+            
+            // Set up auto-close timeout if specified
+            const autoCloseDelay = customOptions?.autoClose || options.autoClose;
+            if (autoCloseDelay) {
                 timeoutRef.current = setTimeout(() => {
                     hideCoachMark();
-                }, customOptions.autoClose);
+                }, autoCloseDelay);
             }
-
-            // Verify element exists after state update
-            setTimeout(() => {
-                const targetElement = document.getElementById(elementId);
-                if (!targetElement) {
-                    console.warn(`[CoachMark] Warning: Target element with ID "${elementId}" not found`);
-                }
-            }, 0);
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [clearCoachMarkTimeout]
+        [clearCoachMarkTimeout, options.autoClose]
     );
 
     // Function to hide the coachmark
     const hideCoachMark = useCallback(() => {
         clearCoachMarkTimeout();
-        setActiveCoachMark(null);
+        setIsVisible(false);
+        
+        // Optional: If you want to completely reset the state after it's hidden
+        // setTimeout(() => {
+        //     setTargetElementId(null);
+        //     setMessage(null);
+        // }, 300); // Matches your transition duration
     }, [clearCoachMarkTimeout]);
 
     // Clean up on unmount
     useEffect(() => {
-        return () => {
-            clearCoachMarkTimeout();
-        };
+        return clearCoachMarkTimeout;
     }, [clearCoachMarkTimeout]);
 
-    // The actual CoachMark component that will be rendered
-    const CoachMark = useCallback(() => {
-        if (!activeCoachMark) {
+    const CoachMarkComponent = useCallback(() => {
+        if (!isVisible || !targetElementId || !message) {
             return null;
         }
 
-        const targetElement = document.getElementById(activeCoachMark);
+        const targetElement = document.getElementById(targetElementId);
         if (!targetElement) {
-            console.error(`[CoachMark] Error: Target element with ID "${activeCoachMark}" not found during render`);
+            console.error(`[CoachMark] Error: Target element with ID "${targetElementId}" not found during render`);
             return null;
         }
 
@@ -328,12 +322,12 @@ export function useCoachMark() {
             </div>,
             document.body
         );
-    }, [activeCoachMark, message, options, hideCoachMark]);
+    }, [isVisible, targetElementId, message, options, hideCoachMark]);
 
     // Add a window resize handler to reposition the coachmark
     useEffect(() => {
         const handleResize = () => {
-            if (activeCoachMark) {
+            if (isVisible) {
                 // Trigger a re-render by updating options slightly
                 setOptions((prev) => ({ ...prev }));
             }
@@ -343,13 +337,12 @@ export function useCoachMark() {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [activeCoachMark]);
+    }, [isVisible]);
 
     return {
+        isVisible,
         showCoachMark,
         hideCoachMark,
-        CoachMark,
-        isActive: !!activeCoachMark,
-        activeElement: activeCoachMark
+        CoachMark: CoachMarkComponent
     };
 }

@@ -45,6 +45,7 @@ export function StepButtons({
                             Restart demo
                         </Button>
                         <Button
+                            id='return-home-button'
                             variant='default'
                             name='home'
                             type='button'

@@ -12,8 +12,8 @@ import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
 import { AIIcon } from '@/components/AIIcon';
-import { AudioPlayer } from '@/components/core/AudioPlayer';
-import { useCoachMarkContext } from '@/contexts/CoachMarkContext';
+import { AudioPlayerDemo } from './AudioPlayerDemo';
+import { useCoachMark } from '@/hooks/useCoachMark';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -28,8 +28,8 @@ type TopSkillsFormProps = {
 };
 
 export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }: TopSkillsFormProps) {
-    const { showCoachMark, hideCoachMark } = useCoachMarkContext();
-    const coachMarkShownRef = useRef(false);
+    // Create an independent coach mark for the "next" button
+    const nextButtonCoachMark = useCoachMark();
 
     const formHook = useForm<TopSkillsFormValues>({
         resolver: zodResolver(topSkillsFormSchema)
@@ -40,16 +40,14 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
     const demoData = {
         topSkills:
             '[PRIMARY SKILLS]\n' +
-            '- Culinary Expertise (Expert) - Demonstrated through spearheading traditional African cuisine preparations and assisting the head chef in preparing and executing complex dishes. Consistently received accolades for taste and presentation.\n' +
+            '- Culinary Expertise (Expert) - Demonstrated through spearheading traditional African cuisine preparations and assisting the head chef ...\n' +
             '\n' +
-            '- Time Management (Advanced) - Highlighted by playing a pivotal role during peak weekend and night shifts and managing kitchen operations efficiently.\n' +
-            '\n' +
-            'etc...'
+            '- Time Management (Advanced) - Highlighted by playing a pivotal role during peak weekend and night shifts ...'
     };
 
     const { typing, completed } = useTypewriterEffect(formHook, demoData, {
         initialDelay: 1000,
-        typeDelay: 50,
+        typeDelay: 20,
         fieldDelay: 800,
         onComplete: () => {
             console.log('All fields filled!');
@@ -57,34 +55,24 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
     });
 
     useEffect(() => {
-        setTimeout(() => {
-            setIsGeneratingText(true);
-        }, 500);
-    }, []);
-
-    useEffect(() => {
-        if (completed && !typing && !coachMarkShownRef.current) {
-            coachMarkShownRef.current = true; // Prevent showing multiple times
-            console.log('Form completed. Starting timeout for coach mark...');
-
-            // Use a slight delay to ensure everything is rendered
-            setTimeout(() => {
-                showCoachMark(
-                    'audio-player-toggle-play', // ID of the element to highlight
-                    <div>
-                        <p className='text-sm'>Listen to a sample AI generated conversation</p>
-                    </div>
-                );
-            }, 500);
+        if (completed && !typing) {
+            // Show coach mark for next button when typing is completed
+            nextButtonCoachMark.showCoachMark(
+                'next-button',
+                <div>
+                    <p className='text-sm'>Top skills identified</p>
+                    <p className='text-xs mt-1'>Click next to download your CV</p>
+                </div>
+            );
         }
-    }, [completed, typing, showCoachMark]);
+    }, [completed, typing, nextButtonCoachMark.showCoachMark]);
 
-    // Clean up coach marks when component unmounts
+    // Clean up on unmount
     useEffect(() => {
         return () => {
-            hideCoachMark(); // Hide coach mark when navigating away
+            nextButtonCoachMark.hideCoachMark();
         };
-    }, [hideCoachMark]);
+    }, [nextButtonCoachMark.hideCoachMark]);
 
     async function onSubmit(event?: React.BaseSyntheticEvent) {
         event?.preventDefault(); // Prevent form submission immediately
@@ -127,15 +115,10 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                                 formHook={formHook}
                                 fieldName='topSkills'
                                 placeholder='AI generated text will appear here'
-                                rows={8}
+                                rows={10}
                             />
                         </div>
-                        {completed && (
-                            <div className='border border-gray-200 rounded-lg p-4 mt-4'>
-                                <div className='text-xs'>A sample conversation of AI generated conversation</div>
-                                <AudioPlayer src='/audio/sample-topskills-discussion.mp3' className='mt-4' />
-                            </div>
-                        )}
+                        <AudioPlayerDemo />
                     </StepContainer>
                     <StepButtons
                         onPrevious={onPrevious}
@@ -146,6 +129,8 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                     />
                 </form>
             </Form>
+            {/* Render the coach mark component in your component */}
+            <nextButtonCoachMark.CoachMark />
         </>
     );
 }

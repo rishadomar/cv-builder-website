@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ExternalLink, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { useLazyDownloadSamplePDFQuery } from '@/lib/store/api/pdfApiSlice';
 import { toast } from '@/hooks/use-toast';
 import { getStep } from '@/lib/utils/demoStep';
 import { StepButtons } from '../StepButtons';
-import { useCoachMarkContext } from '@/contexts/CoachMarkContext';
+import { useCoachMark } from '@/hooks/useCoachMark';
 
 type DemoDownloadPDFProps = {
     onRestartDemo: () => void;
@@ -16,29 +16,55 @@ type DemoDownloadPDFProps = {
 };
 
 export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoDownloadPDFProps) {
-    const { showCoachMark, hideCoachMark } = useCoachMarkContext();
+    const downloadButtonCoachMark = useCoachMark();
+    const nextButtonCoachMark = useCoachMark();
+    const [pdfActionCompleted, setPdfActionCompleted] = useState(false);
     const isLoading = useAppSelector((state) => state.loading.isLoading);
     const step = getStep('download-pdf');
     const [downloadSamplePDFTrigger] = useLazyDownloadSamplePDFQuery();
 
+    // Initial coach mark for download button
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            showCoachMark(
+            downloadButtonCoachMark.showCoachMark(
                 'download-pdf-button', // ID of the element to highlight
                 <div>
-                    <p className='text-xs'>Download a sample PDF</p>
+                    <p className='text-sm'>Download a sample PDF</p>
                 </div>,
-                {
-                    position: 'bottom'
-                }
+                { position: 'bottom' }
             );
         }, 1000);
+        
         return () => {
             clearTimeout(timeoutId);
-            hideCoachMark(); // Hide coach mark when navigating away
+            downloadButtonCoachMark.hideCoachMark();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Show second coach mark when PDF action completes
+    useEffect(() => {
+        if (pdfActionCompleted) {
+            // Hide the first coach mark
+            downloadButtonCoachMark.hideCoachMark();
+            
+            // Show the next button coach mark after a small delay
+            const timeoutId = setTimeout(() => {
+                nextButtonCoachMark.showCoachMark(
+                    'return-home-button', // ID of the element to highlight
+                    <div>
+                        <p className='text-sm'>Thank you for completing the demo.</p>
+                        <p className='text-xs mt-1'>You can restart it or return home.</p>
+                    </div>,
+                    { position: 'top' }
+                );
+            }, 1500); // Short delay after toast appears
+            
+            return () => {
+                clearTimeout(timeoutId);
+                nextButtonCoachMark.hideCoachMark();
+            };
+        }
+    }, [pdfActionCompleted]);
 
     const handlePDF = async (action: 'download' | 'open') => {
         try {
@@ -62,12 +88,9 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                 }
 
                 // Cleanup
-                // For downloads, we can revoke immediately
-                // For opening in new tab, we need to delay the cleanup
                 if (action === 'download') {
                     window.URL.revokeObjectURL(url);
                 } else {
-                    // Delay revoking the object URL to ensure the PDF loads in the new tab
                     setTimeout(() => {
                         window.URL.revokeObjectURL(url);
                     }, 1000);
@@ -78,6 +101,9 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                     title: 'Success',
                     description: `PDF ${action === 'download' ? 'downloaded' : 'opened'} successfully`
                 });
+                
+                // Set state to trigger second coach mark
+                setPdfActionCompleted(true);
             } else {
                 throw new Error('Invalid PDF format');
             }
@@ -136,7 +162,15 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                 </div>
             </StepContainer>
 
-            <StepButtons asSubmit={false} onRestartDemo={onRestartDemo} onReturnToHome={onReturnToHome} />
+            <StepButtons 
+                asSubmit={false} 
+                onRestartDemo={onRestartDemo} 
+                onReturnToHome={onReturnToHome} 
+            />
+            
+            {/* Render both coach marks */}
+            <downloadButtonCoachMark.CoachMark />
+            <nextButtonCoachMark.CoachMark />
         </div>
     );
 }

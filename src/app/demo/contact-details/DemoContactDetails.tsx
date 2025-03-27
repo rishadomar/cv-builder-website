@@ -8,9 +8,9 @@ import { StepButtons } from '@/app/demo/StepButtons';
 import TextFormField from '@/app/builder/TextFormField';
 import { StepContainer } from '@/components/StepContainer';
 import { useTypewriterEffect } from '@/hooks/useTypewriterEffect';
-import { useCoachMarkContext } from '@/contexts/CoachMarkContext';
 import { getStep } from '@/lib/utils/demoStep';
 import { useEffect, useRef } from 'react';
+import { useCoachMark } from '@/hooks/useCoachMark';
 
 const contactDetailsFormSchema = z.object({
     name: z.string().default(''),
@@ -27,9 +27,8 @@ type ContactDetailsFormProps = {
 };
 
 export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToHome }: ContactDetailsFormProps) {
-    // Use the context instead of direct hook
-    const { showCoachMark, hideCoachMark } = useCoachMarkContext();
-    const coachMarkShownRef = useRef(false);
+    const nextButtonCoachMark = useCoachMark();
+    const coachMarkRendered = useRef(false);
 
     const formHook = useForm<ContactDetailsFormValues>({
         resolver: zodResolver(contactDetailsFormSchema)
@@ -55,28 +54,17 @@ export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToH
     });
 
     useEffect(() => {
-        if (completed && !typing && !coachMarkShownRef.current) {
-            coachMarkShownRef.current = true; // Prevent showing multiple times
-
-            // Use a slight delay to ensure everything is rendered
-            setTimeout(() => {
-                showCoachMark(
-                    'next-button', // ID of the element to highlight
-                    <div>
-                        <p className='text-sm'>Details are complete!</p>
-                        <p className='text-xs mt-1'>Click next to continue the demo.</p>
-                    </div>
-                );
-            }, 500);
+        if (completed && !typing && !coachMarkRendered.current) {
+            coachMarkRendered.current = true;
+            nextButtonCoachMark.showCoachMark(
+                'next-button', // ID of the element to highlight
+                <div>
+                    <p className='text-sm'>Contact details are complete!</p>
+                    <p className='text-xs mt-1'>Click next to describe your personality</p>
+                </div>
+            );
         }
-    }, [completed, typing, showCoachMark]);
-
-    // Clean up coach marks when component unmounts
-    useEffect(() => {
-        return () => {
-            hideCoachMark(); // Hide coach mark when navigating away
-        };
-    }, [hideCoachMark]);
+    }, [completed, typing, nextButtonCoachMark]);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
         event?.preventDefault(); // Prevent form submission immediately
@@ -99,42 +87,45 @@ export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToH
     };
 
     return (
-        <Form {...formHook}>
-            <form onSubmit={onSubmit}>
-                <StepContainer step={step}>
-                    <TextFormField
-                        formHook={formHook}
-                        label='Name'
-                        fieldName='name'
-                        description='This is the name that will be displayed on your profile and in emails.'
-                        placeholder='Your name'
-                    />
+        <>
+            <Form {...formHook}>
+                <form onSubmit={onSubmit}>
+                    <StepContainer step={step}>
+                        <TextFormField
+                            formHook={formHook}
+                            label='Name'
+                            fieldName='name'
+                            description='This is the name that will be displayed on your profile and in emails.'
+                            placeholder='Your name'
+                        />
 
-                    <TextFormField
-                        formHook={formHook}
-                        label='Professional title'
-                        fieldName='professionalTitle'
-                        description='This is your current job title.'
-                        placeholder='Your professional title'
-                    />
+                        <TextFormField
+                            formHook={formHook}
+                            label='Professional title'
+                            fieldName='professionalTitle'
+                            description='This is your current job title.'
+                            placeholder='Your professional title'
+                        />
 
-                    <TextFormField
-                        formHook={formHook}
-                        label='Contact number'
-                        fieldName='phoneNumber'
-                        placeholder='Your contact number'
-                    />
-                </StepContainer>
+                        <TextFormField
+                            formHook={formHook}
+                            label='Contact number'
+                            fieldName='phoneNumber'
+                            placeholder='Your contact number'
+                        />
+                    </StepContainer>
 
-                <StepButtons
-                    onNext={onNext}
-                    onPrevious={onPrevious}
-                    typing={typing}
-                    completed={completed}
-                    onReturnToHome={onReturnToHome}
-                    nextButtonProps={{ id: 'next-button' }}
-                />
-            </form>
-        </Form>
+                    <StepButtons
+                        onNext={onNext}
+                        onPrevious={onPrevious}
+                        typing={typing}
+                        completed={completed}
+                        onReturnToHome={onReturnToHome}
+                        nextButtonProps={{ id: 'next-button' }}
+                    />
+                </form>
+            </Form>
+            <nextButtonCoachMark.CoachMark />
+        </>
     );
 }
