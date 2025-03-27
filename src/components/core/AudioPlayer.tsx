@@ -8,9 +8,11 @@ import { Button } from '@/components/ui/button';
 
 interface AudioPlayerProps extends React.HTMLAttributes<HTMLDivElement> {
     src: string;
+    onStartPlaying?: () => void;
+    onEndPlaying?: () => void;
 }
 
-export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
+export function AudioPlayer({ src, onStartPlaying, onEndPlaying, className, ...props }: AudioPlayerProps) {
     const [playing, setPlaying] = React.useState(false);
     const [currentTime, setCurrentTime] = React.useState(0);
     const [duration, setDuration] = React.useState(0);
@@ -32,6 +34,7 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
         audio.addEventListener('ended', () => {
             setPlaying(false);
             setCurrentTime(0);
+            onEndPlaying ? onEndPlaying() : null;
         });
         audio.addEventListener('error', () => {
             setError(true);
@@ -40,6 +43,20 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
 
         return () => {
             // Cleanup event listeners
+            audio.removeEventListener('timeupdate', () => setCurrentTime(audio.currentTime));
+            audio.removeEventListener('loadedmetadata', () => {
+                setDuration(audio.duration);
+                setLoading(false);
+            });
+            audio.removeEventListener('ended', () => {
+                setPlaying(false);
+                setCurrentTime(0);
+                onEndPlaying ? onEndPlaying() : null;
+            });
+            audio.removeEventListener('error', () => {
+                setError(true);
+                setLoading(false);
+            });
         };
     }, []);
 
@@ -51,6 +68,7 @@ export function AudioPlayer({ src, className, ...props }: AudioPlayerProps) {
             audio.pause();
         } else {
             audio.play();
+            onStartPlaying ? onStartPlaying() : null;
         }
         setPlaying(!playing);
     };
