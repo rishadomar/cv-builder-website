@@ -29,7 +29,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
             downloadButtonCoachMark.showCoachMark(
                 'download-pdf-button', // ID of the element to highlight
                 <div>
-                    <p className='text-sm'>Download a sample PDF</p>
+                    <p className='text-xs'>Download a sample PDF</p>
                 </div>,
                 { position: 'bottom' }
             );

@@ -1,16 +1,17 @@
 import { AudioPlayer } from '@/components/core/AudioPlayer';
 import { useCoachMark } from '@/hooks/useCoachMark';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-export const AudioPlayerDemo = () => {
+type AudioPlayerDemoProps = {
+    onEndPlaying?: () => void;
+};
+export const AudioPlayerDemo = ({ onEndPlaying }: AudioPlayerDemoProps) => {
     // Create an independent coach mark for the audio player
     const audioCoachMark = useCoachMark();
-    const [readyToLoadAudio, setReadyToLoadAudio] = useState(false);
 
     useEffect(() => {
         // Show coach mark after a delay
         const timer = setTimeout(() => {
-            setReadyToLoadAudio(true);
             audioCoachMark.showCoachMark(
                 'audio-player-toggle-play', 
                 <div>
@@ -28,10 +29,9 @@ export const AudioPlayerDemo = () => {
             <AudioPlayer
                 src='/audio/sample-topskills-discussion.mp3'
                 onStartPlaying={() => audioCoachMark.hideCoachMark()}
+                onEndPlaying={onEndPlaying}
                 className='mt-4'
             />
-            
-            {/* Render the coach mark component */}
             <audioCoachMark.CoachMark />
         </div>
     );

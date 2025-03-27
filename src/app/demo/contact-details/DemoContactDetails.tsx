@@ -121,7 +121,6 @@ export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToH
                         typing={typing}
                         completed={completed}
                         onReturnToHome={onReturnToHome}
-                        nextButtonProps={{ id: 'next-button' }}
                     />
                 </form>
             </Form>

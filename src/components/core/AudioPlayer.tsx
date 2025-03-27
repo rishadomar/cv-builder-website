@@ -34,7 +34,9 @@ export function AudioPlayer({ src, onStartPlaying, onEndPlaying, className, ...p
         audio.addEventListener('ended', () => {
             setPlaying(false);
             setCurrentTime(0);
-            onEndPlaying ? onEndPlaying() : null;
+            if (onEndPlaying) {
+                onEndPlaying();
+            }
         });
         audio.addEventListener('error', () => {
             setError(true);
@@ -51,7 +53,9 @@ export function AudioPlayer({ src, onStartPlaying, onEndPlaying, className, ...p
             audio.removeEventListener('ended', () => {
                 setPlaying(false);
                 setCurrentTime(0);
-                onEndPlaying ? onEndPlaying() : null;
+                if (onEndPlaying) {
+                    onEndPlaying();
+                 }
             });
             audio.removeEventListener('error', () => {
                 setError(true);
@@ -68,7 +72,9 @@ export function AudioPlayer({ src, onStartPlaying, onEndPlaying, className, ...p
             audio.pause();
         } else {
             audio.play();
-            onStartPlaying ? onStartPlaying() : null;
+            if (onStartPlaying) {
+                onStartPlaying();
+             }
         }
         setPlaying(!playing);
     };

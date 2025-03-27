@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -28,13 +28,12 @@ type TopSkillsFormProps = {
 };
 
 export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }: TopSkillsFormProps) {
-    // Create an independent coach mark for the "next" button
+    const [audioDone, setAudioDone] = useState(false);
     const nextButtonCoachMark = useCoachMark();
 
     const formHook = useForm<TopSkillsFormValues>({
         resolver: zodResolver(topSkillsFormSchema)
     });
-    const [isGeneratingText, setIsGeneratingText] = useState(false);
     const step = getStep('top-skills');
 
     const demoData = {
@@ -55,7 +54,7 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
     });
 
     useEffect(() => {
-        if (completed && !typing) {
+        if (completed && !typing && audioDone) {
             // Show coach mark for next button when typing is completed
             nextButtonCoachMark.showCoachMark(
                 'next-button',
@@ -65,7 +64,7 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                 </div>
             );
         }
-    }, [completed, typing, nextButtonCoachMark.showCoachMark]);
+    }, [completed, typing, audioDone, nextButtonCoachMark.showCoachMark]);
 
     // Clean up on unmount
     useEffect(() => {
@@ -99,7 +98,7 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                         <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                             <Button variant='outline' disabled={typing && !completed}>
                                 <AIIcon />
-                                {isGeneratingText && !completed ? (
+                                {!completed ? (
                                     <>
                                         <span>Generating...</span>
                                         <span className='animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full ml-2' />
@@ -118,13 +117,13 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                                 rows={10}
                             />
                         </div>
-                        <AudioPlayerDemo />
+                        <AudioPlayerDemo onEndPlaying={() => setAudioDone(true)}/>
                     </StepContainer>
                     <StepButtons
                         onPrevious={onPrevious}
                         onNext={onNext}
                         typing={typing}
-                        completed={completed}
+                        completed={completed && audioDone}
                         onReturnToHome={onReturnToHome}
                     />
                 </form>
