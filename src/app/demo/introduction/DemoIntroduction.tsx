@@ -30,6 +30,7 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
             clearTimeout(timeoutId);
             nextButtonCoachMark.hideCoachMark();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onSubmit = async (event?: React.BaseSyntheticEvent) => {
@@ -95,8 +96,8 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
                                         <div>
                                             <h3 className='font-medium'>Interactive Elements</h3>
                                             <p className='text-sm text-muted-foreground'>
-                                                At certain points, you&apos;ll be prompted to interact with the form. Clear
-                                                instructions will guide you on what to do next.
+                                                At certain points, you&apos;ll be prompted to interact with the form.
+                                                Clear instructions will guide you on what to do next.
                                             </p>
                                         </div>
                                     </div>
@@ -119,7 +120,7 @@ export default function DemoIntroduction({ onNext, onReturnToHome }: DemoIntrodu
                     <StepButtons onNext={onNext} typing={false} completed={true} onReturnToHome={onReturnToHome} />
                 </StepContainer>
             </form>
-            
+
             <nextButtonCoachMark.CoachMark />
         </>
     );

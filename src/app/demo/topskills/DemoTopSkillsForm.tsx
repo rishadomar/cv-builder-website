@@ -48,9 +48,7 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
         initialDelay: 1000,
         typeDelay: 20,
         fieldDelay: 800,
-        onComplete: () => {
-            console.log('All fields filled!');
-        }
+        onComplete: () => {}
     });
 
     useEffect(() => {
@@ -117,7 +115,7 @@ export default function DemoTopSkillsForm({ onNext, onPrevious, onReturnToHome }
                                 rows={10}
                             />
                         </div>
-                        <AudioPlayerDemo onEndPlaying={() => setAudioDone(true)}/>
+                        <AudioPlayerDemo onEndPlaying={() => setAudioDone(true)} />
                     </StepContainer>
                     <StepButtons
                         onPrevious={onPrevious}

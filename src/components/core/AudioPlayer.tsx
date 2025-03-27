@@ -55,13 +55,14 @@ export function AudioPlayer({ src, onStartPlaying, onEndPlaying, className, ...p
                 setCurrentTime(0);
                 if (onEndPlaying) {
                     onEndPlaying();
-                 }
+                }
             });
             audio.removeEventListener('error', () => {
                 setError(true);
                 setLoading(false);
             });
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const togglePlayPause = () => {
@@ -74,7 +75,7 @@ export function AudioPlayer({ src, onStartPlaying, onEndPlaying, className, ...p
             audio.play();
             if (onStartPlaying) {
                 onStartPlaying();
-             }
+            }
         }
         setPlaying(!playing);
     };

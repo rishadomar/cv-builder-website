@@ -67,7 +67,6 @@ export function useTypewriterEffect<
             if (completedRef.current) return;
 
             if (fieldIndex >= fields.length) {
-                // All fields completed
                 setTyping(false);
                 setCompleted(true);
                 completedRef.current = true;

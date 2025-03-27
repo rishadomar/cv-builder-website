@@ -34,11 +34,12 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                 { position: 'bottom' }
             );
         }, 1000);
-        
+
         return () => {
             clearTimeout(timeoutId);
             downloadButtonCoachMark.hideCoachMark();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Show second coach mark when PDF action completes
@@ -46,7 +47,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
         if (pdfActionCompleted) {
             // Hide the first coach mark
             downloadButtonCoachMark.hideCoachMark();
-            
+
             // Show the next button coach mark after a small delay
             const timeoutId = setTimeout(() => {
                 nextButtonCoachMark.showCoachMark(
@@ -58,12 +59,12 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                     { position: 'top' }
                 );
             }, 1500); // Short delay after toast appears
-            
+
             return () => {
                 clearTimeout(timeoutId);
                 nextButtonCoachMark.hideCoachMark();
             };
-        }
+        } // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pdfActionCompleted]);
 
     const handlePDF = async (action: 'download' | 'open') => {
@@ -101,7 +102,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                     title: 'Success',
                     description: `PDF ${action === 'download' ? 'downloaded' : 'opened'} successfully`
                 });
-                
+
                 // Set state to trigger second coach mark
                 setPdfActionCompleted(true);
             } else {
@@ -162,12 +163,8 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                 </div>
             </StepContainer>
 
-            <StepButtons 
-                asSubmit={false} 
-                onRestartDemo={onRestartDemo} 
-                onReturnToHome={onReturnToHome} 
-            />
-            
+            <StepButtons asSubmit={false} onRestartDemo={onRestartDemo} onReturnToHome={onReturnToHome} />
+
             {/* Render both coach marks */}
             <downloadButtonCoachMark.CoachMark />
             <nextButtonCoachMark.CoachMark />

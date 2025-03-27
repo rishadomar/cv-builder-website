@@ -47,10 +47,7 @@ export default function DemoContactDetailsForm({ onNext, onPrevious, onReturnToH
     const { typing, completed } = useTypewriterEffect(formHook, demoData, {
         initialDelay: 1000,
         typeDelay: 50,
-        fieldDelay: 800,
-        onComplete: () => {
-            console.log('All fields filled!');
-        }
+        fieldDelay: 800
     });
 
     useEffect(() => {
