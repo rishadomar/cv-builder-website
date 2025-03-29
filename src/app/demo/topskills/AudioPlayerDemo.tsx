@@ -16,7 +16,11 @@ export const AudioPlayerDemo = ({ onEndPlaying }: AudioPlayerDemoProps) => {
                 'audio-player-toggle-play',
                 <div>
                     <p className='text-sm'>Listen to a sample AI generated conversation</p>
-                </div>
+                </div>,
+                {
+                    autoClose: false,
+                    showCloseButton: false
+                }
             );
         }, 2000);
 

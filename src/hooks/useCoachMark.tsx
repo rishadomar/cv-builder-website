@@ -9,7 +9,7 @@ interface CoachMarkOptions {
     position?: CoachMarkPosition;
     style?: CoachMarkStyle;
     offset?: number;
-    autoClose?: number;
+    autoClose?: number | false;
     onClose?: () => void;
     showCloseButton?: boolean;
     className?: string;
@@ -53,9 +53,13 @@ export function useCoachMark(initialVisible = false) {
             setOptions((prev) => ({ ...prev, ...(customOptions || {}) }));
             setIsVisible(true);
 
-            // Set up auto-close timeout if specified
-            const autoCloseDelay = customOptions?.autoClose || options.autoClose;
-            if (autoCloseDelay) {
+            // Get the autoClose value from custom options if provided, otherwise from current options
+            const autoCloseDelay = customOptions?.hasOwnProperty('autoClose')
+                ? customOptions.autoClose
+                : options.autoClose;
+
+            // Only set timeout if autoClose is a number (not false)
+            if (autoCloseDelay !== false && typeof autoCloseDelay === 'number') {
                 timeoutRef.current = setTimeout(() => {
                     hideCoachMark();
                 }, autoCloseDelay);
