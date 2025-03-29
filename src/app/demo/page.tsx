@@ -27,7 +27,7 @@ export default function DemoPage() {
             case 'personality-details':
                 setCurrentStep('top-skills');
                 break;
-             case 'top-skills':
+            case 'top-skills':
                 setCurrentStep('download-pdf');
                 break;
             case 'download-pdf':
@@ -44,7 +44,7 @@ export default function DemoPage() {
     };
 
     return (
-        <div className='min-h-screen bg-background'>
+        <div className='bg-gray-50 py-12 sm:px-6 lg:px-8'>
             {currentStep === 'introduction' && <DemoIntroduction onNext={goToNextStep} onReturnToHome={returnToHome} />}
 
             {currentStep === 'contact-details' && (
