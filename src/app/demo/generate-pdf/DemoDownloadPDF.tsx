@@ -31,7 +31,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
                 <div>
                     <p className='text-xs'>Download a sample PDF</p>
                 </div>,
-                { position: 'bottom' }
+                { position: 'bottom', autoClose: false, showCloseButton: false }
             );
         }, 1000);
 
@@ -131,7 +131,7 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
     };
 
     return (
-        <div className='mt-14'>
+        <>
             <StepContainer step={step}>
                 <div className='flex items-center justify-center min-h-[50vh]'>
                     <Card className='w-full max-w-md p-2'>
@@ -168,6 +168,6 @@ export default function DemoDownloadPDF({ onRestartDemo, onReturnToHome }: DemoD
             {/* Render both coach marks */}
             <downloadButtonCoachMark.CoachMark />
             <nextButtonCoachMark.CoachMark />
-        </div>
+        </>
     );
 }
