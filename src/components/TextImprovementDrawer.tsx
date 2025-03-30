@@ -12,9 +12,8 @@ import {
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Wand2, ThumbsUp, RotateCcw, Loader2 } from 'lucide-react';
+import { Wand2, ThumbsUp, Loader2 } from 'lucide-react';
+import { AIIcon } from './AIIcon';
 
 const IMPROVEMENT_SUGGESTIONS = [
     'Make shorter',
@@ -28,12 +27,6 @@ const IMPROVEMENT_SUGGESTIONS = [
     'Simplify language'
 ];
 
-type ImprovementHistoryItem = {
-    type: 'original' | 'improvement';
-    prompt: string;
-    text: string;
-};
-
 type TextImprovementDrawerProps = {
     originalText: string;
     onSubmit: (userInput: string, originalText: string, isFinal?: boolean) => Promise<string>;
@@ -46,28 +39,22 @@ export function TextImprovementDrawer({
     triggerButtonText = 'Improve Text'
 }: TextImprovementDrawerProps) {
     const [userInput, setUserInput] = useState('');
+    const [currentText, setCurrentText] = useState(originalText);
     const [improvedText, setImprovedText] = useState('');
+    const [lastPrompt, setLastPrompt] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [activeView, setActiveView] = useState('input'); // "input" or "review"
-    const [improvementHistory, setImprovementHistory] = useState<ImprovementHistoryItem[]>([
-        { type: 'original', prompt: '', text: originalText }
-    ]);
+    const [showingImproved, setShowingImproved] = useState(false);
 
     const handleRequestImprovement = async () => {
         if (!userInput.trim()) return;
 
         setIsLoading(true);
+        setLastPrompt(userInput);
 
         try {
-            // In real implementation, call your API
-            const newText = await onSubmit(userInput, improvementHistory[improvementHistory.length - 1].text, false);
-
-            // Add to history
-            setImprovementHistory([...improvementHistory, { type: 'improvement', prompt: userInput, text: newText }]);
-
+            const newText = await onSubmit(userInput, currentText, false);
             setImprovedText(newText);
-            setUserInput('');
-            setActiveView('review');
+            setShowingImproved(true);
         } catch (error) {
             console.error('Error improving text:', error);
         } finally {
@@ -76,13 +63,14 @@ export function TextImprovementDrawer({
     };
 
     const handleAccept = () => {
-        // Close drawer and submit final text
-        onSubmit('', improvementHistory[improvementHistory.length - 1].text, true);
-        // Reset state for next time
-        setImprovedText('');
-        setUserInput('');
-        setActiveView('input');
-        setImprovementHistory([{ type: 'original', prompt: '', text: originalText }]);
+        // Apply the improved text
+        onSubmit('', improvedText, true);
+
+        // Reset the component state
+        reset();
+
+        // Close the drawer
+        document.querySelector<HTMLButtonElement>('.drawer-close-button')?.click();
     };
 
     const handleSuggestionClick = (suggestion: string) => {
@@ -90,40 +78,44 @@ export function TextImprovementDrawer({
     };
 
     const handleNewRequest = () => {
-        setActiveView('input');
+        // Update current text to the improved version
+        setCurrentText(improvedText);
+        setImprovedText('');
+        setUserInput('');
+        setShowingImproved(false);
     };
 
-    const handleReset = () => {
-        // Reset to original text
-        setImprovementHistory([{ type: 'original', prompt: '', text: originalText }]);
-        setActiveView('input');
+    const reset = () => {
+        setCurrentText(originalText);
+        setImprovedText('');
         setUserInput('');
+        setLastPrompt('');
+        setShowingImproved(false);
     };
 
     return (
-        <Drawer>
+        <Drawer onClose={reset}>
             <DrawerTrigger asChild>
-                <Button className='gap-2'>
-                    <Wand2 className='h-4 w-4' />
+                <Button variant='outline' className='w-full mt-3' size='sm'>
+                    <AIIcon />
                     {triggerButtonText}
                 </Button>
             </DrawerTrigger>
 
             <DrawerContent className='max-h-[90vh]'>
                 <div className='mx-auto w-full max-w-4xl'>
-                    <DrawerHeader>
+                    <DrawerHeader className='pb-2'>
                         <DrawerTitle>Improve Your Text</DrawerTitle>
-                        <DrawerDescription>
-                            I will help you improve your CV text until you're satisfied with it.
-                        </DrawerDescription>
+                        <DrawerDescription>I will help you improve your CV text.</DrawerDescription>
                     </DrawerHeader>
 
-                    <ScrollArea className='p-4 max-h-[60vh]'>
-                        {activeView === 'input' ? (
-                            <div className='space-y-4'>
+                    {/* Use a div with overflow-y-auto here instead of the ScrollArea component */}
+                    <div className='overflow-y-auto px-4 py-2' style={{ maxHeight: 'calc(90vh - 180px)' }}>
+                        {!showingImproved ? (
+                            <div className='space-y-4 pb-4'>
                                 <div className='bg-muted p-4 rounded-lg text-sm'>
                                     <h4 className='font-medium mb-2'>Current Text:</h4>
-                                    <p>{improvementHistory[improvementHistory.length - 1].text}</p>
+                                    <p>{currentText}</p>
                                 </div>
 
                                 <Textarea
@@ -133,7 +125,9 @@ export function TextImprovementDrawer({
                                     className='min-h-[100px]'
                                 />
 
-                                <div>
+                                <div className='pb-6'>
+                                    {' '}
+                                    {/* Added padding to ensure visibility */}
                                     <p className='text-sm text-muted-foreground mb-2'>Quick suggestions:</p>
                                     <div className='flex flex-wrap gap-2'>
                                         {IMPROVEMENT_SUGGESTIONS.map((suggestion) => (
@@ -151,75 +145,28 @@ export function TextImprovementDrawer({
                                 </div>
                             </div>
                         ) : (
-                            <div className='space-y-4'>
-                                <Tabs defaultValue='improved'>
-                                    <TabsList className='grid w-full grid-cols-2'>
-                                        <TabsTrigger value='previous'>Previous Version</TabsTrigger>
-                                        <TabsTrigger value='improved'>Improved Version</TabsTrigger>
-                                    </TabsList>
-                                    <TabsContent value='previous' className='p-4 bg-muted rounded-lg mt-2'>
-                                        <h4 className='font-medium mb-2'>Previous Text:</h4>
-                                        <p>
-                                            {improvementHistory.length > 1
-                                                ? improvementHistory[improvementHistory.length - 2].text
-                                                : originalText}
-                                        </p>
-                                    </TabsContent>
-                                    <TabsContent value='improved' className='p-4 bg-muted/50 border rounded-lg mt-2'>
-                                        <h4 className='font-medium mb-2'>Improved Text:</h4>
-                                        <p>{improvementHistory[improvementHistory.length - 1].text}</p>
-                                        <p className='text-xs text-muted-foreground mt-2'>
-                                            Improvement:{' '}
-                                            {improvementHistory.length > 1
-                                                ? improvementHistory[improvementHistory.length - 1].prompt
-                                                : 'Original'}
-                                        </p>
-                                    </TabsContent>
-                                </Tabs>
-
-                                <div className='pt-2'>
-                                    <h4 className='font-medium mb-2'>Improvement History:</h4>
-                                    <div className='space-y-2'>
-                                        {improvementHistory.map((item, index) => (
-                                            <div
-                                                key={index}
-                                                className={`p-2 text-xs rounded ${
-                                                    index === improvementHistory.length - 1
-                                                        ? 'bg-primary/10 border border-primary/30'
-                                                        : 'bg-muted'
-                                                }`}
-                                            >
-                                                <span className='font-medium'>
-                                                    {index === 0 ? 'Original' : `Change ${index}: ${item.prompt}`}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
+                            <div className='space-y-4 pb-4'>
+                                <div className='bg-muted/50 border p-4 rounded-lg'>
+                                    <h4 className='font-medium mb-2'>Improved Text:</h4>
+                                    <p>{improvedText}</p>
+                                    <p className='text-xs text-muted-foreground mt-2'>Improvement: {lastPrompt}</p>
                                 </div>
                             </div>
                         )}
-                    </ScrollArea>
+                    </div>
 
-                    <DrawerFooter>
-                        {activeView === 'input' ? (
-                            <>
-                                <Button onClick={handleRequestImprovement} disabled={!userInput.trim() || isLoading}>
-                                    {isLoading ? (
-                                        <>
-                                            <Loader2 className='h-4 w-4 mr-2 animate-spin' />
-                                            Improving...
-                                        </>
-                                    ) : (
-                                        'Improve Text'
-                                    )}
-                                </Button>
-                                {improvementHistory.length > 1 && (
-                                    <Button variant='outline' onClick={handleReset}>
-                                        <RotateCcw className='h-4 w-4 mr-2' />
-                                        Reset to Original
-                                    </Button>
+                    <DrawerFooter className='pt-2 border-t'>
+                        {!showingImproved ? (
+                            <Button onClick={handleRequestImprovement} disabled={!userInput.trim() || isLoading}>
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 className='h-4 w-4 mr-2 animate-spin' />
+                                        Improving...
+                                    </>
+                                ) : (
+                                    'Improve Text'
                                 )}
-                            </>
+                            </Button>
                         ) : (
                             <div className='flex flex-col gap-2 w-full'>
                                 <div className='grid grid-cols-2 gap-2'>
@@ -231,7 +178,7 @@ export function TextImprovementDrawer({
                                         Accept & Apply
                                     </Button>
                                 </div>
-                                <DrawerClose asChild>
+                                <DrawerClose asChild className='drawer-close-button' onClick={reset}>
                                     <Button variant='ghost'>Close Without Changes</Button>
                                 </DrawerClose>
                             </div>

@@ -110,6 +110,8 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
         });
     };
 
+    console.log('watchedPersonalityText', watchedPersonalityText);
+
     return (
         <>
             <Form {...formHook}>
@@ -137,6 +139,8 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
                                     variant='outline'
+                                    className='w-full'
+                                    size='sm'
                                     disabled={watchedPersonalityTraits?.length === 0 || isGeneratingPersonalityText}
                                     onClick={() => generateAiText()}
                                 >
@@ -152,28 +156,30 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                 placeholder='AI generated text will appear here'
                                 rows={watchedPersonalityText?.length > 0 ? 10 : 3}
                             />
-                            <TextImprovementDrawer
-                                originalText={watchedPersonalityText || ''}
-                                onSubmit={(userInput: string, originalText: string, isFinal?: boolean) => {
-                                    return new Promise<string>(async (resolve) => {
-                                        if (isFinal) {
-                                            formHook.setValue('personalityText', originalText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            resolve(originalText);
-                                        } else {
-                                            const newText = await improvePersonalityText({
-                                                traits: watchedPersonalityTraits,
-                                                previousText: originalText,
-                                                userInput: userInput
-                                            }).unwrap();
-                                            resolve(newText);
-                                        }
-                                    });
-                                }}
-                                triggerButtonText='Improve with AI'
-                            />
+                            {watchedPersonalityText && watchedPersonalityText.length > 0 && (
+                                <TextImprovementDrawer
+                                    originalText={watchedPersonalityText || ''}
+                                    onSubmit={(userInput: string, originalText: string, isFinal?: boolean) => {
+                                        return new Promise<string>(async (resolve) => {
+                                            if (isFinal) {
+                                                formHook.setValue('personalityText', originalText, {
+                                                    shouldValidate: true,
+                                                    shouldDirty: true
+                                                });
+                                                resolve(originalText);
+                                            } else {
+                                                const newText = await improvePersonalityText({
+                                                    traits: watchedPersonalityTraits,
+                                                    previousText: originalText,
+                                                    userInput: userInput
+                                                }).unwrap();
+                                                resolve(newText);
+                                            }
+                                        });
+                                    }}
+                                    triggerButtonText='Improve with AI'
+                                />
+                            )}
                             {/* <ImproveWithAIButton
                                 isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}
                                 disabled={!watchedPersonalityText || watchedPersonalityText.length === 0}
