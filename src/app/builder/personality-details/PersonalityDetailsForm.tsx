@@ -16,6 +16,7 @@ import { StepContainer } from '@/components/StepContainer';
 import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { AIIcon } from '@/components/AIIcon';
+import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -151,7 +152,29 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                 placeholder='AI generated text will appear here'
                                 rows={watchedPersonalityText?.length > 0 ? 10 : 3}
                             />
-                            <ImproveWithAIButton
+                            <TextImprovementDrawer
+                                originalText={watchedPersonalityText || ''}
+                                onSubmit={(userInput: string, originalText: string, isFinal?: boolean) => {
+                                    return new Promise<string>(async (resolve) => {
+                                        if (isFinal) {
+                                            formHook.setValue('personalityText', originalText, {
+                                                shouldValidate: true,
+                                                shouldDirty: true
+                                            });
+                                            resolve(originalText);
+                                        } else {
+                                            const newText = await improvePersonalityText({
+                                                traits: watchedPersonalityTraits,
+                                                previousText: originalText,
+                                                userInput: userInput
+                                            }).unwrap();
+                                            resolve(newText);
+                                        }
+                                    });
+                                }}
+                                triggerButtonText='Improve with AI'
+                            />
+                            {/* <ImproveWithAIButton
                                 isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}
                                 disabled={!watchedPersonalityText || watchedPersonalityText.length === 0}
                                 isDirty={isDirty}
@@ -175,7 +198,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                         }
                                     });
                                 }}
-                            />
+                            /> */}
                         </div>
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
