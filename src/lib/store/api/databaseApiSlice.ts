@@ -3,6 +3,7 @@ import type { CvData, KeyValuePairArray, FieldValuesState, PaymentDetails, Field
 import { compareEducationEntries, compareWorkExperienceEntries } from '@/lib/utils';
 import { customBaseQuery, injectSub } from './customBaseQuery';
 import { setFieldValues } from '../fieldValues/fieldValuesSlice';
+import { setSaving } from '../loading/loadingSlice';
 
 export const databaseApiSlice = createApi({
     reducerPath: 'databaseApi',
@@ -82,12 +83,14 @@ export const databaseApiSlice = createApi({
             invalidatesTags: ['FieldValues'],
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
+                    dispatch(setSaving(true));
                     await queryFulfilled;
                     const mappedArray = Object.entries(arg.data).map(([field, value]) => ({
                         field: field as keyof FieldValuesState,
                         value
                     }));
                     dispatch(setFieldValues(mappedArray));
+                    dispatch(setSaving(false));
                 } catch (error) {
                     console.error('Error saving data to Redux:', error);
                 }

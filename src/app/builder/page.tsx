@@ -132,7 +132,7 @@ function FormContent() {
 // Main component with proper Suspense boundary
 export default function BuilderPage() {
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-    const { isLoading: isFieldValuesLoading } = useAppSelector((state) => state.loading);
+    const isReading = useAppSelector((state) => state.loading.isReading);
 
     if (isAuthLoading) {
         return (
@@ -149,7 +149,7 @@ export default function BuilderPage() {
     return (
         <Suspense fallback={<OverlaySpinner />}>
             <FormContent />
-            {isFieldValuesLoading && <OverlaySpinner />}
+            {isReading && <OverlaySpinner />}
         </Suspense>
     );
 }
