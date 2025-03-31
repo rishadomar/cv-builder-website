@@ -1,31 +1,27 @@
 // components/TextImprovementDrawer.jsx
-import { useState } from 'react';
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger
-} from '@/components/ui/drawer';
+import { useState, useRef, useEffect } from 'react';
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Wand2, ThumbsUp, Loader2 } from 'lucide-react';
+import { ThumbsUp, Loader2, CornerDownLeft, Clock, X } from 'lucide-react';
 import { AIIcon } from './AIIcon';
+import { Badge } from '@/components/ui/badge';
 
 const IMPROVEMENT_SUGGESTIONS = [
     'Make shorter',
     'Make longer with more details',
-    'Make less formal',
-    'Make more formal',
+    'Make more informal',
     'Fix grammar and spelling',
-    'Add more achievements',
     'More professional tone',
-    'Add measurable results',
     'Simplify language'
 ];
+
+type TextEntry = {
+    text: string;
+    prompt: string;
+    timestamp: Date;
+    isOriginal: boolean;
+};
 
 type TextImprovementDrawerProps = {
     originalText: string;
@@ -39,22 +35,57 @@ export function TextImprovementDrawer({
     triggerButtonText = 'Improve Text'
 }: TextImprovementDrawerProps) {
     const [userInput, setUserInput] = useState('');
-    const [currentText, setCurrentText] = useState(originalText);
-    const [improvedText, setImprovedText] = useState('');
-    const [lastPrompt, setLastPrompt] = useState('');
+    const [historyEntries, setHistoryEntries] = useState<TextEntry[]>([]);
+    const [currentText, setCurrentText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [showingImproved, setShowingImproved] = useState(false);
+    const latestEntryRef = useRef<HTMLDivElement>(null);
+
+    // Initialize with original text
+    useEffect(() => {
+        if (historyEntries.length === 0) {
+            setHistoryEntries([
+                {
+                    text: originalText,
+                    prompt: 'Original text',
+                    timestamp: new Date(),
+                    isOriginal: true
+                }
+            ]);
+            setCurrentText(originalText);
+        }
+    }, [originalText, historyEntries.length]);
+
+    // Scroll to the latest entry when a new one is added
+    useEffect(() => {
+        if (latestEntryRef.current) {
+            latestEntryRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [historyEntries.length]);
 
     const handleRequestImprovement = async () => {
         if (!userInput.trim()) return;
 
         setIsLoading(true);
-        setLastPrompt(userInput);
 
         try {
             const newText = await onSubmit(userInput, currentText, false);
-            setImprovedText(newText);
-            setShowingImproved(true);
+
+            // Add the new entry to history
+            setHistoryEntries((prev) => [
+                ...prev,
+                {
+                    text: newText,
+                    prompt: userInput,
+                    timestamp: new Date(),
+                    isOriginal: false
+                }
+            ]);
+
+            // Update current text to the new improved version
+            setCurrentText(newText);
+
+            // Clear input
+            setUserInput('');
         } catch (error) {
             console.error('Error improving text:', error);
         } finally {
@@ -62,9 +93,9 @@ export function TextImprovementDrawer({
         }
     };
 
-    const handleAccept = () => {
-        // Apply the improved text
-        onSubmit('', improvedText, true);
+    const handleAccept = (text: string) => {
+        // Apply the selected text
+        onSubmit('', text, true);
 
         // Reset the component state
         reset();
@@ -77,20 +108,21 @@ export function TextImprovementDrawer({
         setUserInput(suggestion);
     };
 
-    const handleNewRequest = () => {
-        // Update current text to the improved version
-        setCurrentText(improvedText);
-        setImprovedText('');
+    const reset = () => {
+        setHistoryEntries([
+            {
+                text: originalText,
+                prompt: 'Original text',
+                timestamp: new Date(),
+                isOriginal: true
+            }
+        ]);
+        setCurrentText(originalText);
         setUserInput('');
-        setShowingImproved(false);
     };
 
-    const reset = () => {
-        setCurrentText(originalText);
-        setImprovedText('');
-        setUserInput('');
-        setLastPrompt('');
-        setShowingImproved(false);
+    const formatTime = (date: Date) => {
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
     return (
@@ -104,31 +136,77 @@ export function TextImprovementDrawer({
 
             <DrawerContent className='max-h-[90vh]'>
                 <div className='mx-auto w-full max-w-4xl'>
-                    <DrawerHeader className='pb-2'>
-                        <DrawerTitle>Improve Your Text</DrawerTitle>
-                        <DrawerDescription>I will help you improve your CV text.</DrawerDescription>
-                    </DrawerHeader>
+                    <div className='flex justify-between items-start px-6 pt-2'>
+                        <div>
+                            <DrawerTitle className=''>Improve Your Text</DrawerTitle>
+                        </div>
 
-                    {/* Use a div with overflow-y-auto here instead of the ScrollArea component */}
-                    <div className='overflow-y-auto px-4 py-2' style={{ maxHeight: 'calc(90vh - 180px)' }}>
-                        {!showingImproved ? (
-                            <div className='space-y-4 pb-4'>
-                                <div className='bg-muted p-4 rounded-lg text-sm'>
-                                    <h4 className='font-medium mb-2'>Current Text:</h4>
-                                    <p>{currentText}</p>
+                        {/* X button in the top right */}
+                        <DrawerClose asChild className='drawer-close-button'>
+                            <Button variant='ghost' size='icon' className='rounded-full h-8 w-8'>
+                                <X className='h-4 w-4' />
+                            </Button>
+                        </DrawerClose>
+                    </div>
+
+                    <div className='overflow-y-auto px-4 py-2' style={{ maxHeight: 'calc(90vh - 230px)' }}>
+                        <div className='space-y-4 pb-4'>
+                            {/* History entries */}
+                            {historyEntries.map((entry, index) => (
+                                <div
+                                    key={index}
+                                    className={`border rounded-lg p-4 ${
+                                        index === historyEntries.length - 1 ? 'bg-muted/100' : 'bg-white'
+                                    }`}
+                                    ref={index === historyEntries.length - 1 ? latestEntryRef : null}
+                                >
+                                    <div className='flex justify-between items-start mb-2'>
+                                        <div className='flex items-center'>
+                                            {entry.isOriginal ? (
+                                                <Badge variant='outline' className='mr-2'>
+                                                    Original
+                                                </Badge>
+                                            ) : (
+                                                <Badge variant='secondary' className='mr-2'>
+                                                    Improved
+                                                </Badge>
+                                            )}
+                                            <span className='text-xs text-muted-foreground flex items-center'>
+                                                <Clock className='w-3 h-3 mr-1' />
+                                                {formatTime(entry.timestamp)}
+                                            </span>
+                                        </div>
+
+                                        {!entry.isOriginal && (
+                                            <Button onClick={() => handleAccept(entry.text)} variant='ghost' size='sm'>
+                                                <ThumbsUp className='h-3 w-3 mr-1' />
+                                                Accept
+                                            </Button>
+                                        )}
+                                    </div>
+
+                                    <div className='text-sm whitespace-pre-line'>{entry.text}</div>
+
+                                    {!entry.isOriginal && (
+                                        <p className='text-xs text-muted-foreground mt-2 italic'>
+                                            Prompt: "{entry.prompt}"
+                                        </p>
+                                    )}
                                 </div>
+                            ))}
 
+                            {/* New improvement input */}
+                            <div className='border-t pt-4 mt-6'>
+                                <h4 className='text-sm font-medium mb-2'>Improve further:</h4>
                                 <Textarea
                                     placeholder='Tell me how you want to improve the text...'
                                     value={userInput}
                                     onChange={(e) => setUserInput(e.target.value)}
-                                    className='min-h-[100px]'
+                                    className='min-h-[80px]'
                                 />
 
-                                <div className='pb-6'>
-                                    {' '}
-                                    {/* Added padding to ensure visibility */}
-                                    <p className='text-sm text-muted-foreground mb-2'>Quick suggestions:</p>
+                                <div className='mt-3 pb-6'>
+                                    <p className='text-xs text-muted-foreground mb-2'>Quick suggestions:</p>
                                     <div className='flex flex-wrap gap-2'>
                                         {IMPROVEMENT_SUGGESTIONS.map((suggestion) => (
                                             <Button
@@ -144,45 +222,30 @@ export function TextImprovementDrawer({
                                     </div>
                                 </div>
                             </div>
-                        ) : (
-                            <div className='space-y-4 pb-4'>
-                                <div className='bg-muted/50 border p-4 rounded-lg'>
-                                    <h4 className='font-medium mb-2'>Improved Text:</h4>
-                                    <p>{improvedText}</p>
-                                    <p className='text-xs text-muted-foreground mt-2'>Improvement: {lastPrompt}</p>
-                                </div>
-                            </div>
-                        )}
+                        </div>
                     </div>
 
                     <DrawerFooter className='pt-2 border-t'>
-                        {!showingImproved ? (
-                            <Button onClick={handleRequestImprovement} disabled={!userInput.trim() || isLoading}>
+                        <div className='flex gap-2 w-full'>
+                            <Button
+                                className='flex-1'
+                                variant='default'
+                                onClick={handleRequestImprovement}
+                                disabled={!userInput.trim() || isLoading}
+                            >
                                 {isLoading ? (
                                     <>
                                         <Loader2 className='h-4 w-4 mr-2 animate-spin' />
                                         Improving...
                                     </>
                                 ) : (
-                                    'Improve Text'
+                                    <>
+                                        <CornerDownLeft className='h-4 w-4 mr-2' />
+                                        Improve Text
+                                    </>
                                 )}
                             </Button>
-                        ) : (
-                            <div className='flex flex-col gap-2 w-full'>
-                                <div className='grid grid-cols-2 gap-2'>
-                                    <Button onClick={handleNewRequest} variant='outline'>
-                                        Improve Further
-                                    </Button>
-                                    <Button onClick={handleAccept}>
-                                        <ThumbsUp className='h-4 w-4 mr-2' />
-                                        Accept & Apply
-                                    </Button>
-                                </div>
-                                <DrawerClose asChild className='drawer-close-button' onClick={reset}>
-                                    <Button variant='ghost'>Close Without Changes</Button>
-                                </DrawerClose>
-                            </div>
-                        )}
+                        </div>
                     </DrawerFooter>
                 </div>
             </DrawerContent>

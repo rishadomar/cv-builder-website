@@ -160,7 +160,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                 <TextImprovementDrawer
                                     originalText={watchedPersonalityText || ''}
                                     onSubmit={(userInput: string, originalText: string, isFinal?: boolean) => {
-                                        return new Promise<string>(async (resolve) => {
+                                        return new Promise<string>(async (resolve, reject) => {
                                             if (isFinal) {
                                                 formHook.setValue('personalityText', originalText, {
                                                     shouldValidate: true,
@@ -168,12 +168,16 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                                 });
                                                 resolve(originalText);
                                             } else {
-                                                const newText = await improvePersonalityText({
-                                                    traits: watchedPersonalityTraits,
-                                                    previousText: originalText,
-                                                    userInput: userInput
-                                                }).unwrap();
-                                                resolve(newText);
+                                                try {
+                                                    const newText = await improvePersonalityText({
+                                                        traits: watchedPersonalityTraits,
+                                                        previousText: originalText,
+                                                        userInput: userInput
+                                                    }).unwrap();
+                                                    resolve(newText);
+                                                } catch (error) {
+                                                    reject(error);
+                                                }
                                             }
                                         });
                                     }}
