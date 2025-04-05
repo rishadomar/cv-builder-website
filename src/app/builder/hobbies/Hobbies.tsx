@@ -13,9 +13,9 @@ import TextareaFormField from '../TextareaFormField';
 import { Button } from '@/components/ui/button';
 import { useGenerateHobbiesTextMutation, useImproveHobbiesTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '@/components/StepContainer';
-import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { AIIcon } from '@/components/AIIcon';
+import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
 
 const hobbyDetailsFormSchema = z.object({
     hobbies: z.array(z.string()).default([]),
@@ -61,7 +61,7 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
     const step = getStep('hobbies');
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generateHobbiesText, { isLoading: isGeneratingHobbiesText }] = useGenerateHobbiesTextMutation();
-    const [improveHobbiesText, { isLoading: isImprovingHobbiesText }] = useImproveHobbiesTextMutation();
+    const [improveHobbiesText] = useImproveHobbiesTextMutation();
     const [saveData] = useSaveDataMutation();
 
     useEffect(() => {
@@ -148,31 +148,32 @@ export default function HobbyDetailsForm({ onNext, onPrevious }: HobbyDetailsFor
                                 placeholder='AI generated text will appear here'
                                 rows={watchedHobbiesText?.length > 0 ? 10 : 3}
                             />
-                            <ImproveWithAIButton
-                                isBusyImproving={isGeneratingHobbiesText || isImprovingHobbiesText}
-                                disabled={watchedHobbiesText?.length === 0}
-                                isDirty={isDirty}
-                                onClick={async () => {
-                                    const newText = await improveHobbiesText({
-                                        hobbies: watchedHobbies,
-                                        previousText: watchedHobbiesText
-                                    }).unwrap();
-                                    setCompareText({
-                                        previousText: watchedHobbiesText,
-                                        newText,
-                                        onAccept: (acceptedText: string) => {
-                                            formHook.setValue('hobbiesText', acceptedText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            setCompareText(undefined);
-                                        },
-                                        onReject: () => {
-                                            setCompareText(undefined);
-                                        }
-                                    });
-                                }}
-                            />
+                            {watchedHobbiesText && watchedHobbiesText.length > 0 && (
+                                <TextImprovementDrawer
+                                    originalText={watchedHobbiesText || ''}
+                                    onSubmit={(userInput: string, originalText: string) => {
+                                        return new Promise<string>(async (resolve, reject) => {
+                                            try {
+                                                const newText = await improveHobbiesText({
+                                                    hobbies: watchedHobbies,
+                                                    previousText: originalText,
+                                                    userInput: userInput
+                                                }).unwrap();
+                                                resolve(newText);
+                                            } catch (error) {
+                                                reject(error);
+                                            }
+                                        });
+                                    }}
+                                    onSave={(text: string) => {
+                                        formHook.setValue('hobbiesText', text, {
+                                            shouldValidate: true,
+                                            shouldDirty: true
+                                        });
+                                    }}
+                                    triggerButtonText='Improve with AI'
+                                />
+                            )}
                         </div>
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />

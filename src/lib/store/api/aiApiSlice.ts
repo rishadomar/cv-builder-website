@@ -29,11 +29,14 @@ export const aiApiSlice = createApi({
                 body: hobbies
             })
         }),
-        improveHobbiesText: builder.mutation<string, { hobbies: Array<string>; previousText: string }>({
-            query: ({ hobbies, previousText }) => ({
+        improveHobbiesText: builder.mutation<
+            string,
+            { hobbies: Array<string>; previousText: string; userInput: string }
+        >({
+            query: ({ hobbies, previousText, userInput }) => ({
                 url: '/improveHobbiesText',
                 method: 'POST',
-                body: { hobbies, previousText }
+                body: { hobbies, previousText, userInput }
             })
         }),
         improveWorkDescriptionText: builder.mutation<
