@@ -191,7 +191,7 @@ export function TextImprovementDrawer({
 
                                     {!entry.isOriginal && (
                                         <p className='text-xs text-muted-foreground mt-2 italic'>
-                                            Prompt: "{entry.prompt}"
+                                            Prompt: {entry.prompt}
                                         </p>
                                     )}
                                 </div>

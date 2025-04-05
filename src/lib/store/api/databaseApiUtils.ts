@@ -1,6 +1,6 @@
 import { databaseApiSlice } from './databaseApiSlice';
 import { getStore } from '../store';
-import { setLoading, setReading } from '../loading/loadingSlice';
+import { setReading } from '../loading/loadingSlice';
 
 // Function to invalidate cache and trigger a refetch through RTK Query
 export const refreshRecordData = async (sub: string, email: string) => {
