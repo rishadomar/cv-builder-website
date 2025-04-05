@@ -60,10 +60,17 @@ export const aiApiSlice = createApi({
             })
         }),
         extractTopSkills: builder.mutation<string, { previousText: string }>({
-            query: (previousText) => ({
+            query: ({ previousText }) => ({
                 url: '/extractTopSkills',
                 method: 'POST',
                 body: { previousText }
+            })
+        }),
+        improveTopSkills: builder.mutation<string, { previousText: string; userInput: string }>({
+            query: ({ previousText, userInput }) => ({
+                url: '/improveTopSkills',
+                method: 'POST',
+                body: { previousText, userInput }
             })
         })
     })
@@ -76,5 +83,6 @@ export const {
     useImproveHobbiesTextMutation,
     useImproveWorkDescriptionTextMutation,
     useImproveEducationCommentMutation,
-    useExtractTopSkillsMutation
+    useExtractTopSkillsMutation,
+    useImproveTopSkillsMutation
 } = aiApiSlice;
