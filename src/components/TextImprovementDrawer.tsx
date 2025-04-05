@@ -25,13 +25,15 @@ type TextEntry = {
 
 type TextImprovementDrawerProps = {
     originalText: string;
-    onSubmit: (userInput: string, originalText: string, isFinal?: boolean) => Promise<string>;
+    onSubmit: (userInput: string, originalText: string) => Promise<string>;
+    onSave: (text: string) => void;
     triggerButtonText?: string;
 };
 
 export function TextImprovementDrawer({
     originalText,
     onSubmit,
+    onSave,
     triggerButtonText = 'Improve Text'
 }: TextImprovementDrawerProps) {
     const [userInput, setUserInput] = useState('');
@@ -68,7 +70,7 @@ export function TextImprovementDrawer({
         setIsLoading(true);
 
         try {
-            const newText = await onSubmit(userInput, currentText, false);
+            const newText = await onSubmit(userInput, currentText);
 
             // Add the new entry to history
             setHistoryEntries((prev) => [
@@ -95,7 +97,7 @@ export function TextImprovementDrawer({
 
     const handleAccept = (text: string) => {
         // Apply the selected text
-        onSubmit('', text, true);
+        onSave(text);
 
         // Reset the component state
         reset();

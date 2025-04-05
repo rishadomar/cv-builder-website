@@ -13,7 +13,6 @@ import { getStep } from '@/lib/utils/step';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '@/components/StepContainer';
-import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { AIIcon } from '@/components/AIIcon';
 import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
@@ -65,7 +64,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generatePersonalityText, { isLoading: isGeneratingPersonalityText }] = useGeneratePersonalityTextMutation();
-    const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
+    const [improvePersonalityText] = useImprovePersonalityTextMutation();
 
     useEffect(() => {
         if (allFieldValues) {
@@ -159,56 +158,29 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                             {watchedPersonalityText && watchedPersonalityText.length > 0 && (
                                 <TextImprovementDrawer
                                     originalText={watchedPersonalityText || ''}
-                                    onSubmit={(userInput: string, originalText: string, isFinal?: boolean) => {
+                                    onSubmit={(userInput: string, originalText: string) => {
                                         return new Promise<string>(async (resolve, reject) => {
-                                            if (isFinal) {
-                                                formHook.setValue('personalityText', originalText, {
-                                                    shouldValidate: true,
-                                                    shouldDirty: true
-                                                });
-                                                resolve(originalText);
-                                            } else {
-                                                try {
-                                                    const newText = await improvePersonalityText({
-                                                        traits: watchedPersonalityTraits,
-                                                        previousText: originalText,
-                                                        userInput: userInput
-                                                    }).unwrap();
-                                                    resolve(newText);
-                                                } catch (error) {
-                                                    reject(error);
-                                                }
+                                            try {
+                                                const newText = await improvePersonalityText({
+                                                    traits: watchedPersonalityTraits,
+                                                    previousText: originalText,
+                                                    userInput: userInput
+                                                }).unwrap();
+                                                resolve(newText);
+                                            } catch (error) {
+                                                reject(error);
                                             }
+                                        });
+                                    }}
+                                    onSave={(text: string) => {
+                                        formHook.setValue('personalityText', text, {
+                                            shouldValidate: true,
+                                            shouldDirty: true
                                         });
                                     }}
                                     triggerButtonText='Improve with AI'
                                 />
                             )}
-                            {/* <ImproveWithAIButton
-                                isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}
-                                disabled={!watchedPersonalityText || watchedPersonalityText.length === 0}
-                                isDirty={isDirty}
-                                onClick={async () => {
-                                    const newDescription = await improvePersonalityText({
-                                        traits: watchedPersonalityTraits,
-                                        previousText: watchedPersonalityText
-                                    }).unwrap();
-                                    setCompareText({
-                                        previousText: watchedPersonalityText,
-                                        newText: newDescription,
-                                        onAccept: (acceptedText: string) => {
-                                            formHook.setValue('personalityText', acceptedText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            setCompareText(undefined);
-                                        },
-                                        onReject: () => {
-                                            setCompareText(undefined);
-                                        }
-                                    });
-                                }}
-                            /> */}
                         </div>
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
