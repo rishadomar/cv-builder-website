@@ -1,4 +1,5 @@
 import {
+    AudioLines,
     Bike,
     Briefcase,
     CreditCard,
@@ -117,6 +118,16 @@ export const Steps: StepType[] = [
     },
     {
         id: 11,
+        title: 'Top Skills discussion',
+        icon: AudioLines,
+        description: 'Discussion of your Top skills',
+        completed: false,
+        path: 'top-skills-discussion',
+        showInSections: true,
+        paymentRequired: true
+    },
+    {
+        id: 12,
         title: 'Review',
         description: 'Review your CV',
         completed: false,
@@ -125,7 +136,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 12,
+        id: 13,
         title: 'Select template',
         icon: TextSelect,
         description: 'Select a template for your CV',
@@ -135,7 +146,7 @@ export const Steps: StepType[] = [
         paymentRequired: true
     },
     {
-        id: 13,
+        id: 14,
         title: 'Download PDF',
         icon: Download,
         description: 'Download your PDF for keeps',

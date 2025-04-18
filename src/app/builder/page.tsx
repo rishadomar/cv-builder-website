@@ -20,6 +20,7 @@ import { Steps } from '@/lib/utils/step';
 import SocialLinksForm from './social-links/SocialLinks';
 import TopSkillsForm from './top-skills/TopSkillsForm';
 import SelectTemplate from './generate-pdf/SelectTemplate';
+import TopSkillsDiscussion from './top-skills/TopSkillsDiscussion';
 
 const NumberOfPages = Steps.length;
 
@@ -116,6 +117,10 @@ function FormContent() {
                 )}
 
                 {currentPage === 'top-skills' && <TopSkillsForm onNext={nextPage} onPrevious={previousPage} />}
+
+                {currentPage === 'top-skills-discussion' && (
+                    <TopSkillsDiscussion onNext={nextPage} onPrevious={previousPage} />
+                )}
 
                 {currentPage === 'review' && <Review onNext={nextPage} onPrevious={previousPage} />}
 
