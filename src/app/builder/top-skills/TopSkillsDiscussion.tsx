@@ -1,22 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Form } from '@/components/ui/form';
+import React from 'react';
 import { StepButtons } from '../StepButtons';
 import { useAppSelector } from '@/lib/store/hooks';
-import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '@/components/StepContainer';
-import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
-import { useExtractTopSkillsMutation, useImproveTopSkillsMutation } from '@/lib/store/api/aiApiSlice';
-import { Button } from '@/components/ui/button';
-import TextareaFormField from '../TextareaFormField';
-import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { LearnMoreAboutConversation } from './LearnMoreAboutConversation';
 import { ListenTopSkills } from './ListenTopSkills';
-import { AIIcon } from '@/components/AIIcon';
-import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
 
 type TopSkillsDiscussionProps = {
     onNext?: () => void;
