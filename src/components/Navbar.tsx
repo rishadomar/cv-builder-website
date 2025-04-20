@@ -6,6 +6,7 @@ import StepDrawer from './StepDrawer';
 import ProfileDropdown from './profileDropdown/ProfileDropdown';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
+import { CircleUserRound } from 'lucide-react';
 
 const Navbar: React.FC = () => {
     const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -25,9 +26,10 @@ const Navbar: React.FC = () => {
                         {isLoggedIn ? (
                             <ProfileDropdown />
                         ) : (
-                            <Button onClick={() => router.push('/authentication/login')} variant='outline'>
-                                Login
-                            </Button>
+                            <CircleUserRound
+                                className='text-gray-400 h-8 w-8 cursor-pointer'
+                                onClick={() => router.push('/authentication/login')}
+                            />
                         )}
                     </div>
                 </div>
