@@ -15,6 +15,7 @@ import TextareaFormField from '../TextareaFormField';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { AIIcon } from '@/components/AIIcon';
 import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
+import { isMobile } from '@/lib/utils';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -116,7 +117,7 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                                 formHook={formHook}
                                 fieldName='topSkills'
                                 placeholder='AI generated text will appear here'
-                                rows={watchedTopSkills?.length > 0 ? 20 : 3}
+                                rows={watchedTopSkills?.length > 0 ? (isMobile() ? 18 : 26) : 3}
                             />
                             {watchedTopSkills?.length > 0 && (
                                 <TextImprovementDrawer
