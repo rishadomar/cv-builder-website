@@ -88,27 +88,23 @@ const ProfileDropdown: React.FC = () => {
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            {isQuickLinksDialogOpen && (
-                <DrawerDialog
-                    isOpen={isQuickLinksDialogOpen}
-                    setIsOpen={setIsQuickLinksDialogOpen}
-                    title='Quick links'
-                    description='Handy quick links to help you navigate the builder.'
-                    closeText='Close'
-                    content={<QuickLinks />}
-                />
-            )}
+            <DrawerDialog
+                isOpen={isQuickLinksDialogOpen}
+                setIsOpen={setIsQuickLinksDialogOpen}
+                title='Quick links'
+                description='Handy quick links to help you navigate the builder.'
+                closeText='Close'
+                content={<QuickLinks />}
+            />
 
-            {isDialogOpen && (
-                <DrawerDialog
-                    isOpen={isDialogOpen}
-                    setIsOpen={setIsDialogOpen}
-                    title='Coming soon'
-                    description='This feature is coming soon. Stay tuned!'
-                    closeText='Close'
-                    content={<div />}
-                />
-            )}
+            <DrawerDialog
+                isOpen={isDialogOpen}
+                setIsOpen={setIsDialogOpen}
+                title='Coming soon'
+                description='This feature is coming soon. Stay tuned!'
+                closeText='Close'
+                content={<div />}
+            />
         </>
     );
 };

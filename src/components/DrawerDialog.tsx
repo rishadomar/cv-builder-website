@@ -43,7 +43,7 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
                         <div className='px-4'>
                             {content}
                             {closeText && (
-                                <Button className='mt-6 w-full' variant='outline' onClick={() => setIsOpen(!isOpen)}>
+                                <Button className='mt-6 w-full' variant='outline' onClick={() => setIsOpen(false)}>
                                     {closeText}
                                 </Button>
                             )}
@@ -61,6 +61,11 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
                 <DialogTitle>{title}</DialogTitle>
                 {description && <DialogDescription>{description}</DialogDescription>}
                 <div>{content}</div>
+                {closeText && (
+                    <Button className='mt-4' variant='outline' onClick={() => setIsOpen(false)}>
+                        {closeText}
+                    </Button>
+                )}
             </DialogContent>
         </Dialog>
     );
