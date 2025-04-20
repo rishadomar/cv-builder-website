@@ -22,6 +22,8 @@ const ProfileDropdown: React.FC = () => {
     const router = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isQuickLinksDialogOpen, setIsQuickLinksDialogOpen] = useState(false);
+    // Track dropdown open state
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const handleLogout = async () => {
         if (getCookie('Google') && getCookie('Google') === 'true') {
@@ -42,12 +44,26 @@ const ProfileDropdown: React.FC = () => {
     };
 
     const handleSettings = () => {
-        setIsDialogOpen(true);
+        // First close the dropdown, then open the dialog
+        setIsDropdownOpen(false);
+        // Small delay to ensure dropdown is closed first
+        setTimeout(() => {
+            setIsDialogOpen(true);
+        }, 100);
+    };
+
+    const handleQuickLinks = () => {
+        // First close the dropdown, then open the dialog
+        setIsDropdownOpen(false);
+        // Small delay to ensure dropdown is closed first
+        setTimeout(() => {
+            setIsQuickLinksDialogOpen(true);
+        }, 100);
     };
 
     return (
         <>
-            <DropdownMenu>
+            <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                 <DropdownMenuTrigger asChild>
                     <span className='cursor-pointer'>
                         <CircleUserRound className='text-gray-400' />
@@ -71,11 +87,11 @@ const ProfileDropdown: React.FC = () => {
                             <CreditCard />
                             <span>Billing</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => handleSettings()}>
+                        <DropdownMenuItem onSelect={handleSettings}>
                             <Cog />
                             <span>Settings</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => setIsQuickLinksDialogOpen(true)}>
+                        <DropdownMenuItem onSelect={handleQuickLinks}>
                             <SquareArrowOutUpRight />
                             <span>Quick links</span>
                         </DropdownMenuItem>
@@ -88,23 +104,28 @@ const ProfileDropdown: React.FC = () => {
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <DrawerDialog
-                isOpen={isQuickLinksDialogOpen}
-                setIsOpen={setIsQuickLinksDialogOpen}
-                title='Quick links'
-                description='Handy quick links to help you navigate the builder.'
-                closeText='Close'
-                content={<QuickLinks />}
-            />
+            {/* Render dialogs only when they need to be shown */}
+            {isQuickLinksDialogOpen && (
+                <DrawerDialog
+                    isOpen={isQuickLinksDialogOpen}
+                    setIsOpen={setIsQuickLinksDialogOpen}
+                    title='Quick links'
+                    description='Handy quick links to help you navigate the builder.'
+                    closeText='Close'
+                    content={<QuickLinks />}
+                />
+            )}
 
-            <DrawerDialog
-                isOpen={isDialogOpen}
-                setIsOpen={setIsDialogOpen}
-                title='Coming soon'
-                description='This feature is coming soon. Stay tuned!'
-                closeText='Close'
-                content={<div />}
-            />
+            {isDialogOpen && (
+                <DrawerDialog
+                    isOpen={isDialogOpen}
+                    setIsOpen={setIsDialogOpen}
+                    title='Coming soon'
+                    description='This feature is coming soon. Stay tuned!'
+                    closeText='Close'
+                    content={<div />}
+                />
+            )}
         </>
     );
 };
