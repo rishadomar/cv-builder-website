@@ -1,11 +1,12 @@
 // components/TextImprovementDrawer.jsx
 import { useState, useRef, useEffect } from 'react';
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+import { DrawerFooter } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ThumbsUp, Loader2, CornerDownLeft, Clock, X } from 'lucide-react';
 import { AIIcon } from './AIIcon';
 import { Badge } from '@/components/ui/badge';
+import { DrawerDialog } from './DrawerDialog';
 
 const IMPROVEMENT_SUGGESTIONS = [
     'Make shorter',
@@ -41,6 +42,7 @@ export function TextImprovementDrawer({
     const [currentText, setCurrentText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const latestEntryRef = useRef<HTMLDivElement>(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     // Initialize with original text
     useEffect(() => {
@@ -128,100 +130,87 @@ export function TextImprovementDrawer({
     };
 
     return (
-        <Drawer onClose={reset}>
-            <DrawerTrigger asChild>
+        <DrawerDialog
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            trigger={
                 <Button variant='outline' className='w-full mt-3' size='sm'>
                     <AIIcon />
                     {triggerButtonText}
                 </Button>
-            </DrawerTrigger>
-
-            <DrawerContent className='max-h-[90vh]'>
+            }
+            title='Improve Your Text'
+            description='Help AI improve your text'
+            closeText='Close'
+            content={
                 <div className='mx-auto w-full max-w-4xl'>
-                    <div className='flex justify-between items-start px-6 pt-2'>
-                        <div>
-                            <DrawerTitle className=''>Improve Your Text</DrawerTitle>
-                        </div>
-
-                        {/* X button in the top right */}
-                        <DrawerClose asChild className='drawer-close-button'>
-                            <Button variant='ghost' size='icon' className='rounded-full h-8 w-8'>
-                                <X className='h-4 w-4' />
-                            </Button>
-                        </DrawerClose>
-                    </div>
-
-                    <div className='overflow-y-auto px-4 py-2' style={{ maxHeight: 'calc(90vh - 230px)' }}>
-                        <div className='space-y-4 pb-4'>
-                            {/* History entries */}
-                            {historyEntries.map((entry, index) => (
-                                <div
-                                    key={index}
-                                    className={`border rounded-lg p-4 ${
-                                        index === historyEntries.length - 1 ? 'bg-muted/100' : 'bg-white'
-                                    }`}
-                                    ref={index === historyEntries.length - 1 ? latestEntryRef : null}
-                                >
-                                    <div className='flex justify-between items-start mb-2'>
-                                        <div className='flex items-center'>
-                                            {entry.isOriginal ? (
-                                                <Badge variant='outline' className='mr-2'>
-                                                    Original
-                                                </Badge>
-                                            ) : (
-                                                <Badge variant='secondary' className='mr-2'>
-                                                    Improved
-                                                </Badge>
-                                            )}
-                                            <span className='text-xs text-muted-foreground flex items-center'>
-                                                <Clock className='w-3 h-3 mr-1' />
-                                                {formatTime(entry.timestamp)}
-                                            </span>
-                                        </div>
-
-                                        {!entry.isOriginal && (
-                                            <Button onClick={() => handleAccept(entry.text)} variant='ghost' size='sm'>
-                                                <ThumbsUp className='h-3 w-3 mr-1' />
-                                                Accept
-                                            </Button>
+                    <div className='space-y-4 pb-4'>
+                        {/* History entries */}
+                        {historyEntries.map((entry, index) => (
+                            <div
+                                key={index}
+                                className={`border rounded-lg p-4 ${
+                                    index === historyEntries.length - 1 ? 'bg-muted/100' : 'bg-white'
+                                }`}
+                                ref={index === historyEntries.length - 1 ? latestEntryRef : null}
+                            >
+                                <div className='flex justify-between items-start mb-2'>
+                                    <div className='flex items-center'>
+                                        {entry.isOriginal ? (
+                                            <Badge variant='outline' className='mr-2'>
+                                                Original
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant='secondary' className='mr-2'>
+                                                Improved
+                                            </Badge>
                                         )}
+                                        <span className='text-xs text-muted-foreground flex items-center'>
+                                            <Clock className='w-3 h-3 mr-1' />
+                                            {formatTime(entry.timestamp)}
+                                        </span>
                                     </div>
-
-                                    <div className='text-sm whitespace-pre-line'>{entry.text}</div>
 
                                     {!entry.isOriginal && (
-                                        <p className='text-xs text-muted-foreground mt-2 italic'>
-                                            Prompt: {entry.prompt}
-                                        </p>
+                                        <Button onClick={() => handleAccept(entry.text)} variant='ghost' size='sm'>
+                                            <ThumbsUp className='h-3 w-3 mr-1' />
+                                            Accept
+                                        </Button>
                                     )}
                                 </div>
-                            ))}
 
-                            {/* New improvement input */}
-                            <div className='border-t pt-4 mt-6'>
-                                <h4 className='text-sm font-medium mb-2'>Improve further:</h4>
-                                <Textarea
-                                    placeholder='Tell me how you want to improve the text...'
-                                    value={userInput}
-                                    onChange={(e) => setUserInput(e.target.value)}
-                                    className='min-h-[80px]'
-                                />
+                                <div className='text-sm whitespace-pre-line'>{entry.text}</div>
 
-                                <div className='mt-3 pb-6'>
-                                    <p className='text-xs text-muted-foreground mb-2'>Quick suggestions:</p>
-                                    <div className='flex flex-wrap gap-2'>
-                                        {IMPROVEMENT_SUGGESTIONS.map((suggestion) => (
-                                            <Button
-                                                key={suggestion}
-                                                variant='outline'
-                                                size='sm'
-                                                onClick={() => handleSuggestionClick(suggestion)}
-                                                className='rounded-full'
-                                            >
-                                                {suggestion}
-                                            </Button>
-                                        ))}
-                                    </div>
+                                {!entry.isOriginal && (
+                                    <p className='text-xs text-muted-foreground mt-2 italic'>Prompt: {entry.prompt}</p>
+                                )}
+                            </div>
+                        ))}
+
+                        {/* New improvement input */}
+                        <div className='border-t pt-4 mt-6'>
+                            <h4 className='text-sm font-medium mb-2'>Improve further:</h4>
+                            <Textarea
+                                placeholder='Tell me how you want to improve the text...'
+                                value={userInput}
+                                onChange={(e) => setUserInput(e.target.value)}
+                                className='min-h-[80px]'
+                            />
+
+                            <div className='mt-3 pb-6'>
+                                <p className='text-xs text-muted-foreground mb-2'>Quick suggestions:</p>
+                                <div className='flex flex-wrap gap-2'>
+                                    {IMPROVEMENT_SUGGESTIONS.map((suggestion) => (
+                                        <Button
+                                            key={suggestion}
+                                            variant='outline'
+                                            size='sm'
+                                            onClick={() => handleSuggestionClick(suggestion)}
+                                            className='rounded-full'
+                                        >
+                                            {suggestion}
+                                        </Button>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -250,7 +239,7 @@ export function TextImprovementDrawer({
                         </div>
                     </DrawerFooter>
                 </div>
-            </DrawerContent>
-        </Drawer>
+            }
+        />
     );
 }

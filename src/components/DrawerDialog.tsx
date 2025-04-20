@@ -33,7 +33,11 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
     if (isMobile()) {
         return (
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
-                {trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
+                {trigger && (
+                    <DrawerTrigger asChild className='w-full'>
+                        {trigger}
+                    </DrawerTrigger>
+                )}
                 <DrawerContent className='max-h-[90vh]'>
                     <div className='max-h-full overflow-y-auto'>
                         <DrawerHeader className='px-4'>
