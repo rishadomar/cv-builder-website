@@ -26,10 +26,12 @@ const Navbar: React.FC = () => {
                         {isLoggedIn ? (
                             <ProfileDropdown />
                         ) : (
-                            <CircleUserRound
-                                className='text-gray-400 h-8 w-8 cursor-pointer'
-                                onClick={() => router.push('/authentication/login')}
-                            />
+                            <span className='cursor-pointer'>
+                                <CircleUserRound
+                                    className='text-gray-400'
+                                    onClick={() => router.push('/authentication/login')}
+                                />
+                            </span>
                         )}
                     </div>
                 </div>
