@@ -19,6 +19,7 @@ type DrawerDialogProps = {
     description?: string;
     closeText?: string;
     content: React.ReactNode;
+    preferDialog?: boolean;
 };
 
 export const DrawerDialog: React.FC<DrawerDialogProps> = ({
@@ -28,9 +29,10 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
     title,
     description,
     closeText,
-    content
+    content,
+    preferDialog = false
 }) => {
-    if (isMobile()) {
+    if (!preferDialog && isMobile()) {
         return (
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
                 {trigger && (

@@ -51,12 +51,12 @@ export const aiApiSlice = createApi({
         }),
         improveEducationComment: builder.mutation<
             string,
-            { educationDetails: { description: string; institution: string }; previousText: string }
+            { educationDetails: { description: string; institution: string }; previousText: string; userInput: string }
         >({
-            query: ({ educationDetails, previousText }) => ({
+            query: ({ educationDetails, previousText, userInput }) => ({
                 url: '/improveEducationComment',
                 method: 'POST',
-                body: { educationDetails, previousText }
+                body: { educationDetails, previousText, userInput }
             })
         }),
         extractTopSkills: builder.mutation<string, { previousText: string }>({

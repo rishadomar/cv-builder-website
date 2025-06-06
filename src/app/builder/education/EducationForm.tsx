@@ -16,6 +16,8 @@ import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useImproveEducationCommentMutation } from '@/lib/store/api/aiApiSlice';
 import { toast } from '@/hooks/use-toast';
+import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
+import { original } from '@reduxjs/toolkit';
 
 const educationDetailsFormSchema = z.object({
     description: z
@@ -162,6 +164,7 @@ export default function EducationForm({
         event?.preventDefault();
     }
 
+    console.log('Comment:', watchedComment);
     return (
         <>
             <Form {...formHook}>
@@ -201,14 +204,13 @@ export default function EducationForm({
                             fieldName='subjects'
                             placeholder='Eg. Mathematics, English, Physics'
                         />
-                        <div className='relative'>
-                            <TextareaFormField
-                                formHook={formHook}
-                                label='Comment'
-                                fieldName='comment'
-                                placeholder='Passed with distinction or Learned a lot about the economy'
-                            />
-                            <ImproveWithAIButton
+                        <TextareaFormField
+                            formHook={formHook}
+                            label='Commentxxx'
+                            fieldName='comment'
+                            placeholder='Passed with distinction or Learned a lot about the economy'
+                        />
+                        {/* <ImproveWithAIButton
                                 isBusyImproving={isImprovingEducationComment}
                                 isDirty={isDirty}
                                 disabled={
@@ -239,8 +241,36 @@ export default function EducationForm({
                                         }
                                     });
                                 }}
+                            /> */}
+                        {watchedComment && watchedComment.length > 0 && (
+                            <TextImprovementDrawer
+                                originalText={watchedComment || ''}
+                                onSubmit={(userInput: string, originalText: string) => {
+                                    return new Promise<string>(async (resolve, reject) => {
+                                        try {
+                                            const newDescription = await improveEducationComment({
+                                                educationDetails: {
+                                                    description: watchedDescription || '',
+                                                    institution: watchedInstitution
+                                                },
+                                                previousText: originalText,
+                                                userInput: userInput
+                                            }).unwrap();
+                                            resolve(newDescription);
+                                        } catch (error) {
+                                            reject(error);
+                                        }
+                                    });
+                                }}
+                                onSave={(text: string) => {
+                                    formHook.setValue('comment', text, {
+                                        shouldValidate: true,
+                                        shouldDirty: true
+                                    });
+                                }}
+                                triggerButtonText='Improve with AI'
                             />
-                        </div>
+                        )}
                     </div>
                     <div className='pt-4 m-4 flex justify-end'>
                         <Button
