@@ -206,7 +206,7 @@ export default function EducationForm({
                         />
                         <TextareaFormField
                             formHook={formHook}
-                            label='Commentxxx'
+                            label='Comment'
                             fieldName='comment'
                             placeholder='Passed with distinction or Learned a lot about the economy'
                         />
