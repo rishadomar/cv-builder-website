@@ -1,9 +1,8 @@
-// components/TextImprovementDrawer.jsx
 import { useState, useRef, useEffect } from 'react';
 import { DrawerFooter } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { ThumbsUp, Loader2, CornerDownLeft, Clock, X } from 'lucide-react';
+import { ThumbsUp, Loader2, CornerDownLeft, Clock} from 'lucide-react';
 import { AIIcon } from './AIIcon';
 import { Badge } from '@/components/ui/badge';
 import { DrawerDialog } from './DrawerDialog';

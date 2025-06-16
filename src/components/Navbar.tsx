@@ -5,7 +5,6 @@ import { selectIsLoggedIn } from '@/lib/store/authentication/authenticationSlice
 import StepDrawer from './StepDrawer';
 import ProfileDropdown from './profileDropdown/ProfileDropdown';
 import { useRouter } from 'next/navigation';
-import { Button } from './ui/button';
 import { CircleUserRound } from 'lucide-react';
 
 const Navbar: React.FC = () => {

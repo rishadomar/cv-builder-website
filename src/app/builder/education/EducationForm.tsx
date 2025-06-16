@@ -89,7 +89,7 @@ export default function EducationForm({
     const [confirmClose, setConfirmClose] = useState(false);
     const [compareText, setCompareText] = useState<CompareTextState>();
     const isLoading = useAppSelector((state) => state.loading.isLoading);
-    const [improveEducationComment, { isLoading: isImprovingEducationComment }] = useImproveEducationCommentMutation();
+    const [improveEducationComment] = useImproveEducationCommentMutation();
     const [updateEducation] = useUpdateEducationMutation();
     const [addEducation] = useAddEducationMutation();
 

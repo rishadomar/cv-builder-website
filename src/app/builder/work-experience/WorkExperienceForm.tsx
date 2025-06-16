@@ -88,7 +88,7 @@ export default function WorkExperienceForm({
     const watchedDescription = formHook.watch('description');
     const watchedCompany = formHook.watch('company');
     const isLoading = useAppSelector((state) => state.loading.isLoading);
-    const [improveWorkDescriptionText, { isLoading: isImprovingWorkDescriptionText }] =
+    const [improveWorkDescriptionText] =
         useImproveWorkDescriptionTextMutation();
     const [addWorkExperience] = useAddWorkExperienceMutation();
     const [updateWorkExperience] = useUpdateWorkExperienceMutation();
