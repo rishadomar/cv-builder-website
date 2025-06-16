@@ -65,13 +65,13 @@ const WorkExperienceEntryActionsDropdown: React.FC<WorkExperienceEntryActionsDro
                 isOpen={showUpdateDialog}
                 setIsOpen={setShowUpdateDialog}
                 title='Update Work Experience'
-                content={
-                    <WorkExperienceForm
-                        workExperienceEntryToEdit={workExperienceEntry}
-                        setBusyUpdating={setBusyUpdatingList}
-                        busyUpdating={busyUpdatingList}
-                        onClose={() => setShowUpdateDialog(false)}
-                    />
+                content={<div>nothing</div>
+                    // <WorkExperienceForm
+                    //     workExperienceEntryToEdit={workExperienceEntry}
+                    //     setBusyUpdating={setBusyUpdatingList}
+                    //     busyUpdating={busyUpdatingList}
+                    //     onClose={() => setShowUpdateDialog(false)}
+                    // />
                 }
             />
 

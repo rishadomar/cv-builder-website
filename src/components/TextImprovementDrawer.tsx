@@ -104,8 +104,8 @@ export function TextImprovementDrawer({
         // Reset the component state
         reset();
 
-        // Close the drawer
-        document.querySelector<HTMLButtonElement>('.drawer-close-button')?.click();
+        // Close the drawer properly using state
+        setIsOpen(false);
     };
 
     const handleSuggestionClick = (suggestion: string) => {
