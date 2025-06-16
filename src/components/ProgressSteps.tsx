@@ -35,6 +35,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
     const isPaymentValid = useAppSelector(selectIsPaymentValid);
     const isSocialLinksPopulated = useAppSelector(selectSocialLinksPopulated);
     const isTopSkillsPopulated = useAppSelector(selectTopSkillsPopulated);
+    const topSkillsAudio = useAppSelector((state) => state.fieldValues.topSkillsAudio);
 
     const getStatus = (step: (typeof Steps)[0]) => {
         switch (step.path) {
@@ -54,6 +55,8 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ onSelect }) => {
                 return isWorkExperiencePopulated ? 'complete' : 'incomplete';
             case 'top-skills':
                 return isTopSkillsPopulated ? 'complete' : 'incomplete';
+            case 'top-skills-discussion':
+                return topSkillsAudio?.status === 'complete' ? 'complete' : 'incomplete';
             case 'social-links':
                 return isSocialLinksPopulated ? 'complete' : 'incomplete';
             default:

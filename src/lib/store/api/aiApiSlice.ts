@@ -12,11 +12,14 @@ export const aiApiSlice = createApi({
                 body: traits
             })
         }),
-        improvePersonalityText: builder.mutation<string, { traits: Array<string>; previousText: string }>({
-            query: ({ traits, previousText }) => ({
+        improvePersonalityText: builder.mutation<
+            string,
+            { traits: Array<string>; previousText: string; userInput: string }
+        >({
+            query: ({ traits, previousText, userInput }) => ({
                 url: '/improvePersonalityText',
                 method: 'POST',
-                body: { traits, previousText }
+                body: { traits, previousText, userInput }
             })
         }),
         generateHobbiesText: builder.mutation<string, { hobbies: Array<string> }>({
@@ -26,38 +29,48 @@ export const aiApiSlice = createApi({
                 body: hobbies
             })
         }),
-        improveHobbiesText: builder.mutation<string, { hobbies: Array<string>; previousText: string }>({
-            query: ({ hobbies, previousText }) => ({
+        improveHobbiesText: builder.mutation<
+            string,
+            { hobbies: Array<string>; previousText: string; userInput: string }
+        >({
+            query: ({ hobbies, previousText, userInput }) => ({
                 url: '/improveHobbiesText',
                 method: 'POST',
-                body: { hobbies, previousText }
+                body: { hobbies, previousText, userInput }
             })
         }),
         improveWorkDescriptionText: builder.mutation<
             string,
-            { workDetails: { company: string }; previousText: string }
+            { workDetails: { company: string }; previousText: string; userInput: string }
         >({
-            query: ({ workDetails, previousText }) => ({
+            query: ({ workDetails, previousText, userInput }) => ({
                 url: '/improveWorkDescriptionText',
                 method: 'POST',
-                body: { workDetails, previousText }
+                body: { workDetails, previousText, userInput }
             })
         }),
         improveEducationComment: builder.mutation<
             string,
-            { educationDetails: { description: string; institution: string }; previousText: string }
+            { educationDetails: { description: string; institution: string }; previousText: string; userInput: string }
         >({
-            query: ({ educationDetails, previousText }) => ({
+            query: ({ educationDetails, previousText, userInput }) => ({
                 url: '/improveEducationComment',
                 method: 'POST',
-                body: { educationDetails, previousText }
+                body: { educationDetails, previousText, userInput }
             })
         }),
         extractTopSkills: builder.mutation<string, { previousText: string }>({
-            query: (previousText) => ({
+            query: ({ previousText }) => ({
                 url: '/extractTopSkills',
                 method: 'POST',
                 body: { previousText }
+            })
+        }),
+        improveTopSkills: builder.mutation<string, { previousText: string; userInput: string }>({
+            query: ({ previousText, userInput }) => ({
+                url: '/improveTopSkills',
+                method: 'POST',
+                body: { previousText, userInput }
             })
         })
     })
@@ -70,5 +83,6 @@ export const {
     useImproveHobbiesTextMutation,
     useImproveWorkDescriptionTextMutation,
     useImproveEducationCommentMutation,
-    useExtractTopSkillsMutation
+    useExtractTopSkillsMutation,
+    useImproveTopSkillsMutation
 } = aiApiSlice;

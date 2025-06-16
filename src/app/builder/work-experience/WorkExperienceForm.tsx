@@ -8,7 +8,6 @@ import { WorkExperienceEntry, YearMonth } from '@/lib/type';
 import YearMonthFormField from '@/app/builder/YearMonthFormField';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '@/app/builder/TextareaFormField';
-import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useImproveWorkDescriptionTextMutation } from '@/lib/store/api/aiApiSlice';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useEffect, useState } from 'react';
@@ -16,6 +15,7 @@ import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { toast } from '@/hooks/use-toast';
 import { useUpdateWorkExperienceMutation, useAddWorkExperienceMutation } from '@/lib/store/api/workExperienceApiSlice';
+import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z
@@ -88,7 +88,7 @@ export default function WorkExperienceForm({
     const watchedDescription = formHook.watch('description');
     const watchedCompany = formHook.watch('company');
     const isLoading = useAppSelector((state) => state.loading.isLoading);
-    const [improveWorkDescriptionText, { isLoading: isImprovingWorkDescriptionText }] =
+    const [improveWorkDescriptionText] =
         useImproveWorkDescriptionTextMutation();
     const [addWorkExperience] = useAddWorkExperienceMutation();
     const [updateWorkExperience] = useUpdateWorkExperienceMutation();
@@ -245,31 +245,34 @@ export default function WorkExperienceForm({
                                 fieldName='description'
                                 placeholder='Eg. I was responsible for...'
                             />
-                            <ImproveWithAIButton
-                                isBusyImproving={isImprovingWorkDescriptionText}
-                                disabled={!watchedDescription || watchedDescription.length === 0}
-                                isDirty={isDirty}
-                                onClick={async () => {
-                                    const newDescription = await improveWorkDescriptionText({
-                                        workDetails: { company: watchedCompany },
-                                        previousText: watchedDescription
-                                    }).unwrap();
-                                    setCompareText({
-                                        previousText: watchedDescription,
-                                        newText: newDescription,
-                                        onAccept: (acceptedText: string) => {
-                                            formHook.setValue('description', acceptedText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            setCompareText(undefined);
-                                        },
-                                        onReject: () => {
-                                            setCompareText(undefined);
-                                        }
-                                    });
-                                }}
-                            />
+                            {watchedDescription && watchedDescription.length > 0 && (
+                                <TextImprovementDrawer
+                                    originalText={watchedDescription || ''}
+                                    onSubmit={(userInput: string, originalText: string) => {
+                                        return new Promise<string>(async (resolve, reject) => {
+                                            try {
+                                                const newDescription = await improveWorkDescriptionText({
+                                                    workDetails: {
+                                                        company: watchedCompany
+                                                    },
+                                                    previousText: originalText,
+                                                    userInput: userInput
+                                                }).unwrap();
+                                                resolve(newDescription);
+                                            } catch (error) {
+                                                reject(error);
+                                            }
+                                        });
+                                    }}
+                                    onSave={(text: string) => {
+                                        formHook.setValue('description', text, {
+                                            shouldValidate: true,
+                                            shouldDirty: true
+                                        });
+                                    }}
+                                    triggerButtonText='Improve with AI'
+                                />
+                            )}
                         </div>
                     </div>
                     <div className='pt-4 m-4 flex justify-end'>

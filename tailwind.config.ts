@@ -77,17 +77,39 @@ const config: Config = {
                     }
                 },
                 'vibrate-burst': {
-                    '0%, 75%, 100%': { transform: 'translate(0)' },
-                    '2.5%': { transform: 'translate(2px)' },
-                    '5%': { transform: 'translate(-2px)' },
-                    '7.5%': { transform: 'translate(2px)' },
-                    '10%': { transform: 'translate(-2px)' },
-                    '12.5%': { transform: 'translate(2px)' },
-                    '15%': { transform: 'translate(-2px)' },
-                    '17.5%': { transform: 'translate(2px)' },
-                    '20%': { transform: 'translate(-2px)' },
-                    '22.5%': { transform: 'translate(2px)' },
-                    '25%': { transform: 'translate(0)' }
+                    '0%, 75%, 100%': {
+                        transform: 'translate(0)'
+                    },
+                    '2.5%': {
+                        transform: 'translate(2px)'
+                    },
+                    '5%': {
+                        transform: 'translate(-2px)'
+                    },
+                    '7.5%': {
+                        transform: 'translate(2px)'
+                    },
+                    '10%': {
+                        transform: 'translate(-2px)'
+                    },
+                    '12.5%': {
+                        transform: 'translate(2px)'
+                    },
+                    '15%': {
+                        transform: 'translate(-2px)'
+                    },
+                    '17.5%': {
+                        transform: 'translate(2px)'
+                    },
+                    '20%': {
+                        transform: 'translate(-2px)'
+                    },
+                    '22.5%': {
+                        transform: 'translate(2px)'
+                    },
+                    '25%': {
+                        transform: 'translate(0)'
+                    }
                 }
             },
             animation: {

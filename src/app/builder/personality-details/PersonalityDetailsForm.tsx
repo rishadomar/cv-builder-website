@@ -13,9 +13,9 @@ import { getStep } from '@/lib/utils/step';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useGeneratePersonalityTextMutation, useImprovePersonalityTextMutation } from '@/lib/store/api/aiApiSlice';
 import { StepContainer } from '@/components/StepContainer';
-import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
 import { AIIcon } from '@/components/AIIcon';
+import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
 
 const personalityDetailsFormSchema = z.object({
     personalityTraits: z.array(z.string()).min(1, 'At least one description is required').default([]),
@@ -64,7 +64,7 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
     const step = getStep('personality-details');
     const [compareText, setCompareText] = useState<CompareTextState>();
     const [generatePersonalityText, { isLoading: isGeneratingPersonalityText }] = useGeneratePersonalityTextMutation();
-    const [improvePersonalityText, { isLoading: isImprovingPersonalityText }] = useImprovePersonalityTextMutation();
+    const [improvePersonalityText] = useImprovePersonalityTextMutation();
 
     useEffect(() => {
         if (allFieldValues) {
@@ -109,6 +109,8 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
         });
     };
 
+    console.log('watchedPersonalityText', watchedPersonalityText);
+
     return (
         <>
             <Form {...formHook}>
@@ -136,6 +138,8 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                             <div className='flex flex-col md:flex-row justify-end gap-2 mt-4'>
                                 <Button
                                     variant='outline'
+                                    className='w-full'
+                                    size='sm'
                                     disabled={watchedPersonalityTraits?.length === 0 || isGeneratingPersonalityText}
                                     onClick={() => generateAiText()}
                                 >
@@ -151,31 +155,32 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
                                 placeholder='AI generated text will appear here'
                                 rows={watchedPersonalityText?.length > 0 ? 10 : 3}
                             />
-                            <ImproveWithAIButton
-                                isBusyImproving={isGeneratingPersonalityText || isImprovingPersonalityText}
-                                disabled={!watchedPersonalityText || watchedPersonalityText.length === 0}
-                                isDirty={isDirty}
-                                onClick={async () => {
-                                    const newDescription = await improvePersonalityText({
-                                        traits: watchedPersonalityTraits,
-                                        previousText: watchedPersonalityText
-                                    }).unwrap();
-                                    setCompareText({
-                                        previousText: watchedPersonalityText,
-                                        newText: newDescription,
-                                        onAccept: (acceptedText: string) => {
-                                            formHook.setValue('personalityText', acceptedText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            setCompareText(undefined);
-                                        },
-                                        onReject: () => {
-                                            setCompareText(undefined);
-                                        }
-                                    });
-                                }}
-                            />
+                            {watchedPersonalityText && watchedPersonalityText.length > 0 && (
+                                <TextImprovementDrawer
+                                    originalText={watchedPersonalityText || ''}
+                                    onSubmit={(userInput: string, originalText: string) => {
+                                        return new Promise<string>(async (resolve, reject) => {
+                                            try {
+                                                const newText = await improvePersonalityText({
+                                                    traits: watchedPersonalityTraits,
+                                                    previousText: originalText,
+                                                    userInput: userInput
+                                                }).unwrap();
+                                                resolve(newText);
+                                            } catch (error) {
+                                                reject(error);
+                                            }
+                                        });
+                                    }}
+                                    onSave={(text: string) => {
+                                        formHook.setValue('personalityText', text, {
+                                            shouldValidate: true,
+                                            shouldDirty: true
+                                        });
+                                    }}
+                                    triggerButtonText='Improve with AI'
+                                />
+                            )}
                         </div>
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />

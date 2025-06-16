@@ -19,6 +19,7 @@ type DrawerDialogProps = {
     description?: string;
     closeText?: string;
     content: React.ReactNode;
+    preferDialog?: boolean;
 };
 
 export const DrawerDialog: React.FC<DrawerDialogProps> = ({
@@ -28,12 +29,17 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
     title,
     description,
     closeText,
-    content
+    content,
+    preferDialog = false
 }) => {
-    if (isMobile()) {
+    if (!preferDialog && isMobile()) {
         return (
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
-                {trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
+                {trigger && (
+                    <DrawerTrigger asChild className='w-full'>
+                        {trigger}
+                    </DrawerTrigger>
+                )}
                 <DrawerContent className='max-h-[90vh]'>
                     <div className='max-h-full overflow-y-auto'>
                         <DrawerHeader className='px-4'>
@@ -43,7 +49,7 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
                         <div className='px-4'>
                             {content}
                             {closeText && (
-                                <Button className='mt-6 w-full' variant='outline' onClick={() => setIsOpen(!isOpen)}>
+                                <Button className='mt-6 mb-2 w-full' variant='outline' onClick={() => setIsOpen(false)}>
                                     {closeText}
                                 </Button>
                             )}
@@ -61,6 +67,11 @@ export const DrawerDialog: React.FC<DrawerDialogProps> = ({
                 <DialogTitle>{title}</DialogTitle>
                 {description && <DialogDescription>{description}</DialogDescription>}
                 <div>{content}</div>
+                {closeText && (
+                    <Button className='mt-4' variant='outline' onClick={() => setIsOpen(false)}>
+                        {closeText}
+                    </Button>
+                )}
             </DialogContent>
         </Dialog>
     );

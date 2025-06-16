@@ -18,6 +18,7 @@ export default function AddEducationDialog({ busyUpdating, setBusyUpdating }: Ad
         <DrawerDialog
             isOpen={dialogIsOpen}
             setIsOpen={setDialogIsOpen}
+            preferDialog
             trigger={
                 <Button variant='outline' onClick={() => setDialogIsOpen(true)}>
                     <Plus className='mr-2' />

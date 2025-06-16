@@ -12,6 +12,7 @@ import { Loader } from 'lucide-react';
 import EmailField, { EmailFieldRef } from '@/components/EmailField';
 import { toast } from '@/hooks/use-toast';
 import { useLoginMutation } from '@/lib/store/api/authenticationApiSlice';
+import { GoogleLoginForm } from './GoogleLoginForm';
 
 interface AuthenticationLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onForgotPassword: () => void;
@@ -111,6 +112,7 @@ export function AuthenticationLoginForm({
                         />
                     </div>
                 </form>
+                <GoogleLoginForm />
             </div>
         </>
     );

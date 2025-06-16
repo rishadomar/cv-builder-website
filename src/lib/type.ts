@@ -169,6 +169,7 @@ export type StepPath =
     | 'education'
     | 'work-experience'
     | 'top-skills'
+    | 'top-skills-discussion'
     | 'social-links'
     | 'paywall'
     | 'review'

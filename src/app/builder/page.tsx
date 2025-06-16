@@ -20,6 +20,7 @@ import { Steps } from '@/lib/utils/step';
 import SocialLinksForm from './social-links/SocialLinks';
 import TopSkillsForm from './top-skills/TopSkillsForm';
 import SelectTemplate from './generate-pdf/SelectTemplate';
+import TopSkillsDiscussion from './top-skills/TopSkillsDiscussion';
 
 const NumberOfPages = Steps.length;
 
@@ -117,6 +118,10 @@ function FormContent() {
 
                 {currentPage === 'top-skills' && <TopSkillsForm onNext={nextPage} onPrevious={previousPage} />}
 
+                {currentPage === 'top-skills-discussion' && (
+                    <TopSkillsDiscussion onNext={nextPage} onPrevious={previousPage} />
+                )}
+
                 {currentPage === 'review' && <Review onNext={nextPage} onPrevious={previousPage} />}
 
                 {currentPage === 'paywall' && <Paywall onNext={nextPage} onPrevious={previousPage} />}
@@ -132,7 +137,7 @@ function FormContent() {
 // Main component with proper Suspense boundary
 export default function BuilderPage() {
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-    const { isLoading: isFieldValuesLoading } = useAppSelector((state) => state.loading);
+    const isReading = useAppSelector((state) => state.loading.isReading);
 
     if (isAuthLoading) {
         return (
@@ -149,7 +154,7 @@ export default function BuilderPage() {
     return (
         <Suspense fallback={<OverlaySpinner />}>
             <FormContent />
-            {isFieldValuesLoading && <OverlaySpinner />}
+            {isReading && <OverlaySpinner />}
         </Suspense>
     );
 }

@@ -9,14 +9,13 @@ import { KeyValuePairArray } from '@/lib/type';
 import { getStep } from '@/lib/utils/step';
 import { StepContainer } from '@/components/StepContainer';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
-import { useExtractTopSkillsMutation } from '@/lib/store/api/aiApiSlice';
+import { useExtractTopSkillsMutation, useImproveTopSkillsMutation } from '@/lib/store/api/aiApiSlice';
 import { Button } from '@/components/ui/button';
 import TextareaFormField from '../TextareaFormField';
-import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { useSaveDataMutation } from '@/lib/store/api/databaseApiSlice';
-import { LearnMoreAboutConversation } from './LearnMoreAboutConversation';
-import { ListenTopSkills } from './ListenTopSkills';
 import { AIIcon } from '@/components/AIIcon';
+import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
+import { isMobile } from '@/lib/utils';
 
 const topSkillsFormSchema = z.object({
     topSkills: z.string().default('')
@@ -45,6 +44,7 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
     const { isDirty } = formHook.formState;
     const step = getStep('top-skills');
     const [extractTopSkills] = useExtractTopSkillsMutation();
+    const [improveTopSkills] = useImproveTopSkillsMutation();
     const [busyGeneratingTopSkills, setBusyGeneratingTopSkills] = useState(false);
 
     useEffect(() => {
@@ -117,49 +117,34 @@ export default function TopSkillsForm({ onNext, onPrevious }: TopSkillsFormProps
                                 formHook={formHook}
                                 fieldName='topSkills'
                                 placeholder='AI generated text will appear here'
-                                rows={watchedTopSkills?.length > 0 ? 20 : 3}
+                                rows={watchedTopSkills?.length > 0 ? (isMobile() ? 18 : 26) : 3}
                             />
-                            <ImproveWithAIButton
-                                isBusyImproving={busyGeneratingTopSkills}
-                                disabled={!watchedTopSkills || watchedTopSkills.length === 0}
-                                isDirty={isDirty}
-                                onClick={async () => {
-                                    try {
-                                        setBusyGeneratingTopSkills(true);
-                                        const newDescription = await extractTopSkills({
-                                            previousText: watchedTopSkills
-                                        }).unwrap();
-                                        setCompareText({
-                                            previousText: watchedTopSkills,
-                                            newText: newDescription,
-                                            onAccept: (acceptedText: string) => {
-                                                formHook.setValue('topSkills', acceptedText, {
-                                                    shouldValidate: true,
-                                                    shouldDirty: true
-                                                });
-                                                setCompareText(undefined);
-                                            },
-                                            onReject: () => {
-                                                setCompareText(undefined);
+                            {watchedTopSkills?.length > 0 && (
+                                <TextImprovementDrawer
+                                    originalText={watchedTopSkills || ''}
+                                    onSubmit={(userInput: string, originalText: string) => {
+                                        return new Promise<string>(async (resolve, reject) => {
+                                            try {
+                                                const newText = await improveTopSkills({
+                                                    previousText: originalText,
+                                                    userInput: userInput
+                                                }).unwrap();
+                                                resolve(newText);
+                                            } catch (error) {
+                                                reject(error);
                                             }
                                         });
-                                    } finally {
-                                        setBusyGeneratingTopSkills(false);
-                                    }
-                                }}
-                            />
-                        </div>
-                        {allFieldValues?.topSkillsAudio?.status === 'complete' ? (
-                            <>
-                                <ListenTopSkills dateGenerated={allFieldValues.topSkillsAudio.lastUpdated} />
-                                <LearnMoreAboutConversation
-                                    title='Regenerate your conversation'
-                                    countGenerations={allFieldValues.topSkillsAudio.count}
+                                    }}
+                                    onSave={(text: string) => {
+                                        formHook.setValue('topSkills', text, {
+                                            shouldValidate: true,
+                                            shouldDirty: true
+                                        });
+                                    }}
+                                    triggerButtonText='Improve with AI'
                                 />
-                            </>
-                        ) : (
-                            <LearnMoreAboutConversation title='Learn more about the Top Skills' countGenerations={0} />
-                        )}
+                            )}
+                        </div>
                     </StepContainer>
                     <StepButtons onNext={onNext} onPrevious={onPrevious} />
                 </form>
