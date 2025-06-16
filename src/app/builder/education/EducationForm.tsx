@@ -12,12 +12,10 @@ import TextareaFormField from '@/app/builder/TextareaFormField';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { useEffect, useState } from 'react';
 import { OverlaySpinner } from '@/components/OverlaySpinner';
-import ImproveWithAIButton from '@/components/ImproveWithAIButton';
 import { CompareText, CompareTextState } from '@/components/compareText/CompareText';
 import { useImproveEducationCommentMutation } from '@/lib/store/api/aiApiSlice';
 import { toast } from '@/hooks/use-toast';
 import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
-import { original } from '@reduxjs/toolkit';
 
 const educationDetailsFormSchema = z.object({
     description: z
@@ -210,38 +208,6 @@ export default function EducationForm({
                             fieldName='comment'
                             placeholder='Passed with distinction or Learned a lot about the economy'
                         />
-                        {/* <ImproveWithAIButton
-                                isBusyImproving={isImprovingEducationComment}
-                                isDirty={isDirty}
-                                disabled={
-                                    watchedDescription?.length === 0 ||
-                                    watchedInstitution?.length === 0 ||
-                                    watchedComment?.length === 0
-                                }
-                                onClick={async () => {
-                                    const newDescription = await improveEducationComment({
-                                        educationDetails: {
-                                            description: watchedDescription,
-                                            institution: watchedInstitution
-                                        },
-                                        previousText: watchedComment
-                                    }).unwrap();
-                                    setCompareText({
-                                        previousText: watchedComment,
-                                        newText: newDescription,
-                                        onAccept: (acceptedText: string) => {
-                                            formHook.setValue('comment', acceptedText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            setCompareText(undefined);
-                                        },
-                                        onReject: () => {
-                                            setCompareText(undefined);
-                                        }
-                                    });
-                                }}
-                            /> */}
                         {watchedComment && watchedComment.length > 0 && (
                             <TextImprovementDrawer
                                 originalText={watchedComment || ''}
