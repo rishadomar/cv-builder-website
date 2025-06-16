@@ -41,12 +41,12 @@ export const aiApiSlice = createApi({
         }),
         improveWorkDescriptionText: builder.mutation<
             string,
-            { workDetails: { company: string }; previousText: string }
+            { workDetails: { company: string }; previousText: string; userInput: string }
         >({
-            query: ({ workDetails, previousText }) => ({
+            query: ({ workDetails, previousText, userInput }) => ({
                 url: '/improveWorkDescriptionText',
                 method: 'POST',
-                body: { workDetails, previousText }
+                body: { workDetails, previousText, userInput }
             })
         }),
         improveEducationComment: builder.mutation<

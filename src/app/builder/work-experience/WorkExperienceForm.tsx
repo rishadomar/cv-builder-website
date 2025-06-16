@@ -16,6 +16,7 @@ import { OverlaySpinner } from '@/components/OverlaySpinner';
 import { ConfirmCloseDialog } from '@/components/ConfirmCloseDialog';
 import { toast } from '@/hooks/use-toast';
 import { useUpdateWorkExperienceMutation, useAddWorkExperienceMutation } from '@/lib/store/api/workExperienceApiSlice';
+import { TextImprovementDrawer } from '@/components/TextImprovementDrawer';
 
 const workExperienceDetailsFormSchema = z.object({
     company: z
@@ -245,31 +246,34 @@ export default function WorkExperienceForm({
                                 fieldName='description'
                                 placeholder='Eg. I was responsible for...'
                             />
-                            <ImproveWithAIButton
-                                isBusyImproving={isImprovingWorkDescriptionText}
-                                disabled={!watchedDescription || watchedDescription.length === 0}
-                                isDirty={isDirty}
-                                onClick={async () => {
-                                    const newDescription = await improveWorkDescriptionText({
-                                        workDetails: { company: watchedCompany },
-                                        previousText: watchedDescription
-                                    }).unwrap();
-                                    setCompareText({
-                                        previousText: watchedDescription,
-                                        newText: newDescription,
-                                        onAccept: (acceptedText: string) => {
-                                            formHook.setValue('description', acceptedText, {
-                                                shouldValidate: true,
-                                                shouldDirty: true
-                                            });
-                                            setCompareText(undefined);
-                                        },
-                                        onReject: () => {
-                                            setCompareText(undefined);
-                                        }
-                                    });
-                                }}
-                            />
+                            {watchedDescription && watchedDescription.length > 0 && (
+                                <TextImprovementDrawer
+                                    originalText={watchedDescription || ''}
+                                    onSubmit={(userInput: string, originalText: string) => {
+                                        return new Promise<string>(async (resolve, reject) => {
+                                            try {
+                                                const newDescription = await improveWorkDescriptionText({
+                                                    workDetails: {
+                                                        company: watchedCompany
+                                                    },
+                                                    previousText: originalText,
+                                                    userInput: userInput
+                                                }).unwrap();
+                                                resolve(newDescription);
+                                            } catch (error) {
+                                                reject(error);
+                                            }
+                                        });
+                                    }}
+                                    onSave={(text: string) => {
+                                        formHook.setValue('description', text, {
+                                            shouldValidate: true,
+                                            shouldDirty: true
+                                        });
+                                    }}
+                                    triggerButtonText='Improve with AI'
+                                />
+                            )}
                         </div>
                     </div>
                     <div className='pt-4 m-4 flex justify-end'>
