@@ -134,7 +134,7 @@ export function useCoachMark(initialVisible = false) {
         };
 
         const config = getResponsiveConfig();
-        const { isMobile, edgePadding, maxWidthPx } = config;
+        const { edgePadding, maxWidthPx } = config;
 
         let positionStyle: React.CSSProperties = {};
         let arrowStyle: React.CSSProperties = {};
