@@ -178,7 +178,7 @@ export function TextImprovementDrawer({
                                     )}
                                 </div>
 
-                                <div className='text-sm whitespace-pre-line'>{entry.text}</div>
+                                <div className='text-xs whitespace-pre-line'>{entry.text}</div>
 
                                 {!entry.isOriginal && (
                                     <p className='text-xs text-muted-foreground mt-2 italic'>Prompt: {entry.prompt}</p>
@@ -192,8 +192,9 @@ export function TextImprovementDrawer({
                             <Textarea
                                 placeholder='Tell me how you want to improve the text...'
                                 value={userInput}
+                                disabled={isLoading}
                                 onChange={(e) => setUserInput(e.target.value)}
-                                className='min-h-[80px]'
+                                className='min-h-[80px] text-xs'
                             />
 
                             <div className='mt-3 pb-6'>

@@ -29,7 +29,7 @@ export default function TextFormField({
             <>
                 <FormLabel>{label}</FormLabel>
                 <FormControl>
-                    <Input onFocus={onFocus} placeholder={placeholder || ''} {...field} value={field.value ?? ''} />
+                    <Input onFocus={onFocus} className='text-sm' placeholder={placeholder || ''} {...field} value={field.value ?? ''} />
                 </FormControl>
             </>
         );

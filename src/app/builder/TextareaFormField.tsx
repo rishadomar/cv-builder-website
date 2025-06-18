@@ -28,7 +28,7 @@ export default function TextareaFormField({
                 <FormItem>
                     {label && <FormLabel>{label}</FormLabel>}
                     <FormControl>
-                        <Textarea placeholder={placeholder} {...field} rows={rows} />
+                        <Textarea placeholder={placeholder} {...field} rows={rows} className='text-xs'/>
                     </FormControl>
                     {description && <FormDescription>{description}</FormDescription>}
                     {error && (
