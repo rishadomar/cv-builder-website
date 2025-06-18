@@ -15,7 +15,7 @@ interface CoachMarkOptions {
     className?: string;
     zIndex?: number;
     arrow?: boolean;
-    maxWidth?: string; // Added option to control max width
+    maxWidth?: string;
 }
 
 const defaultOptions: CoachMarkOptions = {
@@ -26,7 +26,7 @@ const defaultOptions: CoachMarkOptions = {
     autoClose: 8000,
     zIndex: 2000,
     arrow: true,
-    maxWidth: '280px' // Default max width
+    maxWidth: '280px'
 };
 
 export function useCoachMark(initialVisible = false) {
@@ -53,12 +53,10 @@ export function useCoachMark(initialVisible = false) {
             setOptions((prev) => ({ ...prev, ...(customOptions || {}) }));
             setIsVisible(true);
 
-            // Get the autoClose value from custom options if provided, otherwise from current options
             const autoCloseDelay = customOptions?.hasOwnProperty('autoClose')
                 ? customOptions.autoClose
                 : options.autoClose;
 
-            // Only set timeout if autoClose is a number (not false)
             if (autoCloseDelay !== false && typeof autoCloseDelay === 'number') {
                 timeoutRef.current = setTimeout(() => {
                     hideCoachMark();
@@ -72,12 +70,6 @@ export function useCoachMark(initialVisible = false) {
     const hideCoachMark = useCallback(() => {
         clearCoachMarkTimeout();
         setIsVisible(false);
-
-        // Optional: If you want to completely reset the state after it's hidden
-        // setTimeout(() => {
-        //     setTargetElementId(null);
-        //     setMessage(null);
-        // }, 300); // Matches your transition duration
     }, [clearCoachMarkTimeout]);
 
     // Clean up on unmount
@@ -104,108 +96,122 @@ export function useCoachMark(initialVisible = false) {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
-        // Determine if we're on a mobile device (viewport width less than 640px)
-        const isMobile = viewportWidth < 640;
+        // Improved responsive breakpoints and width calculation
+        const getResponsiveConfig = () => {
+            if (viewportWidth < 640) {
+                // Mobile
+                return {
+                    isMobile: true,
+                    edgePadding: 12,
+                    maxWidthPx: Math.min(320, viewportWidth - 24),
+                    widthPercentage: 0.9
+                };
+            } else if (viewportWidth < 768) {
+                // Small tablet
+                return {
+                    isMobile: false,
+                    edgePadding: 16,
+                    maxWidthPx: Math.min(360, viewportWidth * 0.8),
+                    widthPercentage: 0.8
+                };
+            } else if (viewportWidth < 1024) {
+                // Medium screens (including 808px) - keep similar to mobile
+                return {
+                    isMobile: false,
+                    edgePadding: 20,
+                    maxWidthPx: Math.min(360, viewportWidth - 40), // Fixed width similar to mobile
+                    widthPercentage: 0.6
+                };
+            } else {
+                // Large screens
+                return {
+                    isMobile: false,
+                    edgePadding: 24,
+                    maxWidthPx: parseInt(maxWidth || '280', 10),
+                    widthPercentage: 0.5
+                };
+            }
+        };
 
-        // Padding from edges - increase for mobile devices
-        const edgePadding = isMobile ? 12 : 16;
+        const config = getResponsiveConfig();
+        const { isMobile, edgePadding, maxWidthPx } = config;
 
         let positionStyle: React.CSSProperties = {};
         let arrowStyle: React.CSSProperties = {};
 
-        // Default coachmark dimensions - adjust for mobile
-        const effectiveMaxWidth = isMobile
-            ? Math.min(parseInt(maxWidth || '280', 10), viewportWidth - edgePadding * 2)
-            : parseInt(maxWidth || '280', 10);
-
-        const coachMarkWidth = Math.min(effectiveMaxWidth, viewportWidth - edgePadding * 2);
+        // Calculate effective width based on screen size and content
+        const baseWidth = Math.min(maxWidthPx, viewportWidth - edgePadding * 2);
+        const coachMarkWidth = Math.max(200, baseWidth); // Minimum width of 200px
         const coachMarkHalfWidth = coachMarkWidth / 2;
 
         // Calculate position based on the specified position and handle edge cases
         switch (position) {
             case 'top': {
-                // Calculate initial position
                 let leftPos = targetRect.left + targetRect.width / 2;
 
-                // For mobile devices, if the element is near the right edge,
-                // try to position coach mark more to the left
-                if (isMobile && targetRect.right > viewportWidth - 80) {
-                    leftPos = Math.max(
-                        coachMarkHalfWidth + edgePadding,
-                        Math.min(leftPos, viewportWidth - coachMarkHalfWidth - edgePadding)
-                    );
-                }
-                // For mobile devices, if the element is near the left edge,
-                // try to position coach mark more to the right
-                else if (isMobile && targetRect.left < 80) {
-                    leftPos = Math.max(
-                        coachMarkHalfWidth + edgePadding,
-                        Math.min(viewportWidth - coachMarkHalfWidth - edgePadding, leftPos)
-                    );
-                }
-                // Standard edge adjustment
-                else {
-                    if (leftPos - coachMarkHalfWidth < edgePadding) {
-                        // Too close to left edge
-                        leftPos = edgePadding + coachMarkHalfWidth;
-                    } else if (leftPos + coachMarkHalfWidth > viewportWidth - edgePadding) {
-                        // Too close to right edge
-                        leftPos = viewportWidth - edgePadding - coachMarkHalfWidth;
-                    }
+                // Improved edge detection and positioning
+                const minLeft = edgePadding + coachMarkHalfWidth;
+                const maxLeft = viewportWidth - edgePadding - coachMarkHalfWidth;
+
+                // Special handling for elements near edges
+                if (targetRect.left < edgePadding) {
+                    leftPos = minLeft;
+                } else if (targetRect.right > viewportWidth - edgePadding) {
+                    leftPos = maxLeft;
+                } else {
+                    // Clamp to safe bounds
+                    leftPos = Math.max(minLeft, Math.min(maxLeft, leftPos));
                 }
 
                 positionStyle = {
                     bottom: window.innerHeight - targetRect.top + (offset || 0),
                     left: leftPos,
                     transform: 'translateX(-50%)',
-                    maxWidth: `${effectiveMaxWidth}px`
+                    width: `${coachMarkWidth}px`,
+                    maxWidth: `${coachMarkWidth}px`
                 };
 
-                // Adjust arrow to point to the button even when coach mark is shifted
-                const arrowLeftOffset = ((targetRect.left + targetRect.width / 2 - leftPos) / coachMarkWidth) * 100;
+                // Calculate arrow position relative to target
+                const targetCenter = targetRect.left + targetRect.width / 2;
+                const arrowLeftOffset = ((targetCenter - leftPos) / coachMarkWidth) * 100;
+                const clampedArrowOffset = Math.max(-40, Math.min(40, arrowLeftOffset));
+
                 arrowStyle = {
                     bottom: -8,
-                    left: `calc(50% + ${arrowLeftOffset}%)`,
+                    left: `calc(50% + ${clampedArrowOffset}%)`,
                     transform: 'translateX(-50%) rotate(45deg)',
                     backgroundColor: 'var(--coachmark-bg, hsl(var(--primary)))'
                 };
                 break;
             }
             case 'bottom': {
-                // Calculate initial position
                 let leftPos = targetRect.left + targetRect.width / 2;
 
-                // For mobile devices, if the element is near the right edge,
-                // try to position coach mark more to the left
-                if (isMobile && targetRect.right > viewportWidth - 80) {
-                    leftPos = Math.max(coachMarkHalfWidth + edgePadding, Math.min(viewportWidth / 2, leftPos));
-                }
-                // For mobile devices, if the element is near the left edge,
-                // try to position coach mark more to the right
-                else if (isMobile && targetRect.left < 80) {
-                    leftPos = Math.max(coachMarkHalfWidth + edgePadding, Math.min(viewportWidth / 2, leftPos + 40));
-                }
-                // Standard edge adjustment
-                else {
-                    if (leftPos - coachMarkHalfWidth < edgePadding) {
-                        // Too close to left edge
-                        leftPos = edgePadding + coachMarkHalfWidth;
-                    } else if (leftPos + coachMarkHalfWidth > viewportWidth - edgePadding) {
-                        // Too close to right edge
-                        leftPos = viewportWidth - edgePadding - coachMarkHalfWidth;
-                    }
+                // Improved edge detection and positioning
+                const minLeft = edgePadding + coachMarkHalfWidth;
+                const maxLeft = viewportWidth - edgePadding - coachMarkHalfWidth;
+
+                // Special handling for elements near edges
+                if (targetRect.left < edgePadding) {
+                    leftPos = minLeft;
+                } else if (targetRect.right > viewportWidth - edgePadding) {
+                    leftPos = maxLeft;
+                } else {
+                    // Clamp to safe bounds
+                    leftPos = Math.max(minLeft, Math.min(maxLeft, leftPos));
                 }
 
                 positionStyle = {
                     top: targetRect.bottom + (offset || 0),
                     left: leftPos,
                     transform: 'translateX(-50%)',
-                    maxWidth: `${effectiveMaxWidth}px`
+                    width: `${coachMarkWidth}px`,
+                    maxWidth: `${coachMarkWidth}px`
                 };
 
-                // Adjust arrow to point to the button even when coach mark is shifted
-                const arrowLeftOffset = ((targetRect.left + targetRect.width / 2 - leftPos) / coachMarkWidth) * 100;
-                // Clamp the arrow offset to make sure it stays within the coach mark
+                // Calculate arrow position relative to target
+                const targetCenter = targetRect.left + targetRect.width / 2;
+                const arrowLeftOffset = ((targetCenter - leftPos) / coachMarkWidth) * 100;
                 const clampedArrowOffset = Math.max(-40, Math.min(40, arrowLeftOffset));
 
                 arrowStyle = {
@@ -217,33 +223,27 @@ export function useCoachMark(initialVisible = false) {
                 break;
             }
             case 'left': {
-                // Calculate vertical center alignment
                 let topPos = targetRect.top + targetRect.height / 2;
 
-                // Handle potential overflow on small screens
-                if (isMobile) {
-                    // Calculate coach mark height (approximation)
-                    const estimatedHeight = 80; // Minimal approximation
-                    const coachMarkHalfHeight = estimatedHeight / 2;
+                // Estimate coachmark height for vertical positioning
+                const estimatedHeight = 100;
+                const coachMarkHalfHeight = estimatedHeight / 2;
 
-                    // Adjust when close to top or bottom edges
-                    if (topPos - coachMarkHalfHeight < edgePadding) {
-                        topPos = edgePadding + coachMarkHalfHeight;
-                    } else if (topPos + coachMarkHalfHeight > viewportHeight - edgePadding) {
-                        topPos = viewportHeight - edgePadding - coachMarkHalfHeight;
-                    }
-                }
+                const minTop = edgePadding + coachMarkHalfHeight;
+                const maxTop = viewportHeight - edgePadding - coachMarkHalfHeight;
+
+                topPos = Math.max(minTop, Math.min(maxTop, topPos));
 
                 positionStyle = {
                     top: topPos,
                     right: viewportWidth - targetRect.left + (offset || 0),
                     transform: 'translateY(-50%)',
-                    maxWidth: `${effectiveMaxWidth}px`
+                    width: `${coachMarkWidth}px`,
+                    maxWidth: `${coachMarkWidth}px`
                 };
 
-                // Arrow positioning
-                const arrowTopOffset = ((targetRect.top + targetRect.height / 2 - topPos) / coachMarkWidth) * 100;
-                // Clamp the arrow offset to make sure it stays within the coach mark
+                const targetCenter = targetRect.top + targetRect.height / 2;
+                const arrowTopOffset = ((targetCenter - topPos) / estimatedHeight) * 100;
                 const clampedArrowOffset = Math.max(-40, Math.min(40, arrowTopOffset));
 
                 arrowStyle = {
@@ -255,33 +255,27 @@ export function useCoachMark(initialVisible = false) {
                 break;
             }
             case 'right': {
-                // Calculate vertical center alignment
                 let topPos = targetRect.top + targetRect.height / 2;
 
-                // Handle potential overflow on small screens
-                if (isMobile) {
-                    // Calculate coach mark height (approximation)
-                    const estimatedHeight = 80; // Minimal approximation
-                    const coachMarkHalfHeight = estimatedHeight / 2;
+                // Estimate coachmark height for vertical positioning
+                const estimatedHeight = 100;
+                const coachMarkHalfHeight = estimatedHeight / 2;
 
-                    // Adjust when close to top or bottom edges
-                    if (topPos - coachMarkHalfHeight < edgePadding) {
-                        topPos = edgePadding + coachMarkHalfHeight;
-                    } else if (topPos + coachMarkHalfHeight > viewportHeight - edgePadding) {
-                        topPos = viewportHeight - edgePadding - coachMarkHalfHeight;
-                    }
-                }
+                const minTop = edgePadding + coachMarkHalfHeight;
+                const maxTop = viewportHeight - edgePadding - coachMarkHalfHeight;
+
+                topPos = Math.max(minTop, Math.min(maxTop, topPos));
 
                 positionStyle = {
                     top: topPos,
                     left: targetRect.right + (offset || 0),
                     transform: 'translateY(-50%)',
-                    maxWidth: `${effectiveMaxWidth}px`
+                    width: `${coachMarkWidth}px`,
+                    maxWidth: `${coachMarkWidth}px`
                 };
 
-                // Arrow positioning
-                const arrowTopOffset = ((targetRect.top + targetRect.height / 2 - topPos) / coachMarkWidth) * 100;
-                // Clamp the arrow offset to make sure it stays within the coach mark
+                const targetCenter = targetRect.top + targetRect.height / 2;
+                const arrowTopOffset = ((targetCenter - topPos) / estimatedHeight) * 100;
                 const clampedArrowOffset = Math.max(-40, Math.min(40, arrowTopOffset));
 
                 arrowStyle = {
@@ -294,7 +288,6 @@ export function useCoachMark(initialVisible = false) {
             }
         }
 
-        // For speech bubble and tooltip styles
         return createPortal(
             <div
                 className={`fixed z-[1000] ${options.className || ''}`}
@@ -307,8 +300,8 @@ export function useCoachMark(initialVisible = false) {
                     boxShadow: '0 10px 15px -3px var(--coachmark-shadow), 0 4px 6px -2px var(--coachmark-shadow)',
                     border: '1px solid var(--coachmark-border)',
                     zIndex: zIndex || 1000,
-                    minWidth: isMobile ? `${coachMarkWidth}px` : 'auto',
-                    width: isMobile ? `${coachMarkWidth}px` : 'fit-content'
+                    // Ensure consistent sizing
+                    boxSizing: 'border-box'
                 }}
             >
                 {arrow && <div className='absolute w-4 h-4' style={arrowStyle} />}
