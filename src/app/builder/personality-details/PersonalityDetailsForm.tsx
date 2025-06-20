@@ -109,8 +109,6 @@ export default function PersonalityDetailsForm({ onNext, onPrevious }: Personali
         });
     };
 
-    console.log('watchedPersonalityText', watchedPersonalityText);
-
     return (
         <>
             <Form {...formHook}>

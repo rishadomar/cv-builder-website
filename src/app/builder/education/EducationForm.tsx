@@ -162,7 +162,6 @@ export default function EducationForm({
         event?.preventDefault();
     }
 
-    console.log('Comment:', watchedComment);
     return (
         <>
             <Form {...formHook}>
@@ -265,7 +264,6 @@ export default function EducationForm({
                 onOpenChange={setConfirmClose}
                 onCancel={() => setConfirmClose(false)}
                 onClose={() => {
-                    console.log('on close');
                     setConfirmClose(false);
                     onClose();
                 }}

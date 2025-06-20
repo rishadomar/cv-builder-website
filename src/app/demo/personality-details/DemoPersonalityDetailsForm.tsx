@@ -107,7 +107,6 @@ export default function DemoPersonalityDetailsForm({
         initialDelay: 3000,
         typeDelay: 20, // Faster typing for the longer text
         onComplete: () => {
-            console.log('Personality text generation completed');
         }
     });
 

@@ -50,20 +50,15 @@ export const pdfApiSlice = createApi({
                     }
 
                     const base64Data = await response.text();
-                    console.log('Raw response:', base64Data.substring(0, 50));
 
                     // Convert base64 to binary
                     const binaryString = atob(base64Data);
-                    console.log('First few chars after atob:', binaryString.substring(0, 20));
 
                     // Convert binary string to Uint8Array
                     const bytes = new Uint8Array(binaryString.length);
                     for (let i = 0; i < binaryString.length; i++) {
                         bytes[i] = binaryString.charCodeAt(i);
                     }
-
-                    console.log('First bytes:', bytes.slice(0, 20));
-                    console.log('As text:', new TextDecoder().decode(bytes.slice(0, 20)));
 
                     // Create blob from the binary data
                     return new Blob([bytes], { type: 'application/pdf' });

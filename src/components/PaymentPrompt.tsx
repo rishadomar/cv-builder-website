@@ -42,7 +42,6 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
     }, []);
 
     const onSuccess = async (response: any) => {
-        console.log('Paystack payment modal response', response);
         await paymentComplete({
             currency: Cost.currency as Currency,
             amount: Cost.amount,
@@ -101,12 +100,9 @@ export function PaymentPrompt({ onNext, onPrevious }: PaymentPromptProps) {
                                     }
                                 }}
                                 onSuccess={async (response) => {
-                                    console.log(response);
                                     await onSuccess(response);
                                 }}
-                                onClose={() => {
-                                    console.log('closed');
-                                }}
+                                onClose={() => {}}
                             />
                             {paymentInitiated && (
                                 <PaymentInitiatedDialog

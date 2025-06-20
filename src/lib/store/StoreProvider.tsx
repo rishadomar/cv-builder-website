@@ -14,9 +14,11 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
         if (!storeRef.current) {
             return;
         }
-        // Log the latest state whenever the component mounts or updates
+        // Log the latest state whenever the component mounts or updates (dev only)
         const unsubscribe = storeRef.current.subscribe(() => {
-            console.log('Latest state:', storeRef.current!.getState());
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Latest state:', storeRef.current!.getState());
+            }
         });
 
         // Cleanup subscription on unmount

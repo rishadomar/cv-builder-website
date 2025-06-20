@@ -13,9 +13,9 @@ export function GoogleLoginForm() {
         const authorizeParams = new URLSearchParams();
         const origin = window.location.origin;
 
-        console.log('Origin: ', origin);
-        console.log('COGNITO_DOMAIN: ', COGNITO_DOMAIN);
-        console.log('COGNITO_APP_CLIENT_ID: ', COGNITO_APP_CLIENT_ID);
+        // console.log('Origin: ', origin);
+        // console.log('COGNITO_DOMAIN: ', COGNITO_DOMAIN);
+        // console.log('COGNITO_APP_CLIENT_ID: ', COGNITO_APP_CLIENT_ID);
 
         authorizeParams.append('response_type', 'code');
         authorizeParams.append('client_id', COGNITO_APP_CLIENT_ID as string);
@@ -24,7 +24,6 @@ export function GoogleLoginForm() {
         authorizeParams.append('scope', 'profile email openid');
 
         const authUrl = `${COGNITO_DOMAIN}/oauth2/authorize?${authorizeParams.toString()}`;
-        console.log('Auth URL: ', authUrl);
 
         window.location.href = authUrl;
     }

@@ -38,7 +38,6 @@ export const workExperienceApiSlice = createApi({
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    console.log('Data om WorkExperienceApiSlice', data);
                     dispatch(setWorkExperiences(data.workExperiences));
                 } catch (error) {
                     console.error('Error saving data to Redux:', error);
