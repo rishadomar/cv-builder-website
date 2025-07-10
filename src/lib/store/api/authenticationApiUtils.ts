@@ -39,74 +39,27 @@ export const getIdToken = async () => {
 };
 
 export const refreshToken = async () => {
-    const refreshToken = getCookie('RefreshToken');
-    if (!refreshToken) {
+    const refreshTokenValue = getCookie('RefreshToken');
+    if (!refreshTokenValue) {
         throw new Error('No RefreshToken available in Cookie');
     }
 
-    try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_GATEWAY_URL + '/refresh_token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ refreshToken })
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const { AccessToken, IdToken } = data;
-
-        setCookie('AccessToken', AccessToken);
-        setCookie('IdToken', IdToken);
-    } catch (error) {
-        console.error('Token refresh failed:', error);
-        throw error;
-    }
+    const store = getStore();
+    return await store
+        .dispatch(authenticationApiSlice.endpoints.refreshToken.initiate({ refreshToken: refreshTokenValue }))
+        .unwrap();
 };
 
 export async function validateGoogleLogin(code: string): Promise<GoogleLoginResponse> {
-    try {
-        // Make the GET request using Axios
-        const response = await fetch(process.env.NEXT_PUBLIC_API_GATEWAY_URL + '/validateGoogleLogin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ code: code, callbackURL: `${window.location.origin}/google-login-success` })
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = (await response.json()) as GoogleLoginResponse;
-        setCookie('AccessToken', data.access_token);
-        setCookie('IdToken', data.id_token);
-        setCookie('RefreshToken', data.refresh_token);
-        setCookie('Sub', data.sub);
-        setCookie('Email', data.email);
-        setCookie('Google', 'true');
-
-        const store = getStore();
-        store.dispatch(
-            setAuthenticationDetails({
-                idToken: data.id_token,
-                accessToken: data.access_token,
-                refreshToken: data.refresh_token,
-                sub: data.sub,
-                email: data.email
+    const store = getStore();
+    return await store
+        .dispatch(
+            authenticationApiSlice.endpoints.validateGoogleLogin.initiate({
+                code,
+                callbackURL: `${window.location.origin}/google-login-success`
             })
-        );
-
-        await refreshRecordData(data.sub, data.email);
-        return data;
-    } catch (error) {
-        // Handle any errors
-        console.error('Error fetching data:', error);
-        throw error;
-    }
+        )
+        .unwrap();
 }
 
 export async function resetAuthenticationFields() {

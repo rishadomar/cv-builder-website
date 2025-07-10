@@ -125,7 +125,64 @@ export const authenticationApiSlice = createApi({
                     }
                 }
             }
-        )
+        ),
+
+        refreshToken: builder.mutation<{ AccessToken: string; IdToken: string }, { refreshToken: string }>({
+            query: ({ refreshToken }) => ({
+                url: '/refresh_token',
+                method: 'POST',
+                body: {
+                    refreshToken
+                }
+            }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    setCookie('AccessToken', data.AccessToken);
+                    setCookie('IdToken', data.IdToken);
+                } catch (error) {
+                    console.error('Token refresh failed:', error);
+                    throw error;
+                }
+            }
+        }),
+
+        validateGoogleLogin: builder.mutation<any, { code: string; callbackURL: string }>({
+            query: ({ code, callbackURL }) => ({
+                url: '/validateGoogleLogin',
+                method: 'POST',
+                body: {
+                    code,
+                    callbackURL
+                }
+            }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    setCookie('AccessToken', data.access_token);
+                    setCookie('IdToken', data.id_token);
+                    setCookie('RefreshToken', data.refresh_token);
+                    setCookie('Sub', data.sub);
+                    setCookie('Email', data.email);
+                    setCookie('Google', 'true');
+
+                    dispatch(
+                        setAuthenticationDetails({
+                            idToken: data.id_token,
+                            accessToken: data.access_token,
+                            refreshToken: data.refresh_token,
+                            sub: data.sub,
+                            email: data.email
+                        })
+                    );
+
+                    await refreshRecordData(data.sub, data.email);
+                } catch (error) {
+                    console.error('Error validating Google login:', error);
+                    throw error;
+                }
+            }
+        })
     })
 });
 
@@ -134,5 +191,7 @@ export const {
     useLogoutMutation,
     useRegisterNewUserMutation,
     useForgotPasswordMutation,
-    useConfirmForgotPasswordMutation
+    useConfirmForgotPasswordMutation,
+    useRefreshTokenMutation,
+    useValidateGoogleLoginMutation
 } = authenticationApiSlice;
