@@ -55,20 +55,20 @@ const retryOnServerError = async (args: any, api: any, extraOptions: any, baseQu
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
         const result = await baseQuery(args, api, extraOptions);
-        
+
         // If request succeeded or it's not a 500 error, return the result
         if (!result.error || (result.error as any)?.status !== 500) {
             return result;
         }
-        
+
         // If this was the last attempt, return the error
         if (attempt === maxRetries) {
             return result;
         }
-        
+
         // Wait before retrying (exponential backoff)
-        await new Promise(resolve => setTimeout(resolve, retryDelay * Math.pow(2, attempt)));
+        await new Promise((resolve) => setTimeout(resolve, retryDelay * Math.pow(2, attempt)));
     }
 };
 
-export { customBaseQuery, injectSub };
+export { customBaseQuery, injectSub, retryOnServerError };

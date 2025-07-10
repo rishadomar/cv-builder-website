@@ -1,64 +1,21 @@
 import { BlogPost } from '@/lib/type';
+import { getStore } from '../store';
+import { blogApiSlice } from './blogApiSlice';
 
 export async function getBlogPostContent(slug: string): Promise<string> {
-    try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BLOG_URL}/${slug}/content.md`, {
-            next: { revalidate: 3600 }, // Cache for 1 hour
-            headers: {
-                Accept: 'text/markdown'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch blog post: ${response.statusText}`);
-        }
-
-        return await response.text();
-    } catch (error) {
-        console.error(`Error fetching blog post ${slug}:`, error);
-        throw error;
-    }
+    const store = getStore();
+    return await store.dispatch(blogApiSlice.endpoints.getBlogPostContent.initiate(slug)).unwrap();
 }
 
 export async function getBlogPosts(limit: number): Promise<BlogPost[]> {
-    try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/getRecentPosts?limit=${limit}`, {
-            next: { revalidate: 3600 }, // Cache for 1 hour
-            headers: {
-                Accept: 'text/markdown'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch blog posts: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data.items;
-    } catch (error) {
-        console.error(`Error fetching blog posts:`, error);
-        throw error;
-    }
+    const store = getStore();
+    const result = await store.dispatch(blogApiSlice.endpoints.getRecentPosts.initiate({ limit })).unwrap();
+    return result.items;
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost> {
-    try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/getBlogPost/${slug}`, {
-            next: { revalidate: 3600 }, // Cache for 1 hour
-            headers: {
-                Accept: 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch blog post: ${response.statusText}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error(`Error fetching blog post ${slug}:`, error);
-        throw error;
-    }
+    const store = getStore();
+    return await store.dispatch(blogApiSlice.endpoints.getBlogPost.initiate(slug)).unwrap();
 }
 
 // export async function getBlogPostKeywords(slug: string): Promise<string[]> {
