@@ -51,7 +51,7 @@ const injectSub = async (args: any, api: any, extraOptions: any, baseQuery: any)
 
 const retryOnServerError = async (args: any, api: any, extraOptions: any, baseQuery: any) => {
     const maxRetries = 3;
-    const retryDelay = 1000; // 1 second
+    const retryDelay = 3000; // 3 seconds
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
         const result = await baseQuery(args, api, extraOptions);
