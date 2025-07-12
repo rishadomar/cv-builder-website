@@ -38,7 +38,10 @@ export const pdfApiSlice = createApi({
                 cache: 'no-cache',
                 responseHandler: async (response: Response) => {
                     if (!response.ok) {
-                        throw new Error('Failed to download PDF');
+                        // Create an error object with the status code to enable retry logic
+                        const error = new Error('Failed to download PDF') as any;
+                        error.status = response.status;
+                        throw error;
                     }
 
                     const contentType = response.headers.get('content-type');
@@ -46,6 +49,7 @@ export const pdfApiSlice = createApi({
                         !contentType?.includes('application/pdf') &&
                         !contentType?.includes('application/octet-stream')
                     ) {
+                        // For content type errors, we don't want to retry as it's likely a permanent issue
                         throw new Error(`Invalid content type: ${contentType}`);
                     }
 
@@ -82,7 +86,10 @@ export const pdfApiSlice = createApi({
                 cache: 'no-cache',
                 responseHandler: async (response: Response) => {
                     if (!response.ok) {
-                        throw new Error('Failed to download Sample PDF');
+                        // Create an error object with the status code to enable retry logic
+                        const error = new Error('Failed to download Sample PDF') as any;
+                        error.status = response.status;
+                        throw error;
                     }
 
                     const contentType = response.headers.get('content-type');
@@ -90,6 +97,7 @@ export const pdfApiSlice = createApi({
                         !contentType?.includes('application/pdf') &&
                         !contentType?.includes('application/octet-stream')
                     ) {
+                        // For content type errors, we don't want to retry as it's likely a permanent issue
                         throw new Error(`Invalid content type: ${contentType}`);
                     }
 
