@@ -15,11 +15,15 @@ export default function Home() {
                 <div className='w-full lg:w-1/2 mt-8 lg:mt-0 lg:mr-6 flex justify-center'>
                     <Image
                         src='/images/FuturisticOffice.png'
-                        alt='CV Builder Hero'
+                        alt='Modern office workspace showcasing CV Builder productivity'
                         width={500}
                         height={400}
                         className='rounded-xl shadow-lg w-full max-w-md'
                         priority
+                        quality={85}
+                        placeholder='blur'
+                        blurDataURL='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=='
+                        sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 500px'
                     />
                 </div>
 

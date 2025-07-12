@@ -34,8 +34,6 @@ const HorizontalTimeline = ({ experiences }: { experiences: WorkExperienceEntry[
         };
     });
 
-    console.log('U-experiences', uexperiences);
-
     // Find the earliest and latest dates
     const dates = uexperiences.flatMap((exp) => [exp.startDate, exp.endDate]);
     const startDate = new Date(Math.min(...dates.map((d) => d.getTime())));
