@@ -135,7 +135,7 @@ export const authenticationApiSlice = createApi({
                     refreshToken
                 }
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(arg, { queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
                     setCookie('AccessToken', data.AccessToken);

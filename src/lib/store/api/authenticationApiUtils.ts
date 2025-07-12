@@ -2,7 +2,7 @@ import { getStore } from '../store';
 import { GoogleLoginResponse, LoginResponse } from '@/lib/type';
 import { authenticationApiSlice } from './authenticationApiSlice';
 import { jwtDecode } from 'jwt-decode';
-import { deleteCookie, getCookie, setCookie } from '@/lib/utils';
+import { deleteCookie, getCookie } from '@/lib/utils';
 import { resetAuthenticationDetails, setAuthenticationDetails } from '../authentication/authenticationSlice';
 import { refreshRecordData } from './databaseApiUtils';
 import { resetFieldValues } from '../fieldValues/fieldValuesSlice';
