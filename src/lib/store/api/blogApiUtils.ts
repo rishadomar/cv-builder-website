@@ -1,21 +1,62 @@
-import { BlogPost } from '@/lib/type';
-import { getStore } from '../store';
-import { blogApiSlice } from './blogApiSlice';
+import { BlogPost, BlogPostsResponse } from '@/lib/type';
 
+// Direct fetch functions for build-time/SSG usage (no RTK Query)
 export async function getBlogPostContent(slug: string): Promise<string> {
-    const store = getStore();
-    return await store.dispatch(blogApiSlice.endpoints.getBlogPostContent.initiate(slug)).unwrap();
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BLOG_URL}/${slug}/content.md`, {
+            next: { revalidate: 3600 } // Cache for 1 hour
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch blog post content: ${response.statusText}`);
+        }
+
+        return await response.text();
+    } catch (error) {
+        console.error(`Error fetching blog post content ${slug}:`, error);
+        throw error;
+    }
 }
 
 export async function getBlogPosts(limit: number): Promise<BlogPost[]> {
-    const store = getStore();
-    const result = await store.dispatch(blogApiSlice.endpoints.getRecentPosts.initiate({ limit })).unwrap();
-    return result.items;
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/getRecentPosts?limit=${limit}`, {
+            next: { revalidate: 3600 }, // Cache for 1 hour
+            headers: {
+                Accept: 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch blog posts: ${response.statusText}`);
+        }
+
+        const result: BlogPostsResponse = await response.json();
+        return result.items;
+    } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        throw error;
+    }
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost> {
-    const store = getStore();
-    return await store.dispatch(blogApiSlice.endpoints.getBlogPost.initiate(slug)).unwrap();
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/getBlogPost/${slug}`, {
+            next: { revalidate: 3600 }, // Cache for 1 hour
+            headers: {
+                Accept: 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch blog post: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching blog post ${slug}:`, error);
+        throw error;
+    }
 }
 
 // export async function getBlogPostKeywords(slug: string): Promise<string[]> {

@@ -1,10 +1,8 @@
-import { blogApiSlice } from '@/lib/store/api/blogApiSlice';
-import { getStore } from '@/lib/store/store';
+import { getBlogPosts } from '@/lib/store/api/blogApiUtils';
 
 const fetchBlogPosts = async () => {
-    // Cannot use hooks in a non-React function, so we need to get the store and dispatch the action manually
-    const store = getStore();
-    return await store.dispatch(blogApiSlice.endpoints.getRecentPosts.initiate({ limit: 100 })).unwrap();
+    // Use the direct fetch utility function for build-time operations
+    return await getBlogPosts(100);
 };
 
 const EXTERNAL_DATA_URL = 'https://cvbuilder.co.za';
@@ -46,12 +44,8 @@ export async function GET() {
     try {
         const blogPosts = await fetchBlogPosts();
 
-        let blogPostUrls: string[] = [];
-
-        if ('items' in blogPosts) {
-            // Generate blog post URLs from the fetched data
-            blogPostUrls = blogPosts.items.map((post) => `/blog/${post.slug}`);
-        }
+        // Generate blog post URLs from the fetched data
+        const blogPostUrls = blogPosts.map((post) => `/blog/${post.slug}`);
 
         // Combine static pages and blog post URLs
         const allPages = [...pages, ...blogPostUrls];
