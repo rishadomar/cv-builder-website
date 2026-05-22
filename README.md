@@ -1,53 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CV Builder 🧠
+
+> AI-assisted CV generator — answer guided prompts, get a polished, professional CV.
+
+**Live at [cvbuilder.co.za](https://cvbuilder.co.za)**
+
+---
+
+## Overview
+
+CV Builder takes the blank-page problem out of writing a CV. Users work through a guided set of prompts about their experience, skills, and goals - and the app uses AI to generate clear, well-structured content tailored to them. The result is a professional CV they can download and use immediately.
+
+Built as a full-stack personal project using Next.js on the frontend and a serverless AWS backend.
+
+---
+
+## Screenshots
+
+![Personality page](public/images/screenshots/personality.png)
+
+![Topskills discussion](public/images/screenshots/topskills-discussion.png)
+
+---
+
+## Features
+
+- 🤖 **AI-assisted content generation** — prompts guide users through their experience; AI writes the copy
+- 📄 **Downloadable CV output** — clean, formatted document ready to send
+- ⚡ **Fast, serverless backend** — AWS Lambda handles AI calls with low latency
+- 🎨 **Clean, minimal UI** — built with Tailwind CSS for a distraction-free experience
+- 🔄 **State management via RTK Query** — efficient data fetching and caching
+
+---
+
+## Tech Stack
+
+| Layer                 | Technology                        |
+| --------------------- | --------------------------------- |
+| Frontend              | Next.js · React · TypeScript      |
+| Styling               | Tailwind CSS                      |
+| State / Data fetching | RTK Query                         |
+| Backend               | AWS Lambda · API Gateway          |
+| AI                    | Anthropic / OpenAI API            |
+| Deployment            | Vercel (frontend) · AWS (backend) |
+
+---
+
+## Architecture
+
+```
+User browser
+    │
+    ▼
+Next.js (Vercel)
+    │  RTK Query
+    ▼
+AWS API Gateway
+    │
+    ▼
+AWS Lambda
+    │  AI API call
+    ▼
+LLM (generates CV content)
+    │
+    ▼
+Response streamed back to UI
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- AWS account with Lambda + API Gateway configured
+- An API key for your chosen LLM provider (Anthropic or OpenAI)
+
+### Installation
 
 ```bash
-nvm use 18.19.0
+# Clone the repo
+git clone https://github.com/rishadomar/cv-builder.git
+cd cv-builder
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+```
+
+### Environment Variables
+
+Create a `.env.local` file in the root:
+
+```env
+NEXT_PUBLIC_API_URL=https://your-api-gateway-url.amazonaws.com
+```
+
+On the Lambda side, set:
+
+```env
+LLM_API_KEY=your_api_key_here
+```
+
+### Run locally
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment
 
-## Learn More
+**Frontend** — deployed to Vercel. Connect your GitHub repo and Vercel handles the rest.
 
-To learn more about Next.js, take a look at the following resources:
+**Backend** — deploy Lambda functions via AWS Console or the AWS CLI:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+zip -r function.zip .
+aws lambda update-function-code \
+  --function-name cv-builder \
+  --zip-file fileb://function.zip
+```
 
+---
 
+## Roadmap
 
-### Screens
+- [ ] Multiple CV templates / styles
+- [ ] Job description import — tailor CV to a specific role
+- [ ] LinkedIn profile import
+- [ ] PDF export with custom styling
+- [ ] Save and edit past CVs
 
-Home screen (server) /nothing
-   - [Register]
-   - [Sign in]
+---
 
-Register /register
-    - f-email
-    - [Continue with email]
-    -------------------------------
-    Or register using Google
-    - [via google]
-    - [Login instead]
+## About
 
-if f-email already known goto /sign-in
-if not known:
-    - f-password
-    - f-confirm-password
-    [Register]
+Built by [Rishad Omar](https://linkedin.com/in/rishad-omar) — senior full-stack developer based in Cape Town, South Africa.
 
-Sign in /sign-in?email=
-    - f-email
-    - f-password
-    OR
-    [via Google]
+Other projects: [PIL — Patient Information Leaflet Reader](https://github.com/rishadomar/pil) · [Savvy Website Builder](https://savvy.site)
 
-Logged in /start
+---
+
+## License
+
+MIT
