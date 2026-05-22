@@ -16,9 +16,9 @@ Built as a full-stack personal project using Next.js on the frontend and a serve
 
 ## Screenshots
 
-<img src="public/images/screenshots/personality.png" alt="Personality page" width="700" />
+![Personality page](public/images/screenshots/personality.png)
 
-<img src="public/images/screenshots/topskills-discussion.png" alt="Topskills discussion" width="700" />
+![Topskills discussion](public/images/screenshots/topskills-discussion.png)
 
 ---
 
